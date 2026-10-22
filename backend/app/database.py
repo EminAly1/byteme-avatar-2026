@@ -15,6 +15,8 @@ def get_engine():
     return create_engine(
         get_settings().database_url(),
         pool_pre_ping=True,
+        isolation_level="READ COMMITTED",
+        hide_parameters=True,
         connect_args={"connect_timeout": 3, "read_timeout": 3, "write_timeout": 3},
     )
 
