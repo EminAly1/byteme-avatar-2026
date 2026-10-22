@@ -218,3 +218,15 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Monorepo development outputs and local credentials
+.env.*
+!.env.example
+node_modules/
+.vite/
+*.tsbuildinfo
+android/.gradle/
+android/local.properties
+*.jks
+*.keystore
+ml/artifacts/
