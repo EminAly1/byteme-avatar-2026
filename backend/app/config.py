@@ -14,6 +14,7 @@ class Settings(BaseSettings):
     mysql_database: str = "avatar"
     mysql_user: str = "avatar"
     mysql_password: SecretStr | None = None
+    avatar_api_key: SecretStr | None = None
     cors_origins: str = "http://localhost:5173"
 
     def database_url(self) -> URL:

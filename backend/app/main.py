@@ -2,6 +2,10 @@ import logging
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
+
+from app.api import router
+from app.errors import DomainError
 from sqlalchemy.exc import SQLAlchemyError
 
 from app.config import get_settings
@@ -12,8 +16,8 @@ app = FastAPI(title="AVATAR API", version="0.1.0")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[origin.strip() for origin in get_settings().cors_origins.split(",") if origin.strip()],
-    allow_methods=["GET"],
-    allow_headers=["Content-Type"],
+    allow_methods=["GET", "POST"],
+    allow_headers=["Content-Type", "Idempotency-Key", "X-API-Key"],
 )
 
 
@@ -32,3 +36,17 @@ def readiness() -> dict[str, str]:
         logger.warning("Database readiness check failed; check MySQL service and MYSQL_* settings")
         raise HTTPException(status_code=503, detail="Database unavailable or not configured") from None
     return {"status": "ok", "database": "ok"}
+
+
+@app.exception_handler(DomainError)
+async def domain_error(request, exc):
+    return JSONResponse(status_code=exc.status, content={"error": {"code": exc.code, "message": exc.message, "details": {}}})
+
+
+@app.exception_handler(SQLAlchemyError)
+async def database_error(request, exc):
+    logger.warning("Database operation failed; credentials and statements omitted")
+    return JSONResponse(status_code=503, content={"error": {"code": "DATABASE_UNAVAILABLE", "message": "Veritabanı işlemi gerçekleştirilemedi", "details": {}}})
+
+
+app.include_router(router)

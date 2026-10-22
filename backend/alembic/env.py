@@ -3,6 +3,7 @@ from alembic import context
 
 from app.config import get_settings
 from app.database import Base, get_engine
+from app import models  # Register all tables for autogenerate.
 
 target_metadata = Base.metadata
 
