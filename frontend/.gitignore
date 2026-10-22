@@ -1,0 +1,11 @@
+node_modules/
+dist/
+test-results/
+playwright-report/
+coverage/
+.env
+.env.*
+!.env.example
+# Root Python template ignores every lib/ directory; keep frontend source tracked.
+!src/lib/
+!src/lib/**
