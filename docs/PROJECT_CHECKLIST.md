@@ -2,7 +2,7 @@
 
 **Teslim:** 1 Kasım 2026, **23:59 Europe/Istanbul (UTC+3)**. Tarih/saat kullanıcı talimatıdır; PDF’de teslim tarihi yoktur.
 
-**Gereksinim kaynağı:** [AVATAR_Assessment.pdf](AVATAR_Assessment.pdf), 3 sayfa. **Kanıt tarihi:** 24 Ekim 2026 (Görev 7 kuzu parçalama PR #9 dahil). [Güncel entegrasyon ve test raporu](INTEGRATION_VALIDATION_2026-10-24.md).
+**Gereksinim kaynağı:** [AVATAR_Assessment.pdf](AVATAR_Assessment.pdf), 3 sayfa. **Kanıt tarihi:** 25 Ekim 2026 (Görev 8 Android PR #11 dahil). [Güncel entegrasyon ve test raporu](INTEGRATION_VALIDATION_2026-10-24.md).
 
 ## Durumlar ve kapsam
 
@@ -18,6 +18,8 @@
 **Görev 6 ek güncellemesi:** [PR #7](https://github.com/EminAly1/byteme-avatar-2026/pull/7) normal merge ile `main` üzerine eklendi (`3d9125e862e8ad77a7c10dcf331633ecc22f8d5e`). [100 test raporu](../database/trace-recall-validation.md): izole gerçek MySQL'de 84 MySQL testi + 16 bağımsız test geçti; son birleşik `main` üzerinde bağımsız tekrar hâlâ gerekli. Android, kuzu parçalama ve iki ML modeli tamamlanmış değildir.
 
 **Görev 7 ek güncellemesi:** [PR #9](https://github.com/EminAly1/byteme-avatar-2026/pull/9) `main` üzerine normal merge ile eklendi (`21d9b31fe26d17bd60765b9f77456e290c7bcc3e`). [131 test raporu](../database/cutting-validation.md): ayrı test MySQL 8'de 115 DB ve 16 diğer test; son merge sonrası `main` bağımsız test doğrulaması bekliyor. Ayrı kalite hedefi: [Profesyonel React UX/UI tasarım şartnamesi](FRONTEND_VISION.md). Bu doküman mevcut UI'ın tamamlandığı anlamına gelmez.
+
+**Görev 8 güncellemesi (25 Ekim):** [PR #11](https://github.com/EminAly1/byteme-avatar-2026/pull/11) `main` üzerine normal merge ile alındı (`94281b6f493d5a1cb66ce953efa6087641454d96`). [Android doğrulama raporu](../android/VALIDATION.md): 16 farklı host testi debug+release'de toplam 32 başarılı çalışma, API 28 AOSP emülatörde 4 farklı cihaz testi iki koşuda toplam 6 başarılı çalışma, gerçek MySQL ile 6 kg→5 kg kuzu but satışı, idempotent tekrar ve LOT_BLOCKED, offline taslak kalıcılığı, lint ve debug APK build. **API 35 instrumentation çöktü; API 35 ve fiziksel telefon doğrulanmadı.** APK build artefaktıdır, Git'e commit edilmedi. Release auth/HTTPS, son birleşik main ve final cihaz/saha kontrolleri ayrıca bekler.
 
 ## 1. Proje altyapısı
 
@@ -56,7 +58,7 @@ PDF s.1, Görev 2. Tabloda `cutting` türünün bulunması çalışan parçalama
 | KUZ-02 | Önceden tanımlanabilen reçete ve sürümlü dağıtım anahtarı | Tamamlandı | [RecipeVersion ve RecipeLine](../backend/app/models.py), `allocation_snapshot` ve kullanılabilirlik endpoint'leri; eski kayıt maliyeti sürümden bağımsız korunuyor. |
 | KUZ-03 | But/sırt/omuz/kaburga/kıyma fiilî ağırlıkları; fire/yan ürün ve ağırlık dengesi | Tamamlandı | [cuttings.py](../backend/app/cuttings.py), [MySQL raporu](../database/cutting-validation.md): fiilî 22 kg ve açıklanmış 3 kg fark; byproduct ayrı lot/stok. Demo parça ağırlıkları kurgusaldır. |
 | KUZ-04 | Miktar veya değer ağırlıklı maliyet dağıtımı; toplam maliyet eşitliği | Tamamlandı | [Görev 7](../backend/CUTTING.md): quantity/value referans anahtarı ve Decimal toplamı; 287,500000 EUR iki yöntemde de korunuyor; sürümlü snapshot/test var. |
-| KUZ-05 | Giriş lotundan bütün parça lotlarına bağlantı, lot stokları ve Kotlin satışı | Devam ediyor | [Görev 7](../database/cutting-validation.md): parça lotları, trace, merkezî satış ve recall hazır; **Kotlin/Room üzerinde gerçek satış ile uçtan uca cihaz demosu henüz yok.** |
+| KUZ-05 | Giriş lotundan bütün parça lotlarına bağlantı, lot stokları ve Kotlin satışı | Tamamlandı | [PR #9](https://github.com/EminAly1/byteme-avatar-2026/pull/9) + [PR #11](https://github.com/EminAly1/byteme-avatar-2026/pull/11): gerçek API 28 emülatöründen kuzu but lotu 6 kg→1 kg satış→5 kg merkezî stok, satış/hareket ID ve recall blokajı. API 35/fiziksel cihaz henüz doğrulanmadı. |
 | KUZ-06 | 25×11,50=287,50 / 351 EUR ve 22 kg parça toplamı tutarsızlıklarını kararla bağlama | Doğrulama gerekiyor | [assumptions.md](assumptions.md) farkları kaydeder; gerçek alış belgesi ve 3 kg farkın işletme açıklaması gerekli. Otomatik fire varsayılmaz. |
 
 ## 4. Android Kotlin ve satış
@@ -65,12 +67,12 @@ PDF s.1/s.3. [android/README.md](../android/README.md) yalnız yönergedir; Kotl
 
 | ID | Görev | Durum | Kanıt / kalan iş |
 | --- | --- | --- | --- |
-| AND-01 | Kotlin/Compose uygulaması, sabit SDK/JDK/Gradle ve cihaz/emülatör build’i | Başlanmadı | Çalıştırılabilir Kotlin kaynakları/build kanıtı yok. |
-| AND-02 | Room/SQLite yerel saklama ve Retrofit istemcisi | Başlanmadı | Uygulama ve persistence/API testleri gerekli. |
-| AND-03 | SQLite–MySQL tutarlı sync; outbox, idempotent tekrar ve çatışma yönetimi | Başlanmadı | Tasarım notu var; bağlantı kesilmesi/yeniden bağlanma uygulaması ve testi yok. Offline kesin satış varsayılmıyor. |
-| AND-04 | Her satış satırında lot, miktar ve kesin stok hareketi | Başlanmadı | Merkezi lotlu satış API'si artık [PR #5](https://github.com/EminAly1/byteme-avatar-2026/pull/5) ile hazır, ancak Android uygulaması/onay akışı ve cihaz testi yok; Android gereksinimi tamamlanmadı. |
-| AND-05 | Geri çağrılan lotun satışını aynı transaction’da engelleme | Devam ediyor | [PR #7](https://github.com/EminAly1/byteme-avatar-2026/pull/7): backend'in lot kilidi altında satış/recall yarış ve LOT_BLOCKED testleri hazır; Android uygulaması ve hata gösterimi eksik. |
-| AND-06 | Parçalanan kuzu ürünlerinin Kotlin üzerinden lot bazlı satışı | Başlanmadı | KUZ-05/AND-04 sonrası ikinci görevin uçtan uca demosu. |
+| AND-01 | Kotlin/Compose uygulaması, sabit SDK/JDK/Gradle ve cihaz/emülatör build’i | Tamamlandı | [Kurulum/sürümler](../android/ANDROID_SETUP.md) ve [validation](../android/VALIDATION.md): Compose Material 3, Gradle test/lint/assembleDebug, API 28 AOSP emülatör. API 35 instrumentation başarısız, fiziksel cihaz henüz yok. |
+| AND-02 | Room/SQLite yerel saklama ve Retrofit istemcisi | Tamamlandı | [Android veri katmanı](../android/README.md): sekiz Room tablo, Retrofit/FK, katalog cache, yerel işlem kalıcılığı; host + cihaz DB testi. |
+| AND-03 | SQLite–MySQL tutarlı sync; outbox, idempotent tekrar ve çatışma yönetimi | Tamamlandı | [Android validation](../android/VALIDATION.md): kalıcı UUID/gövde, FIFO gönderim, backend onaylı satış, 409 çatışma, offline yalnız taslak, süreç sonrası kalıcılık; uygulama açıkken senkronizasyon. Kapalı uygulamada arka plan gönderimi yok. |
+| AND-04 | Her satış satırında lot, miktar ve kesin stok hareketi | Tamamlandı | [API 28 gerçek satış testi](../android/VALIDATION.md): Kotlin→FastAPI→MySQL lot/miktar/StockMovement UUID; 1 kg stok yalnızca bir kez düştü. |
+| AND-05 | Geri çağrılan lotun satışını aynı transaction’da engelleme | Tamamlandı | [PR #7](https://github.com/EminAly1/byteme-avatar-2026/pull/7) transaction/yarış koruması + [Android test](../android/VALIDATION.md): eski önbellekle satışta 409 LOT_BLOCKED; UI NEEDS_ACTION, merkezî stok/satış değişmedi. |
+| AND-06 | Parçalanan kuzu ürünlerinin Kotlin üzerinden lot bazlı satışı | Tamamlandı | [Demo](../android/VALIDATION.md): kesilmiş value yöntemli kuzu butundan Android Compose'da 1 kg kesin satış; 6→5 kg, idempotent replay ve recall reddi. |
 
 ## 5. Lot izlenebilirliği ve geri çağırma
 
@@ -124,7 +126,7 @@ OCR/fatura okuma ve anomali uyarıları PDF’de **isteğe bağlıdır**; iki zo
 | TST-02 | Gerçek MySQL migration, satır kilidi, yarış, rollback ve idempotency | Tamamlandı | [Görev 7 MySQL testleri](../tests/test_cuttings_mysql.py), [migration](../tests/test_cutting_migrations_mysql.py) ve eski satış/recall testleri: parçalama/recall kilit yarışı, maliyet/rollback ve şema geçişleri. |
 | TST-03 | Temiz npm kurulumu, typecheck, build ve frontend unit/component | Tamamlandı | `npm ci`, typecheck/build başarılı; **25 passed**. |
 | TST-04 | Gerçek FastAPI/MySQL/Vite/Chromium ile alış–üretim–stok ve demo | Tamamlandı | **4 passed**; mock backend kullanılmadı. [Rapor](INTEGRATION_VALIDATION_2026-10-24.md). |
-| TST-05 | Parçalama, Kotlin satış/sync, recall yarışları ve iki ML modelinin değerlendirmesi | Devam ediyor | [Görev 7](../database/cutting-validation.md): parçalama ve recall yarışları gerçek MySQL'de doğrulandı; Kotlin cihaz/sync ve iki ML değerlendirmesi hâlâ eksik. |
+| TST-05 | Parçalama, Kotlin satış/sync, recall yarışları ve iki ML modelinin değerlendirmesi | Devam ediyor | [Görev 7](../database/cutting-validation.md) kuzu/recall yarışları ve [Android cihaz kanıtı](../android/VALIDATION.md) kuzu satışı, offline taslak ve tekrar test edildi; **iki zorunlu ML modelinin eğitimi/evaluasyonu hâlâ yok.** |
 | TST-06 | GitHub main merge sonrası kontroller ve PR check/policy doğrulaması | Doğrulama gerekiyor | Üç PR artık `main` içinde; bu raporun testleri yerel birleşim adayında koşuldu. Son `main` ve güncel CI/PR kontrolleri ayrı çalıştırılmalı. |
 
 ## 9. Dokümantasyon ve demo
@@ -133,7 +135,7 @@ OCR/fatura okuma ve anomali uyarıları PDF’de **isteğe bağlıdır**; iki zo
 | --- | --- | --- | --- |
 | DOC-01 | PDF, ER/API, varsayımlar ve kurulum belgelerini tek güncel sözleşmede birleştirme | Devam ediyor | [ER](data-model.md), [API](api-contract.md), [assumptions](assumptions.md), [backend README](../backend/README.md), [frontend README](../frontend/README.md) var; ortak eski “henüz uygulanmadı” durumları konsolide edilmeli. |
 | DOC-02 | Tekrarlanabilir alış/dış üretim/EKP örnek kaydı | Tamamlandı | [app.demo](../backend/app/demo.py) ve [demo_sales_shipments.py](../backend/app/demo_sales_shipments.py) iki kez idempotent çalıştı; 85 paket 30/25/30 sevk ve 16 defter hareketi raporlandı. |
-| DOC-03 | Üç görevin uçtan uca demosu ve alış/üretim/parçalama/lot/satış/recall raporları | Devam ediyor | İki ayrı kuzu lotuyla quantity/value kuzu parçalama HTTP demosu da eklendi; Kotlin parça satışı, ML ve tek birleşik web/Android yarışma demosu henüz eksik. |
+| DOC-03 | Üç görevin uçtan uca demosu ve alış/üretim/parçalama/lot/satış/recall raporları | Devam ediyor | Dış üretim, kuzu parçalama, merkezî lot/recall API senaryolarına [gerçek Android kuzu lot satışı](../android/VALIDATION.md) eklendi. İki ML modelinin sonucu ve tek birleşik web/Android demo videosu hâlâ eksik. |
 | DOC-04 | ML yöntem/örnek tahmin/doğruluk raporu | Başlanmadı | Yalnız plan var; model sonucu ve hata ölçümü yok. |
 | DOC-05 | Temiz makinede tek, tutarlı kurulum ve demo çalıştırma | Doğrulama gerekiyor | Host venv/Vite + izole MySQL doğrulandı; tam Compose/fresh release kurulumu doğrulanmadı. |
 
@@ -142,7 +144,7 @@ OCR/fatura okuma ve anomali uyarıları PDF’de **isteğe bağlıdır**; iki zo
 | ID | Görev | Durum | Kanıt / kalan iş |
 | --- | --- | --- | --- |
 | TES-01 | İlk üç PR ve ayrı checklist PR’ını main’e alma | Tamamlandı | [PR #1](https://github.com/EminAly1/byteme-avatar-2026/pull/1), [#2](https://github.com/EminAly1/byteme-avatar-2026/pull/2), [#3](https://github.com/EminAly1/byteme-avatar-2026/pull/3) ve [#4](https://github.com/EminAly1/byteme-avatar-2026/pull/4) main'e birleşti. Sonraki geliştirme PR'ları ayrı takip edilir. |
-| TES-02 | Üç ana akış + kullanılabilir Kotlin uygulaması + iki zorunlu ML çalışmasının kabulü | Başlanmadı | Çalışan temel var; bütün yarışma kapsamı kabul edilebilir durumda değil. |
+| TES-02 | Üç ana akış + kullanılabilir Kotlin uygulaması + iki zorunlu ML çalışmasının kabulü | Devam ediyor | Dış üretim, kuzu parçalama, izlenebilirlik/recall ve API 28 Kotlin satış prototipleri gösterildi; iki zorunlu AI modeli ve tam entegre teslim kabulü hâlâ eksik. |
 | TES-03 | Son kaynak/kurulum/örnek kayıt/test/doküman paketi ve temiz kurulumdan demo | Başlanmadı | Entegre main, eksik modüller ve release paketi gerekli. |
 | TES-04 | Final sensitive-data kontrolü, sürüm etiketi ve yeniden üretilebilirlik | Doğrulama gerekiyor | Final paket/tag yok; önceki yerel secret kontrolleri final teslim kanıtı değildir. |
 | TES-05 | **1 Kasım 2026 23:59 Europe/Istanbul** öncesi gönderim ve alındı doğrulaması | Başlanmadı | Yarışma e-postası: kayıtlı ekip üyesinin aynı e-postayı yanıtlayarak public GitHub deposu ve herkesin izleyebildiği en fazla 15 dakikalık video bağlantısını göndermesi gerekir. Gönderim/alındı kanıtı yok. |
