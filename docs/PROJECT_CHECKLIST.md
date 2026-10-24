@@ -2,7 +2,7 @@
 
 **Teslim:** 1 Kasım 2026, **23:59 Europe/Istanbul (UTC+3)**. Tarih/saat kullanıcı talimatıdır; PDF’de teslim tarihi yoktur.
 
-**Gereksinim kaynağı:** [AVATAR_Assessment.pdf](AVATAR_Assessment.pdf), 3 sayfa. **Kanıt tarihi:** 24 Ekim 2026. [Güncel entegrasyon ve test raporu](INTEGRATION_VALIDATION_2026-10-24.md).
+**Gereksinim kaynağı:** [AVATAR_Assessment.pdf](AVATAR_Assessment.pdf), 3 sayfa. **Kanıt tarihi:** 24 Ekim 2026 (Görev 5 satış/sevkiyat ve PR #5 güncellendi). [Güncel entegrasyon ve test raporu](INTEGRATION_VALIDATION_2026-10-24.md).
 
 ## Durumlar ve kapsam
 
@@ -12,6 +12,8 @@
 - **Doğrulama gerekiyor:** Gerekli ortam, uçtan uca, insan veya GitHub doğrulaması eksik/engelli.
 
 **GitHub birleşim güncellemesi (24 Ekim 2026):** [PR #1](https://github.com/EminAly1/byteme-avatar-2026/pull/1), [PR #2](https://github.com/EminAly1/byteme-avatar-2026/pull/2) ve [PR #3](https://github.com/EminAly1/byteme-avatar-2026/pull/3) sırasıyla **normal merge commit** ile `main` dalına birleştirildi. Son birleşim commit'i: `7837a85097e2fd50c8da672a03803c319296d344`. Aşağıdaki başarılı testler aynı kaynak ağacının izole yerel birleşim adayında koşulmuştur; son uzak `main` üzerinde yeniden test **henüz yapılmadı**.
+
+**24 Ekim Görev 5 güncellemesi:** [PR #5](https://github.com/EminAly1/byteme-avatar-2026/pull/5) satış/sevkiyat çekirdeğini `main` üzerine normal merge ile ekledi (`e1589d8f219a4ab689348f6b4f698829ab0193dd`). [76 test raporu](../database/sales-shipments-validation.md) izole MySQL'deki Codex koşusuna dayanır; birleşik son `main` üzerinde bağımsız tekrar gereklidir. Bu görev **lot izleme/geri çağırma veya Android satışı bitmiş** anlamına gelmez.
 
 ## 1. Proje altyapısı
 
@@ -62,7 +64,7 @@ PDF s.1/s.3. [android/README.md](../android/README.md) yalnız yönergedir; Kotl
 | AND-01 | Kotlin/Compose uygulaması, sabit SDK/JDK/Gradle ve cihaz/emülatör build’i | Başlanmadı | Çalıştırılabilir Kotlin kaynakları/build kanıtı yok. |
 | AND-02 | Room/SQLite yerel saklama ve Retrofit istemcisi | Başlanmadı | Uygulama ve persistence/API testleri gerekli. |
 | AND-03 | SQLite–MySQL tutarlı sync; outbox, idempotent tekrar ve çatışma yönetimi | Başlanmadı | Tasarım notu var; bağlantı kesilmesi/yeniden bağlanma uygulaması ve testi yok. Offline kesin satış varsayılmıyor. |
-| AND-04 | Her satış satırında lot, miktar ve kesin stok hareketi | Başlanmadı | Merkezi satış transaction’ı ve Android onay akışı gerekli. |
+| AND-04 | Her satış satırında lot, miktar ve kesin stok hareketi | Başlanmadı | Merkezi lotlu satış API'si artık [PR #5](https://github.com/EminAly1/byteme-avatar-2026/pull/5) ile hazır, ancak Android uygulaması/onay akışı ve cihaz testi yok; Android gereksinimi tamamlanmadı. |
 | AND-05 | Geri çağrılan lotun satışını aynı transaction’da engelleme | Başlanmadı | Satış/recall yarış testi ve cihaz hata gösterimi gerekli. |
 | AND-06 | Parçalanan kuzu ürünlerinin Kotlin üzerinden lot bazlı satışı | Başlanmadı | KUZ-05/AND-04 sonrası ikinci görevin uçtan uca demosu. |
 
@@ -76,11 +78,11 @@ PDF s.2, Görev 3. Doğrudan emir ilişkisi, çok adımlı ileri/geri izleme yer
 | LOT-02 | Uygun ürünlerde son tüketim tarihi girişinin tam uçtan uca kabulü | Doğrulama gerekiyor | Alan/validation var; expired lot engeli test edildi. SKT’nin alış UI→DB roundtrip’i ayrı kabul testiyle doğrulanmalı. |
 | LOT-03 | Miktarlı çoktan çoğa hammadde–emir–mamul ilişkileri, kısmi lotun farklı emirlere girmesi | Tamamlandı | [LotLink/Input/Output](../backend/app/models.py); multiple_outputs ve partial_lot MySQL testleri. İlişkiler tahmin değildir. |
 | LOT-04 | ET-2026-001 → URT-2026-045 → SUC-2026-045 / 85 paket kesin ilişkisi | Tamamlandı | [HTTP demo](../backend/app/demo.py), [browser testi](../frontend/tests/browser/dashboard.spec.ts); kaynak lotlar ve 85 paket doğrulandı. Henüz market sevkiyatı yok. |
-| LOT-05 | Bağımsız depo transferi, satış, müşteri iadesi, rework ve fire hareketlerinin tamamı | Devam ediyor | Üretici sevki/tüketim/mamul kabulü/hammadde iadesi çalışıyor; diğer bağımsız endpoint’ler eksik. |
+| LOT-05 | Bağımsız depo transferi, satış, müşteri iadesi, rework ve fire hareketlerinin tamamı | Devam ediyor | Satış ve bağımsız/bağlı sevkiyat API'leri [PR #5](https://github.com/EminAly1/byteme-avatar-2026/pull/5) ile eklendi. Genel depo transferi, müşteri iadesi/iptali ve rework hâlâ eksik. |
 | LOT-06 | Sorunlu hammaddeden tüm türev lot, stok, sevkiyat ve bilinen alıcıya ileri izleme | Başlanmadı | Recursive graf traversal ve rapor/test gerekli. |
 | LOT-07 | Mamulden hammadde/tedarikçi/emirlere çok adımlı geriye izleme | Başlanmadı | Emir ayrıntısındaki doğrudan bağlantılar var; recursive endpoint yok. |
 | LOT-08 | Recall kaydı, türev lotları atomik bloklama, satış/üretimle yarışın önlenmesi | Başlanmadı | blocked alanı/sevk engeli var; recall komutu, türev bloklama ve satış kapısı yok. |
-| LOT-09 | Market A/B/C’ye 30/25/30 paket sevki ve ET lotundan etkilenen market/iletişim listesi | Başlanmadı | Kesin lotlu satış/sevkiyat, müşteri miktar/iletişim raporu ve zorunlu üçüncü demo gerekli. |
+| LOT-09 | Market A/B/C’ye 30/25/30 paket sevki ve ET lotundan etkilenen market/iletişim listesi | Devam ediyor | [Görev 5 demo](../backend/SALES_SHIPMENTS.md): üç kayıtlı sevkiyat 30/25/30, alıcı snapshot'ı, toplam 85; ancak ET kaynak lotuna göre **recursive etkilenen market raporu ve recall** henüz yok. |
 | LOT-10 | İkinci kademe dağıtımı yalnız kayıt varsa kesin gösterme | Başlanmadı | Alıcı zinciri/rapor davranışı gerekli; bilinmeyen alıcı tahmin edilmez. |
 | LOT-11 | Parçalama girişinden bütün parça lotlarına aynı izlenebilirlik zinciri | Başlanmadı | Kuzu akışıyla birlikte ilişki/ileri-geri testleri gerekli. |
 
@@ -114,8 +116,8 @@ OCR/fatura okuma ve anomali uyarıları PDF’de **isteğe bağlıdır**; iki zo
 
 | ID | Görev | Durum | Kanıt / kalan iş |
 | --- | --- | --- | --- |
-| TST-01 | Mevcut backend health/config/Decimal/stok/iş kuralları | Tamamlandı | 24 Ekim tam seçim **38 passed**, 1 upstream deprecation warning; [tests](../tests). |
-| TST-02 | Gerçek MySQL migration, satır kilidi, yarış, rollback ve idempotency | Tamamlandı | [core](../tests/test_core_mysql.py), [migration](../tests/test_migrations_mysql.py); sıfırdan ayrı test instance’ında. |
+| TST-01 | Mevcut backend health/config/Decimal/stok/iş kuralları | Tamamlandı | [Görev 5 raporu](../database/sales-shipments-validation.md): eski 38 + yeni 38 = **76 passed**, izole gerçek MySQL, 0 failed/skipped (1 bağımlılık uyarısı). Son `main` üzerinde bağımsız yeniden koşu henüz yapılmadı. |
+| TST-02 | Gerçek MySQL migration, satır kilidi, yarış, rollback ve idempotency | Tamamlandı | [Görev 5 testleri](../tests/test_sales_shipments_mysql.py) ve [migration](../tests/test_sales_migrations_mysql.py): satış/sevkiyat yarışları, rollback, replay ve upgrade/downgrade izole MySQL'de geçti. |
 | TST-03 | Temiz npm kurulumu, typecheck, build ve frontend unit/component | Tamamlandı | `npm ci`, typecheck/build başarılı; **25 passed**. |
 | TST-04 | Gerçek FastAPI/MySQL/Vite/Chromium ile alış–üretim–stok ve demo | Tamamlandı | **4 passed**; mock backend kullanılmadı. [Rapor](INTEGRATION_VALIDATION_2026-10-24.md). |
 | TST-05 | Parçalama, Kotlin satış/sync, recall yarışları ve iki ML modelinin değerlendirmesi | Başlanmadı | İlgili çalışan modüller ve kabul testleri eksik. |
@@ -126,7 +128,7 @@ OCR/fatura okuma ve anomali uyarıları PDF’de **isteğe bağlıdır**; iki zo
 | ID | Görev | Durum | Kanıt / kalan iş |
 | --- | --- | --- | --- |
 | DOC-01 | PDF, ER/API, varsayımlar ve kurulum belgelerini tek güncel sözleşmede birleştirme | Devam ediyor | [ER](data-model.md), [API](api-contract.md), [assumptions](assumptions.md), [backend README](../backend/README.md), [frontend README](../frontend/README.md) var; ortak eski “henüz uygulanmadı” durumları konsolide edilmeli. |
-| DOC-02 | Tekrarlanabilir alış/dış üretim/EKP örnek kaydı | Tamamlandı | [app.demo](../backend/app/demo.py) izole web test DB’sinde iki kez aynı emir/lot cevabını verdi. |
+| DOC-02 | Tekrarlanabilir alış/dış üretim/EKP örnek kaydı | Tamamlandı | [app.demo](../backend/app/demo.py) ve [demo_sales_shipments.py](../backend/app/demo_sales_shipments.py) iki kez idempotent çalıştı; 85 paket 30/25/30 sevk ve 16 defter hareketi raporlandı. |
 | DOC-03 | Üç görevin uçtan uca demosu ve alış/üretim/parçalama/lot/satış/recall raporları | Devam ediyor | Alış/üretim/stok görünümü çalışıyor; parçalama/Kotlin satış/sevkiyat/recall demoları ve raporları eksik. |
 | DOC-04 | ML yöntem/örnek tahmin/doğruluk raporu | Başlanmadı | Yalnız plan var; model sonucu ve hata ölçümü yok. |
 | DOC-05 | Temiz makinede tek, tutarlı kurulum ve demo çalıştırma | Doğrulama gerekiyor | Host venv/Vite + izole MySQL doğrulandı; tam Compose/fresh release kurulumu doğrulanmadı. |
@@ -135,7 +137,7 @@ OCR/fatura okuma ve anomali uyarıları PDF’de **isteğe bağlıdır**; iki zo
 
 | ID | Görev | Durum | Kanıt / kalan iş |
 | --- | --- | --- | --- |
-| TES-01 | İlk üç PR ve ayrı checklist PR’ını main’e alma | Devam ediyor | İlk üç PR birleştirildi; `docs/project-checklist` dalındaki ayrı checklist PR'ının inceleme ve birleşimi bekleniyor. |
+| TES-01 | İlk üç PR ve ayrı checklist PR’ını main’e alma | Tamamlandı | [PR #1](https://github.com/EminAly1/byteme-avatar-2026/pull/1), [#2](https://github.com/EminAly1/byteme-avatar-2026/pull/2), [#3](https://github.com/EminAly1/byteme-avatar-2026/pull/3) ve [#4](https://github.com/EminAly1/byteme-avatar-2026/pull/4) main'e birleşti. Sonraki geliştirme PR'ları ayrı takip edilir. |
 | TES-02 | Üç ana akış + kullanılabilir Kotlin uygulaması + iki zorunlu ML çalışmasının kabulü | Başlanmadı | Çalışan temel var; bütün yarışma kapsamı kabul edilebilir durumda değil. |
 | TES-03 | Son kaynak/kurulum/örnek kayıt/test/doküman paketi ve temiz kurulumdan demo | Başlanmadı | Entegre main, eksik modüller ve release paketi gerekli. |
 | TES-04 | Final sensitive-data kontrolü, sürüm etiketi ve yeniden üretilebilirlik | Doğrulama gerekiyor | Final paket/tag yok; önceki yerel secret kontrolleri final teslim kanıtı değildir. |
