@@ -87,7 +87,7 @@ def weight(db, product_id, quantity, expected_unit=None):
 
 def lock_lots(db, ids):
     unique = sorted({str(x) for x in ids})
-    rows = db.scalars(select(m.Lot).where(m.Lot.id.in_(unique)).order_by(m.Lot.id).with_for_update()).all()
+    rows = db.scalars(select(m.Lot).where(m.Lot.id.in_(unique)).order_by(m.Lot.id).with_for_update().execution_options(populate_existing=True)).all()
     if len(rows) != len(unique):
         raise DomainError('NOT_FOUND', 'Lot bulunamadı', 404)
     return {row.id: row for row in rows}

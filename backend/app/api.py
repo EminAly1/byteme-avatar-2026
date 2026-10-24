@@ -1,6 +1,6 @@
 """Protected core API. No domain write may bypass execute()/its transaction."""
 import hmac
-from typing import Annotated
+from typing import Annotated, Literal
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, Header, Query
@@ -8,7 +8,7 @@ from fastapi.responses import JSONResponse
 from sqlalchemy import and_, or_, select
 from sqlalchemy.orm import Session
 
-from app import models as m, schemas as s, services, sales
+from app import models as m, schemas as s, services, sales, traceability, recalls
 from app.commands import execute
 from app.config import get_settings
 from app.database import get_engine
@@ -166,3 +166,18 @@ def shipment_get(shipment_id: UUID, db: DB):
 
 router.add_api_route('/sales', listing(m.Sale, sales.sale_summary), methods=['GET'], name='list_sales')
 router.add_api_route('/shipments', listing(m.Shipment), methods=['GET'], name='list_shipments')
+
+
+@router.get('/lots/{lot_id}/trace')
+def lot_trace(lot_id: UUID, db: DB, direction: Literal['forward', 'backward'] = 'forward'):
+    return traceability.trace(db, lot_id, direction)
+
+
+@router.post('/recalls', status_code=201)
+def recall_create(body: s.RecallCreate, key: Key):
+    return write('recalls', key, body, recalls.create_recall)
+
+
+@router.get('/recalls/{recall_id}')
+def recall_get(recall_id: UUID, db: DB):
+    return recalls.recall_detail(db, recall_id)

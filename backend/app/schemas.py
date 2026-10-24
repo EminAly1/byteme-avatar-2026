@@ -196,3 +196,8 @@ class ShipmentCreate(Schema):
         if len(set(line_ids)) != len(line_ids):
             raise ValueError('Aynı satış satırı tekrarlanamaz')
         return self
+
+
+class RecallCreate(Schema):
+    source_lot_id: UUID
+    reason: str = Field(min_length=1, max_length=500)

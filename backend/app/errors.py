@@ -3,3 +3,7 @@ class DomainError(Exception):
         self.code = code
         self.message = message
         self.status = status
+
+
+class GraphChanged(Exception):
+    """Internal signal: release every lock and retry the whole transaction."""

@@ -9,7 +9,7 @@ from sqlalchemy.exc import IntegrityError, OperationalError
 from sqlalchemy.orm import Session
 
 from app.database import get_engine
-from app.errors import DomainError
+from app.errors import DomainError, GraphChanged
 from app.models import IdempotencyRequest
 
 
@@ -57,6 +57,12 @@ def execute(scope, key, payload, action, status=201):
                 if record:
                     return replay(record, digest)
             raise DomainError('CONFLICT', 'Benzersiz kayıt veya ilişki kısıtı ihlal edildi') from None
+        except GraphChanged:
+            # No additional out-of-order locks: discard the old closure, its
+            # idempotency row and all effects before acquiring the enlarged set.
+            if attempt == 2:
+                raise DomainError('TRANSACTION_RETRY', 'Lot grafı değişti; aynı idempotency anahtarıyla tekrar deneyin', 503) from None
+            time.sleep(0.02 * (attempt+1))
         except OperationalError as exc:
             errno = getattr(exc.orig, 'args', [None])[0]
             if errno not in (1205, 1213):
