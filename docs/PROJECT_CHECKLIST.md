@@ -11,7 +11,7 @@
 - **Başlanmadı:** Çalıştırılabilir akış yok; yalnız yönerge/tasarım bulunması uygulama sayılmaz.
 - **Doğrulama gerekiyor:** Gerekli ortam, uçtan uca, insan veya GitHub doğrulaması eksik/engelli.
 
-**Uzak main henüz birleştirilmedi:** `f263f1913f7787e1998d2cf9810fb47ef393dc62`. İncelemede [PR #1](https://github.com/EminAly1/byteme-avatar-2026/pull/1), [PR #2](https://github.com/EminAly1/byteme-avatar-2026/pull/2) ve [PR #3](https://github.com/EminAly1/byteme-avatar-2026/pull/3) açıktı. GitHub API bağlantısı proxy 403 ile engellendi. Tamamlandı durumları branch’lerdeki ve aynı kaynak ağacına sahip **yerel birleştirme adayındaki** kanıtlara dayanır.
+**GitHub birleşim güncellemesi (24 Ekim 2026):** [PR #1](https://github.com/EminAly1/byteme-avatar-2026/pull/1), [PR #2](https://github.com/EminAly1/byteme-avatar-2026/pull/2) ve [PR #3](https://github.com/EminAly1/byteme-avatar-2026/pull/3) sırasıyla **normal merge commit** ile `main` dalına birleştirildi. Son birleşim commit'i: `7837a85097e2fd50c8da672a03803c319296d344`. Aşağıdaki başarılı testler aynı kaynak ağacının izole yerel birleşim adayında koşulmuştur; son uzak `main` üzerinde yeniden test **henüz yapılmadı**.
 
 ## 1. Proje altyapısı
 
@@ -21,7 +21,7 @@
 | ALT-02 | FastAPI health ve MySQL ready | Tamamlandı | [main.py](../backend/app/main.py), [health testleri](../tests/test_health.py); gerçek iki endpoint 200. |
 | ALT-03 | Environment üzerinden MySQL 8, Alembic migration, FK/CHECK ve Decimal alanlar | Tamamlandı | [database.py](../backend/app/database.py), [migration](../backend/alembic/versions/eeea4b5dd1a8_create_production_and_stock_ledger_core.py), [migration testi](../tests/test_migrations_mysql.py); MySQL 8.0.46 üzerinde upgrade/check/downgrade/upgrade geçti. |
 | ALT-04 | Yerel proxy sınırı ve gizli bilgileri Git/tarayıcı dışında tutma | Tamamlandı | [proxy](../frontend/server/proxy.ts), [browser testi](../frontend/tests/browser/dashboard.spec.ts); Host/Origin, dosya erişimi ve key sızıntısı kontrolleri geçti. Üretim auth’u değildir. |
-| ALT-05 | Üç PR’ı normal merge commit ile sırayla main’e alma, hedefleri değiştirme | Doğrulama gerekiyor | Yerel üç merge çakışmasız; GitHub merge/retarget yapılamadı. [Manuel sıra](INTEGRATION_VALIDATION_2026-10-24.md#github-birleştirme-sırası). |
+| ALT-05 | Üç PR’ı normal merge commit ile sırayla main’e alma, hedefleri değiştirme | Tamamlandı | PR #1, #2 ve #3 GitHub üzerinde birleştirildi; `main` son birleşim commit'i `7837a850`. Son `main` testleri TST-06 kapsamında ayrıca doğrulanmalı. |
 | ALT-06 | Tek komutla bütün servislerin çalıştığı Docker Compose | Doğrulama gerekiyor | [Compose](../docker-compose.yml) API anahtarını enjekte etmiyor; frontend hedefi `http://backend:8000`, loopback kuralıyla uyumsuz. Tam image build/stack bu görevde çalıştırılmadı. Doğrulanan yol: izole MySQL container + host FastAPI/Vite. |
 | ALT-07 | Üretim kullanıcı oturumu, roller ve yetkilendirme | Başlanmadı | [API anahtarı kontrolü](../backend/app/api.py) yalnız güvenilir yerel istemciler içindir. |
 
@@ -119,7 +119,7 @@ OCR/fatura okuma ve anomali uyarıları PDF’de **isteğe bağlıdır**; iki zo
 | TST-03 | Temiz npm kurulumu, typecheck, build ve frontend unit/component | Tamamlandı | `npm ci`, typecheck/build başarılı; **25 passed**. |
 | TST-04 | Gerçek FastAPI/MySQL/Vite/Chromium ile alış–üretim–stok ve demo | Tamamlandı | **4 passed**; mock backend kullanılmadı. [Rapor](INTEGRATION_VALIDATION_2026-10-24.md). |
 | TST-05 | Parçalama, Kotlin satış/sync, recall yarışları ve iki ML modelinin değerlendirmesi | Başlanmadı | İlgili çalışan modüller ve kabul testleri eksik. |
-| TST-06 | GitHub main merge sonrası kontroller ve PR check/policy doğrulaması | Doğrulama gerekiyor | Bu koşu yerel adayda; uzak main eski. API engeli sonrası retarget, merge ve son main yeniden doğrulanmalı. |
+| TST-06 | GitHub main merge sonrası kontroller ve PR check/policy doğrulaması | Doğrulama gerekiyor | Üç PR artık `main` içinde; bu raporun testleri yerel birleşim adayında koşuldu. Son `main` ve güncel CI/PR kontrolleri ayrı çalıştırılmalı. |
 
 ## 9. Dokümantasyon ve demo
 
@@ -135,11 +135,11 @@ OCR/fatura okuma ve anomali uyarıları PDF’de **isteğe bağlıdır**; iki zo
 
 | ID | Görev | Durum | Kanıt / kalan iş |
 | --- | --- | --- | --- |
-| TES-01 | İlk üç PR ve ayrı checklist PR’ını main’e alma | Doğrulama gerekiyor | API ağ engeli; [manuel sıra](INTEGRATION_VALIDATION_2026-10-24.md#github-birleştirme-sırası). |
+| TES-01 | İlk üç PR ve ayrı checklist PR’ını main’e alma | Devam ediyor | İlk üç PR birleştirildi; `docs/project-checklist` dalındaki ayrı checklist PR'ının inceleme ve birleşimi bekleniyor. |
 | TES-02 | Üç ana akış + kullanılabilir Kotlin uygulaması + iki zorunlu ML çalışmasının kabulü | Başlanmadı | Çalışan temel var; bütün yarışma kapsamı kabul edilebilir durumda değil. |
 | TES-03 | Son kaynak/kurulum/örnek kayıt/test/doküman paketi ve temiz kurulumdan demo | Başlanmadı | Entegre main, eksik modüller ve release paketi gerekli. |
 | TES-04 | Final sensitive-data kontrolü, sürüm etiketi ve yeniden üretilebilirlik | Doğrulama gerekiyor | Final paket/tag yok; önceki yerel secret kontrolleri final teslim kanıtı değildir. |
-| TES-05 | **1 Kasım 2026 23:59 Europe/Istanbul** öncesi gönderim ve alındı doğrulaması | Başlanmadı | Teslim platformu/kanalı netleşmeli; gönderim/alındı kanıtı yok. |
+| TES-05 | **1 Kasım 2026 23:59 Europe/Istanbul** öncesi gönderim ve alındı doğrulaması | Başlanmadı | Yarışma e-postası: kayıtlı ekip üyesinin aynı e-postayı yanıtlayarak public GitHub deposu ve herkesin izleyebildiği en fazla 15 dakikalık video bağlantısını göndermesi gerekir. Gönderim/alındı kanıtı yok. |
 
 ## Bir sonraki kritik backend işi
 
