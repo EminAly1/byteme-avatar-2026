@@ -8,7 +8,7 @@ from fastapi.responses import JSONResponse
 from sqlalchemy import and_, or_, select
 from sqlalchemy.orm import Session
 
-from app import models as m, schemas as s, services, sales, traceability, recalls
+from app import models as m, schemas as s, services, sales, traceability, recalls, cuttings
 from app.commands import execute
 from app.config import get_settings
 from app.database import get_engine
@@ -181,3 +181,51 @@ def recall_create(body: s.RecallCreate, key: Key):
 @router.get('/recalls/{recall_id}')
 def recall_get(recall_id: UUID, db: DB):
     return recalls.recall_detail(db, recall_id)
+
+
+@router.post('/recipes', status_code=201)
+def recipe_create(body: s.RecipeCreate, key: Key):
+    return write('recipes', key, body, cuttings.create_recipe)
+
+
+@router.get('/recipes/{recipe_id}')
+def recipe_get(recipe_id: UUID, db: DB):
+    return cuttings.recipe_detail(db, services.get(db, m.RecipeVersion, recipe_id))
+
+
+@router.post('/recipes/{recipe_id}/availability')
+def recipe_availability(recipe_id: UUID, body: s.RecipeAvailability, key: Key):
+    return write(f'recipes:{recipe_id}:availability', key, body, lambda db, p: cuttings.set_availability(db, recipe_id, p), 200)
+
+
+@router.post('/cuttings', status_code=201)
+def cutting_create(body: s.CuttingCreate, key: Key):
+    return write('cuttings', key, body, cuttings.create_cutting)
+
+
+@router.get('/cuttings/{cutting_id}')
+def cutting_get(cutting_id: UUID, db: DB):
+    return cuttings.cutting_detail(db, services.get(db, m.Operation, cutting_id))
+
+
+@router.post('/cuttings/{cutting_id}/post')
+def cutting_post(cutting_id: UUID, body: s.CuttingPost, key: Key):
+    return write(f'cuttings:{cutting_id}:post', key, body, lambda db, p: cuttings.post_cutting(db, cutting_id, p), 200)
+
+
+def cutting_list(db: DB, limit: Limit = 50, cursor: UUID | None = None):
+    query = select(m.Operation).where(m.Operation.kind == 'cutting').order_by(m.Operation.id).limit(limit+1)
+    if cursor:
+        query = query.where(m.Operation.id > str(cursor))
+    rows = db.scalars(query).all()
+    return {'items': [services.entity(x) for x in rows[:limit]], 'next_cursor': rows[limit-1].id if len(rows) > limit else None}
+
+
+router.add_api_route('/cuttings', cutting_list, methods=['GET'], name='list_cuttings')
+@router.get('/recipes')
+def recipe_list(db: DB, limit: Limit = 50, cursor: UUID | None = None):
+    query = select(m.RecipeVersion).order_by(m.RecipeVersion.id).limit(limit+1)
+    if cursor:
+        query = query.where(m.RecipeVersion.id > str(cursor))
+    rows = db.scalars(query).all()
+    return {'items': [cuttings.recipe_detail(db, x) for x in rows[:limit]], 'next_cursor': rows[limit-1].id if len(rows) > limit else None}

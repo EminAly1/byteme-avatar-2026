@@ -61,7 +61,7 @@ Her POST `Idempotency-Key: UUID` ister. Aynı kapsam+anahtar+kanonik gövde ayn�
 6. Lot bağlantıları FK ile operation_input/output kayıtlarına gider. Karışımın tüm ortak çıktılarıyla kayıt ilişkisi kurulur; kaydedilen miktar dağıtım kaydıdır, fiziksel molekül ayrımı garantisi değildir. Bağlantı miktarı hassasiyet altında sıfıra düşerse kapanış reddedilir.
 7. MySQL deadlock/lock timeout (1213/1205) tüm transaction’ı en çok 3 kez tekrarlar. Kapanmış emir tekrar değiştirilemez; başarılı idempotent replay bunun dışındadır.
 
-Lot bazlı satış ve bağımsız/bağlı sevkiyat Görev 5 ile [uygulanmıştır](SALES_SHIPMENTS.md). İleri/geri izleme ve atomik recall Görev 6 ile [uygulanmıştır](TRACE_RECALL.md). Parçalama, değer ağırlıklı dağıtım ve genel transfer endpoint’i bu aşamada yoktur. Şema kind=cutting/rework, çoktan çoğa lot ilişkisi, lot.blocked ve hareket reversal_of alanlarıyla sonraki migration’lara zemin sağlar; bunlar tamamlanmış iş akışları değildir.
+Lot bazlı satış ve bağımsız/bağlı sevkiyat Görev 5 ile [uygulanmıştır](SALES_SHIPMENTS.md). İleri/geri izleme ve atomik recall Görev 6 ile [uygulanmıştır](TRACE_RECALL.md). İşletme içi parçalama ve değer ağırlıklı dağıtım Görev 7 ile [uygulanmıştır](CUTTING.md). Genel transfer endpoint’i bu aşamada yoktur. Şema kind=cutting/rework, çoktan çoğa lot ilişkisi, lot.blocked ve hareket reversal_of alanlarıyla sonraki migration’lara zemin sağlar; bunlar tamamlanmış iş akışları değildir.
 
 ## Gerçek HTTP demo
 
@@ -94,3 +94,7 @@ AVATAR_MYSQL_TEST=1 AVATAR_CORE_MYSQL_TEST=1 backend/.venv/bin/python -m pytest 
 ## Görev 6 — lot izleme ve geri çağırma
 
 [Sözleşme, transaction protokolü ve HTTP demo](TRACE_RECALL.md); [izole MySQL doğrulaması](../database/trace-recall-validation.md). Yeni head `bacb184a30d7`; kurulumda `alembic upgrade head` uygulanmalıdır.
+
+## Görev 7 — kuzu parçalama
+
+[Kesim/reçete API sözleşmesi ve demo](CUTTING.md), [gerçek MySQL doğrulaması](../database/cutting-validation.md). Yeni Alembic head `fa8791f3cf0e`; önce `alembic upgrade head` uygulayın. Parça ağırlıkları/ref fiyatlar PDF’de verilmediği için demo bunları kurgusal olarak etiketler.

@@ -25,6 +25,7 @@ class Schema(BaseModel):
 
 
 class ProductCreate(Schema):
+    species: Name | None = None
     sku: Annotated[str, Field(min_length=1, max_length=64)]
     name: Name
     type: Literal['raw', 'finished', 'byproduct']
@@ -67,6 +68,7 @@ class ReceiptItem(Schema):
     external_lot_code: Code
     quantity: PositiveQuantity
     total_cost: Money
+    unit_price: Money | None = None
     expires_at: date | None = None
 
 
@@ -201,3 +203,61 @@ class ShipmentCreate(Schema):
 class RecallCreate(Schema):
     source_lot_id: UUID
     reason: str = Field(min_length=1, max_length=500)
+
+
+class RecipeLineCreate(Schema):
+    product_id: UUID
+    reference_eur_per_kg: Annotated[Money, Field(gt=0)] | None = None
+
+
+class RecipeCreate(Schema):
+    code: Code
+    version: Annotated[int, Field(strict=True, ge=1, le=2147483647)]
+    species: Name
+    input_product_id: UUID
+    allocation_method: Literal['quantity', 'value']
+    available: bool = True
+    lines: Annotated[list[RecipeLineCreate], Field(min_length=1, max_length=100)]
+
+    @model_validator(mode='after')
+    def validate_key(self):
+        if len({x.product_id for x in self.lines}) != len(self.lines):
+            raise ValueError('Reçete ürünleri tekrarlanamaz')
+        if self.allocation_method == 'value' and any(x.reference_eur_per_kg is None for x in self.lines):
+            raise ValueError('Değer anahtarı bütün parçalarda pozitif EUR/kg referansı gerektirir')
+        return self
+
+
+class RecipeAvailability(Schema):
+    available: bool
+
+
+class CuttingCreate(Schema):
+    code: Code
+    recipe_version_id: UUID
+
+
+class CuttingOutput(OutputItem):
+    unit: Literal['kg'] = 'kg'
+    explanation: Annotated[str, Field(min_length=1, max_length=500)] | None = None
+
+
+class CuttingDifference(Schema):
+    kind: Literal['waste', 'other_loss']
+    quantity: PositiveQuantity
+    reason: Annotated[str, Field(min_length=1, max_length=500)]
+
+
+class CuttingPost(Schema):
+    consumed_inputs: Annotated[list[ConsumedInput], Field(min_length=1, max_length=100)]
+    output_location_id: UUID
+    outputs: Annotated[list[CuttingOutput], Field(min_length=1, max_length=100)]
+    differences: Annotated[list[CuttingDifference], Field(max_length=100)] = Field(default_factory=list)
+
+    @model_validator(mode='after')
+    def unique_lines(self):
+        if len({(x.lot_id, x.location_id) for x in self.consumed_inputs}) != len(self.consumed_inputs):
+            raise ValueError('Girdi lot/konumu tekrarlanamaz')
+        if len({(x.product_id, x.lot_code) for x in self.outputs}) != len(self.outputs):
+            raise ValueError('Çıktı ürün/lot kodu tekrarlanamaz')
+        return self

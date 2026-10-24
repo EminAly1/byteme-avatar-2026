@@ -3,7 +3,7 @@ from datetime import date, datetime, timezone
 from decimal import Decimal
 from uuid import uuid4
 
-from sqlalchemy import Boolean, CheckConstraint, Date, ForeignKey, Index, JSON, Numeric, String, UniqueConstraint
+from sqlalchemy import null, Boolean, CheckConstraint, Integer, Date, ForeignKey, Index, JSON, Numeric, String, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy.dialects.mysql import DATETIME
 
@@ -29,6 +29,8 @@ class Product(Identified, Base):
         CheckConstraint("base_unit IN ('kg','package','unit')", name="ck_product_unit"),
         CheckConstraint("package_weight_kg IS NULL OR package_weight_kg > 0", name="ck_product_weight"), OPTIONS,
     )
+    # Server default lets legacy inserts omit this optional metadata column.
+    species: Mapped[str | None] = mapped_column(String(200), server_default=null())
     sku: Mapped[str] = mapped_column(String(64), unique=True)
     name: Mapped[str] = mapped_column(String(200))
     type: Mapped[str] = mapped_column(String(24))
@@ -92,6 +94,33 @@ class ReceiptLine(Identified, Base):
     lot_id: Mapped[str] = mapped_column(ForeignKey("lots.id"), unique=True)
     quantity: Mapped[Decimal] = mapped_column(Q)
     total_cost: Mapped[Decimal] = mapped_column(Q)
+    unit_price: Mapped[Decimal | None] = mapped_column(Q)
+
+
+class RecipeVersion(Identified, Base):
+    __tablename__ = "recipe_versions"
+    __table_args__ = (
+        UniqueConstraint("code", "version", name="uq_recipe_version"),
+        CheckConstraint("version > 0", name="ck_recipe_version"),
+        CheckConstraint("allocation_method IN ('quantity','value')", name="ck_recipe_method"), OPTIONS,
+    )
+    code: Mapped[str] = mapped_column(String(100))
+    version: Mapped[int] = mapped_column(Integer)
+    species: Mapped[str] = mapped_column(String(200))
+    input_product_id: Mapped[str] = mapped_column(ForeignKey("products.id"))
+    allocation_method: Mapped[str] = mapped_column(String(16))
+    available: Mapped[bool] = mapped_column(Boolean, default=True)
+
+
+class RecipeLine(Identified, Base):
+    __tablename__ = "recipe_lines"
+    __table_args__ = (
+        UniqueConstraint("recipe_version_id", "product_id", name="uq_recipe_product"),
+        CheckConstraint("reference_eur_per_kg IS NULL OR reference_eur_per_kg > 0", name="ck_recipe_reference"), OPTIONS,
+    )
+    recipe_version_id: Mapped[str] = mapped_column(ForeignKey("recipe_versions.id"))
+    product_id: Mapped[str] = mapped_column(ForeignKey("products.id"))
+    reference_eur_per_kg: Mapped[Decimal | None] = mapped_column(Q)
 
 
 class Operation(Identified, Base):
@@ -104,6 +133,8 @@ class Operation(Identified, Base):
     code: Mapped[str] = mapped_column(String(100), unique=True)
     kind: Mapped[str] = mapped_column(String(24), default="external_production")
     producer_id: Mapped[str | None] = mapped_column(ForeignKey("parties.id"))
+    recipe_version_id: Mapped[str | None] = mapped_column(ForeignKey("recipe_versions.id", name="fk_operations_recipe_version"))
+    allocation_snapshot: Mapped[dict | None] = mapped_column(JSON(none_as_null=True))
     status: Mapped[str] = mapped_column(String(16), default="draft")
     posted_at: Mapped[datetime | None] = mapped_column(DATETIME(fsp=6))
     total_material_cost: Mapped[Decimal] = mapped_column(Q, default=Decimal("0"))
@@ -133,8 +164,22 @@ class OperationOutput(Identified, Base):
     operation_id: Mapped[str] = mapped_column(ForeignKey("operations.id"))
     lot_id: Mapped[str] = mapped_column(ForeignKey("lots.id"), unique=True)
     quantity: Mapped[Decimal] = mapped_column(Q)
+    reference_eur_per_kg: Mapped[Decimal | None] = mapped_column(Q)
+    explanation: Mapped[str | None] = mapped_column(String(500))
     allocation_weight: Mapped[Decimal] = mapped_column(Q)
     allocated_cost: Mapped[Decimal] = mapped_column(Q)
+
+
+class OperationDifference(Identified, Base):
+    __tablename__ = "operation_differences"
+    __table_args__ = (
+        CheckConstraint("kind IN ('waste','other_loss')", name="ck_difference_kind"),
+        CheckConstraint("quantity > 0", name="ck_difference_quantity"), OPTIONS,
+    )
+    operation_id: Mapped[str] = mapped_column(ForeignKey("operations.id"))
+    kind: Mapped[str] = mapped_column(String(24))
+    quantity: Mapped[Decimal] = mapped_column(Q)
+    reason: Mapped[str] = mapped_column(String(500))
 
 
 class LotLink(Identified, Base):
