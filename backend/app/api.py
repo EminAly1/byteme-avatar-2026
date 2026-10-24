@@ -8,7 +8,7 @@ from fastapi.responses import JSONResponse
 from sqlalchemy import and_, or_, select
 from sqlalchemy.orm import Session
 
-from app import models as m, schemas as s, services
+from app import models as m, schemas as s, services, sales
 from app.commands import execute
 from app.config import get_settings
 from app.database import get_engine
@@ -93,13 +93,13 @@ def lot_get(lot_id: UUID, db: DB):
     return services.entity(services.get(db, m.Lot, lot_id))
 
 
-def listing(model):
+def listing(model, serialize=services.entity):
     def endpoint(db: DB, limit: Limit = 50, cursor: UUID | None = None):
         query = select(model).order_by(model.id).limit(limit+1)
         if cursor:
             query = query.where(model.id > str(cursor))
         rows = db.scalars(query).all()
-        return {'items': [services.entity(x) for x in rows[:limit]], 'next_cursor': rows[limit-1].id if len(rows) > limit else None}
+        return {'items': [serialize(x) for x in rows[:limit]], 'next_cursor': rows[limit-1].id if len(rows) > limit else None}
     return endpoint
 
 
@@ -142,3 +142,27 @@ def movements(db: DB, limit: Limit = 50, cursor: UUID | None = None, lot_id: UUI
         query = query.where(m.StockMovement.id > str(cursor))
     rows = db.scalars(query).all()
     return {'items': [services.entity(x) for x in rows[:limit]], 'next_cursor': rows[limit-1].id if len(rows) > limit else None}
+
+
+@router.post('/sales', status_code=201)
+def sale_create(body: s.SaleCreate, key: Key):
+    return write('sales', key, body, sales.create_sale)
+
+
+@router.get('/sales/{sale_id}')
+def sale_get(sale_id: UUID, db: DB):
+    return sales.sale_detail(db, services.get(db, m.Sale, sale_id))
+
+
+@router.post('/shipments', status_code=201)
+def shipment_create(body: s.ShipmentCreate, key: Key):
+    return write('shipments', key, body, sales.create_shipment)
+
+
+@router.get('/shipments/{shipment_id}')
+def shipment_get(shipment_id: UUID, db: DB):
+    return sales.shipment_detail(db, services.get(db, m.Shipment, shipment_id))
+
+
+router.add_api_route('/sales', listing(m.Sale, sales.sale_summary), methods=['GET'], name='list_sales')
+router.add_api_route('/shipments', listing(m.Shipment), methods=['GET'], name='list_shipments')

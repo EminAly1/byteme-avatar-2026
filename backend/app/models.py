@@ -191,3 +191,68 @@ class IdempotencyRequest(Base):
     http_status: Mapped[int] = mapped_column(default=0)
     response: Mapped[dict] = mapped_column(JSON, default=dict)
     created_at: Mapped[datetime] = mapped_column(DATETIME(fsp=6), default=now)
+
+
+class Sale(Identified, Base):
+    __tablename__ = "sales"
+    __table_args__ = (
+        CheckConstraint("currency = 'EUR' AND total_amount >= 0", name="ck_sale_amount"),
+        Index("ix_sale_customer", "customer_id", "id"), OPTIONS,
+    )
+    customer_id: Mapped[str] = mapped_column(ForeignKey("parties.id"))
+    sold_at: Mapped[datetime] = mapped_column(DATETIME(fsp=6))
+    currency: Mapped[str] = mapped_column(String(3), default="EUR")
+    total_amount: Mapped[Decimal] = mapped_column(Numeric(18, 2), default=Decimal("0"))
+
+
+class SaleLine(Identified, Base):
+    __tablename__ = "sale_lines"
+    __table_args__ = (
+        UniqueConstraint("sale_id", "line_no", name="uq_sale_line_number"),
+        UniqueConstraint("sale_id", "lot_id", "location_id", name="uq_sale_lot_location"),
+        CheckConstraint("line_no > 0 AND quantity > 0 AND unit_price >= 0 AND total_amount >= 0 AND consumed_cost >= 0", name="ck_sale_line_values"),
+        CheckConstraint("unit IN ('kg','package','unit')", name="ck_sale_line_unit"),
+        Index("ix_sale_line_lot", "lot_id", "sale_id"), OPTIONS,
+    )
+    sale_id: Mapped[str] = mapped_column(ForeignKey("sales.id"))
+    line_no: Mapped[int] = mapped_column()
+    product_id: Mapped[str] = mapped_column(ForeignKey("products.id"))
+    lot_id: Mapped[str] = mapped_column(ForeignKey("lots.id"))
+    location_id: Mapped[str] = mapped_column(ForeignKey("locations.id"))
+    stock_movement_id: Mapped[str] = mapped_column(ForeignKey("stock_movements.id"), unique=True)
+    quantity: Mapped[Decimal] = mapped_column(Q)
+    unit: Mapped[str] = mapped_column(String(16))
+    unit_price: Mapped[Decimal] = mapped_column(Numeric(18, 2))
+    total_amount: Mapped[Decimal] = mapped_column(Numeric(18, 2))
+    consumed_cost: Mapped[Decimal] = mapped_column(Q)
+
+
+class Shipment(Identified, Base):
+    __tablename__ = "shipments"
+    __table_args__ = (Index("ix_shipment_customer", "customer_id", "id"), OPTIONS)
+    customer_id: Mapped[str] = mapped_column(ForeignKey("parties.id"))
+    sale_id: Mapped[str | None] = mapped_column(ForeignKey("sales.id"))
+    recipient_name: Mapped[str] = mapped_column(String(200))
+    recipient_contact: Mapped[str | None] = mapped_column(String(300))
+    shipped_at: Mapped[datetime] = mapped_column(DATETIME(fsp=6))
+
+
+class ShipmentLine(Identified, Base):
+    __tablename__ = "shipment_lines"
+    __table_args__ = (
+        UniqueConstraint("shipment_id", "line_no", name="uq_shipment_line_number"),
+        UniqueConstraint("shipment_id", "lot_id", "location_id", name="uq_shipment_lot_location"),
+        CheckConstraint("line_no > 0 AND quantity > 0 AND consumed_cost >= 0", name="ck_shipment_line_values"),
+        CheckConstraint("unit IN ('kg','package','unit')", name="ck_shipment_line_unit"),
+        Index("ix_shipment_line_lot", "lot_id", "shipment_id"), OPTIONS,
+    )
+    shipment_id: Mapped[str] = mapped_column(ForeignKey("shipments.id"))
+    line_no: Mapped[int] = mapped_column()
+    sale_line_id: Mapped[str | None] = mapped_column(ForeignKey("sale_lines.id"), unique=True)
+    product_id: Mapped[str] = mapped_column(ForeignKey("products.id"))
+    lot_id: Mapped[str] = mapped_column(ForeignKey("lots.id"))
+    location_id: Mapped[str] = mapped_column(ForeignKey("locations.id"))
+    stock_movement_id: Mapped[str] = mapped_column(ForeignKey("stock_movements.id"), unique=True)
+    quantity: Mapped[Decimal] = mapped_column(Q)
+    unit: Mapped[str] = mapped_column(String(16))
+    consumed_cost: Mapped[Decimal] = mapped_column(Q)

@@ -1,6 +1,6 @@
 # Backend A — alış, stok ve dış üretim çekirdeği
 
-Bu branch foundation commit’i üzerine kuruludur. Uzak main foundation’ı henüz içermediği için backend PR’ı foundation’a bağımlıdır. Bu görevde yalnızca backend/, database/, tests/ değiştirilmiştir; ortak docs/ ve Compose dosyaları değiştirilmemiştir.
+Foundation/backend/frontend/checklist PR’ları main’e birleştirilmiştir. Görev 5, main 6341cfb üzerine lot bazlı satış ve sevkiyat ekler; ayrıntılı yeni sözleşme [SALES_SHIPMENTS.md](SALES_SHIPMENTS.md) içindedir. Yalnız backend/, database/, tests/ değiştirilir; ortak docs/ ve Compose korunur.
 
 ## Çalıştırma
 
@@ -61,7 +61,7 @@ Her POST `Idempotency-Key: UUID` ister. Aynı kapsam+anahtar+kanonik gövde ayn�
 6. Lot bağlantıları FK ile operation_input/output kayıtlarına gider. Karışımın tüm ortak çıktılarıyla kayıt ilişkisi kurulur; kaydedilen miktar dağıtım kaydıdır, fiziksel molekül ayrımı garantisi değildir. Bağlantı miktarı hassasiyet altında sıfıra düşerse kapanış reddedilir.
 7. MySQL deadlock/lock timeout (1213/1205) tüm transaction’ı en çok 3 kez tekrarlar. Kapanmış emir tekrar değiştirilemez; başarılı idempotent replay bunun dışındadır.
 
-Parçalama, bağımsız sevkiyat/satış, recall raporu/blok endpoint’i, değer ağırlıklı dağıtım ve genel transfer endpoint’i bu aşamada yoktur. Şema kind=cutting/rework, çoktan çoğa lot ilişkisi, lot.blocked ve hareket reversal_of alanlarıyla sonraki migration’lara zemin sağlar; bunlar tamamlanmış iş akışları değildir.
+Lot bazlı satış ve bağımsız/bağlı sevkiyat Görev 5 ile [uygulanmıştır](SALES_SHIPMENTS.md). Parçalama, recall raporu/blok endpoint’i, değer ağırlıklı dağıtım ve genel transfer endpoint’i bu aşamada yoktur. Şema kind=cutting/rework, çoktan çoğa lot ilişkisi, lot.blocked ve hareket reversal_of alanlarıyla sonraki migration’lara zemin sağlar; bunlar tamamlanmış iş akışları değildir.
 
 ## Gerçek HTTP demo
 
