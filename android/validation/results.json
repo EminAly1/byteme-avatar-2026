@@ -1,0 +1,80 @@
+{
+  "report_date": "2026-10-25",
+  "client_timezone": "Europe/Istanbul",
+  "host_tests": [
+    {
+      "variant": "testDebugUnitTest",
+      "class": "com.byteme.avatar.ComposeSmokeTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "variant": "testDebugUnitTest",
+      "class": "com.byteme.avatar.SalesRepositoryTest",
+      "tests": 15,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "variant": "testReleaseUnitTest",
+      "class": "com.byteme.avatar.ComposeSmokeTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "variant": "testReleaseUnitTest",
+      "class": "com.byteme.avatar.SalesRepositoryTest",
+      "tests": 15,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  ],
+  "device": {
+    "android_api": 28,
+    "android_version": "9",
+    "abi": "x86_64",
+    "acceleration": "software TCG",
+    "unique_tests_passed": 4,
+    "main_suite": {
+      "passed": 3,
+      "failed": 0,
+      "skipped": 0
+    },
+    "persistence_and_offline_suite": {
+      "passed": 3,
+      "failed": 0,
+      "skipped": 0
+    },
+    "api35_attempt": "instrumentation process crashed before test discovery; not passed"
+  },
+  "mysql_version": "8.0.46",
+  "isolated_database": "avatar_android_demo_test",
+  "backend_counts": {
+    "sales": 2,
+    "sale_lines": 2,
+    "recalls": 1,
+    "recall_lots": 6,
+    "stock_movements": 16
+  },
+  "mobile_sale_id": "2346fb5e-46bd-42e9-a762-52bb51a457dd",
+  "mobile_sale_line_id": "c4a9c604-2302-44af-b418-ae8f98d7cbc0",
+  "stock_movement_id": "e1ffbf0b-f5d2-45db-896f-e681c2436cbb",
+  "lot_id": "4031dc7a-ace0-4765-861d-cb4960d2b0ed",
+  "stock_before": "6.000000",
+  "stock_after": "5.000000",
+  "offline_drafts_after_restart": 1,
+  "total_drafts_after_restart": 3,
+  "durable_outbox_after_restart": 2,
+  "keys_and_frozen_bodies_unchanged": true,
+  "apk": {
+    "path": "app/build/outputs/apk/debug/app-debug.apk",
+    "bytes": 18026649,
+    "sha256": "2f3c8625616dbbf1e672debd949381cc103da395b6bd2b414813908fb1736c48"
+  }
+}
