@@ -134,10 +134,16 @@ def create_receipt(db, request):
     for line in request.lines:
         product = get(db, m.Product, line.product_id)
         counted_quantity(product, line.quantity)
+        if line.unit_price is not None:
+            with localcontext() as ctx:
+                ctx.prec = 48
+                expected = displayed(line.quantity * line.unit_price)
+            if expected != displayed(line.total_cost):
+                raise DomainError('RECEIPT_PRICE_MISMATCH', 'Miktar × birim fiyat ile doğrulanmış toplam alış tutarı uyuşmuyor', 422)
         lot = m.Lot(product_id=product.id, supplier_id=str(request.supplier_id), external_code=line.external_lot_code, received_at=timestamp, expires_at=line.expires_at, original_quantity=line.quantity, total_cost=line.total_cost)
         db.add(lot)
         db.flush()
-        row = m.ReceiptLine(receipt_id=receipt.id, product_id=product.id, lot_id=lot.id, quantity=line.quantity, total_cost=line.total_cost)
+        row = m.ReceiptLine(receipt_id=receipt.id, product_id=product.id, lot_id=lot.id, quantity=line.quantity, total_cost=line.total_cost, unit_price=line.unit_price)
         db.add(row)
         db.flush()
         # Newly inserted lots are exclusively owned by this transaction.
@@ -153,10 +159,12 @@ def create_operation(db, request):
     return operation_detail(db, row)
 
 
-def draft_operation(db, operation_id):
+def draft_operation(db, operation_id, kind='external_production'):
     op = get(db, m.Operation, operation_id, lock=True)
     if op.status != 'draft':
         raise DomainError('OPERATION_POSTED', 'Kapanmış emir değiştirilemez')
+    if op.kind != kind:
+        raise DomainError('OPERATION_KIND', 'Bu endpoint operasyon türüne uygun değil', 422)
     return op
 
 

@@ -22,4 +22,8 @@ Görev 5 revision’ı `81f4da20f36b` (parent `eeea4b5dd1a8`). sales/sale_lines/
 
 ## Görev 6 — recall migration’ı
 
-Yeni head `bacb184a30d7` (parent `81f4da20f36b`): recalls / recall_lots. Kaynak ve türev üyeler gerçek lot FK’leriyle kaydedilir. Eski stok/satış kayıtları korunur; downgrade recall audit tablolarını siler, lot bloklarını kaldırmaz. [API ve kilit protokolü](../backend/TRACE_RECALL.md), [gerçek MySQL kanıtı](trace-recall-validation.md).
+Görev 6 revision’ı `bacb184a30d7` (parent `81f4da20f36b`): recalls / recall_lots. Kaynak ve türev üyeler gerçek lot FK’leriyle kaydedilir. Eski stok/satış kayıtları korunur; downgrade recall audit tablolarını siler, lot bloklarını kaldırmaz. [API ve kilit protokolü](../backend/TRACE_RECALL.md), [gerçek MySQL kanıtı](trace-recall-validation.md).
+
+## Görev 7 — kesim ve reçete migration’ı
+
+Yeni head `fa8791f3cf0e` (parent `bacb184a30d7`). recipe_versions / recipe_lines / operation_differences tabloları; nullable ürün türü, alış birim fiyatı, operasyon snapshot/FK ve çıktı referans/açıklama alanları eklenir. Mevcut Operation/Lot/StockMovement/LotLink yeniden kullanılır. Downgrade yeni audit metadata’sını siler; stok, lot maliyeti, satış veya recall bloklarını kaldırmaz. [Sözleşme](../backend/CUTTING.md), [doğrulama](cutting-validation.md).
