@@ -147,3 +147,52 @@ class OperationPost(Schema):
         if self.loss_quantity and not self.loss_reason:
             raise ValueError('Miktar farkı için loss_reason gerekir')
         return self
+
+
+class SaleItem(Schema):
+    lot_id: UUID
+    location_id: UUID
+    quantity: PositiveQuantity
+    unit: Literal['kg', 'package', 'unit'] | None = None
+    unit_price: Money
+
+
+class SaleCreate(Schema):
+    customer_id: UUID
+    sold_at: AwareDatetime | None = None
+    currency: Literal['EUR'] = 'EUR'
+    lines: Annotated[list[SaleItem], Field(min_length=1, max_length=100)]
+
+    @model_validator(mode='after')
+    def unique_lines(self):
+        pairs = [(x.lot_id, x.location_id) for x in self.lines]
+        if len(set(pairs)) != len(pairs):
+            raise ValueError('Aynı lot/konum tek satış satırında olmalıdır')
+        return self
+
+
+class ShipmentItem(Schema):
+    lot_id: UUID
+    location_id: UUID
+    quantity: PositiveQuantity
+    unit: Literal['kg', 'package', 'unit'] | None = None
+    sale_line_id: UUID | None = None
+
+
+class ShipmentCreate(Schema):
+    customer_id: UUID
+    sale_id: UUID | None = None
+    shipped_at: AwareDatetime | None = None
+    lines: Annotated[list[ShipmentItem], Field(min_length=1, max_length=100)]
+
+    @model_validator(mode='after')
+    def linked_or_independent(self):
+        if any((x.sale_line_id is not None) != (self.sale_id is not None) for x in self.lines):
+            raise ValueError('sale_id varsa her satırda sale_line_id gerekir; bağımsız sevkiyatta kullanılamaz')
+        pairs = [(x.lot_id, x.location_id) for x in self.lines]
+        if len(set(pairs)) != len(pairs):
+            raise ValueError('Aynı lot/konum tek sevkiyat satırında olmalıdır')
+        line_ids = [x.sale_line_id for x in self.lines if x.sale_line_id]
+        if len(set(line_ids)) != len(line_ids):
+            raise ValueError('Aynı satış satırı tekrarlanamaz')
+        return self
