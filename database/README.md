@@ -1,7 +1,17 @@
-# Veritabanı
+# MySQL üretim ve stok çekirdeği
 
-MySQL 8.0 merkezi otoritedir. ER taslağı: ../docs/data-model.md. SQLAlchemy modelleri ve tek Alembic migration zinciri backend/ altında Ajan A'nın sorumluluğundadır; bu klasöre paralel şema/DDL kopyası eklemeyin.
+Şema kaynağı `backend/app/models.py`; kurulum kaynağı tek Alembic zinciridir. İlk revision `eeea4b5dd1a8` ürün, parti/tedarikçi, konum/depo, lot, alış/satır, emir/girdi/çıktı, hizmet, lot bağlantısı, stok bakiye/hareketi ve idempotency tablolarını oluşturur. Uygulama açılışında `create_all` yoktur.
 
-Şu aşamada yalnızca bağlantı altyapısı vardır; domain tabloları ve örnek senaryo verileri sonraki görevdir. Bootstrap migration domain şeması oluşturmaz. Gelecek seed komutu tekrar çalıştırılabilir olmalı ve PDF'deki ET-2026-001 → URT-2026-045 → SUC-2026-045 → Market A/B/C (30/25/30) kayıtlarını oluşturmalıdır; bu veri henüz yüklenmedi.
+```bash
+# Repo kökünde MYSQL_* process ortamı yüklüyken
+backend/.venv/bin/alembic -c backend/alembic.ini upgrade head
+backend/.venv/bin/alembic -c backend/alembic.ini check
+```
 
-Karakter seti utf8mb4; miktarlar DECIMAL(18,6), maliyetler DECIMAL(18,6), tahsilat tutarları DECIMAL(18,2); zamanlar UTC. Tüm tablolar InnoDB. Kalıcı veri Compose mysql_data volume'unda tutulur; `docker compose down -v` veriyi siler.
+MySQL 8.0.16+ / InnoDB, utf8mb4; Decimal alanlar DECIMAL(18,6), UTC DATETIME(6). Alış/hizmet API tutarları kuruş hassasiyetinde girilir; toplam dağıtımı 6 hanede saklanır. Gerçek lot giriş miktarı/maliyeti sabittir; tüketilen miktar/maliyet kümülatif izlenir. Veri deposu Compose mysql_data volume’udur.
+
+`downgrade base` bütün çekirdek tablolarını ve içlerindeki verileri kaldırır; geliştirme/test dışında yedeksiz çalıştırmayın. MySQL indeksleri FK’lerle birlikte ilgili tablo kaldırıldığında silinir. Upgrade → metadata check → downgrade → tekrar upgrade ayrı `avatar_migration_test` şemasında doğrulanır.
+
+Örnek kayıtları SQL kopyasıyla eklemeyin; `backend/app/demo.py` gerçek HTTP API üzerinden tekrar çalıştırılabilir ET-2026-001 → URT-2026-045 → SUC-2026-045 senaryosunu oluşturur. Piyasa A/B/C sevkiyatları bu aşamada uygulanmadı.
+
+Detaylı çalıştırma/sözleşme: ../backend/README.md. Mevcut ortak docs/data-model.md ve docs/api-contract.md planlama belgeleridir; alan sahipliği nedeniyle bu görevde değiştirilmedi. Gerçek uygulama OpenAPI’si ve backend README bu çekirdek diliminin güncel sözleşmesidir.
