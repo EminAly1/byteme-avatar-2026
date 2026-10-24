@@ -1,50 +1,221 @@
-import { useEffect, useState } from 'react'
+import { useState } from "react";
+import { NavLink, Route, Routes, useLocation } from "react-router-dom";
+import { useIsFetching, useQueryClient } from "@tanstack/react-query";
+import {
+  LayoutDashboard,
+  Boxes,
+  Building2,
+  Warehouse,
+  ClipboardList,
+  Layers3,
+  Factory,
+  Scissors,
+  ChartNoAxesCombined,
+  Network,
+  ShieldAlert,
+  Sparkles,
+  Sprout,
+  RefreshCw,
+  Menu,
+  ChevronRight,
+  ArrowUpRight,
+  LockKeyhole,
+} from "lucide-react";
+import { Products, Parties, Locations } from "./pages/Catalog";
+import { Receipts } from "./pages/Receipts";
+import { Stocks } from "./pages/Stocks";
+import { Operations, OperationPage } from "./pages/Operations";
+import { Dashboard } from "./pages/Dashboard";
 
-type Health = { status: string }
-
-export function App() {
-  const [status, setStatus] = useState('Bağlantı kontrol ediliyor…')
-
-  useEffect(() => {
-    let active = true
-    const controller = new AbortController()
-    const timeout = window.setTimeout(() => controller.abort(), 5000)
-    async function checkHealth() {
-      try {
-        const response = await fetch('/api/health', { signal: controller.signal })
-        if (!response.ok) throw new Error('Health request failed')
-        const health: Health = await response.json()
-        if (health.status !== 'ok') throw new Error('Unexpected health response')
-        if (active) setStatus('API erişilebilir')
-      } catch {
-        if (active) {
-          setStatus(controller.signal.aborted ? 'API kontrolü zaman aşımına uğradı' : 'API bağlantısı kurulamadı')
-        }
-      } finally {
-        window.clearTimeout(timeout)
-      }
-    }
-    void checkHealth()
-    return () => {
-      active = false
-      controller.abort()
-      window.clearTimeout(timeout)
-    }
-  }, [])
-
+const primary = [
+  { path: "/", label: "Genel bakış", icon: LayoutDashboard },
+  { path: "/urunler", label: "Ürünler", icon: Boxes },
+  { path: "/is-ortaklari", label: "İş ortakları", icon: Building2 },
+  { path: "/depolar", label: "Depolar", icon: Warehouse },
+  { path: "/alislar", label: "Alış ve lot girişi", icon: ClipboardList },
+  { path: "/stoklar", label: "Stoklar", icon: Layers3 },
+  { path: "/uretim", label: "Dış üretim", icon: Factory },
+];
+const future = [
+  { path: "/plan/parcalama", label: "Kuzu parçalama", icon: Scissors },
+  { path: "/plan/satis", label: "Satış raporları", icon: ChartNoAxesCombined },
+  { path: "/plan/izleme", label: "Lot izlenebilirliği", icon: Network },
+  { path: "/plan/recall", label: "Geri çağırma", icon: ShieldAlert },
+  { path: "/plan/ai", label: "Yapay zekâ tahminleri", icon: Sparkles },
+];
+function Planned({ title }: { title: string }) {
   return (
-    <main className="mx-auto max-w-4xl px-6 py-16">
-      <p className="text-sm font-semibold tracking-widest text-emerald-700">BYTEME · AVATAR 2026</p>
-      <h1 className="mt-4 text-4xl font-bold tracking-tight text-slate-900">Üretimden satışa, kayıtlı ve izlenebilir.</h1>
-      <p className="mt-6 max-w-2xl text-lg text-slate-600">
-        Gıda üretimi, maliyet, satış ve lot izlenebilirliği prototipinin geliştirme temeli.
+    <section className="planned panel">
+      <div className="planned-icon">
+        <Layers3 size={32} />
+      </div>
+      <span className="eyebrow">YOL HARİTASI</span>
+      <h2>{title}</h2>
+      <span className="badge amber">Geliştirme aşamasında</span>
+      <p>
+        Bu modülün backend işlemleri henüz uygulanmadı. Buradan gerçek bir işlem
+        başlatılamaz.
       </p>
-      <section className="mt-10 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm" aria-labelledby="status-heading">
-        <h2 id="status-heading" className="text-xl font-semibold">Sistem durumu</h2>
-        <p className="mt-3 text-slate-700" role="status">{status}</p>
-        <p className="mt-3 text-sm text-slate-500">Bu kontrol yalnızca API erişimini gösterir. İş akışları ve veritabanı hazırlığı ayrıca doğrulanmalıdır.</p>
-      </section>
-      <p className="mt-8 text-sm text-slate-500">Üretim, parçalama, satış, geri çağırma ve tahmin modülleri sonraki geliştirme aşamasındadır.</p>
-    </main>
-  )
+      <NavLink to="/" className="button">
+        Genel bakışa dön <ArrowUpRight size={16} />
+      </NavLink>
+    </section>
+  );
+}
+export function App() {
+  const [menu, setMenu] = useState(false),
+    location = useLocation(),
+    client = useQueryClient(),
+    fetching = useIsFetching();
+  const title =
+    [...primary, ...future].find((x) =>
+      x.path === "/"
+        ? location.pathname === "/"
+        : location.pathname.startsWith(x.path),
+    )?.label || "Sayfa bulunamadı";
+  return (
+    <div className="app-layout">
+      <a href="#main-content" className="skip-link">
+        İçeriğe geç
+      </a>
+      <aside
+        className={"sidebar " + (menu ? "open" : "")}
+        aria-label="Yönetim menüsü"
+      >
+        <NavLink to="/" className="brand" onClick={() => setMenu(false)}>
+          <span className="brand-icon">
+            <Sprout size={25} />
+          </span>
+          <div>
+            ByteMe<small>AVATAR 2026</small>
+          </div>
+        </NavLink>
+        <div className="workspace-label">GIDA ÜRETİM YÖNETİMİ</div>
+        <nav>
+          <p className="nav-heading">ÇALIŞMA ALANI</p>
+          {primary.map((x) => (
+            <NavLink
+              end={x.path === "/"}
+              className={({ isActive }) =>
+                "nav-item " + (isActive ? "active" : "")
+              }
+              to={x.path}
+              key={x.path}
+              onClick={() => setMenu(false)}
+            >
+              <x.icon size={19} />
+              <span>{x.label}</span>
+              {location.pathname === x.path && <ChevronRight size={15} />}
+            </NavLink>
+          ))}
+          <p className="nav-heading future-heading">SONRAKİ AŞAMA</p>
+          {future.map((x) => (
+            <NavLink
+              className={({ isActive }) =>
+                "nav-item future " + (isActive ? "active" : "")
+              }
+              to={x.path}
+              key={x.path}
+              onClick={() => setMenu(false)}
+            >
+              <x.icon size={18} />
+              <span>{x.label}</span>
+              <span className="nav-dot" />
+            </NavLink>
+          ))}
+        </nav>
+        <div className="sidebar-footer">
+          <LockKeyhole size={17} />
+          <div>
+            Yerel geliştirme<small>Yalnızca bu bilgisayarda</small>
+          </div>
+        </div>
+      </aside>
+      {menu && (
+        <button
+          className="sidebar-overlay"
+          aria-label="Menüyü kapat"
+          onClick={() => setMenu(false)}
+        />
+      )}
+      <div className="main-column">
+        <header className="topbar">
+          <div className="breadcrumb">
+            <button
+              className="icon-button menu-button"
+              aria-label="Menüyü aç"
+              aria-expanded={menu}
+              onClick={() => setMenu(!menu)}
+            >
+              <Menu size={21} />
+            </button>
+            <span>Çalışma alanı</span>
+            <ChevronRight size={15} />
+            <strong>{title}</strong>
+          </div>
+          <div className="topbar-right">
+            <span className="connection">
+              <i className={fetching ? "busy" : ""} />
+              {fetching ? "Kayıtlar alınıyor" : "Yerel demo"}
+            </span>
+            <span className="avatar" aria-hidden="true">
+              B
+            </span>
+          </div>
+        </header>
+        <main id="main-content">
+          <div className="page-heading">
+            <div>
+              <p className="eyebrow">BYTEME / OPERASYONLAR</p>
+              <h1>
+                {location.pathname.startsWith("/uretim/")
+                  ? "Üretim emri ayrıntısı"
+                  : title}
+              </h1>
+            </div>
+            <button
+              className="button refresh"
+              onClick={() => void client.invalidateQueries()}
+              disabled={!!fetching}
+            >
+              <RefreshCw size={16} className={fetching ? "spin" : ""} />
+              Yenile
+            </button>
+          </div>
+          <Routes>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/urunler" element={<Products />} />
+            <Route path="/is-ortaklari" element={<Parties />} />
+            <Route path="/depolar" element={<Locations />} />
+            <Route path="/alislar" element={<Receipts />} />
+            <Route path="/stoklar" element={<Stocks />} />
+            <Route path="/uretim" element={<Operations />} />
+            <Route path="/uretim/:id" element={<OperationPage />} />
+            {future.map((x) => (
+              <Route
+                key={x.path}
+                path={x.path}
+                element={<Planned title={x.label} />}
+              />
+            ))}
+            <Route
+              path="*"
+              element={
+                <div className="panel planned">
+                  <h2>Sayfa bulunamadı</h2>
+                  <NavLink className="button" to="/">
+                    Genel bakışa dön
+                  </NavLink>
+                </div>
+              }
+            />
+          </Routes>
+          <footer className="page-footer">
+            <span>ByteMe · AVATAR 2026</span>
+            <span>Kayıtlı lotlar. Gerçek maliyetler.</span>
+          </footer>
+        </main>
+      </div>
+    </div>
+  );
 }
