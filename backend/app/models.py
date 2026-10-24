@@ -256,3 +256,18 @@ class ShipmentLine(Identified, Base):
     quantity: Mapped[Decimal] = mapped_column(Q)
     unit: Mapped[str] = mapped_column(String(16))
     consumed_cost: Mapped[Decimal] = mapped_column(Q)
+
+
+class Recall(Identified, Base):
+    __tablename__ = "recalls"
+    __table_args__ = OPTIONS
+    source_lot_id: Mapped[str] = mapped_column(ForeignKey("lots.id"))
+    reason: Mapped[str] = mapped_column(String(500))
+
+
+class RecallLot(Base):
+    """Immutable membership at recall creation; blocking is monotonic in this API."""
+    __tablename__ = "recall_lots"
+    __table_args__ = OPTIONS
+    recall_id: Mapped[str] = mapped_column(ForeignKey("recalls.id"), primary_key=True)
+    lot_id: Mapped[str] = mapped_column(ForeignKey("lots.id"), primary_key=True)
