@@ -97,3 +97,8 @@ gh pr merge 2 --repo EminAly1/byteme-avatar-2026 --merge --match-head-commit 25c
 gh pr edit 3 --repo EminAly1/byteme-avatar-2026 --base main
 gh pr merge 3 --repo EminAly1/byteme-avatar-2026 --merge --match-head-commit 325cd602e242a223de12818763df1b94438402cd
 ```
+
+
+## Birleşim sonrası ek durum (24 Ekim 2026)
+
+Bu raporun yukarıdaki PR durumları ve API erişim engeli, ilk Codex çalıştırıldığı andaki **tarihsel kaydıdır**. Daha sonra GitHub bağlantısı üzerinden [PR #1](https://github.com/EminAly1/byteme-avatar-2026/pull/1), [PR #2](https://github.com/EminAly1/byteme-avatar-2026/pull/2) ve [PR #3](https://github.com/EminAly1/byteme-avatar-2026/pull/3) sırasıyla `main` üzerine **normal merge commit** ile başarıyla birleştirildi. Son birleşim SHA: `7837a85097e2fd50c8da672a03803c319296d344`. Uzak `main` üzerinde testler bu güncelleme sırasında yeniden çalıştırılmadı; yukarıda bildirilen test sonuçları izole yerel birleşim adayına aittir. Artık manuel PR #1→#2→#3 birleştirme adımları uygulanmamalıdır. Teslim kanalı, organizatörün e-postasına kayıtlı ekip üyesinin public GitHub ve görüntülenebilir en fazla 15 dakikalık demo video bağlantılarıyla yanıt vermesidir.
