@@ -1,3 +1,4 @@
+const artifactDir = process.env.AVATAR_E2E_ARTIFACT_DIR || "validation-v2";
 import { test, expect } from "@playwright/test";
 import { writeFile, mkdir } from "node:fs/promises";
 import {
@@ -25,9 +26,9 @@ import type {
 import type { Lot, Operation } from "../../src/lib/types";
 const evidence: Array<Record<string, unknown>> = [];
 async function capture(page: import("@playwright/test").Page, name: string) {
-  await mkdir("validation-v2/screenshots", { recursive: true });
+  await mkdir(artifactDir + "/screenshots", { recursive: true });
   await page.screenshot({
-    path: "validation-v2/screenshots/" + name + ".png",
+    path: artifactDir + "/screenshots/" + name + ".png",
     fullPage: true,
   });
 }
@@ -41,9 +42,9 @@ test.beforeEach(async ({ page }) => {
   });
 });
 test.afterAll(async () => {
-  await mkdir("validation-v2", { recursive: true });
+  await mkdir(artifactDir, { recursive: true });
   await writeFile(
-    "validation-v2/acceptance.json",
+    artifactDir + "/acceptance.json",
     JSON.stringify(evidence, null, 2) + "\n",
   );
 });
@@ -201,6 +202,7 @@ test("lotlu UI satış → bağlı sevkiyat aynı hareket; bağımsız sevkiyat 
   const sale = (await (await saleResponse).json()) as SaleDetail;
   await expect(page).toHaveURL("/satislar/" + sale.id);
   expect(await stock(request, s.lot, s.location.id)).toBe("9.000000");
+  await page.locator('summary').filter({hasText:'Stok hareketi'}).click();
   await expect(
     page.getByText(sale.lines[0].stock_movement_id, { exact: true }),
   ).toBeVisible();
@@ -228,7 +230,7 @@ test("lotlu UI satış → bağlı sevkiyat aynı hareket; bağımsız sevkiyat 
   await openShipment.click();
   await expect(page.getByRole('button',{name:'Ayrıntıyı kapat',exact:true})).toBeFocused();
   await page.keyboard.press('Shift+Tab');
-  await expect(page.getByRole('dialog').locator('a,button,[tabindex="0"]').last()).toBeFocused();
+  await expect(page.getByRole('dialog').locator('summary').filter({hasText:'Stok hareketi'}).last()).toBeFocused();
   await page.keyboard.press('Tab');
   await expect(page.getByRole('button',{name:'Ayrıntıyı kapat',exact:true})).toBeFocused();
   await page.keyboard.press('Escape');
@@ -319,7 +321,7 @@ test("gerçek ileri/geri izleme ve ET recall → Market A/B/C 30/25/30; onay şa
   await confirm(page, "Geri çağırmayı gözden geçir");
   const recall = (await (await response).json()) as Recall;
   await expect(page).toHaveURL("/geri-cagirma/" + recall.id);
-  await expect(page.getByText("KESİNLEŞMİŞ RECALL KAYDI")).toBeVisible();
+  await expect(page.getByText("GERİ ÇAĞIRMA AKTİF")).toBeVisible();
   expect(recall.report.buyers).toHaveLength(3);
   expect(recall.report.total_shipped_quantities[0].quantity).toBe("85.000000");
   expect(
@@ -480,11 +482,11 @@ test("üretim ML UI: gerçek forecast UUID → kapanış sonrası 85 paket ve De
     .filter({ hasText: "Mamul miktarı" })
     .filter({ hasText: "86," });
   await expect(
-    row.getByRole("cell", { name: "85", exact: true }),
+    row.getByRole("cell", { name: "85 paket", exact: true }),
   ).toBeVisible();
-  await expect(
-    page.getByText(prediction.id, { exact: true }).first(),
-  ).toBeVisible();
+  await page.getByText('Model bilgisi, teknik referans ve tam hassasiyet',{exact:true}).click();
+  await page.locator('summary').filter({hasText:'Tahmin kaydı'}).click();
+  await expect(page.getByText(prediction.id,{exact:true}).first()).toBeVisible();
   await capture(page, "ai-production-desktop");
   evidence.push({
     scenario: "production ML UI + actual API closure",
@@ -537,7 +539,7 @@ test("kesim ML UI: beş gerçek ürün eşlemesi ve 25 kg tahmin/gerçek/sapma",
     .getByRole("row")
     .filter({ hasText: "Toplam parça ağırlığı" });
   await expect(
-    row.getByRole("cell", { name: "22", exact: true }),
+    row.getByRole("cell", { name: "22 kg", exact: true }),
   ).toBeVisible();
   await expect(
     page.getByText(/Bu model sentetik verilerle eğitilmiştir/).first(),

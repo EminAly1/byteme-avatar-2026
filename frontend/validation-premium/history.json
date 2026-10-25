@@ -1,0 +1,102 @@
+{
+  "base_main": "63a9c86850db5927849bdb4a1e0fe7acb86ca987",
+  "prs": [
+    {
+      "pr": 1,
+      "merge_commit": "223ff8b4785d6635fd9e6e2ebe8f7e61214d679a",
+      "url": "https://github.com/EminAly1/byteme-avatar-2026/pull/1",
+      "ancestor_of_main": true
+    },
+    {
+      "pr": 2,
+      "merge_commit": "d96e250e64b72f98843ffc01150bd66fb29c0344",
+      "url": "https://github.com/EminAly1/byteme-avatar-2026/pull/2",
+      "ancestor_of_main": true
+    },
+    {
+      "pr": 3,
+      "merge_commit": "7837a85097e2fd50c8da672a03803c319296d344",
+      "url": "https://github.com/EminAly1/byteme-avatar-2026/pull/3",
+      "ancestor_of_main": true
+    },
+    {
+      "pr": 4,
+      "merge_commit": "6341cfb24e0a6526694efe13af60041aa5f80875",
+      "url": "https://github.com/EminAly1/byteme-avatar-2026/pull/4",
+      "ancestor_of_main": true
+    },
+    {
+      "pr": 5,
+      "merge_commit": "e1589d8f219a4ab689348f6b4f698829ab0193dd",
+      "url": "https://github.com/EminAly1/byteme-avatar-2026/pull/5",
+      "ancestor_of_main": true
+    },
+    {
+      "pr": 6,
+      "merge_commit": "b90fcb28b882dff7e3207f2341a6d96936d214ae",
+      "url": "https://github.com/EminAly1/byteme-avatar-2026/pull/6",
+      "ancestor_of_main": true
+    },
+    {
+      "pr": 7,
+      "merge_commit": "3d9125e862e8ad77a7c10dcf331633ecc22f8d5e",
+      "url": "https://github.com/EminAly1/byteme-avatar-2026/pull/7",
+      "ancestor_of_main": true
+    },
+    {
+      "pr": 8,
+      "merge_commit": "e8c690d2e55a41d4144dc3278ad9de012e64a2a0",
+      "url": "https://github.com/EminAly1/byteme-avatar-2026/pull/8",
+      "ancestor_of_main": true
+    },
+    {
+      "pr": 9,
+      "merge_commit": "21d9b31fe26d17bd60765b9f77456e290c7bcc3e",
+      "url": "https://github.com/EminAly1/byteme-avatar-2026/pull/9",
+      "ancestor_of_main": true
+    },
+    {
+      "pr": 10,
+      "merge_commit": "3626c99aece86b30a7f6691e4b4a89358260fc5c",
+      "url": "https://github.com/EminAly1/byteme-avatar-2026/pull/10",
+      "ancestor_of_main": true
+    },
+    {
+      "pr": 11,
+      "merge_commit": "94281b6f493d5a1cb66ce953efa6087641454d96",
+      "url": "https://github.com/EminAly1/byteme-avatar-2026/pull/11",
+      "ancestor_of_main": true
+    },
+    {
+      "pr": 12,
+      "merge_commit": "4951281330e69548422ea6e09d6b2418b1ea5c77",
+      "url": "https://github.com/EminAly1/byteme-avatar-2026/pull/12",
+      "ancestor_of_main": true
+    },
+    {
+      "pr": 13,
+      "merge_commit": "eb0cece585e0b9ab4c3e26daeddb719158c04791",
+      "url": "https://github.com/EminAly1/byteme-avatar-2026/pull/13",
+      "ancestor_of_main": true
+    },
+    {
+      "pr": 14,
+      "merge_commit": "99356d45c716f7612f6486d896aa219d51444ca2",
+      "url": "https://github.com/EminAly1/byteme-avatar-2026/pull/14",
+      "ancestor_of_main": true
+    },
+    {
+      "pr": 15,
+      "merge_commit": "fe1dca979e92b522fa6815a3e68fe5e230760d1e",
+      "url": "https://github.com/EminAly1/byteme-avatar-2026/pull/15",
+      "ancestor_of_main": true
+    },
+    {
+      "pr": 16,
+      "merge_commit": "63a9c86850db5927849bdb4a1e0fe7acb86ca987",
+      "url": "https://github.com/EminAly1/byteme-avatar-2026/pull/16",
+      "ancestor_of_main": true
+    }
+  ],
+  "github_api": "GraphQL 403; verified fetched Git ancestry instead"
+}

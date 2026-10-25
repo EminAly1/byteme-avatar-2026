@@ -1,0 +1,1 @@
+{"screenshots":15,"viewport_checks":35,"axe_checks":15,"reduced_motion":{"preference":true,"animations":0},"failures":0,"page_errors":[]}

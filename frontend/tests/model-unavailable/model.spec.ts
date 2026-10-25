@@ -1,3 +1,4 @@
+const artifactDir = process.env.AVATAR_E2E_ARTIFACT_DIR || "validation-v2";
 import { test, expect } from "@playwright/test";
 import { mkdir } from "node:fs/promises";
 test("gerçek eksik-model backend 503: hata görünür, sahte tahmin/metrik yok", async ({
@@ -25,9 +26,9 @@ test("gerçek eksik-model backend 503: hata görünür, sahte tahmin/metrik yok"
     }),
   ).toHaveCount(0);
   await expect(page.getByText('Kayıtlar alınıyor', {exact:true})).toHaveCount(0, {timeout:20000});
-  await mkdir("validation-v2/screenshots", { recursive: true });
+  await mkdir(artifactDir + "/screenshots", { recursive: true });
   await page.screenshot({
-    path: "validation-v2/screenshots/model-unavailable-desktop.png",
+    path: artifactDir + "/screenshots/model-unavailable-desktop.png",
     fullPage: true,
   });
 });

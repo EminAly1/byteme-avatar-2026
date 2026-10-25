@@ -22,6 +22,7 @@ export default defineConfig(({ mode }) => {
     throw new Error("Yerel demo API hedefi http://127.0.0.1:<port> olmalıdır.");
   }
   return {
+    build: { manifest: true },
     plugins: [react(), tailwindcss(), localApiGuard()],
     server: {
       host: "127.0.0.1",

@@ -1,0 +1,74 @@
+{
+  "before": {
+    "single_js_kb": 543.15,
+    "gzip_kb": 162.63,
+    "css_kb": 36.36,
+    "css_gzip_kb": 9.2,
+    "source": "logs/before-build.txt"
+  },
+  "after": {
+    "entry": {
+      "files": [
+        "assets/index-BXgQwrgw.js"
+      ],
+      "minified_bytes": 280007,
+      "gzip_bytes": 87728
+    },
+    "shell_with_static_imports": {
+      "files": [
+        "assets/api-dITgGAO1.js",
+        "assets/preload-helper-CZ9Iw0_d.js",
+        "assets/index-BXgQwrgw.js"
+      ],
+      "minified_bytes": 316502,
+      "gzip_bytes": 101621
+    },
+    "dashboard_with_shell": {
+      "files": [
+        "assets/api-dITgGAO1.js",
+        "assets/data-Bol7v_tP.js",
+        "assets/preload-helper-CZ9Iw0_d.js",
+        "assets/index-BXgQwrgw.js",
+        "assets/Dashboard-DNPKu-fz.js"
+      ],
+      "minified_bytes": 332489,
+      "gzip_bytes": 107702
+    },
+    "all_js": {
+      "files": [
+        "assets/api-dITgGAO1.js",
+        "assets/data-Bol7v_tP.js",
+        "assets/forms-D0A8mboN.js",
+        "assets/history-CsD0xjON.js",
+        "assets/module-payloads-rvOF3w-H.js",
+        "assets/module-validation-BUIXAHeG.js",
+        "assets/payloads-BXB0lrBQ.js",
+        "assets/plus-C3SD6yjz.js",
+        "assets/preload-helper-CZ9Iw0_d.js",
+        "assets/trash-BhtWUVcf.js",
+        "assets/index-BXgQwrgw.js",
+        "assets/Catalog-C16an7sv.js",
+        "assets/Cutting-CAP_tEO8.js",
+        "assets/Dashboard-DNPKu-fz.js",
+        "assets/Operations-CnISiKAB.js",
+        "assets/Predictions-MnqyqaU8.js",
+        "assets/Receipts-Dg1vgtCn.js",
+        "assets/Sales-CMg777w0.js",
+        "assets/Stocks-DJea2VLz.js",
+        "assets/Trace-jJ804JrI.js"
+      ],
+      "minified_bytes": 559195,
+      "gzip_bytes": 179818
+    }
+  },
+  "warning_threshold_changed": false,
+  "method": "Static import closure from Vite manifest; files deduplicated, gzip per asset; no browser timing claim.",
+  "gzip_level": 6,
+  "after_css": {
+    "files": [
+      "assets/index-CK3ONUWd.css"
+    ],
+    "bytes": 36702,
+    "gzip_bytes": 8132
+  }
+}

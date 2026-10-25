@@ -1,0 +1,212 @@
+[
+  {
+    "name": "dashboard",
+    "phase": "before",
+    "path": "before/dashboard-desktop.png",
+    "route": "/",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "full_page": true,
+    "image": {
+      "width": 1440,
+      "height": 1599
+    }
+  },
+  {
+    "name": "dashboard",
+    "phase": "before",
+    "path": "before/dashboard-mobile.png",
+    "route": "/",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "full_page": true,
+    "image": {
+      "width": 390,
+      "height": 2309
+    }
+  },
+  {
+    "name": "cutting",
+    "phase": "before",
+    "path": "before/cutting-desktop.png",
+    "route": "/parcalama/c88c4da0-d399-4895-b0ef-18811bf36569",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "full_page": true,
+    "image": {
+      "width": 1440,
+      "height": 1702
+    }
+  },
+  {
+    "name": "cutting",
+    "phase": "before",
+    "path": "before/cutting-mobile.png",
+    "route": "/parcalama/c88c4da0-d399-4895-b0ef-18811bf36569",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "full_page": true,
+    "image": {
+      "width": 390,
+      "height": 2098
+    }
+  },
+  {
+    "name": "sale",
+    "phase": "before",
+    "path": "before/sale-desktop.png",
+    "route": "/satislar/d2574746-0c90-41c1-98e5-5a11f77976bc",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "full_page": true,
+    "image": {
+      "width": 1440,
+      "height": 1028
+    }
+  },
+  {
+    "name": "sale",
+    "phase": "before",
+    "path": "before/sale-mobile.png",
+    "route": "/satislar/d2574746-0c90-41c1-98e5-5a11f77976bc",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "full_page": true,
+    "image": {
+      "width": 390,
+      "height": 1212
+    }
+  },
+  {
+    "name": "trace",
+    "phase": "before",
+    "path": "before/trace-desktop.png",
+    "route": "/izlenebilirlik?lot=c70fdb38-6875-44bb-97d3-4944142d9964",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "full_page": true,
+    "image": {
+      "width": 1440,
+      "height": 2709
+    }
+  },
+  {
+    "name": "trace",
+    "phase": "before",
+    "path": "before/trace-mobile.png",
+    "route": "/izlenebilirlik?lot=c70fdb38-6875-44bb-97d3-4944142d9964",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "full_page": true,
+    "image": {
+      "width": 390,
+      "height": 4064
+    }
+  },
+  {
+    "name": "recall",
+    "phase": "before",
+    "path": "before/recall-desktop.png",
+    "route": "/geri-cagirma/881f1805-1494-46f0-bfb7-a78957d4dd56",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "full_page": true,
+    "image": {
+      "width": 1440,
+      "height": 2733
+    }
+  },
+  {
+    "name": "recall",
+    "phase": "before",
+    "path": "before/recall-mobile.png",
+    "route": "/geri-cagirma/881f1805-1494-46f0-bfb7-a78957d4dd56",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "full_page": true,
+    "image": {
+      "width": 390,
+      "height": 4114
+    }
+  },
+  {
+    "name": "ai-production",
+    "phase": "before",
+    "path": "before/ai-production-desktop.png",
+    "route": "/yapay-zeka?prediction=4d27451a-c29f-4563-b679-817df9a5c6d0",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "full_page": true,
+    "image": {
+      "width": 1440,
+      "height": 2944
+    }
+  },
+  {
+    "name": "ai-production",
+    "phase": "before",
+    "path": "before/ai-production-mobile.png",
+    "route": "/yapay-zeka?prediction=4d27451a-c29f-4563-b679-817df9a5c6d0",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "full_page": true,
+    "image": {
+      "width": 390,
+      "height": 4035
+    }
+  },
+  {
+    "name": "ai-cutting",
+    "phase": "before",
+    "path": "before/ai-cutting-desktop.png",
+    "route": "/yapay-zeka?prediction=d2d07665-f240-4967-8e4a-23830b903275",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "full_page": true,
+    "image": {
+      "width": 1440,
+      "height": 3113
+    }
+  },
+  {
+    "name": "ai-cutting",
+    "phase": "before",
+    "path": "before/ai-cutting-mobile.png",
+    "route": "/yapay-zeka?prediction=d2d07665-f240-4967-8e4a-23830b903275",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "full_page": true,
+    "image": {
+      "width": 390,
+      "height": 3829
+    }
+  }
+]

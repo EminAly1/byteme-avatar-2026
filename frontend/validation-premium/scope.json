@@ -1,0 +1,52 @@
+{
+  "only_frontend": true,
+  "unchanged_contract_and_command_files": [
+    {
+      "path": "frontend/src/lib/api.ts",
+      "unchanged": true,
+      "sha256": "90f1397d93e5b6cc17bbdedafe3149d468370a2800158e3e83147479c29dc8cd"
+    },
+    {
+      "path": "frontend/src/lib/types.ts",
+      "unchanged": true,
+      "sha256": "b4819c35c9a9169053c7e98a03e1c4c5dadb285672c8e348e3cb2c55047f4dad"
+    },
+    {
+      "path": "frontend/src/lib/modules.ts",
+      "unchanged": true,
+      "sha256": "33b2448e261585549f9558a3b87d9d5794b2fe3a84d98541937bec30fcb9360c"
+    },
+    {
+      "path": "frontend/src/lib/validation.ts",
+      "unchanged": true,
+      "sha256": "09ea776bba3c27bcd411da697f2e30a8f1c444f1cfc3071d59d1f50e6dca8aa6"
+    },
+    {
+      "path": "frontend/src/lib/module-validation.ts",
+      "unchanged": true,
+      "sha256": "07a6e73136360f80858c8ed72294476132c07c097bbea409a35240e468218b85"
+    },
+    {
+      "path": "frontend/src/lib/payloads.ts",
+      "unchanged": true,
+      "sha256": "81a3acb417802abf1e1b23fd00f27316a01215ac9fd772b147a1cc1319dd2fa0"
+    },
+    {
+      "path": "frontend/src/lib/module-payloads.ts",
+      "unchanged": true,
+      "sha256": "2cfad2996395da3fa67c32611331c0c15c757c844dff94a4c4d05297f13833f7"
+    },
+    {
+      "path": "frontend/src/lib/pending.ts",
+      "unchanged": true,
+      "sha256": "bd21c5051af8277c263579a3c2f3996ac937c93efaebd8b34b59d1478053dcbf"
+    },
+    {
+      "path": "frontend/server/proxy.ts",
+      "unchanged": true,
+      "sha256": "37b5d127b9e8c40731e81c1190e77f95f3f0610c04054e4e0f4cf76a6900ff84"
+    }
+  ],
+  "forms_change": "ConfirmDialog import only; mutation logic unchanged",
+  "vite_config_change": "build.manifest only; server/proxy/guard unchanged"
+}

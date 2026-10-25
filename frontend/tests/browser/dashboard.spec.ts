@@ -268,7 +268,7 @@ test("tablet ve mobil yerleşim; recall onay verilmeden işlem başlatmaz", asyn
   await page.setViewportSize({ width: 834, height: 1112 });
   await page.goto("/");
   await expect(
-    page.getByRole("heading", { name: /Üretimin her adımı/ }),
+    page.getByRole("heading", { name: /Operasyon özeti/ }),
   ).toBeVisible();
   await expect(page.getByText("Veriler alınamadı.")).toHaveCount(0);
   expect(

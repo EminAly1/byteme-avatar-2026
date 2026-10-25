@@ -1,0 +1,198 @@
+[
+  {
+    "name": "dashboard",
+    "path": "after/dashboard-mobile.png",
+    "route": "/",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "image": {
+      "width": 390,
+      "height": 2932
+    },
+    "full_page": true
+  },
+  {
+    "name": "cutting",
+    "path": "after/cutting-mobile.png",
+    "route": "/parcalama/c88c4da0-d399-4895-b0ef-18811bf36569",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "image": {
+      "width": 390,
+      "height": 3302
+    },
+    "full_page": true
+  },
+  {
+    "name": "sale",
+    "path": "after/sale-mobile.png",
+    "route": "/satislar/d2574746-0c90-41c1-98e5-5a11f77976bc",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "image": {
+      "width": 390,
+      "height": 1264
+    },
+    "full_page": true
+  },
+  {
+    "name": "trace",
+    "path": "after/trace-mobile.png",
+    "route": "/izlenebilirlik?lot=c70fdb38-6875-44bb-97d3-4944142d9964",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "image": {
+      "width": 390,
+      "height": 3833
+    },
+    "full_page": true
+  },
+  {
+    "name": "recall",
+    "path": "after/recall-mobile.png",
+    "route": "/geri-cagirma/881f1805-1494-46f0-bfb7-a78957d4dd56",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "image": {
+      "width": 390,
+      "height": 3985
+    },
+    "full_page": true
+  },
+  {
+    "name": "ai-production",
+    "path": "after/ai-production-mobile.png",
+    "route": "/yapay-zeka?prediction=4d27451a-c29f-4563-b679-817df9a5c6d0",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "image": {
+      "width": 390,
+      "height": 2093
+    },
+    "full_page": true
+  },
+  {
+    "name": "ai-cutting",
+    "path": "after/ai-cutting-mobile.png",
+    "route": "/yapay-zeka?prediction=d2d07665-f240-4967-8e4a-23830b903275",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "image": {
+      "width": 390,
+      "height": 2930
+    },
+    "full_page": true
+  },
+  {
+    "name": "dashboard",
+    "path": "after/dashboard-desktop.png",
+    "route": "/",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "image": {
+      "width": 1440,
+      "height": 1786
+    },
+    "full_page": true
+  },
+  {
+    "name": "cutting",
+    "path": "after/cutting-desktop.png",
+    "route": "/parcalama/c88c4da0-d399-4895-b0ef-18811bf36569",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "image": {
+      "width": 1440,
+      "height": 1911
+    },
+    "full_page": true
+  },
+  {
+    "name": "sale",
+    "path": "after/sale-desktop.png",
+    "route": "/satislar/d2574746-0c90-41c1-98e5-5a11f77976bc",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "image": {
+      "width": 1440,
+      "height": 972
+    },
+    "full_page": true
+  },
+  {
+    "name": "trace",
+    "path": "after/trace-desktop.png",
+    "route": "/izlenebilirlik?lot=c70fdb38-6875-44bb-97d3-4944142d9964",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "image": {
+      "width": 1440,
+      "height": 2445
+    },
+    "full_page": true
+  },
+  {
+    "name": "recall",
+    "path": "after/recall-desktop.png",
+    "route": "/geri-cagirma/881f1805-1494-46f0-bfb7-a78957d4dd56",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "image": {
+      "width": 1440,
+      "height": 2573
+    },
+    "full_page": true
+  },
+  {
+    "name": "ai-production",
+    "path": "after/ai-production-desktop.png",
+    "route": "/yapay-zeka?prediction=4d27451a-c29f-4563-b679-817df9a5c6d0",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "image": {
+      "width": 1440,
+      "height": 1307
+    },
+    "full_page": true
+  },
+  {
+    "name": "ai-cutting",
+    "path": "after/ai-cutting-desktop.png",
+    "route": "/yapay-zeka?prediction=d2d07665-f240-4967-8e4a-23830b903275",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "image": {
+      "width": 1440,
+      "height": 1565
+    },
+    "full_page": true
+  }
+]

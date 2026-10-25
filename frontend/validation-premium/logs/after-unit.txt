@@ -1,0 +1,16 @@
+
+> byteme-avatar-web@0.1.0 test
+> vitest run
+
+
+ RUN  v5.0.5 /workspace/byteme-avatar-2026/frontend
+
+
+ Test Files  7 passed (7)
+      Tests  43 passed (43)
+   Start at  16:58:32
+   Duration  2.77s (environment 63%, tests 13%, import 10%, setup 9%, transform 5%)
+
+Environment  jsdom was created 7 times · 3.85s total, 63% of tracked time
+             create it once per worker with pool: 'vmThreads' (keeps per-file isolation) or isolate: false (shares it across files)
+             learn more: https://vitest.dev/guide/improving-performance#test-environments

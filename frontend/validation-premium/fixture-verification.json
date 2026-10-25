@@ -1,0 +1,135 @@
+{
+  "database": "avatar_ux_visual_test",
+  "migration_head": "dc9109a1f001",
+  "all_tables_unchanged": true,
+  "tables": 24,
+  "rows": 315,
+  "after_fingerprint": {
+    "products": {
+      "rows": 20,
+      "sha256": "94ced5019f22d14e9523151c8d33581693488507ec4b953d7e5d6e909962210b"
+    },
+    "parties": {
+      "rows": 9,
+      "sha256": "e71aceed1e96875221d3a6c7a9f7100fb22d4ae2a9eca4bb1abd7aff75a3756c"
+    },
+    "locations": {
+      "rows": 5,
+      "sha256": "1042a3b7e12626a5abc140b6ca9203b6b2b56d5b4aadbf8310d94ca5a8fda3b2"
+    },
+    "lots": {
+      "rows": 26,
+      "sha256": "1af187df5e2736da4fe146c2ee0de780b67a135a8a13ad3012acb3321cdd1322"
+    },
+    "receipts": {
+      "rows": 5,
+      "sha256": "e116b0dc316d6507aae3e01799a56d6225bf5e356c06c106486a57c35364c935"
+    },
+    "receipt_lines": {
+      "rows": 9,
+      "sha256": "dabde5239f365aa71b8bcc12b63024273403c8a02f8645439696762d46a9e3eb"
+    },
+    "recipe_versions": {
+      "rows": 3,
+      "sha256": "d1156d6a9ad4bb35ed8458a9e3190c0656736ba5fbf84bae0feed8ca970988d3"
+    },
+    "recipe_lines": {
+      "rows": 15,
+      "sha256": "91bd8025b78c71b7845ae91260a7bfebce724bca89a91ec0b1bce0c397601974"
+    },
+    "operations": {
+      "rows": 5,
+      "sha256": "82cbd026291400fd6c71659e777c9f569ff92971b7f001cbcd047effce9eb5cc"
+    },
+    "operation_inputs": {
+      "rows": 9,
+      "sha256": "a59aa2d5efeb1b945bc5cb8275dbd30325c21432c7d183dfca366ef78dc18470"
+    },
+    "operation_outputs": {
+      "rows": 17,
+      "sha256": "ddb8c38873ba88a92f04f513d868b1aebfe6bfe9fe0b288bd546c2b56351f34a"
+    },
+    "operation_differences": {
+      "rows": 3,
+      "sha256": "869b9dd209dd89b19b42d4da887ed7f314006bc3c0e6480df3cff24774481d36"
+    },
+    "lot_links": {
+      "rows": 21,
+      "sha256": "8123af0300bae8fe0877a56e45a130d475fa365284d4a7cff8538ca6eb4e758f"
+    },
+    "service_costs": {
+      "rows": 2,
+      "sha256": "7ab4fb894bb29717b89a4e4e3203718d92bf41c0635e558618218084154dfa52"
+    },
+    "stock_balances": {
+      "rows": 32,
+      "sha256": "769b43c9971ced725405a9cc1c80643804c1682da2bea093acf559e8c059f67a"
+    },
+    "stock_movements": {
+      "rows": 51,
+      "sha256": "11a243ce8eddeabf5023d629bdc0211f6f594ed4d0d2e1dcb8a0ce354734de4a"
+    },
+    "idempotency_requests": {
+      "rows": 64,
+      "sha256": "36ce0e20367d2c172f1b67d8aa2e0b90b482c0484e7750167f166e3b5fd35254"
+    },
+    "sales": {
+      "rows": 4,
+      "sha256": "84a8da7f583c596814dbbbedf51efbfb495f62ee70b88dbb5a52c2fbea0f79c2"
+    },
+    "sale_lines": {
+      "rows": 4,
+      "sha256": "131cb4afbbc7d64e008ad297b684c1d74e74230abf8f52331fbf25e64add0c90"
+    },
+    "shipments": {
+      "rows": 3,
+      "sha256": "882675aedda59a0318ff18292dff4d9eed2cca501b4334dd1da2eb955c41916f"
+    },
+    "shipment_lines": {
+      "rows": 3,
+      "sha256": "9aa0d4d9b321dbb02210d17020aa28d2c43107f356d4b8b07631059864138745"
+    },
+    "recalls": {
+      "rows": 1,
+      "sha256": "a38996b118da5e8c05fc386e24151b4c21b046a8ef14bf8691da9da66bc47b7b"
+    },
+    "recall_lots": {
+      "rows": 2,
+      "sha256": "a6fdf2c70d4b66b68d927ec9346ca77984a95c1bb27b4dcbd58fc79563959d30"
+    },
+    "prediction_records": {
+      "rows": 2,
+      "sha256": "5ce74699d975ab7675792060f6ca8f67eb6af7dda789eeff4e66e84d3ef7374e"
+    }
+  },
+  "checks": {
+    "products": true,
+    "parties": true,
+    "locations": true,
+    "lots": true,
+    "receipts": true,
+    "receipt_lines": true,
+    "recipe_versions": true,
+    "recipe_lines": true,
+    "operations": true,
+    "operation_inputs": true,
+    "operation_outputs": true,
+    "operation_differences": true,
+    "lot_links": true,
+    "service_costs": true,
+    "stock_balances": true,
+    "stock_movements": true,
+    "idempotency_requests": true,
+    "sales": true,
+    "sale_lines": true,
+    "shipments": true,
+    "shipment_lines": true,
+    "recalls": true,
+    "recall_lots": true,
+    "prediction_records": true
+  },
+  "health": {
+    "status": "ok",
+    "database": "ok"
+  }
+}

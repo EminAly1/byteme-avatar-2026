@@ -1,0 +1,7 @@
+{
+  "actual_test_credentials_in_deliverables": [],
+  "actual_test_credentials_in_build": [],
+  "environment_files_in_change": [],
+  "only_frontend": true,
+  "method": "Exact private runtime values compared outside browser; values omitted from report."
+}

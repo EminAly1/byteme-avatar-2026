@@ -1,0 +1,507 @@
+{
+  "base_main": "63a9c86",
+  "database": "avatar_ux_visual_test",
+  "read_only": true,
+  "checks": [
+    {
+      "name": "dashboard",
+      "route": "/",
+      "viewport": {
+        "name": "narrow",
+        "width": 360,
+        "height": 800
+      },
+      "geometry": {
+        "overflow": false,
+        "smallTargets": []
+      },
+      "axe": "not run at this viewport"
+    },
+    {
+      "name": "cutting",
+      "route": "/parcalama/c88c4da0-d399-4895-b0ef-18811bf36569",
+      "viewport": {
+        "name": "narrow",
+        "width": 360,
+        "height": 800
+      },
+      "geometry": {
+        "overflow": false,
+        "smallTargets": []
+      },
+      "axe": "not run at this viewport"
+    },
+    {
+      "name": "sale",
+      "route": "/satislar/d2574746-0c90-41c1-98e5-5a11f77976bc",
+      "viewport": {
+        "name": "narrow",
+        "width": 360,
+        "height": 800
+      },
+      "geometry": {
+        "overflow": false,
+        "smallTargets": []
+      },
+      "axe": "not run at this viewport"
+    },
+    {
+      "name": "trace",
+      "route": "/izlenebilirlik?lot=c70fdb38-6875-44bb-97d3-4944142d9964",
+      "viewport": {
+        "name": "narrow",
+        "width": 360,
+        "height": 800
+      },
+      "geometry": {
+        "overflow": false,
+        "smallTargets": []
+      },
+      "axe": "not run at this viewport"
+    },
+    {
+      "name": "recall",
+      "route": "/geri-cagirma/881f1805-1494-46f0-bfb7-a78957d4dd56",
+      "viewport": {
+        "name": "narrow",
+        "width": 360,
+        "height": 800
+      },
+      "geometry": {
+        "overflow": false,
+        "smallTargets": []
+      },
+      "axe": "not run at this viewport"
+    },
+    {
+      "name": "ai-production",
+      "route": "/yapay-zeka?prediction=4d27451a-c29f-4563-b679-817df9a5c6d0",
+      "viewport": {
+        "name": "narrow",
+        "width": 360,
+        "height": 800
+      },
+      "geometry": {
+        "overflow": false,
+        "smallTargets": []
+      },
+      "axe": "not run at this viewport"
+    },
+    {
+      "name": "ai-cutting",
+      "route": "/yapay-zeka?prediction=d2d07665-f240-4967-8e4a-23830b903275",
+      "viewport": {
+        "name": "narrow",
+        "width": 360,
+        "height": 800
+      },
+      "geometry": {
+        "overflow": false,
+        "smallTargets": []
+      },
+      "axe": "not run at this viewport"
+    },
+    {
+      "name": "dashboard",
+      "route": "/",
+      "viewport": {
+        "name": "mobile",
+        "width": 390,
+        "height": 844
+      },
+      "geometry": {
+        "overflow": false,
+        "smallTargets": []
+      },
+      "axe": []
+    },
+    {
+      "name": "cutting",
+      "route": "/parcalama/c88c4da0-d399-4895-b0ef-18811bf36569",
+      "viewport": {
+        "name": "mobile",
+        "width": 390,
+        "height": 844
+      },
+      "geometry": {
+        "overflow": false,
+        "smallTargets": []
+      },
+      "axe": []
+    },
+    {
+      "name": "sale",
+      "route": "/satislar/d2574746-0c90-41c1-98e5-5a11f77976bc",
+      "viewport": {
+        "name": "mobile",
+        "width": 390,
+        "height": 844
+      },
+      "geometry": {
+        "overflow": false,
+        "smallTargets": []
+      },
+      "axe": []
+    },
+    {
+      "name": "trace",
+      "route": "/izlenebilirlik?lot=c70fdb38-6875-44bb-97d3-4944142d9964",
+      "viewport": {
+        "name": "mobile",
+        "width": 390,
+        "height": 844
+      },
+      "geometry": {
+        "overflow": false,
+        "smallTargets": []
+      },
+      "axe": []
+    },
+    {
+      "name": "recall",
+      "route": "/geri-cagirma/881f1805-1494-46f0-bfb7-a78957d4dd56",
+      "viewport": {
+        "name": "mobile",
+        "width": 390,
+        "height": 844
+      },
+      "geometry": {
+        "overflow": false,
+        "smallTargets": []
+      },
+      "axe": []
+    },
+    {
+      "name": "ai-production",
+      "route": "/yapay-zeka?prediction=4d27451a-c29f-4563-b679-817df9a5c6d0",
+      "viewport": {
+        "name": "mobile",
+        "width": 390,
+        "height": 844
+      },
+      "geometry": {
+        "overflow": false,
+        "smallTargets": []
+      },
+      "axe": []
+    },
+    {
+      "name": "ai-cutting",
+      "route": "/yapay-zeka?prediction=d2d07665-f240-4967-8e4a-23830b903275",
+      "viewport": {
+        "name": "mobile",
+        "width": 390,
+        "height": 844
+      },
+      "geometry": {
+        "overflow": false,
+        "smallTargets": []
+      },
+      "axe": []
+    },
+    {
+      "name": "dashboard",
+      "route": "/",
+      "viewport": {
+        "name": "tablet",
+        "width": 768,
+        "height": 1024
+      },
+      "geometry": {
+        "overflow": false,
+        "smallTargets": []
+      },
+      "axe": "not run at this viewport"
+    },
+    {
+      "name": "cutting",
+      "route": "/parcalama/c88c4da0-d399-4895-b0ef-18811bf36569",
+      "viewport": {
+        "name": "tablet",
+        "width": 768,
+        "height": 1024
+      },
+      "geometry": {
+        "overflow": false,
+        "smallTargets": []
+      },
+      "axe": "not run at this viewport"
+    },
+    {
+      "name": "sale",
+      "route": "/satislar/d2574746-0c90-41c1-98e5-5a11f77976bc",
+      "viewport": {
+        "name": "tablet",
+        "width": 768,
+        "height": 1024
+      },
+      "geometry": {
+        "overflow": false,
+        "smallTargets": []
+      },
+      "axe": "not run at this viewport"
+    },
+    {
+      "name": "trace",
+      "route": "/izlenebilirlik?lot=c70fdb38-6875-44bb-97d3-4944142d9964",
+      "viewport": {
+        "name": "tablet",
+        "width": 768,
+        "height": 1024
+      },
+      "geometry": {
+        "overflow": false,
+        "smallTargets": []
+      },
+      "axe": "not run at this viewport"
+    },
+    {
+      "name": "recall",
+      "route": "/geri-cagirma/881f1805-1494-46f0-bfb7-a78957d4dd56",
+      "viewport": {
+        "name": "tablet",
+        "width": 768,
+        "height": 1024
+      },
+      "geometry": {
+        "overflow": false,
+        "smallTargets": []
+      },
+      "axe": "not run at this viewport"
+    },
+    {
+      "name": "ai-production",
+      "route": "/yapay-zeka?prediction=4d27451a-c29f-4563-b679-817df9a5c6d0",
+      "viewport": {
+        "name": "tablet",
+        "width": 768,
+        "height": 1024
+      },
+      "geometry": {
+        "overflow": false,
+        "smallTargets": []
+      },
+      "axe": "not run at this viewport"
+    },
+    {
+      "name": "ai-cutting",
+      "route": "/yapay-zeka?prediction=d2d07665-f240-4967-8e4a-23830b903275",
+      "viewport": {
+        "name": "tablet",
+        "width": 768,
+        "height": 1024
+      },
+      "geometry": {
+        "overflow": false,
+        "smallTargets": []
+      },
+      "axe": "not run at this viewport"
+    },
+    {
+      "name": "dashboard",
+      "route": "/",
+      "viewport": {
+        "name": "landscape",
+        "width": 1024,
+        "height": 768
+      },
+      "geometry": {
+        "overflow": false,
+        "smallTargets": []
+      },
+      "axe": "not run at this viewport"
+    },
+    {
+      "name": "cutting",
+      "route": "/parcalama/c88c4da0-d399-4895-b0ef-18811bf36569",
+      "viewport": {
+        "name": "landscape",
+        "width": 1024,
+        "height": 768
+      },
+      "geometry": {
+        "overflow": false,
+        "smallTargets": []
+      },
+      "axe": "not run at this viewport"
+    },
+    {
+      "name": "sale",
+      "route": "/satislar/d2574746-0c90-41c1-98e5-5a11f77976bc",
+      "viewport": {
+        "name": "landscape",
+        "width": 1024,
+        "height": 768
+      },
+      "geometry": {
+        "overflow": false,
+        "smallTargets": []
+      },
+      "axe": "not run at this viewport"
+    },
+    {
+      "name": "trace",
+      "route": "/izlenebilirlik?lot=c70fdb38-6875-44bb-97d3-4944142d9964",
+      "viewport": {
+        "name": "landscape",
+        "width": 1024,
+        "height": 768
+      },
+      "geometry": {
+        "overflow": false,
+        "smallTargets": []
+      },
+      "axe": "not run at this viewport"
+    },
+    {
+      "name": "recall",
+      "route": "/geri-cagirma/881f1805-1494-46f0-bfb7-a78957d4dd56",
+      "viewport": {
+        "name": "landscape",
+        "width": 1024,
+        "height": 768
+      },
+      "geometry": {
+        "overflow": false,
+        "smallTargets": []
+      },
+      "axe": "not run at this viewport"
+    },
+    {
+      "name": "ai-production",
+      "route": "/yapay-zeka?prediction=4d27451a-c29f-4563-b679-817df9a5c6d0",
+      "viewport": {
+        "name": "landscape",
+        "width": 1024,
+        "height": 768
+      },
+      "geometry": {
+        "overflow": false,
+        "smallTargets": []
+      },
+      "axe": "not run at this viewport"
+    },
+    {
+      "name": "ai-cutting",
+      "route": "/yapay-zeka?prediction=d2d07665-f240-4967-8e4a-23830b903275",
+      "viewport": {
+        "name": "landscape",
+        "width": 1024,
+        "height": 768
+      },
+      "geometry": {
+        "overflow": false,
+        "smallTargets": []
+      },
+      "axe": "not run at this viewport"
+    },
+    {
+      "name": "dashboard",
+      "route": "/",
+      "viewport": {
+        "name": "desktop",
+        "width": 1440,
+        "height": 900
+      },
+      "geometry": {
+        "overflow": false,
+        "smallTargets": []
+      },
+      "axe": []
+    },
+    {
+      "name": "cutting",
+      "route": "/parcalama/c88c4da0-d399-4895-b0ef-18811bf36569",
+      "viewport": {
+        "name": "desktop",
+        "width": 1440,
+        "height": 900
+      },
+      "geometry": {
+        "overflow": false,
+        "smallTargets": []
+      },
+      "axe": []
+    },
+    {
+      "name": "sale",
+      "route": "/satislar/d2574746-0c90-41c1-98e5-5a11f77976bc",
+      "viewport": {
+        "name": "desktop",
+        "width": 1440,
+        "height": 900
+      },
+      "geometry": {
+        "overflow": false,
+        "smallTargets": []
+      },
+      "axe": []
+    },
+    {
+      "name": "trace",
+      "route": "/izlenebilirlik?lot=c70fdb38-6875-44bb-97d3-4944142d9964",
+      "viewport": {
+        "name": "desktop",
+        "width": 1440,
+        "height": 900
+      },
+      "geometry": {
+        "overflow": false,
+        "smallTargets": []
+      },
+      "axe": []
+    },
+    {
+      "name": "recall",
+      "route": "/geri-cagirma/881f1805-1494-46f0-bfb7-a78957d4dd56",
+      "viewport": {
+        "name": "desktop",
+        "width": 1440,
+        "height": 900
+      },
+      "geometry": {
+        "overflow": false,
+        "smallTargets": []
+      },
+      "axe": []
+    },
+    {
+      "name": "ai-production",
+      "route": "/yapay-zeka?prediction=4d27451a-c29f-4563-b679-817df9a5c6d0",
+      "viewport": {
+        "name": "desktop",
+        "width": 1440,
+        "height": 900
+      },
+      "geometry": {
+        "overflow": false,
+        "smallTargets": []
+      },
+      "axe": []
+    },
+    {
+      "name": "ai-cutting",
+      "route": "/yapay-zeka?prediction=d2d07665-f240-4967-8e4a-23830b903275",
+      "viewport": {
+        "name": "desktop",
+        "width": 1440,
+        "height": 900
+      },
+      "geometry": {
+        "overflow": false,
+        "smallTargets": []
+      },
+      "axe": []
+    },
+    {
+      "name": "sale-form-mobile",
+      "axe": []
+    }
+  ],
+  "reduced_motion": {
+    "preference": true,
+    "animations": 0
+  },
+  "page_errors": [],
+  "failed": 0
+}

@@ -1,0 +1,22 @@
+
+> byteme-avatar-web@0.1.0 test
+> vitest run
+
+
+ RUN  v5.0.5 /workspace/byteme-avatar-2026/frontend
+
+
+ Test Files  6 passed (6)
+      Tests  38 passed (38)
+   Start at  16:08:24
+   Duration  2.29s (environment 61%, tests 11%, import 10%, setup 9%, transform 8%)
+
+Environment  jsdom was created 6 times · 3.48s total, 61% of tracked time
+             create it once per worker with pool: 'vmThreads' (keeps per-file isolation) or isolate: false (shares it across files)
+             learn more: https://vitest.dev/guide/improving-performance#test-environments
+
+npm notice
+npm notice New major version of npm available! 11.9.0 -> 12.2.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.1
+npm notice To update run: npm install -g npm@12.2.1
+npm notice
