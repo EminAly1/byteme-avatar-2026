@@ -2,7 +2,7 @@
 
 **Teslim:** 1 Kasım 2026, **23:59 Europe/Istanbul (UTC+3)**. Tarih/saat kullanıcı talimatıdır; PDF’de teslim tarihi yoktur.
 
-**Gereksinim kaynağı:** [AVATAR_Assessment.pdf](AVATAR_Assessment.pdf), 3 sayfa. **Kanıt tarihi:** 25 Ekim 2026 (Görev 8 Android PR #11 dahil). [Güncel entegrasyon ve test raporu](INTEGRATION_VALIDATION_2026-10-24.md).
+**Gereksinim kaynağı:** [AVATAR_Assessment.pdf](AVATAR_Assessment.pdf), 3 sayfa. **Kanıt tarihi:** 25 Ekim 2026 (Görev 09 ML PR #13 dahil). [Güncel entegrasyon ve test raporu](INTEGRATION_VALIDATION_2026-10-24.md).
 
 ## Durumlar ve kapsam
 
@@ -20,6 +20,8 @@
 **Görev 7 ek güncellemesi:** [PR #9](https://github.com/EminAly1/byteme-avatar-2026/pull/9) `main` üzerine normal merge ile eklendi (`21d9b31fe26d17bd60765b9f77456e290c7bcc3e`). [131 test raporu](../database/cutting-validation.md): ayrı test MySQL 8'de 115 DB ve 16 diğer test; son merge sonrası `main` bağımsız test doğrulaması bekliyor. Ayrı kalite hedefi: [Profesyonel React UX/UI tasarım şartnamesi](FRONTEND_VISION.md). Bu doküman mevcut UI'ın tamamlandığı anlamına gelmez.
 
 **Görev 8 güncellemesi (25 Ekim):** [PR #11](https://github.com/EminAly1/byteme-avatar-2026/pull/11) `main` üzerine normal merge ile alındı (`94281b6f493d5a1cb66ce953efa6087641454d96`). [Android doğrulama raporu](../android/VALIDATION.md): 16 farklı host testi debug+release'de toplam 32 başarılı çalışma, API 28 AOSP emülatörde 4 farklı cihaz testi iki koşuda toplam 6 başarılı çalışma, gerçek MySQL ile 6 kg→5 kg kuzu but satışı, idempotent tekrar ve LOT_BLOCKED, offline taslak kalıcılığı, lint ve debug APK build. **API 35 instrumentation çöktü; API 35 ve fiziksel telefon doğrulanmadı.** APK build artefaktıdır, Git'e commit edilmedi. Release auth/HTTPS, son birleşik main ve final cihaz/saha kontrolleri ayrıca bekler.
+
+**Görev 09 güncellemesi (25 Ekim):** [PR #13](https://github.com/EminAly1/byteme-avatar-2026/pull/13) `main` üzerine normal merge ile eklendi (`eb0cece585e0b9ab4c3e26daeddb719158c04791`). [ML değerlendirme](../ml/EVALUATION_REPORT.md): her iki model 600 **SYNTHETIC** kayıtla eğitildi; gerçek tarihsel veri 0; 360 eğitim/120 validation/120 test; Ridge üretim/EKP ve Kuzu/beş parça verimi. [181 test raporu](../ml/reports/validation.json): önceki 131 + 31 yeni backend + 19 ML, 0 fail/skip, gerçek API/MySQL HTTP demo. **Gerçek dünyadaki model performansı doğrulanmadı.** React tahmin/gerçek/sapma ekranı ve tümleşik son `main` testleri bekliyor.
 
 ## 1. Proje altyapısı
 
@@ -98,12 +100,12 @@ PDF s.2. [ml/README.md](../ml/README.md) plandır; eğitim kodu, veri seti ve mo
 
 | ID | Görev | Durum | Kanıt / kalan iş |
 | --- | --- | --- | --- |
-| ML-01 | Geçmiş üretim emirlerinden beklenen mamul miktarı ve EKP tahmini (A) | Başlanmadı | pandas/scikit-learn eğitim/tahmin akışı gerekli. |
-| ML-02 | Tür, giriş ağırlığı ve geçmişten beklenen parça ağırlıkları tahmini (B) | Başlanmadı | Parçalama veri kaynağı ve ayrı model/evaluasyon gerekli. |
-| ML-03 | Örnek/anonymize veri, sentetik veri etiketi ve küçük veri sınırlamaları | Başlanmadı | Veri dosyası/açıklaması/örnek sayıları sunulmalı. |
-| ML-04 | Yöntem açıklaması, basit referans karşılaştırması ve ayrı testte hata ölçümü | Başlanmadı | İki model için baseline ve birimleri belirtilen metrikler (örn. kg/EUR-birim MAE) gerekli. |
-| ML-05 | Tahmin, gerçek sonuç ve sapmayı API/web üzerinde birlikte gösterme | Başlanmadı | Model sürümü, API entegrasyonu ve gerçek karşılaştırma ekranı gerekli. |
-| ML-06 | Lot/recall sonuçlarını ML’den bağımsız kesin ilişkilerde tutma | Doğrulama gerekiyor | Core deterministiktir; ML eklendikten sonra ayrım regresyonla doğrulanmalı. |
+| ML-01 | Geçmiş üretim emirlerinden beklenen mamul miktarı ve EKP tahmini (A) | Tamamlandı | [Üretim model kartı](../ml/MODEL_CARD_PRODUCTION.md): 600 sentetik işlemle Ridge verim/hizmet çarpanı eğitimi; tahmini paket ve EKP API'si; gerçek işletme doğruluğu henüz yok. |
+| ML-02 | Tür, giriş ağırlığı ve geçmişten beklenen parça ağırlıkları tahmini (B) | Tamamlandı | [Kesim model kartı](../ml/MODEL_CARD_CUTTING.md): 25 kg Kuzu/beş parça Ridge oran tahmini; fiziksel sınır ve reçete UUID eşlemesi; sentetik model, gerçek işletme doğruluğu yok. |
+| ML-03 | Örnek/anonymize veri, sentetik veri etiketi ve küçük veri sınırlamaları | Tamamlandı | [manifest](../ml/data/manifest.json) + [README](../ml/README.md): 600+600 SYNTHETIC, hash/seed/sürüm; gerçek tarihsel veri 0 olduğu açıkça kaydedildi. |
+| ML-04 | Yöntem açıklaması, basit referans karşılaştırması ve ayrı testte hata ölçümü | Tamamlandı | [Değerlendirme](../ml/EVALUATION_REPORT.md): her hedef için baseline/Ridge MAE ve RMSE, 360/120/120 zamansal sentetik ayrım, küçük kazanç/sınırlama şeffaf. |
+| ML-05 | Tahmin, gerçek sonuç ve sapmayı API/web üzerinde birlikte gösterme | Devam ediyor | [Prediction API](../ml/INTEGRATION.md): değişmez tahmin UUID, model sürümü, gerçek/sapma karşılaştırma API'si hazır; **React web ekranı henüz yok.** |
+| ML-06 | Lot/recall sonuçlarını ML’den bağımsız kesin ilişkilerde tutma | Tamamlandı | [ML API ve test raporu](../ml/EVALUATION_REPORT.md): stok/lot/recall öncesi-sonrası snapshot eşitliği ve eski 131 backend testi; tahmin ayrı PredictionRecord tablosunda. |
 
 OCR/fatura okuma ve anomali uyarıları PDF’de **isteğe bağlıdır**; iki zorunlu modelin yerine geçmez.
 
@@ -122,11 +124,11 @@ OCR/fatura okuma ve anomali uyarıları PDF’de **isteğe bağlıdır**; iki zo
 
 | ID | Görev | Durum | Kanıt / kalan iş |
 | --- | --- | --- | --- |
-| TST-01 | Mevcut backend health/config/Decimal/stok/iş kuralları | Tamamlandı | [Görev 7 test raporu](../database/cutting-validation.md): önceki 100+31 yeni = **131 passed** (115 gerçek MySQL, 16 diğer), 0 failed/skipped; son birleşik main bağımsız yeniden koşulmalı. |
+| TST-01 | Mevcut backend health/config/Decimal/stok/iş kuralları | Tamamlandı | [Görev 09 test raporu](../ml/reports/validation.json): önceki 131 backend korunarak toplam 181 test (162 backend + 19 ML), gerçek izole MySQL; son merge sonrası main ve frontend/Android testleri ayrıca koşulmalı. |
 | TST-02 | Gerçek MySQL migration, satır kilidi, yarış, rollback ve idempotency | Tamamlandı | [Görev 7 MySQL testleri](../tests/test_cuttings_mysql.py), [migration](../tests/test_cutting_migrations_mysql.py) ve eski satış/recall testleri: parçalama/recall kilit yarışı, maliyet/rollback ve şema geçişleri. |
 | TST-03 | Temiz npm kurulumu, typecheck, build ve frontend unit/component | Tamamlandı | `npm ci`, typecheck/build başarılı; **25 passed**. |
 | TST-04 | Gerçek FastAPI/MySQL/Vite/Chromium ile alış–üretim–stok ve demo | Tamamlandı | **4 passed**; mock backend kullanılmadı. [Rapor](INTEGRATION_VALIDATION_2026-10-24.md). |
-| TST-05 | Parçalama, Kotlin satış/sync, recall yarışları ve iki ML modelinin değerlendirmesi | Devam ediyor | [Görev 7](../database/cutting-validation.md) kuzu/recall yarışları ve [Android cihaz kanıtı](../android/VALIDATION.md) kuzu satışı, offline taslak ve tekrar test edildi; **iki zorunlu ML modelinin eğitimi/evaluasyonu hâlâ yok.** |
+| TST-05 | Parçalama, Kotlin satış/sync, recall yarışları ve iki ML modelinin değerlendirmesi | Tamamlandı | [Kesim/recall](../database/cutting-validation.md), [API 28 Android cihazı](../android/VALIDATION.md) ve [iki sentetik ML modeli](../ml/EVALUATION_REPORT.md) ayrı kabul testlerinde doğrulandı. **Tümünün yeni main'de tek koşuda testi, API 35 ve gerçek veri hâlâ TST-06/final doğrulama kapsamı.** |
 | TST-06 | GitHub main merge sonrası kontroller ve PR check/policy doğrulaması | Doğrulama gerekiyor | Üç PR artık `main` içinde; bu raporun testleri yerel birleşim adayında koşuldu. Son `main` ve güncel CI/PR kontrolleri ayrı çalıştırılmalı. |
 
 ## 9. Dokümantasyon ve demo
@@ -135,8 +137,8 @@ OCR/fatura okuma ve anomali uyarıları PDF’de **isteğe bağlıdır**; iki zo
 | --- | --- | --- | --- |
 | DOC-01 | PDF, ER/API, varsayımlar ve kurulum belgelerini tek güncel sözleşmede birleştirme | Devam ediyor | [ER](data-model.md), [API](api-contract.md), [assumptions](assumptions.md), [backend README](../backend/README.md), [frontend README](../frontend/README.md) var; ortak eski “henüz uygulanmadı” durumları konsolide edilmeli. |
 | DOC-02 | Tekrarlanabilir alış/dış üretim/EKP örnek kaydı | Tamamlandı | [app.demo](../backend/app/demo.py) ve [demo_sales_shipments.py](../backend/app/demo_sales_shipments.py) iki kez idempotent çalıştı; 85 paket 30/25/30 sevk ve 16 defter hareketi raporlandı. |
-| DOC-03 | Üç görevin uçtan uca demosu ve alış/üretim/parçalama/lot/satış/recall raporları | Devam ediyor | Dış üretim, kuzu parçalama, merkezî lot/recall API senaryolarına [gerçek Android kuzu lot satışı](../android/VALIDATION.md) eklendi. İki ML modelinin sonucu ve tek birleşik web/Android demo videosu hâlâ eksik. |
-| DOC-04 | ML yöntem/örnek tahmin/doğruluk raporu | Başlanmadı | Yalnız plan var; model sonucu ve hata ölçümü yok. |
+| DOC-03 | Üç görevin uçtan uca demosu ve alış/üretim/parçalama/lot/satış/recall raporları | Devam ediyor | Dış üretim, kuzu parçalama, recall, API 28 Android satış ve [iki zorunlu ML HTTP demosu](../ml/EVALUATION_REPORT.md) ayrı doğrulandı. Tek bütünleşik web/Android demo videosu ve son kabul hâlâ eksik. |
+| DOC-04 | ML yöntem/örnek tahmin/doğruluk raporu | Tamamlandı | [Model A](../ml/MODEL_CARD_PRODUCTION.md), [Model B](../ml/MODEL_CARD_CUTTING.md), [metrikler](../ml/EVALUATION_REPORT.md) ve [API örneği](../ml/reports/demo.json); gerçek veri/kalibre aralık yok. |
 | DOC-05 | Temiz makinede tek, tutarlı kurulum ve demo çalıştırma | Doğrulama gerekiyor | Host venv/Vite + izole MySQL doğrulandı; tam Compose/fresh release kurulumu doğrulanmadı. |
 
 ## 10. Yarışma teslimi
@@ -144,7 +146,7 @@ OCR/fatura okuma ve anomali uyarıları PDF’de **isteğe bağlıdır**; iki zo
 | ID | Görev | Durum | Kanıt / kalan iş |
 | --- | --- | --- | --- |
 | TES-01 | İlk üç PR ve ayrı checklist PR’ını main’e alma | Tamamlandı | [PR #1](https://github.com/EminAly1/byteme-avatar-2026/pull/1), [#2](https://github.com/EminAly1/byteme-avatar-2026/pull/2), [#3](https://github.com/EminAly1/byteme-avatar-2026/pull/3) ve [#4](https://github.com/EminAly1/byteme-avatar-2026/pull/4) main'e birleşti. Sonraki geliştirme PR'ları ayrı takip edilir. |
-| TES-02 | Üç ana akış + kullanılabilir Kotlin uygulaması + iki zorunlu ML çalışmasının kabulü | Devam ediyor | Dış üretim, kuzu parçalama, izlenebilirlik/recall ve API 28 Kotlin satış prototipleri gösterildi; iki zorunlu AI modeli ve tam entegre teslim kabulü hâlâ eksik. |
+| TES-02 | Üç ana akış + kullanılabilir Kotlin uygulaması + iki zorunlu ML çalışmasının kabulü | Devam ediyor | Üç zorunlu iş akışının backend'i, API 28 Kotlin satışı ve iki sentetik ML modeli ayrı ayrı gösterildi; **tek birleşik UI/Android/demo ve release kabulü hâlâ yapılmadı.** |
 | TES-03 | Son kaynak/kurulum/örnek kayıt/test/doküman paketi ve temiz kurulumdan demo | Başlanmadı | Entegre main, eksik modüller ve release paketi gerekli. |
 | TES-04 | Final sensitive-data kontrolü, sürüm etiketi ve yeniden üretilebilirlik | Doğrulama gerekiyor | Final paket/tag yok; önceki yerel secret kontrolleri final teslim kanıtı değildir. |
 | TES-05 | **1 Kasım 2026 23:59 Europe/Istanbul** öncesi gönderim ve alındı doğrulaması | Başlanmadı | Yarışma e-postası: kayıtlı ekip üyesinin aynı e-postayı yanıtlayarak public GitHub deposu ve herkesin izleyebildiği en fazla 15 dakikalık video bağlantısını göndermesi gerekir. Gönderim/alındı kanıtı yok. |
