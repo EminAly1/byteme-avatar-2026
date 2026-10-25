@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useId, useRef, useState, type ReactNode } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   FormProvider,
@@ -13,6 +13,7 @@ import type { z } from "zod";
 import { ApiError, newCommand, send, type Command } from "../lib/api";
 import { ErrorBox, Success } from "./ui";
 import { loadPending, savePending, clearPending } from "../lib/pending";
+import { ConfirmDialog } from "./workflow";
 
 interface Props<T extends FieldValues> {
   schema: z.ZodType<T>;
@@ -23,6 +24,7 @@ interface Props<T extends FieldValues> {
   payload: (v: T) => unknown;
   onSuccess?: (result: unknown) => void;
   children: ReactNode;
+  summary?: (body: unknown) => ReactNode;
 }
 export function CommandForm<T extends FieldValues>({
   schema,
@@ -33,6 +35,7 @@ export function CommandForm<T extends FieldValues>({
   payload,
   onSuccess,
   children,
+  summary,
 }: Props<T>) {
   const [restored] = useState(() => loadPending(path));
   const form = useForm<T>({
@@ -119,52 +122,13 @@ export function CommandForm<T extends FieldValues>({
         )}
       </form>
       {review !== null && (
-        <div className="modal-backdrop">
-          <div
-            className="modal"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="confirm-title"
-            onKeyDown={(event) => {
-              if (event.key === "Escape") setReview(null);
-              if (event.key === "Tab") {
-                const buttons = event.currentTarget.querySelectorAll("button"),
-                  first = buttons[0],
-                  last = buttons[buttons.length - 1];
-                if (event.shiftKey && document.activeElement === first) {
-                  event.preventDefault();
-                  last.focus();
-                } else if (!event.shiftKey && document.activeElement === last) {
-                  event.preventDefault();
-                  first.focus();
-                }
-              }
-            }}
-          >
-            <h2 id="confirm-title">İşlemi onaylayın</h2>
-            <p>{confirmText}</p>
-            <p>
-              Kaydetmeden önce girdiğiniz bilgilerin doğruluğunu kontrol edin.
-            </p>
-            <div className="actions">
-              <button
-                type="button"
-                autoFocus
-                className="button"
-                onClick={() => setReview(null)}
-              >
-                Vazgeç
-              </button>
-              <button
-                type="button"
-                className="button primary"
-                onClick={confirm}
-              >
-                Onayla ve kaydet
-              </button>
-            </div>
-          </div>
-        </div>
+        <ConfirmDialog onCancel={() => setReview(null)} onConfirm={confirm}>
+          <p>{confirmText}</p>
+          {summary?.(review)}
+          <p>
+            Kaydetmeden önce girdiğiniz bilgilerin doğruluğunu kontrol edin.
+          </p>
+        </ConfirmDialog>
       )}
     </FormProvider>
   );
@@ -197,7 +161,7 @@ export function Field({
     formState: { errors },
   } = useFormContext();
   const error = errorAt(errors, name),
-    id = "field-" + name;
+    id = "field-" + name + useId();
   return (
     <div className="field">
       <label htmlFor={id}>{label}</label>

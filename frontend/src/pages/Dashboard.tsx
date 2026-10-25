@@ -6,17 +6,25 @@ import {
   PackageCheck,
   ArrowUpRight,
   ShieldAlert,
+  Scissors,
+  ShoppingBag,
+  Truck,
+  Network,
+  Sparkles,
 } from "lucide-react";
 import { useCatalog, useRecords } from "../lib/data";
 import { Badge, Section, State, Table } from "../components/ui";
 import { amount, eur, positive, units } from "../lib/format";
+import type { Sale, Shipment } from "../lib/modules";
 import type { Operation, Receipt, Stock } from "../lib/types";
 
 export function Dashboard() {
   const data = useCatalog(),
     stocks = useRecords<Stock>("/stocks"),
     receipts = useRecords<Receipt>("/receipts"),
-    operations = useRecords<Operation>("/operations");
+    operations = useRecords<Operation>("/operations"),
+    sales = useRecords<Sale>("/sales"),
+    shipments = useRecords<Shipment>("/shipments");
   const current = stocks.data?.filter((x) => positive(x.quantity)) || [];
   const unavailable = current.filter(
     (x) => !positive(x.available_quantity),
@@ -42,9 +50,24 @@ export function Dashboard() {
     },
     {
       label: "Açık üretim emri",
-      value: operations.data?.filter((x) => x.status === "draft").length || 0,
+      value:
+        operations.data?.filter(
+          (x) => x.status === "draft" && x.kind === "external_production",
+        ).length || 0,
       icon: Factory,
       note: "Kapanış bekleyen emirler",
+    },
+    {
+      label: "Kesin satış kaydı",
+      value: sales.data?.length || 0,
+      icon: ShoppingBag,
+      note: "Backend onaylı satışlar",
+    },
+    {
+      label: "Sevkiyat kaydı",
+      value: shipments.data?.length || 0,
+      icon: Truck,
+      note: "Kayıtlı teslim belgeleri",
     },
   ];
   return (
@@ -53,9 +76,18 @@ export function Dashboard() {
         data.loading ||
         stocks.isPending ||
         receipts.isPending ||
-        operations.isPending
+        operations.isPending ||
+        sales.isPending ||
+        shipments.isPending
       }
-      error={data.error || stocks.error || receipts.error || operations.error}
+      error={
+        data.error ||
+        stocks.error ||
+        receipts.error ||
+        operations.error ||
+        sales.error ||
+        shipments.error
+      }
     >
       <div className="stack">
         <div className="welcome">
@@ -83,7 +115,7 @@ export function Dashboard() {
             </span>
           </div>
         </div>
-        <div className="stat-grid">
+        <div className="stat-grid dashboard-stats">
           {stats.map((x) => (
             <div className="stat" key={x.label}>
               <div className="stat-top">
@@ -96,8 +128,8 @@ export function Dashboard() {
           ))}
         </div>
         <p className="caption">
-          Özet, tamamı yüklenen API kayıtlarına dayanır. Stok miktarları farklı
-          birimlerle toplanmaz; satış ve kâr metrikleri henüz sunulmaz.
+          Gösterilen sayılar kayıtlı işlemlere aittir. Farklı stok birimleri
+          ayrı gösterilir.
         </p>
         {unavailable > 0 && (
           <div className="notice warning">
@@ -106,6 +138,20 @@ export function Dashboard() {
             sıfır. Stok ekranından blok, tarih ve karantina durumunu inceleyin.
           </div>
         )}
+        <div className="quick-actions">
+          {[
+            { to: "/parcalama", icon: Scissors, label: "Kesim başlat" },
+            { to: "/satislar", icon: ShoppingBag, label: "Lotlu satış" },
+            { to: "/izlenebilirlik", icon: Network, label: "Lotu izle" },
+            { to: "/yapay-zeka", icon: Sparkles, label: "Tahmin oluştur" },
+          ].map((x) => (
+            <Link key={x.to} to={x.to} className="quick-link">
+              <x.icon size={19} />
+              <span>{x.label}</span>
+              <ArrowUpRight size={15} />
+            </Link>
+          ))}
+        </div>
         <div className="dashboard-grid">
           <Section
             title="Son üretim emirleri"
@@ -126,7 +172,13 @@ export function Dashboard() {
                 .map((x) => (
                   <tr key={x.id}>
                     <td>
-                      <Link className="text-button code" to={"/uretim/" + x.id}>
+                      <Link
+                        className="text-button code"
+                        to={
+                          (x.kind === "cutting" ? "/parcalama/" : "/uretim/") +
+                          x.id
+                        }
+                      >
                         {x.code}
                       </Link>
                     </td>

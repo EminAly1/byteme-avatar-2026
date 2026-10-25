@@ -1,0 +1,18 @@
+
+> byteme-avatar-web@0.1.0 test:e2e
+> playwright test --grep beş viewport|lotlu UI satış
+
+
+Running 2 tests using 1 worker
+
+(node:13404) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/browser/integration-v2.spec.ts:184:1 › lotlu UI satış → bağlı sevkiyat aynı hareket; bağımsız sevkiyat yeni çıkış (15.9s)
+  ✓  2 tests/browser/integration-v2.spec.ts:556:1 › beş viewport: gerçek modüller, mobil satış ve drawer klavye erişimi; sayfa taşmaz (24.6s)
+
+  2 passed (45.3s)
+npm notice
+npm notice New major version of npm available! 11.9.0 -> 12.2.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.1
+npm notice To update run: npm install -g npm@12.2.1
+npm notice

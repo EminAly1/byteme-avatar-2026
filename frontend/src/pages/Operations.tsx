@@ -1,4 +1,4 @@
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { useFieldArray, useFormContext } from "react-hook-form";
 import type { z } from "zod";
@@ -45,7 +45,11 @@ export function Operations() {
             ]}
             empty={!operations.data?.length}
           >
-            {[...(operations.data || [])]
+            {[
+              ...(operations.data || []).filter(
+                (x) => x.kind === "external_production",
+              ),
+            ]
               .sort((a, b) => b.created_at.localeCompare(a.created_at))
               .map((x) => (
                 <tr key={x.id}>
@@ -414,6 +418,8 @@ export function OperationPage() {
       }),
     ).values(),
   );
+  if (op?.kind === "cutting")
+    return <Navigate replace to={"/parcalama/" + op.id} />;
   return (
     <State
       loading={
@@ -571,7 +577,7 @@ export function OperationPage() {
                   <DispatchFields
                     data={data}
                     stocks={stocks.data || []}
-                    producer={op.producer_id}
+                    producer={op.producer_id || ""}
                   />
                 </CommandForm>
               </Section>

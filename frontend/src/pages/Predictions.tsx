@@ -1,0 +1,562 @@
+import { useEffect, useRef, useState } from "react";
+import { useSearchParams } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { useFormContext } from "react-hook-form";
+import { Sparkles, FlaskConical } from "lucide-react";
+import { CommandForm, Field, Options, ArrayError } from "../components/forms";
+import { Badge, Section, State, Table } from "../components/ui";
+import {
+  CriticalNotice,
+  ModuleIntro,
+  NumberInput,
+  RecordId,
+  StatCard,
+} from "../components/workflow";
+import { request } from "../lib/api";
+import { useCatalog, useRecords } from "../lib/data";
+import { amount, dateTime, eur } from "../lib/format";
+import type { Operation } from "../lib/types";
+import {
+  partNames,
+  type ModelInfo,
+  type Prediction,
+  type Recipe,
+  type Part,
+} from "../lib/modules";
+import {
+  productionPredictionSchema,
+  cuttingPredictionSchema,
+} from "../lib/module-validation";
+import {
+  productionPredictionPayload,
+  cuttingPredictionPayload,
+} from "../lib/module-payloads";
+import { readHistory, remember } from "../lib/history";
+import type { z } from "zod";
+
+const warning =
+  "Bu model sentetik verilerle eğitilmiştir. Gerçek işletme verileriyle doğruluğu henüz kanıtlanmamıştır.";
+export const predictionLabels: Record<string, { label: string; unit: string }> =
+  {
+    predicted_finished_quantity: { label: "Mamul miktarı", unit: "paket" },
+    predicted_yield_ratio: { label: "Üretim verimi", unit: "kg/kg" },
+    predicted_total_cost_eur: { label: "Toplam maliyet", unit: "EUR" },
+    predicted_ekp_eur_per_unit: { label: "Birim EKP", unit: "EUR/paket" },
+    predicted_total_weight_kg: { label: "Toplam parça ağırlığı", unit: "kg" },
+    predicted_difference_kg: { label: "Açıklanması gereken fark", unit: "kg" },
+    ...Object.fromEntries(
+      Object.entries(partNames).map(([key, label]) => [
+        "predicted_" + key + "_kg",
+        { label, unit: "kg" },
+      ]),
+    ),
+  };
+function ProductionFields({
+  data,
+  operations,
+}: {
+  data: ReturnType<typeof useCatalog>;
+  operations: Operation[];
+}) {
+  const { watch } =
+    useFormContext<z.infer<typeof productionPredictionSchema>>();
+  const operation = watch("operation_id");
+  return (
+    <>
+      <div className="form-grid">
+        <Field name="meat_type" label="Et türü">
+          <option value="beef">Sığır (beef)</option>
+          <option value="lamb">Kuzu (lamb)</option>
+        </Field>
+        <Field name="planned_producer_profile" label="Sentetik üretici profili">
+          <option value="producer_a">producer_a · kurgusal profil A</option>
+          <option value="producer_b">producer_b · kurgusal profil B</option>
+          <option value="producer_c">producer_c · kurgusal profil C</option>
+        </Field>
+      </div>
+      <div className="form-grid cols-3">
+        <NumberInput name="meat_kg" label="Planlanan et (kg)" />
+        <NumberInput name="spice_kg" label="Planlanan baharat (kg)" />
+        <NumberInput name="casing_kg" label="Planlanan kılıf (kg)" />
+        <NumberInput name="meat_cost_eur" label="Bilinen et maliyeti (EUR)" />
+        <NumberInput
+          name="spice_cost_eur"
+          label="Bilinen baharat maliyeti (EUR)"
+        />
+        <NumberInput
+          name="casing_cost_eur"
+          label="Bilinen kılıf maliyeti (EUR)"
+        />
+      </div>
+      <div className="form-grid">
+        <NumberInput name="package_weight_kg" label="Paket ağırlığı (kg)" />
+        <NumberInput
+          name="estimated_service_eur"
+          label="Hizmet ön teklifi (EUR)"
+          hint="İşlem öncesi bağımsız teklif; gerçekleşen paket × tarife girilmez."
+        />
+        <Field name="operation_id" label="Üretim operasyon referansı">
+          <Options
+            items={operations
+              .filter(
+                (o) => o.kind === "external_production" && o.status === "draft",
+              )
+              .map((o) => ({ id: o.id, name: o.code }))}
+            placeholder="İlişkisiz tahmin (isteğe bağlı)"
+          />
+        </Field>
+        <Field
+          name="output_product_id"
+          label="Tahminin paket ürünü"
+          hint={
+            operation
+              ? "Bağlı işlem için zorunlu; paket ağırlığı DB ile eşleşir."
+              : "İsteğe bağlı; referans girilmezse gerçekleşme eşleşmez."
+          }
+        >
+          <Options
+            items={data.products.filter(
+              (p) => p.type === "finished" && p.base_unit === "package",
+            )}
+          />
+        </Field>
+      </div>
+      <p className="caption">
+        Model aralığı: et 60–160 kg, baharat 0,8–4,2 kg, kılıf 2–10,5 kg, paket
+        0,5–1,5 kg, ön teklif 200–900 EUR. Girdiler muhasebeleşmiş sonuç
+        değildir.
+      </p>
+    </>
+  );
+}
+function CuttingFields({
+  data,
+  operations,
+  recipes,
+}: {
+  data: ReturnType<typeof useCatalog>;
+  operations: Operation[];
+  recipes: Recipe[];
+}) {
+  const { watch, setValue } =
+      useFormContext<z.infer<typeof cuttingPredictionSchema>>(),
+    recipeId = watch("recipe_version_id"),
+    previous = useRef(recipeId);
+  const recipe = useQuery({
+    queryKey: ["recipe", recipeId],
+    queryFn: () => request<Recipe>("/recipes/" + recipeId),
+    enabled: !!recipeId,
+    retry: false,
+  });
+  useEffect(() => {
+    if (previous.current !== recipeId) {
+      setValue("part_products", {
+        leg: "",
+        shoulder: "",
+        back: "",
+        rib: "",
+        mince: "",
+      });
+      setValue("operation_id", "");
+      previous.current = recipeId;
+    }
+  }, [recipeId, setValue]);
+  const selected = recipe.data;
+  return (
+    <>
+      <div className="form-grid">
+        <Field name="recipe_version_id" label="Tahmin reçete sürümü">
+          <Options
+            items={recipes
+              .filter(
+                (r) =>
+                  r.available && r.species === "Kuzu" && r.lines.length === 5,
+              )
+              .map((r) => ({ id: r.id, name: r.code + " · v" + r.version }))}
+          />
+        </Field>
+        <Field name="species" label="Tahmin hayvan türü">
+          <option value="Kuzu">Kuzu</option>
+        </Field>
+        <NumberInput
+          name="input_weight_kg"
+          label="Tahmin giriş ağırlığı (kg)"
+          hint="Desteklenen sentetik aralık 18–40 kg."
+        />
+        <Field name="operation_id" label="Kesim operasyon referansı">
+          <Options
+            items={operations
+              .filter(
+                (o) =>
+                  o.kind === "cutting" &&
+                  o.status === "draft" &&
+                  o.recipe_version_id === recipeId,
+              )
+              .map((o) => ({ id: o.id, name: o.code }))}
+            placeholder="İlişkisiz tahmin (isteğe bağlı)"
+          />
+        </Field>
+      </div>
+      {recipeId && (
+        <State loading={recipe.isPending} error={recipe.error}>
+          <h3>Reçete parçası → gerçek ürün eşlemesi</h3>
+          <p className="caption">
+            Her parça için reçeteden farklı bir ürün seçin. Eşleme kullanıcı
+            konfigürasyonudur.
+          </p>
+          <div className="form-grid">
+            {Object.entries(partNames).map(([key, label]) => (
+              <Field
+                key={key}
+                name={"part_products." + key}
+                label={label + " ürün eşlemesi"}
+              >
+                <Options
+                  items={data.products.filter(
+                    (p) =>
+                      p.type === "finished" &&
+                      p.base_unit === "kg" &&
+                      selected?.lines.some((l) => l.product_id === p.id),
+                  )}
+                />
+              </Field>
+            ))}
+          </div>
+          <ArrayError name="part_products" />
+        </State>
+      )}
+    </>
+  );
+}
+export function PredictionResult({ prediction }: { prediction: Prediction }) {
+  const p = prediction;
+  const fields =
+    p.kind === "production"
+      ? [
+          "predicted_finished_quantity",
+          "predicted_ekp_eur_per_unit",
+          "predicted_total_cost_eur",
+          "predicted_yield_ratio",
+        ]
+      : [
+          "predicted_total_weight_kg",
+          "predicted_difference_kg",
+          "predicted_yield_ratio",
+        ];
+  return (
+    <Section
+      title={
+        p.kind === "production"
+          ? "Üretim tahmin sonucu"
+          : "Kuzu parçalama tahmin sonucu"
+      }
+      subtitle="Tahminler karar desteğidir; kesin maliyet veya stok kaydı değildir."
+    >
+      <div className="stack">
+        <div className="prediction-source">
+          <Badge tone="amber">{p.data_origin}</Badge>
+          <span>{warning}</span>
+        </div>
+        <RecordId id={p.id} label="Prediction UUID" />
+        <p className="caption">
+          Tahmin zamanı: {dateTime(p.predicted_at)} ·{" "}
+          <span className="code">{p.model_version}</span>
+        </p>
+        <div className="stat-grid">
+          {fields.map((k) => {
+            const v = p[k as keyof Prediction] as string;
+            return (
+              <StatCard
+                key={k}
+                label={
+                  "Tahmini " + predictionLabels[k].label.toLocaleLowerCase("tr")
+                }
+                value={
+                  k.includes("cost") || k.includes("ekp")
+                    ? eur(v)
+                    : amount(v) + " " + predictionLabels[k].unit
+                }
+              />
+            );
+          })}
+        </div>
+        {p.actual_unavailable_reason && (
+          <p className="notice warning">{p.actual_unavailable_reason}</p>
+        )}
+        <Table
+          headers={[
+            "Hedef / birim",
+            "Tahmin",
+            "Gerçekleşen",
+            "Mutlak sapma",
+            "Sapma %",
+          ]}
+          empty={!p.comparison}
+        >
+          {Object.entries(p.comparison || {}).map(([key, c]) => (
+            <tr key={key}>
+              <td>
+                <strong>{predictionLabels[key]?.label || key}</strong>
+                <small>{predictionLabels[key]?.unit}</small>
+              </td>
+              <td>{amount(c.predicted)}</td>
+              <td>
+                {c.actual === null ? "Henüz gerçekleşmedi" : amount(c.actual)}
+              </td>
+              <td>
+                {c.absolute_deviation === null
+                  ? "—"
+                  : amount(c.absolute_deviation)}
+              </td>
+              <td>
+                {c.percentage_deviation === null
+                  ? "—"
+                  : amount(c.percentage_deviation) + "%"}
+              </td>
+            </tr>
+          ))}
+        </Table>
+        <p className="caption">
+          Sapma backend tarafından kesin gerçekleşmeden hesaplanır. Gerçek
+          sıfırsa yüzde tanımsızdır; boş değerler sayıya dönüştürülmez.
+        </p>
+        <details>
+          <summary>Model sınırlamaları ve kullanılan girdiler</summary>
+          <ul>
+            {p.prediction_limitations.map((l, i) => (
+              <li key={i}>{l}</li>
+            ))}
+          </ul>
+          <dl className="review-summary">
+            {Object.entries(p.features).map(([k, v]) => (
+              <div key={k}>
+                <dt>{k}</dt>
+                <dd>{v}</dd>
+              </div>
+            ))}
+          </dl>
+        </details>
+      </div>
+    </Section>
+  );
+}
+export function Predictions() {
+  const data = useCatalog(),
+    operations = useRecords<Operation>("/operations"),
+    recipes = useRecords<Recipe>("/recipes"),
+    models = useQuery({
+      queryKey: ["prediction-models"],
+      queryFn: () => request<{ models: ModelInfo[] }>("/predictions/models"),
+      retry: false,
+    });
+  const [params, setParams] = useSearchParams(),
+    [tab, setTab] = useState<"production" | "cutting">("production"),
+    [lookup, setLookup] = useState(""),
+    [lookupError, setLookupError] = useState(""),
+    [history, setHistory] = useState(() => readHistory("predictions"));
+  const selected = params.get("prediction") || "";
+  const result = useQuery({
+    queryKey: ["prediction", selected],
+    queryFn: () => request<Prediction>("/predictions/" + selected),
+    enabled: !!selected,
+    retry: false,
+  });
+  const success = (r: unknown) => {
+    const p = r as Prediction;
+    remember("predictions", {
+      id: p.id,
+      at: p.predicted_at,
+      label: p.kind === "production" ? "Üretim" : "Kuzu parçalama",
+    });
+    setHistory(readHistory("predictions"));
+    setParams({ prediction: p.id });
+  };
+  const info = models.data?.models.find((m) => m.kind === tab);
+  return (
+    <div className="stack">
+      <ModuleIntro
+        title="Ölçülebilir tahmin. Açık sınırlar."
+        description="Üretim ve parçalama öncesi karar desteği; gerçek sonuçla model sürümünü koruyarak karşılaştırın."
+        icon={<Sparkles size={24} />}
+      />
+      <div className="science-notice">
+        <FlaskConical size={22} />
+        <div>
+          <strong>Sentetik eğitim verisi</strong>
+          <p>{warning}</p>
+        </div>
+      </div>
+      <Section title="Yeni tahmin">
+        <div className="tabs" role="group" aria-label="Tahmin modeli">
+          <button
+            className={tab === "production" ? "active" : ""}
+            onClick={() => setTab("production")}
+          >
+            Üretim verimi ve EKP
+          </button>
+          <button
+            className={tab === "cutting" ? "active" : ""}
+            onClick={() => setTab("cutting")}
+          >
+            Kuzu parçalama
+          </button>
+        </div>
+        <State
+          loading={
+            data.loading ||
+            operations.isPending ||
+            recipes.isPending ||
+            models.isPending
+          }
+          error={
+            data.error || operations.error || recipes.error || models.error
+          }
+        >
+          {tab === "production" ? (
+            <CommandForm
+              schema={productionPredictionSchema}
+              defaults={{
+                operation_id: "",
+                output_product_id: "",
+                meat_type: "beef",
+                meat_kg: "",
+                spice_kg: "",
+                casing_kg: "",
+                meat_cost_eur: "",
+                spice_cost_eur: "",
+                casing_cost_eur: "",
+                planned_producer_profile: "producer_a",
+                package_weight_kg: "",
+                estimated_service_eur: "",
+              }}
+              path="/predictions/production"
+              label="Üretim tahminini gözden geçir"
+              confirmText="Sentetik modelle karar destek tahmini kaydedilecek. Bu işlem stok veya kesin maliyet üretmez."
+              payload={productionPredictionPayload}
+              onSuccess={success}
+            >
+              <ProductionFields
+                data={data}
+                operations={operations.data || []}
+              />
+            </CommandForm>
+          ) : (
+            <CommandForm
+              schema={cuttingPredictionSchema}
+              defaults={{
+                operation_id: "",
+                recipe_version_id: "",
+                species: "Kuzu",
+                input_weight_kg: "",
+                part_products: {
+                  leg: "",
+                  shoulder: "",
+                  back: "",
+                  rib: "",
+                  mince: "",
+                },
+              }}
+              path="/predictions/cutting"
+              label="Kesim tahminini gözden geçir"
+              confirmText="Beklenen parça ağırlıkları tahmin kaydı olarak saklanacak; fiilî tartım veya stok oluşturulmaz."
+              payload={cuttingPredictionPayload}
+              onSuccess={success}
+            >
+              <CuttingFields
+                data={data}
+                operations={operations.data || []}
+                recipes={recipes.data || []}
+              />
+            </CommandForm>
+          )}
+        </State>
+      </Section>
+      {selected && (
+        <State loading={result.isPending} error={result.error}>
+          {result.data && <PredictionResult prediction={result.data} />}
+        </State>
+      )}
+      <Section
+        title="Tahmin geçmişi ve kayıt açma"
+        subtitle="Backend liste endpoint'i sunmuyor. Bu sekmedeki gerçek referanslar gösterilir; bilinen UUID ile başka kayıt açılabilir."
+      >
+        <form
+          className="inline-form"
+          onSubmit={(e) => {
+            e.preventDefault();
+            if (!/^[0-9a-f-]{36}$/i.test(lookup)) {
+              setLookupError("Geçerli prediction UUID girin.");
+              return;
+            }
+            setLookupError("");
+            setParams({ prediction: lookup });
+          }}
+        >
+          <label>
+            Prediction UUID
+            <input value={lookup} onChange={(e) => setLookup(e.target.value)} />
+          </label>
+          <button className="button">Tahmin kaydını aç</button>
+        </form>
+        {lookupError && (
+          <p className="field-error" role="alert">
+            {lookupError}
+          </p>
+        )}
+        <Table
+          headers={[
+            "Tür",
+            "Tahmin zamanı",
+            "Gerçek prediction UUID",
+            "Ayrıntı",
+          ]}
+          empty={!history.length}
+        >
+          {history.map((h) => (
+            <tr key={h.id}>
+              <td>{h.label}</td>
+              <td>{dateTime(h.at)}</td>
+              <td className="code">{h.id}</td>
+              <td>
+                <button
+                  className="text-button"
+                  onClick={() => setParams({ prediction: h.id })}
+                >
+                  Tahmini aç
+                </button>
+              </td>
+            </tr>
+          ))}
+        </Table>
+      </Section>
+      {info && (
+        <Section
+          title="Sentetik test metrikleri"
+          subtitle={`${info.model_version} · Gerçek işletme doğruluğu değildir; eğitim/validation/test: ${info.metrics.splits.train}/${info.metrics.splits.validation}/${info.metrics.splits.test}`}
+        >
+          <Table
+            headers={[
+              "Hedef",
+              "Birim",
+              "MAE",
+              "RMSE",
+              "Baseline MAE",
+              "n test",
+            ]}
+          >
+            {Object.entries(info.metrics.ridge_test).map(([key, m]) => (
+              <tr key={key}>
+                <td>{predictionLabels[key]?.label || key}</td>
+                <td>{m.unit}</td>
+                <td>{m.mae.toFixed(4)}</td>
+                <td>{m.rmse.toFixed(4)}</td>
+                <td>{info.metrics.baseline_test[key].mae.toFixed(4)}</td>
+                <td>{m.n}</td>
+              </tr>
+            ))}
+          </Table>
+        </Section>
+      )}
+    </div>
+  );
+}

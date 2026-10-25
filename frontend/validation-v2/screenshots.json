@@ -1,0 +1,132 @@
+[
+  {
+    "path": "screenshots/ai-cutting-desktop.png",
+    "image_width": 1440,
+    "image_height": 3113,
+    "viewport_width": 1440,
+    "viewport_height": 900,
+    "full_page": true,
+    "sha256": "edb7f34892e9f0b255641763da60ed8015c2909070a793ade2636a56019dbb9c",
+    "source": "actual Chromium render, unedited"
+  },
+  {
+    "path": "screenshots/ai-mobile.png",
+    "image_width": 390,
+    "image_height": 3829,
+    "viewport_width": 390,
+    "viewport_height": 844,
+    "full_page": true,
+    "sha256": "d2a62982a69c2f6896cdd722e50bab39dfc2b42f2af7c351e738388468fc39ae",
+    "source": "actual Chromium render, unedited"
+  },
+  {
+    "path": "screenshots/ai-production-desktop.png",
+    "image_width": 1440,
+    "image_height": 2944,
+    "viewport_width": 1440,
+    "viewport_height": 900,
+    "full_page": true,
+    "sha256": "55d00abb66c38ef01a57cb1bbbd2d8eea6cafc924f745a62a4b4a224d8b44505",
+    "source": "actual Chromium render, unedited"
+  },
+  {
+    "path": "screenshots/baseline-dashboard-desktop.png",
+    "image_width": 1440,
+    "image_height": 1398,
+    "viewport_width": 1440,
+    "viewport_height": 900,
+    "full_page": true,
+    "sha256": "827da0a09f6e7c81cd491c6b6f091b698a4e98a544862efe5e206c1cd520493f",
+    "source": "actual Chromium render, unedited"
+  },
+  {
+    "path": "screenshots/cutting-desktop.png",
+    "image_width": 1440,
+    "image_height": 1702,
+    "viewport_width": 1440,
+    "viewport_height": 900,
+    "full_page": true,
+    "sha256": "7a65ed7c9b03fca4aa33525bd030a2b1b2b2a11ff8c5f5cbd1804e8c6e2d5a92",
+    "source": "actual Chromium render, unedited"
+  },
+  {
+    "path": "screenshots/cutting-mobile.png",
+    "image_width": 390,
+    "image_height": 2098,
+    "viewport_width": 390,
+    "viewport_height": 844,
+    "full_page": true,
+    "sha256": "cd6170affb8d24825ed408b6f96d41291142a4e2ea89f7206c6815796145050e",
+    "source": "actual Chromium render, unedited"
+  },
+  {
+    "path": "screenshots/cutting-tablet.png",
+    "image_width": 768,
+    "image_height": 4746,
+    "viewport_width": 768,
+    "viewport_height": 1024,
+    "full_page": true,
+    "sha256": "95794f9768dfd9dd1fd3e114dbf69519e33c276d58d04801673ebe443e1432ff",
+    "source": "actual Chromium render, unedited"
+  },
+  {
+    "path": "screenshots/dashboard-desktop.png",
+    "image_width": 1440,
+    "image_height": 1701,
+    "viewport_width": 1440,
+    "viewport_height": 900,
+    "full_page": true,
+    "sha256": "7cba9841b5d4366646837199d72af1c00cc4858456ad7b7d51e2d890dacdb60f",
+    "source": "actual Chromium render, unedited"
+  },
+  {
+    "path": "screenshots/dashboard-mobile.png",
+    "image_width": 390,
+    "image_height": 2445,
+    "viewport_width": 390,
+    "viewport_height": 844,
+    "full_page": true,
+    "sha256": "9738130a3407292f0c945613d7eff2996c8522de70ce81e7858d1ffed6e760e3",
+    "source": "actual Chromium render, unedited"
+  },
+  {
+    "path": "screenshots/model-unavailable-desktop.png",
+    "image_width": 1440,
+    "image_height": 1173,
+    "viewport_width": 1440,
+    "viewport_height": 900,
+    "full_page": true,
+    "sha256": "c380b7090dbbbaef5c0ec25e0577f2ff04141e8c323f9f7c30d1a654ef8b9ea3",
+    "source": "actual Chromium render, unedited"
+  },
+  {
+    "path": "screenshots/recall-desktop.png",
+    "image_width": 1440,
+    "image_height": 2733,
+    "viewport_width": 1440,
+    "viewport_height": 900,
+    "full_page": true,
+    "sha256": "420c88b757d766c166dcb92f89f140a08eff7ebe1dd6e9fad026c764641f309f",
+    "source": "actual Chromium render, unedited"
+  },
+  {
+    "path": "screenshots/sale-mobile.png",
+    "image_width": 390,
+    "image_height": 1266,
+    "viewport_width": 390,
+    "viewport_height": 844,
+    "full_page": true,
+    "sha256": "4f4a16009815155eb8a27ade3290285b8a83c0e3ce1faf9f3a6859908eebc8a6",
+    "source": "actual Chromium render, unedited"
+  },
+  {
+    "path": "screenshots/trace-desktop.png",
+    "image_width": 1440,
+    "image_height": 2709,
+    "viewport_width": 1440,
+    "viewport_height": 900,
+    "full_page": true,
+    "sha256": "5a09eb11ef5e69c1b7a2ed2601a3ced919a63ea78446ab9964f6fef02d7e4995",
+    "source": "actual Chromium render, unedited"
+  }
+]

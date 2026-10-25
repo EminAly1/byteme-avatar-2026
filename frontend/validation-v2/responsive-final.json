@@ -1,0 +1,15 @@
+[
+  {
+    "scenario": "responsive",
+    "viewports": [
+      "360x800",
+      "390x844",
+      "768x1024",
+      "1024x768",
+      "1440x900"
+    ],
+    "mobile_sale": true,
+    "keyboard_menu": true,
+    "legacy_redirects": 5
+  }
+]

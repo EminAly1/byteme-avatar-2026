@@ -1,0 +1,18 @@
+
+> byteme-avatar-web@0.1.0 test:e2e
+> playwright test --grep WCAG|beş viewport
+
+
+Running 2 tests using 1 worker
+
+(node:10775) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/browser/accessibility-v2.spec.ts:4:1 › WCAG AA otomatik kontrast, etiket ve yapı denetimi: desktop/mobil ana ekranlar (30.2s)
+  ✓  2 tests/browser/integration-v2.spec.ts:549:1 › beş viewport: gerçek modüller, mobil satış ve drawer klavye erişimi; sayfa taşmaz (24.9s)
+
+  2 passed (56.7s)
+npm notice
+npm notice New major version of npm available! 11.9.0 -> 12.2.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.1
+npm notice To update run: npm install -g npm@12.2.1
+npm notice

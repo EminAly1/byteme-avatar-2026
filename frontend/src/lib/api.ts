@@ -10,7 +10,38 @@ export class ApiError extends Error {
     super(message);
   }
 }
-const fieldNames: Record<string, string> = { product_id:"Ürün", supplier_id:"Tedarikçi", producer_id:"Dış üretici", location_id:"Konum", lot_id:"Lot", quantity:"Miktar", total_cost:"Toplam maliyet", amount:"Tutar", expires_at:"Son tüketim tarihi", lines:"Satırlar", consumed_inputs:"Tüketim", returned_inputs:"İade", outputs:"Mamul", service_costs:"Hizmet", output_location_id:"Mamul deposu", loss_quantity:"Miktar farkı", loss_reason:"Fark açıklaması", code:"Emir numarası", from_location_id:"Çıkış konumu", to_location_id:"Kabul konumu", currency:"Para birimi", external_lot_code:"Lot numarası", lot_code:"Lot numarası", sku:"SKU", name:"Ad", package_weight_kg:"Paket kg dönüşümü", base_unit:"Birim", kind:"Tür", type:"Tür", roles:"Roller" };
+const fieldNames: Record<string, string> = {
+  product_id: "Ürün",
+  supplier_id: "Tedarikçi",
+  producer_id: "Dış üretici",
+  location_id: "Konum",
+  lot_id: "Lot",
+  quantity: "Miktar",
+  total_cost: "Toplam maliyet",
+  amount: "Tutar",
+  expires_at: "Son tüketim tarihi",
+  lines: "Satırlar",
+  consumed_inputs: "Tüketim",
+  returned_inputs: "İade",
+  outputs: "Mamul",
+  service_costs: "Hizmet",
+  output_location_id: "Mamul deposu",
+  loss_quantity: "Miktar farkı",
+  loss_reason: "Fark açıklaması",
+  code: "Emir numarası",
+  from_location_id: "Çıkış konumu",
+  to_location_id: "Kabul konumu",
+  currency: "Para birimi",
+  external_lot_code: "Lot numarası",
+  lot_code: "Lot numarası",
+  sku: "SKU",
+  name: "Ad",
+  package_weight_kg: "Paket kg dönüşümü",
+  base_unit: "Birim",
+  kind: "Tür",
+  type: "Tür",
+  roles: "Roller",
+};
 const messages: Record<number, string> = {
   401: "Bağlantı yetkilendirilemedi. Yerel sunucunun API anahtarı ayarını kontrol edin.",
   403: "Bu yerel bağlantıya erişim reddedildi.",
@@ -19,6 +50,27 @@ const messages: Record<number, string> = {
   503: "API veya veritabanı hazır değil. Bağlantıyı kontrol edip tekrar deneyin.",
 };
 
+const domainMessages: Record<string, string> = {
+  LOT_BLOCKED:
+    "Bu lot geri çağırma kapsamında bloke. Satış, sevk veya tüketim yapılamaz; lot kaydını inceleyin.",
+  LOT_EXPIRED:
+    "Lotun son tüketim tarihi geçmiş. Kullanılabilir başka lot seçin.",
+  INSUFFICIENT_STOCK:
+    "Seçili konumda yeterli stok yok. Bakiyeyi yenileyip miktarı kontrol edin.",
+  MASS_BALANCE:
+    "Giriş ağırlığı, ürün/yan ürün ve açıklanmış farklarla dengelenmiyor. Tartımları kontrol edin.",
+  RECIPE_UNAVAILABLE: "Reçete sürümü kullanıma kapalı. Açık bir sürüm seçin.",
+  FORECAST_TOO_LATE:
+    "İşlem başlamış veya kapanmış. Yeni işlem öncesi tahmin kaydedilemez; önceki tahmin kaydını açın.",
+  MODEL_UNAVAILABLE:
+    "Tahmin modeli hazır değil veya geçersiz. Tahmin üretilmedi; model kurulumunu kontrol edin.",
+  PREDICTION_OUT_OF_DOMAIN:
+    "Girdiler modelin desteklediği sentetik aralık dışında. Formdaki sınırları kontrol edin.",
+  IDEMPOTENCY_CONFLICT:
+    "Bu işlem anahtarı başka bir içerikle kullanılmış. Mevcut işlemin sonucunu inceleyin.",
+  SALE_LINE_ALREADY_SHIPPED:
+    "Bu satış satırı daha önce sevk edilmiş. Sevkiyat kayıtlarını yenileyin.",
+};
 export async function request<T>(
   path: string,
   options: RequestInit = {},
@@ -43,7 +95,13 @@ export async function request<T>(
     const details = Array.isArray(body?.detail)
       ? body.detail
           .map((x: { loc?: Array<string | number> }) =>
-            x.loc?.slice(1).map(k=>typeof k==='number'?`${k+1}. satır`:fieldNames[k]).filter(Boolean).join(" / "),
+            x.loc
+              ?.slice(1)
+              .map((k) =>
+                typeof k === "number" ? `${k + 1}. satır` : fieldNames[k],
+              )
+              .filter(Boolean)
+              .join(" / "),
           )
           .filter(Boolean)
           .join(", ")
@@ -51,7 +109,7 @@ export async function request<T>(
     throw new ApiError(
       response.status,
       body?.error?.code || "HTTP_ERROR",
-      `${messages[response.status] || "İstek tamamlanamadı."}${body?.error?.message ? " " + body.error.message : ""}${details ? " Alanlar: " + details : ""}`,
+      `${domainMessages[body?.error?.code] || (messages[response.status] || "İstek tamamlanamadı.") + (body?.error?.message ? " " + body.error.message : "")}${details ? " Alanlar: " + details : ""}`,
       response.status >= 500,
     );
   }

@@ -23,3 +23,27 @@ export function useCatalog() {
     error: [products, parties, locations, lots].find((x) => x.isError)?.error,
   };
 }
+
+export function useRecordDetails<T>(path: string, ids: string[] | undefined) {
+  return useQuery({
+    queryKey: ["record-details", path, ids],
+    queryFn: async ({ signal }) => {
+      const { request } = await import("./api");
+      const results: T[] = [];
+      // Complete the prototype's list without flooding the local API/DB pool.
+      for (let i = 0; i < (ids?.length || 0); i += 4) {
+        results.push(
+          ...(await Promise.all(
+            ids!
+              .slice(i, i + 4)
+              .map((id) => request<T>(path + "/" + id, { signal })),
+          )),
+        );
+      }
+      return results;
+    },
+    enabled: ids !== undefined,
+    retry: false,
+    staleTime: 15000,
+  });
+}
