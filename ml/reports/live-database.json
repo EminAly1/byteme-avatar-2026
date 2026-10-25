@@ -1,0 +1,13 @@
+{
+  "mysql_version": "8.0.46",
+  "database": "avatar_ml_demo_test",
+  "counts_after_two_identical_HTTP_demo_runs": {
+    "prediction_records": 2,
+    "operations": 2,
+    "lots": 10,
+    "stock_movements": 20,
+    "recalls": 0,
+    "lot_links": 8
+  },
+  "duplicate_forecasts_or_operations": false
+}

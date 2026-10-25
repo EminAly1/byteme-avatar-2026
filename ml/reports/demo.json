@@ -1,0 +1,187 @@
+{
+  "transport": "real HTTP FastAPI + MySQL 8; separate *_test database",
+  "health": {
+    "status": "ok"
+  },
+  "ready": {
+    "status": "ok",
+    "database": "ok"
+  },
+  "data_note": "Training: SYNTHETIC, not enterprise history. Production actual: PDF reference entered into demo ledger. Cutting actual 6/4/4/5/3 and waste classification: FICTIONAL demo.",
+  "forecast_features_note": "450 EUR preliminary service quote and producer_a profile are independent fictional assumptions; 85 and 18.16 were not inputs.",
+  "model_versions": [
+    "production-ridge-v1-a27a209e395c",
+    "cutting-ridge-v1-ddd7ab8f61fd"
+  ],
+  "production": {
+    "id": "93216a0e-a133-438b-a240-4dbac37cb09f",
+    "kind": "production",
+    "operation_id": "d53d6c31-7522-4e55-aa55-194b01528218",
+    "predicted_at": "2026-10-25T08:26:44.718845+00:00",
+    "features": {
+      "meat_kg": "100",
+      "spice_kg": "2",
+      "casing_kg": "5",
+      "meat_type": "beef",
+      "meat_cost_eur": "970",
+      "spice_cost_eur": "48",
+      "casing_cost_eur": "58",
+      "package_weight_kg": "1",
+      "estimated_service_eur": "450",
+      "planned_producer_profile": "producer_a"
+    },
+    "context": {
+      "producer_id": "01b9a83a-ffb9-4c68-821d-eb609cbccc4c",
+      "output_product_id": "790b99ea-e0e9-41fd-8f89-d0d72de46c18"
+    },
+    "currency": "EUR",
+    "data_origin": "SYNTHETIC",
+    "cost_meaning": "Bilinen planlı malzeme bedeli + tahmin edilen hizmet bedeli; gerçek muhasebe toplamı değildir.",
+    "dataset_hash": "a27a209e395c81f5753f386707713b4b2113e54df5451dd57f9c75021566c800",
+    "model_version": "production-ridge-v1-a27a209e395c",
+    "quantity_unit": "package",
+    "dataset_version": "synthetic-v1",
+    "predicted_ekp_display": "17.57",
+    "predicted_yield_ratio": "0.807183",
+    "feature_schema_version": "preprocess-v1",
+    "prediction_limitations": [
+      "SYNTHETIC eğitim/test verisi: gerçek işletme başarımı kanıtlanmadı.",
+      "Karar desteğidir; stok, lot, recall veya muhasebe kaydı oluşturmaz.",
+      "Gözlenmeyen süreç değişkenleri ve dağılım kayması nedeniyle hata mümkündür; güven aralığı kalibre edilmedi."
+    ],
+    "predicted_total_cost_eur": "1517.629016",
+    "predicted_ekp_eur_per_unit": "17.571540",
+    "predicted_finished_quantity": "86.368585",
+    "actual_unavailable_reason": null,
+    "comparison": {
+      "predicted_yield_ratio": {
+        "predicted": "0.807183",
+        "actual": "0.794393",
+        "absolute_deviation": "0.012790",
+        "percentage_deviation": "1.610095"
+      },
+      "predicted_total_cost_eur": {
+        "predicted": "1517.629016",
+        "actual": "1543.500000",
+        "absolute_deviation": "25.870984",
+        "percentage_deviation": "1.676125"
+      },
+      "predicted_ekp_eur_per_unit": {
+        "predicted": "17.571540",
+        "actual": "18.158824",
+        "absolute_deviation": "0.587284",
+        "percentage_deviation": "3.234150"
+      },
+      "predicted_finished_quantity": {
+        "predicted": "86.368585",
+        "actual": "85.000000",
+        "absolute_deviation": "1.368585",
+        "percentage_deviation": "1.610100"
+      }
+    },
+    "percentage_denominator": "abs(actual); zero or unavailable => null"
+  },
+  "cutting": {
+    "id": "ab0da95c-213f-4b65-88d1-9e528ac8054d",
+    "kind": "cutting",
+    "operation_id": "c2c54f26-2249-43af-9ded-5fa05d08e67a",
+    "predicted_at": "2026-10-25T08:26:44.991695+00:00",
+    "features": {
+      "species": "Kuzu",
+      "recipe_shape": "five_parts_v1",
+      "input_weight_kg": "25"
+    },
+    "context": {
+      "part_names": {
+        "leg": "But",
+        "rib": "Kaburga",
+        "back": "Sırt",
+        "mince": "Kıyma",
+        "shoulder": "Omuz"
+      },
+      "recipe_code": "ML-DEMO-LAMB-KEY",
+      "recipe_shape": "five_parts_v1",
+      "part_products": {
+        "leg": "a5d57025-1143-4026-8630-0acda2a03036",
+        "rib": "5b2f41aa-9b46-4442-86f8-6a300278375a",
+        "back": "65978f82-81b3-4fdf-8685-9172a2ce0ca1",
+        "mince": "cf037fb6-283d-43d1-a402-d2c5e568b2d1",
+        "shoulder": "06eb30f6-b1e1-486f-a76d-baeda8e61d67"
+      },
+      "recipe_version": 1,
+      "recipe_version_id": "e9851477-6c84-4037-8b1f-e9dab94e46a2"
+    },
+    "unit": "kg",
+    "data_origin": "SYNTHETIC",
+    "cost_meaning": null,
+    "dataset_hash": "ddd7ab8f61fd22be62953a9e36d2b83fa221aab6bb5319cd3e308a1be472d701",
+    "model_version": "cutting-ridge-v1-ddd7ab8f61fd",
+    "dataset_version": "synthetic-v1",
+    "predicted_leg_kg": "5.875229",
+    "predicted_rib_kg": "4.878152",
+    "predicted_back_kg": "3.950854",
+    "predicted_mince_kg": "3.077829",
+    "predicted_shoulder_kg": "4.025129",
+    "predicted_yield_ratio": "0.872288",
+    "feature_schema_version": "preprocess-v1",
+    "prediction_limitations": [
+      "SYNTHETIC eğitim/test verisi: gerçek işletme başarımı kanıtlanmadı.",
+      "Karar desteğidir; stok, lot, recall veya muhasebe kaydı oluşturmaz.",
+      "Gözlenmeyen süreç değişkenleri ve dağılım kayması nedeniyle hata mümkündür; güven aralığı kalibre edilmedi."
+    ],
+    "predicted_difference_kg": "3.192807",
+    "predicted_total_weight_kg": "21.807193",
+    "actual_unavailable_reason": null,
+    "comparison": {
+      "predicted_leg_kg": {
+        "predicted": "5.875229",
+        "actual": "6.000000",
+        "absolute_deviation": "0.124771",
+        "percentage_deviation": "2.079517"
+      },
+      "predicted_rib_kg": {
+        "predicted": "4.878152",
+        "actual": "5.000000",
+        "absolute_deviation": "0.121848",
+        "percentage_deviation": "2.436960"
+      },
+      "predicted_back_kg": {
+        "predicted": "3.950854",
+        "actual": "4.000000",
+        "absolute_deviation": "0.049146",
+        "percentage_deviation": "1.228650"
+      },
+      "predicted_mince_kg": {
+        "predicted": "3.077829",
+        "actual": "3.000000",
+        "absolute_deviation": "0.077829",
+        "percentage_deviation": "2.594300"
+      },
+      "predicted_shoulder_kg": {
+        "predicted": "4.025129",
+        "actual": "4.000000",
+        "absolute_deviation": "0.025129",
+        "percentage_deviation": "0.628225"
+      },
+      "predicted_yield_ratio": {
+        "predicted": "0.872288",
+        "actual": "0.880000",
+        "absolute_deviation": "0.007712",
+        "percentage_deviation": "0.876364"
+      },
+      "predicted_difference_kg": {
+        "predicted": "3.192807",
+        "actual": "3.000000",
+        "absolute_deviation": "0.192807",
+        "percentage_deviation": "6.426900"
+      },
+      "predicted_total_weight_kg": {
+        "predicted": "21.807193",
+        "actual": "22.000000",
+        "absolute_deviation": "0.192807",
+        "percentage_deviation": "0.876395"
+      }
+    },
+    "percentage_denominator": "abs(actual); zero or unavailable => null"
+  }
+}

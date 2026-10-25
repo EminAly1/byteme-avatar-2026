@@ -1,4 +1,5 @@
 from functools import lru_cache
+from pathlib import Path
 
 from pydantic import Field, SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -16,6 +17,7 @@ class Settings(BaseSettings):
     mysql_password: SecretStr | None = None
     avatar_api_key: SecretStr | None = None
     cors_origins: str = "http://localhost:5173"
+    avatar_ml_model_dir: str = str(Path(__file__).resolve().parents[2] / 'ml' / 'models')
 
     def database_url(self) -> URL:
         if not self.mysql_password or not self.mysql_password.get_secret_value():

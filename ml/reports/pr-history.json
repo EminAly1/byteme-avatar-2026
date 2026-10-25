@@ -1,0 +1,126 @@
+{
+  "base_main": "4951281330e69548422ea6e09d6b2418b1ea5c77",
+  "github_api_state_query": "403 Forbidden",
+  "merge_commits": [
+    {
+      "pr": 1,
+      "url": "https://github.com/EminAly1/byteme-avatar-2026/pull/1",
+      "merge_commit": "223ff8b4785d6635fd9e6e2ebe8f7e61214d679a",
+      "parents": [
+        "f263f1913f7787e1998d2cf9810fb47ef393dc62",
+        "e91fa9ba424df976a6c7f61e1c5e5222f1630493"
+      ],
+      "source": "git origin/main ancestry; GitHub API returned 403"
+    },
+    {
+      "pr": 2,
+      "url": "https://github.com/EminAly1/byteme-avatar-2026/pull/2",
+      "merge_commit": "d96e250e64b72f98843ffc01150bd66fb29c0344",
+      "parents": [
+        "223ff8b4785d6635fd9e6e2ebe8f7e61214d679a",
+        "25c6cb48c4b923bb78e78293f7826b78fa8248ff"
+      ],
+      "source": "git origin/main ancestry; GitHub API returned 403"
+    },
+    {
+      "pr": 3,
+      "url": "https://github.com/EminAly1/byteme-avatar-2026/pull/3",
+      "merge_commit": "7837a85097e2fd50c8da672a03803c319296d344",
+      "parents": [
+        "d96e250e64b72f98843ffc01150bd66fb29c0344",
+        "325cd602e242a223de12818763df1b94438402cd"
+      ],
+      "source": "git origin/main ancestry; GitHub API returned 403"
+    },
+    {
+      "pr": 4,
+      "url": "https://github.com/EminAly1/byteme-avatar-2026/pull/4",
+      "merge_commit": "6341cfb24e0a6526694efe13af60041aa5f80875",
+      "parents": [
+        "7837a85097e2fd50c8da672a03803c319296d344",
+        "fd1cb93d92433af4622f1fa725c3827c6fb0d60f"
+      ],
+      "source": "git origin/main ancestry; GitHub API returned 403"
+    },
+    {
+      "pr": 5,
+      "url": "https://github.com/EminAly1/byteme-avatar-2026/pull/5",
+      "merge_commit": "e1589d8f219a4ab689348f6b4f698829ab0193dd",
+      "parents": [
+        "6341cfb24e0a6526694efe13af60041aa5f80875",
+        "a6a6cb44864307cf62e9cfa475353b39b6c155ca"
+      ],
+      "source": "git origin/main ancestry; GitHub API returned 403"
+    },
+    {
+      "pr": 6,
+      "url": "https://github.com/EminAly1/byteme-avatar-2026/pull/6",
+      "merge_commit": "b90fcb28b882dff7e3207f2341a6d96936d214ae",
+      "parents": [
+        "e1589d8f219a4ab689348f6b4f698829ab0193dd",
+        "b1e5e1fc6669ea0be50b736d22879e66ddcbecc1"
+      ],
+      "source": "git origin/main ancestry; GitHub API returned 403"
+    },
+    {
+      "pr": 7,
+      "url": "https://github.com/EminAly1/byteme-avatar-2026/pull/7",
+      "merge_commit": "3d9125e862e8ad77a7c10dcf331633ecc22f8d5e",
+      "parents": [
+        "b90fcb28b882dff7e3207f2341a6d96936d214ae",
+        "27b4fb7c6fd55ead7d0776d3641ec2af57cf3ab3"
+      ],
+      "source": "git origin/main ancestry; GitHub API returned 403"
+    },
+    {
+      "pr": 8,
+      "url": "https://github.com/EminAly1/byteme-avatar-2026/pull/8",
+      "merge_commit": "e8c690d2e55a41d4144dc3278ad9de012e64a2a0",
+      "parents": [
+        "3d9125e862e8ad77a7c10dcf331633ecc22f8d5e",
+        "77d318c8546e2a04a3d711f61468b89b9cd906dd"
+      ],
+      "source": "git origin/main ancestry; GitHub API returned 403"
+    },
+    {
+      "pr": 9,
+      "url": "https://github.com/EminAly1/byteme-avatar-2026/pull/9",
+      "merge_commit": "21d9b31fe26d17bd60765b9f77456e290c7bcc3e",
+      "parents": [
+        "e8c690d2e55a41d4144dc3278ad9de012e64a2a0",
+        "6cb672c7fd51af832e4c6574fe8f3363b7cd36e7"
+      ],
+      "source": "git origin/main ancestry; GitHub API returned 403"
+    },
+    {
+      "pr": 10,
+      "url": "https://github.com/EminAly1/byteme-avatar-2026/pull/10",
+      "merge_commit": "3626c99aece86b30a7f6691e4b4a89358260fc5c",
+      "parents": [
+        "21d9b31fe26d17bd60765b9f77456e290c7bcc3e",
+        "9511b6c9ff685b902cc0ee6dabe0dbee32704139"
+      ],
+      "source": "git origin/main ancestry; GitHub API returned 403"
+    },
+    {
+      "pr": 11,
+      "url": "https://github.com/EminAly1/byteme-avatar-2026/pull/11",
+      "merge_commit": "94281b6f493d5a1cb66ce953efa6087641454d96",
+      "parents": [
+        "3626c99aece86b30a7f6691e4b4a89358260fc5c",
+        "fc3d854309b56249bbeda4326340ab45ecc55805"
+      ],
+      "source": "git origin/main ancestry; GitHub API returned 403"
+    },
+    {
+      "pr": 12,
+      "url": "https://github.com/EminAly1/byteme-avatar-2026/pull/12",
+      "merge_commit": "4951281330e69548422ea6e09d6b2418b1ea5c77",
+      "parents": [
+        "94281b6f493d5a1cb66ce953efa6087641454d96",
+        "471a5a75882daf1485b58267bcd69b53deb1d7e3"
+      ],
+      "source": "git origin/main ancestry; GitHub API returned 403"
+    }
+  ]
+}

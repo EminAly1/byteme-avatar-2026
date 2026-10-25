@@ -316,3 +316,19 @@ class RecallLot(Base):
     __table_args__ = OPTIONS
     recall_id: Mapped[str] = mapped_column(ForeignKey("recalls.id"), primary_key=True)
     lot_id: Mapped[str] = mapped_column(ForeignKey("lots.id"), primary_key=True)
+
+
+class PredictionRecord(Identified, Base):
+    """Append-only forecast snapshot; never participates in ledger/recall decisions."""
+    __tablename__ = 'prediction_records'
+    __table_args__ = (
+        CheckConstraint("kind IN ('production','cutting')", name='ck_prediction_kind'),
+        Index('ix_prediction_operation', 'operation_id', 'created_at'), OPTIONS,
+    )
+    kind: Mapped[str] = mapped_column(String(24))
+    operation_id: Mapped[str | None] = mapped_column(ForeignKey('operations.id'))
+    model_version: Mapped[str] = mapped_column(String(100))
+    feature_schema_version: Mapped[str] = mapped_column(String(40))
+    features: Mapped[dict] = mapped_column(JSON)
+    context: Mapped[dict] = mapped_column(JSON)
+    prediction: Mapped[dict] = mapped_column(JSON)
