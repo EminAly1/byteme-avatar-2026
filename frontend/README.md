@@ -1,68 +1,85 @@
-# ByteMe web yönetim paneli
+# ByteMe Operations — React Frontend v2
 
-`feature/web-dashboard`, backend commit’i **25c6cb48c4b923bb78e78293f7826b78fa8248ff** üzerinden geliştirilmiştir. Yalnızca frontend/ değiştirilir. Bu branch, feature/backend-core’a bağımlıdır; önerilen PR hedefi backend-core’dur. Mevcut backend, Android, ML ve ortak docs dosyaları değiştirilmedi.
+Gerçek FastAPI/MySQL kayıtlarıyla çalışan Türkçe yönetim paneli. Görev 10, `origin/main` **99356d4** (PR #14) üzerinden `feature/frontend-v2-integration` dalında geliştirildi. Yalnız `frontend/` değişir; backend, ML, Android, database ve ortak checklist korunur.
 
-## Çalışan ekranlar
+## Ekranlar
 
-- Genel bakış: tüm API sayfaları tamamlandıktan sonra ürün, stoklu lot/konum, alış ve açık emir sayıları. Farklı stok birimleri toplanmaz; satış/kâr gibi API’de olmayan metrikler gösterilmez.
-- Ürünler: liste, SKU/ad araması, tür filtresi, ürün oluşturma, paket kg dönüşümü.
-- İş ortakları ve depolar: tedarikçi/dış üretici rolleri, iletişim, işletme deposu, üretici konumu ve firma ilişkisi, karantina.
-- Alış/lot girişi: çok satırlı alış, toplam satır maliyeti, lot kodu, opsiyonel son tüketim tarihi, depo ve kayıt ayrıntıları.
-- Stok: ürün/lot/konum filtreleri, backend bakiyesi ve kullanılabilir miktar, bloke/kullanılamaz durumları, imzalı stok hareketleri.
-- Dış üretim: ayrı emir oluşturma → hammadde sevki → fiilî tüketim/iade → mamul/hizmet/miktar farkı ile kapanış. Kapanış sonrası gerçek maliyet, EKP ve kayıtlı kaynak lot bağlantıları.
-- Kuzu parçalama, satış raporları, tam lot izlenebilirliği, recall ve ML menüleri açıkça **Geliştirme aşamasında** durumundadır; sahte işlem göndermez.
+| URL | Gerçek işlem kapsamı |
+| --- | --- |
+| `/` | Kayıtlı ürün, stoklu lot/konum, alış, açık dış üretim, satış ve sevkiyat sayıları; doğru modüle açılan son işlemler |
+| `/urunler`, `/is-ortaklari`, `/depolar` | Ürün/birim, supplier/producer/customer rolleri ve konum yönetimi |
+| `/alislar`, `/stoklar`, `/uretim`, `/uretim/:id` | Çok satırlı alış, bakiyeler/hareketler, ayrı emir–sevk–fiilî kapanış ve backend EKP |
+| `/parcalama`, `/parcalama/:id` | Reçete/sürüm/kullanılabilirlik, quantity/value, kaynak lot, fiilî parça/yan ürün, açıklamalı fire/diğer kayıp, onaylı kapanış ve gerçek maliyet/lot bağlantıları |
+| `/satislar`, `/satislar/:id` | Çok satırlı lotlu kesin satış, müşteri/lot filtreleri, tutar ve kesin stok hareketi UUID |
+| `/sevkiyatlar` | Bağımsız çıkış veya sevk edilmemiş **tam satış satırlarının** teslim belgesi; detay drawer'ı. `?sale=UUID` ve `?shipment=UUID` desteklenir |
+| `/izlenebilirlik` | `?lot=UUID&direction=forward\|backward`; gerçek FK/operasyon kenarları, erişilebilir sıralı akış, lot drawer'ı, bakiye ve bilinen alıcılar |
+| `/geri-cagirma`, `/geri-cagirma/:id` | Mevcut izleme kapsamı ön görünümü, açık kritik onay, kesin recall üyeliği/bloklar, market bazlı miktar ve tarihsel iletişim |
+| `/yapay-zeka` | İki model formu, sentetik uyarı/metrikler, UUID/zaman/sürüm ve backend tahmin–gerçek–sapma; `?prediction=UUID` |
 
-React Router, TanStack Query, React Hook Form + Zod ve yeniden kullanılabilir form/tablo/durum/onay bileşenleri kullanılır. Maliyet veya stok muhasebesi frontend’de hesaplanmaz; yalnızca backend ondalık string sonuçları formatlanır. Saatler Europe/Istanbul ile gösterilir.
+Eski `/plan/parcalama`, `/plan/satis`, `/plan/izleme`, `/plan/recall`, `/plan/ai` yolları yeni modüllere yönlenir. Geliştirme aşamasında ekranları kaldırıldı. Sayılar/alarmlar kayıtlı veriden gelir; sahte grafik/aktivite yoktur.
 
-## Yerel çalıştırma ve güvenlik
+## Yerel çalıştırma
 
-Önce backend/README.md akışıyla MySQL, migration ve backend’i başlatın. Backend ve Vite Node süreçlerine **aynı AVATAR_API_KEY** güvenli process ortamından verilmelidir. Anahtarı kaynak koduna, VITE_* değişkenine, tarayıcı storage’ına veya komut/log çıktısına koymayın. Frontend .env dosyasından API anahtarı otomatik okunmaz.
+Node **24.19.0**, npm **11.9.0** ile test edildi; paket engine şartı Node >=22.12.0. Önce backend/README.md ve ml/INTEGRATION.md akışıyla ayrı MySQL 8 şemasını/migration'ı ve FastAPI'yi başlatın. ML modelleri backend'in okuyabildiği konumda olmalıdır; model yoksa UI gerçek 503 hatasını gösterir.
+
+Backend ve Vite Node süreçlerine **aynı AVATAR_API_KEY** güvenli process ortamından verilmelidir. Anahtarı komuta düz metin olarak, kaynak koduna, `.env` commit'ine veya `VITE_*` değişkenine koymayın. Frontend .env dosyasından anahtar otomatik okunmaz.
 
 ```bash
-# AVATAR_API_KEY zaten güvenli process ortamında export edilmişken
 cd frontend
 npm ci
 npm run dev
 ```
 
-Yalnızca `http://127.0.0.1:5173` origin’i kullanılır. `localhost` farklı origin’dir ve proxy’de kabul edilmez. Vite `127.0.0.1` adresine bağlanır; CLI ile `--host 0.0.0.0` verilirse başlatma reddedilir. Vite sunucu anahtarını `/api/v1` → backend `/v1` isteklerine kendi ekler; tarayıcı hiçbir X-API-Key göndermez.
+Tek origin: **http://127.0.0.1:5173**. `localhost` başka origin'dir. Varsayılan API hedefi `http://127.0.0.1:8000`; yalnız Node process'inde `AVATAR_API_PROXY_TARGET=http://127.0.0.1:<port>` ile değişebilir. Anahtar tarayıcıya aktarılmaz; Node proxy ekler. Host/Origin/uzak hedef/originsiz POST engelleri ve gizli dosya erişim sınırı korundu. `0.0.0.0` başlatma reddedilir; backend CORS/auth gevşetilmedi. `npm run preview` API proxy'si sağlamaz.
 
-Varsayılan backend hedefi `http://127.0.0.1:8000`. Gerekirse Vite process ortamında **AVATAR_API_PROXY_TARGET** veya sır içermeyen mevcut **VITE_API_PROXY_TARGET** ayarlanabilir; hedef yalnızca HTTP loopback IP’si olabilir. Kullanıcı bilgisi/path/query içeren veya uzak hedefler reddedilir. Host/Origin/cross-site denetimi vardır; yazma istekleri aynı Origin’i gerektirir. Proxy yanlış/missing key durumunda 401/503; ağ kesintisinde hata gösterir, örnek verileri canlı veri gibi sunmaz.
+Bu dağıtım yerel prototip içindir. Üretim kullanıcı oturumu, roller, TLS ve yetkili dağıtım bu görevde uygulanmadı.
 
-Bu düzen **yalnızca yerel demo/geliştirme** içindir. Vite geliştirme sunucusu kimlik doğrulama servisi değildir. Aynı makine/aynı origin’deki güvenilmeyen süreçlere karşı tam bir güvenlik sınırı sağlamaz. Üretimde kullanıcı oturumları, backend yetkilendirmesi, TLS ve uygun dağıtım sunucusu gerekir. Mevcut Docker frontend için portu dışarı açmak veya proxy’yi gevşetmek bu çözümün kapsamında değildir. `npm run preview` statik derleme önizlemesidir; API proxy’si kapalıdır.
+## Güvenilir işlem davranışı
 
-## İstek ve hata davranışı
+- Her değiştirici POST, kullanıcı onayından sonra UUID Idempotency-Key ile gönderilir. Özetlerde miktar/lot/referanslar gösterilir; tutar ve kesin stok/maliyet backend otoritesindedir.
+- Cevap kaybı/timeout/5xx durumunda donmuş gövde ve aynı anahtar korunur; form kilitlenir. Sekme yeniden yüklense bile sessionStorage'dan **aynı komut** geri alınır. Bu storage yalnız komut/form ve UUID referanslarını tutar; API anahtarı tutmaz. Storage kapalıysa bellekten retry çalışır, sayfayı kapatmayın.
+- Modal iptali/Escape POST göndermez. Native dialog focus sınırı ve geri dönüşü korunur. Başarılı işlemler ilgili katalog/lot/stok/satış/trace sorgularını geçersizleştirir.
+- Decimal değerler string gönderilir; virgül normalize edilir. Frontend finans/maliyet dağıtımı hesaplamaz. Kesim kg ön kontrolü, yalnız girilen tartımları 6 haneli BigInt ölçeğiyle doğrular; kesin kütle dengesi ve transaction backend'dedir.
+- Kullanılabilir miktar/blok durumu backend'den gelir. Bloke/tarihi geçmiş seçenekler kapalıdır; eski cache ile oluşan yarışın gerçek 409 hatası yine gösterilir.
+- Bağlı sevkiyat aynı satış hareketini kullanır; yeni stok çıkışı yoktur. Bağımsız sevkiyat fiziksel çıkıştır, satış/gelir değildir. Market kalanı/son tüketici satışı/ikinci kademe alıcı kaydı yoksa **Bilinmiyor** gösterilir.
+- Recall ön görünümü kesin sonuç değildir. Nihai üyelik ve blokaj onaydan sonraki backend transaction'ının kaydıdır. Blok kaldırma akışı bulunmaz.
+- Tahminler SYNTHETIC eğitim verisidir; gerçek doğruluk iddiası yoktur. Gerçekleşme yoksa null korunur. Sapma/model sürümü backend'den gelir, model frontend'de yeniden çalıştırılmaz.
 
-- Tüm POST’lar yeni bir UUID `Idempotency-Key` ile başlar; kullanıcı onayından önce istek gönderilmez.
-- Ağ hatası/5xx sonucunda aynı gövde ve anahtar korunur; otomatik yeni anahtar üretilmez. Form kilitlenir ve **Aynı işlemi tekrar dene** sunulur.
-- Sonucu belirsiz istek/form bilgisi sekmeye özel sessionStorage’da tutulur; sayfa yeniden açıldığında aynı komut geri alınır. Bu bilgi **API anahtarı içermez**. Başarılı cevap veya kesin 4xx sonrasında kaldırılır. Storage kapalıysa sayfa belleğinde retry çalışır; sayfayı kapatmayın.
-- 401, 409, 422, 503 Türkçe açıklanır. Miktar ve para string’dir; virgül nokta haline getirilir, tutar hesaplanmaz. Backend doğrulaması son otoritedir.
-- `next_cursor` bitene kadar tüm sayfalar okunur; tekrar eden cursor hata sayılır. Arama/filtre bu tamamlanmış listede yapılır. Bu yaklaşım küçük prototip verisine uygundur; büyük veri için backend filtreleme/toplam endpoint’i ve kademeli listeler sonraki iştir.
+## API ve UI mimarisi
 
-## API tipleri
+React 19 / TypeScript / Vite / Tailwind / React Router / TanStack Query / React Hook Form / Zod / Lucide korunmuştur. Ek bağımlılık yalnız test için `@axe-core/playwright` 4.10.2'dir; ağır UI framework eklenmedi.
 
-`src/lib/openapi.d.ts` çalışan backend’in `/openapi.json` çıktısından openapi-typescript 7.13.0 ile üretilmiştir. `payloads.ts` bütün yazma gövdelerini bu request tipleriyle kontrol eder. Backend okuma cevapları OpenAPI’de ayrıntılı modellenmediği için `types.ts` cevap tipleri gerçek API/service çıktısına göre elle tanımlanır ve tarayıcı testlerinde doğrulanır.
+`src/lib/openapi.d.ts`, bu görevde çalışan FastAPI `/openapi.json` çıktısından openapi-typescript 7.13.0 ile yenilendi. Yazma payload'ları bu request şemalarıyla tip kontrolünden geçer. Backend okuma cevapları OpenAPI'de ayrıntılı modellenmediği için `types.ts` / `modules.ts` gerçek API yanıtlarına göre tanımlanır; browser kabul testleri bunları doğrular.
 
-Pydantic OpenAPI Decimal girişlerini sayı/string olarak gösterse de backend’in BeforeValidator’ı string gerektirir; frontend yalnızca string gönderir. TypeScript 7 altyapısı korundu. Tip üreticisinin TypeScript 5 peer şartı nedeniyle üretim komutu proje bağımlılık ağacından ayrı geçici bir dizinde çalıştırılabilir:
+`components/ui.tsx`, `forms.tsx`, `workflow.tsx`: başlık, kart, rozet, tablo, filtre, durum, native onay/drawer, alan/sayı ve kullanılabilir lot seçimi. `module-validation.ts` ön kontrol, `module-payloads.ts` string/FK eşlemesi içerir. Kayıtlar next_cursor bitene kadar okunur; tekrarlayan cursor reddedilir. Satış/sevkiyat detay okumaları API havuzunu taşırmamak için 4'lü gruplarla yapılır. Tam liste indirme küçük prototip içindir; büyük işletme verisi için backend filtre/toplam ve kademeli liste API'si gerekir.
+
+Recall ve prediction listesi backend'de bulunmaz. Bu sekmede alınmış gerçek UUID/zaman referansları gösterilir; bilinen UUID elle veya URL ile açılır. Global sunucu geçmişi varmış gibi sunulmaz. Otomatik lot/ürün isim eşlemesi veya ML'den lot ilişkisi üretilmez.
+
+## Test ve görsel kanıt
 
 ```bash
-# Backend açıkken; çıktı yolunu kendi checkout yolunuza göre ayarlayın.
-cd /tmp
-npm exec --yes --package=openapi-typescript@7.13.0 --package=typescript@5 -- openapi-typescript http://127.0.0.1:8000/openapi.json -o /workspace/byteme-avatar-2026/frontend/src/lib/openapi.d.ts
-```
-
-## Testler
-
-```bash
-cd frontend
 npm ci
 npm run typecheck
 npm run build
 npm run test
-# Gerçek MySQL/backend + aynı anahtarlı Vite açıkken:
+# Backend aynı ayrı *_test DB ile, Vite aynı Node anahtarıyla açıkken:
+export AVATAR_E2E_DATABASE=avatar_frontend_v2_test
 npm run test:e2e
 ```
 
-E2E sistem Chromium’unu kullanır (`/usr/bin/chromium`, gerekirse CHROMIUM_PATH ile değiştirin). Backend’in canonical demosu önceden repo kökünden `PYTHONPATH=backend backend/.venv/bin/python -m app.demo` ile yüklenmiş olmalıdır. AVATAR_API_KEY, sızıntı kontrolü için Playwright’ın Node process ortamında da gerekir; tarayıcıya verilmez. Testler üretim DB’sinde çalıştırılmamalıdır: WEB- önekli ürün/firma/alış/emir kayıtları oluşturur, mevcut veriyi silmez. Başarısız test sonrası da bu kayıtlar kalabilir.
+Playwright ayrıca Node process'inde AVATAR_API_KEY ister; anahtarı tarayıcıya aktarmaz. E2E guard, `_test` ile biten açık şema adı ve loopback API gerektirir. Backend'in gerçekten aynı şema ile çalıştığını operatör sağlamalıdır. Testler alış/satış/recall gibi kalıcı kayıtlar oluşturur; işletme veya paylaşılan demo DB'sinde çalıştırmayın. Testler veri silmez. Mevcut canonical veri için repo kökünde aynı environment ile `python -m app.demo_sales_shipments` ve `python -m app.demo_cutting` (`PYTHONPATH=backend`) kullanılabilir; bunlar kurgusal demo verisidir.
 
-Sonuçlar: **25 birim/bileşen testi**, **4 gerçek Chromium testi** geçti. Ayrıntılar [TEST_REPORT.md](TEST_REPORT.md). Ekran görüntüleri/test çıktıları ignored test-results/ altındadır. Backend testleri bu frontend görevinde yeniden çalıştırılmadı.
+Ek gerçek eksik-model testi için:
+
+1. Normal Vite'ı kapatın; 5173 boş olmalıdır.
+2. Aynı izole DB/key ile ikinci FastAPI'yi 8002'de `AVATAR_ML_MODEL_DIR` var olmayan boş bir dizini gösterecek şekilde başlatın.
+3. Node key ortamı korunarak:
+
+```bash
+AVATAR_API_PROXY_TARGET=http://127.0.0.1:8002 \
+AVATAR_E2E_API_URL=http://127.0.0.1:8002 npm run test:e2e:missing-models
+```
+
+Bu ayrı profil kendi Vite sürecini başlatır/kapatır; başka sunucuyu devralmaz. API cevabı mock edilmez. Normal geliştirmeye dönmek için varsayılan hedefle `npm run dev` kullanın. Varsayılan Chromium `/usr/bin/chromium`; gerekirse CHROMIUM_PATH ayarlayın.
+
+Güncel sonuç, ekran listesi, güvenlik kontrolü ve WEB/ML checklist devri: [VALIDATION_V2.md](VALIDATION_V2.md). Önceki v1 kanıtı [TEST_REPORT.md](TEST_REPORT.md) içinde tarihsel olarak korunmuştur. `validation-v2/screenshots/` gerçek Chromium görüntüleridir; baseline, aynı main commit'inin geçici salt kaynak export'undan alınmıştır. Görüntülere tasarım/mock veya sonradan görsel düzenleme uygulanmadı.

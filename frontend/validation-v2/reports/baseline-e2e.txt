@@ -1,0 +1,20 @@
+
+> byteme-avatar-web@0.1.0 test:e2e
+> playwright test
+
+
+Running 4 tests using 1 worker
+
+(node:1897) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/browser/dashboard.spec.ts:49:1 › gerçek UI: çok satırlı alış → sevk → üretim kapanışı → doğru EKP ve stok (10.2s)
+  ✓  2 tests/browser/dashboard.spec.ts:248:1 › belgedeki mevcut demo gerçek API kaydından gösterilir (1.3s)
+  ✓  3 tests/browser/dashboard.spec.ts:265:1 › tablet ve mobil yerleşim; eksik modüller işlem sunmaz (1.8s)
+  ✓  4 tests/browser/dashboard.spec.ts:303:1 › yerel proxy uzak origin/host ve originsiz yazmayı reddeder; gizli dosya servis edilmez (73ms)
+
+  4 passed (15.1s)
+npm notice
+npm notice New major version of npm available! 11.9.0 -> 12.2.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.1
+npm notice To update run: npm install -g npm@12.2.1
+npm notice

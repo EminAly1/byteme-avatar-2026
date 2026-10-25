@@ -1,0 +1,30 @@
+
+> byteme-avatar-web@0.1.0 test:e2e
+> playwright test
+
+
+Running 14 tests using 1 worker
+
+(node:13988) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 tests/browser/accessibility-v2.spec.ts:4:1 › WCAG AA otomatik kontrast, etiket ve yapı denetimi: desktop/mobil ana ekranlar (28.2s)
+  ✓   2 tests/browser/dashboard.spec.ts:49:1 › gerçek UI: çok satırlı alış → sevk → üretim kapanışı → doğru EKP ve stok (19.0s)
+  ✓   3 tests/browser/dashboard.spec.ts:248:1 › belgedeki mevcut demo gerçek API kaydından gösterilir (1.4s)
+  ✓   4 tests/browser/dashboard.spec.ts:265:1 › tablet ve mobil yerleşim; recall onay verilmeden işlem başlatmaz (2.2s)
+  ✓   5 tests/browser/dashboard.spec.ts:303:1 › yerel proxy uzak origin/host ve originsiz yazmayı reddeder; gizli dosya servis edilmez (66ms)
+  ✓   6 tests/browser/integration-v2.spec.ts:51:1 › reçete UI → quantity/value kesimleri; eksik açıklama ve gerçek backend 422; iki ayrı kaynak lot (9.2s)
+  ✓   7 tests/browser/integration-v2.spec.ts:184:1 › lotlu UI satış → bağlı sevkiyat aynı hareket; bağımsız sevkiyat yeni çıkış (4.9s)
+  ✓   8 tests/browser/integration-v2.spec.ts:257:1 › gerçek ileri/geri izleme ve ET recall → Market A/B/C 30/25/30; onay şart (5.5s)
+  ✓   9 tests/browser/integration-v2.spec.ts:350:1 › stale lot seçimi sonrası gerçek LOT_BLOCKED; süresi geçmiş lot seçenekleri kapalı (6.0s)
+  ✓  10 tests/browser/integration-v2.spec.ts:389:1 › gerçek commit sonrası kayıp cevap: reload ve aynı UUID/gövde ile retry tek satış üretir (3.7s)
+  ✓  11 tests/browser/integration-v2.spec.ts:442:1 › üretim ML UI: gerçek forecast UUID → kapanış sonrası 85 paket ve Decimal sapma (3.2s)
+  ✓  12 tests/browser/integration-v2.spec.ts:497:1 › kesim ML UI: beş gerçek ürün eşlemesi ve 25 kg tahmin/gerçek/sapma (3.3s)
+  ✓  13 tests/browser/integration-v2.spec.ts:556:1 › beş viewport: gerçek modüller, mobil satış ve drawer klavye erişimi; sayfa taşmaz (38.4s)
+  ✓  14 tests/browser/integration-v2.spec.ts:667:1 › yan ürün ayrı lot/stok; diğer kayıp açıklaması ve reçete kullanılabilirliği gerçek UI (4.2s)
+
+  14 passed (2.2m)
+npm notice
+npm notice New major version of npm available! 11.9.0 -> 12.2.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.1
+npm notice To update run: npm install -g npm@12.2.1
+npm notice

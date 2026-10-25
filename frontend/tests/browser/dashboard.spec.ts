@@ -262,7 +262,7 @@ test("belgedeki mevcut demo gerçek API kaydından gösterilir", async ({
   ).toBeVisible();
 });
 
-test("tablet ve mobil yerleşim; eksik modüller işlem sunmaz", async ({
+test("tablet ve mobil yerleşim; recall onay verilmeden işlem başlatmaz", async ({
   page,
 }) => {
   await page.setViewportSize({ width: 834, height: 1112 });
@@ -284,10 +284,10 @@ test("tablet ve mobil yerleşim; eksik modüller işlem sunmaz", async ({
   await page.getByRole("button", { name: "Menüyü aç", exact: true }).click();
   await page.getByRole("link", { name: "Geri çağırma", exact: true }).click();
   await expect(
-    page.getByText("Geliştirme aşamasında", { exact: true }),
+    page.getByLabel("Sorunlu kaynak lot", { exact: true }),
   ).toBeVisible();
   await expect(
-    page.getByRole("button", { name: /Geri çağırmayı başlat/ }),
+    page.getByRole("button", { name: "Geri çağırmayı gözden geçir", exact: true }),
   ).toHaveCount(0);
   expect(
     await page.evaluate(
@@ -295,7 +295,7 @@ test("tablet ve mobil yerleşim; eksik modüller işlem sunmaz", async ({
     ),
   ).toBe(true);
   await page.screenshot({
-    path: "test-results/planned-mobile.png",
+    path: "test-results/recall-mobile.png",
     fullPage: true,
   });
 });

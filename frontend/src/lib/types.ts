@@ -7,6 +7,7 @@ export interface Entity {
   created_at: string;
 }
 export interface Product extends Entity {
+  species?: string | null;
   sku: string;
   name: string;
   type: ProductType;
@@ -71,8 +72,10 @@ export interface ReceiptDetail extends Receipt {
 }
 export interface Operation extends Entity {
   code: string;
-  producer_id: string;
-  kind: "external_production";
+  producer_id: string | null;
+  kind: "external_production" | "cutting" | "rework";
+  recipe_version_id: string | null;
+  allocation_method: "quantity" | "value";
   status: "draft" | "posted";
   total_material_cost: string;
   total_service_cost: string;
@@ -94,6 +97,8 @@ export interface Output extends Entity {
   allocation_weight: string;
   unit_cost: string;
   unit_cost_display: string;
+  reference_eur_per_kg: string | null;
+  explanation: string | null;
 }
 export interface LotLink extends Entity {
   input_lot_id: string;

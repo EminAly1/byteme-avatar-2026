@@ -91,18 +91,26 @@ export function Table({
   return empty ? (
     <Empty />
   ) : (
-    <div className="table-scroll">
-      <table>
-        <thead>
-          <tr>
-            {headers.map((x) => (
-              <th key={x}>{x}</th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>{children}</tbody>
-      </table>
-    </div>
+    <>
+      <div
+        className="table-scroll"
+        tabIndex={0}
+        role="region"
+        aria-label={headers.join(", ") + " tablosu"}
+      >
+        <table>
+          <thead>
+            <tr>
+              {headers.map((x) => (
+                <th key={x}>{x}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>{children}</tbody>
+        </table>
+      </div>
+      <p className="scroll-hint">Diğer sütunlar için tabloyu yatay kaydırın.</p>
+    </>
   );
 }
 export function Success({ children }: { children: ReactNode }) {

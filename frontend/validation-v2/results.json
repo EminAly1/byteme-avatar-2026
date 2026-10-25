@@ -1,0 +1,79 @@
+{
+  "date": "2026-10-25",
+  "timezone": "Europe/Istanbul",
+  "base_main": "99356d45c716f7612f6486d896aa219d51444ca2",
+  "branch": "feature/frontend-v2-integration",
+  "changed_roots": [
+    "frontend/"
+  ],
+  "runtime": {
+    "node": "24.19.0",
+    "npm": "11.9.0",
+    "chromium": "154.0.8037.57",
+    "mysql": "8.0.46",
+    "database": "avatar_frontend_v2_test",
+    "migration_head": "dc9109a1f001"
+  },
+  "baseline": {
+    "unit_passed": 25,
+    "chromium_passed": 4
+  },
+  "final": {
+    "npm_ci": "passed, 140 packages",
+    "typecheck": "passed",
+    "build": "passed; Vite >500 kB chunk warning retained",
+    "unit_passed": 38,
+    "normal_chromium_passed": 14,
+    "missing_model_chromium_passed": 1,
+    "unique_chromium_tests": 15,
+    "failed": 0,
+    "skipped": 0
+  },
+  "follow_up_checks": {
+    "responsive_and_axe": 2,
+    "legacy_mobile_updated_expectation": 1,
+    "keyboard_dialog_menu_drawer_and_trade": 2,
+    "note": "Repeated executions are not counted as new unique tests."
+  },
+  "real_api_data_origin": "Fictional test/demo inputs recorded through real FastAPI/MySQL, not real enterprise history",
+  "interception": "Only deliberate committed-response loss and real backend 422 fault injection; no fabricated success responses",
+  "missing_model": "Separate real FastAPI :8002 with absent artifact directory; same isolated test DB, Vite-owned profile, real 503",
+  "a11y": {
+    "engine": "axe-core 4.10.2",
+    "tags": [
+      "wcag2a",
+      "wcag2aa",
+      "wcag21aa"
+    ],
+    "views": 18,
+    "violations": 0,
+    "certification_claim": false
+  },
+  "viewports": [
+    "360x800",
+    "390x844",
+    "768x1024",
+    "1024x768",
+    "1440x900"
+  ],
+  "screenshots": 13,
+  "not_run": [
+    "Full Docker Compose image/stack",
+    "Backend pytest, Android tests and ML training suites in Task10",
+    "Physical devices, Safari, Firefox",
+    "Separate UI expired-lot server race"
+  ],
+  "limitations": [
+    "Production sessions/roles/TLS deployment absent",
+    "Full-list detail fetch intended for prototype datasets",
+    "Route splitting performance work pending",
+    "ML still synthetic; real enterprise accuracy unproven"
+  ],
+  "scope": {
+    "shared_checklist_changed": false,
+    "backend_changed": false,
+    "android_changed": false,
+    "ml_changed": false,
+    "proxy_guard_changed": false
+  }
+}
