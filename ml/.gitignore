@@ -1,0 +1,6 @@
+# Only reviewed, generated SYNTHETIC CSV and portable JSON belong in Git.
+private/
+artifacts/
+*.pkl
+*.pickle
+*.joblib

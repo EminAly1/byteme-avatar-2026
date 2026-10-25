@@ -98,3 +98,11 @@ AVATAR_MYSQL_TEST=1 AVATAR_CORE_MYSQL_TEST=1 backend/.venv/bin/python -m pytest 
 ## Görev 7 — kuzu parçalama
 
 [Kesim/reçete API sözleşmesi ve demo](CUTTING.md), [gerçek MySQL doğrulaması](../database/cutting-validation.md). Yeni Alembic head `fa8791f3cf0e`; önce `alembic upgrade head` uygulayın. Parça ağırlıkları/ref fiyatlar PDF’de verilmediği için demo bunları kurgusal olarak etiketler.
+
+## Görev 09 — karar desteği için iki zorunlu ML modeli
+
+[ML kurulum/kanıt](../ml/README.md), [API ve snapshot/sapma sözleşmesi](../ml/INTEGRATION.md). Head `dc9109a1f001`: yalnız `prediction_records` tablosu eklenir; önce `alembic upgrade head` uygulayın. İş endpoint'leri mevcut X-API-Key korumasındadır; POST tahminler UUID Idempotency-Key ister.
+
+`POST /v1/predictions/production`, `POST /v1/predictions/cutting`, `GET /v1/predictions/models`, `GET /v1/predictions/{id}`. Repo kurulumunda küçük JSON modeller `ml/models/` üzerinden okunur; başka dağıtımda `AVATAR_ML_MODEL_DIR` ayarlayın. Mevcut backend-only container context'ine modeller ayrıca read-only mount edilmelidir; yok/geçersiz model 503 döner. Çıkarım sklearn gerektirmez ve eğitim yapmaz. Eğitim/tüm ML testleri için ayrıca `pip install -r ml/requirements.txt` gerekir.
+
+Tahminler **SYNTHETIC veriyle eğitilmiş karar desteğidir**. Kesin stok/lot/maliyet/recall motorları değiştirilmedi; tahminler bu kayıtlara yazamaz. Başlamamış taslağa bağlı tahmin sürüm/zaman/özellik/sonuç snapshot'ıyla korunur; kapanıştan sonra GET kesin gerçek/sapmayı döndürür. ML ve mevcut 131 regresyon dahil 181 test geçti; sonuçlar `ml/reports/` altındadır. Web tahmin/karşılaştırma ekranı bu görevde yoktur.

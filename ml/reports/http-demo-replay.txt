@@ -1,0 +1,1 @@
+{"output": "ml/reports/demo.json", "production_forecast_id": "93216a0e-a133-438b-a240-4dbac37cb09f", "cutting_forecast_id": "ab0da95c-213f-4b65-88d1-9e528ac8054d", "passed": true}
