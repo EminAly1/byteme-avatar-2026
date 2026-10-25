@@ -2,7 +2,7 @@
 
 **Teslim:** 1 Kasım 2026, **23:59 Europe/Istanbul (UTC+3)**. Tarih/saat kullanıcı talimatıdır; PDF’de teslim tarihi yoktur.
 
-**Gereksinim kaynağı:** [AVATAR_Assessment.pdf](AVATAR_Assessment.pdf), 3 sayfa. **Kanıt tarihi:** 25 Ekim 2026 (Görev 10 React Frontend v2 PR #15 dahil). [Güncel entegrasyon ve test raporu](INTEGRATION_VALIDATION_2026-10-24.md).
+**Gereksinim kaynağı:** [AVATAR_Assessment.pdf](AVATAR_Assessment.pdf), 3 sayfa. **Kanıt tarihi:** 25 Ekim 2026 (Görev 11 profesyonel UX PR #17 dahil). [Güncel entegrasyon ve test raporu](INTEGRATION_VALIDATION_2026-10-24.md).
 
 ## Durumlar ve kapsam
 
@@ -24,6 +24,8 @@
 **Görev 09 güncellemesi (25 Ekim):** [PR #13](https://github.com/EminAly1/byteme-avatar-2026/pull/13) `main` üzerine normal merge ile eklendi (`eb0cece585e0b9ab4c3e26daeddb719158c04791`). [ML değerlendirme](../ml/EVALUATION_REPORT.md): her iki model 600 **SYNTHETIC** kayıtla eğitildi; gerçek tarihsel veri 0; 360 eğitim/120 validation/120 test; Ridge üretim/EKP ve Kuzu/beş parça verimi. [181 test raporu](../ml/reports/validation.json): önceki 131 + 31 yeni backend + 19 ML, 0 fail/skip, gerçek API/MySQL HTTP demo. **Gerçek dünyadaki model performansı doğrulanmadı.** React tahmin/gerçek/sapma ekranı ve tümleşik son `main` testleri bekliyor.
 
 **Görev 10 güncellemesi (25 Ekim):** [PR #15](https://github.com/EminAly1/byteme-avatar-2026/pull/15) `main` üzerine normal merge ile eklendi (`fe1dca979e92b522fa6815a3e68fe5e230760d1e`). [Frontend V2 doğrulama raporu](../frontend/VALIDATION_V2.md): 38 unit/component + 14 gerçek FastAPI/MySQL/Chromium E2E + 1 gerçek eksik-model 503 senaryosu; 18 görünümde otomatik axe denetimi 0 ihlal; beş viewport ve 13 gerçek Chromium ekran görüntüsü. Kuzu parçalama, satış/sevkiyat, lot trace, recall ve iki ML tahmin/sapma ekranları gerçek backend ile çalıştı. **Bu işlevsel prototip kabulüdür; premium UI/UX son rötuşları, tam birleşik main regresyonu, üretim auth/TLS/dağıtım, Android API 35 ve final teslim bekliyor.**
+
+**Görev 11 görsel kabulü (25 Ekim):** [PR #17](https://github.com/EminAly1/byteme-avatar-2026/pull/17) normal merge ile `main` üzerine eklendi (`56314099f8f260aa582fd3750e43c63b49135bfd`). [UI refinement raporu](../frontend/UI_REFINEMENT_REPORT.md) ve [önce/sonra gerçek Chromium görüntüleri](../frontend/validation-premium/): dashboard öncelikleri, mobil satış/kesim kartları, teknik referans açıklığı, AI özet+hassasiyet, recall market etkisi, renk/metin/erişilebilirlik. Codex'in son izole test raporu: **43 unit/component + 14 gerçek E2E + 1 gerçek model-503, 35 responsive ve 33 axe görünümü otomatik sıfır ihlalle** geçti. İlk yüklenen JS yaklaşık 543→332 kB raporlandı. Bunlar yalnız frontend kodunda doğrulanan değişikliklerdir; final birleşik `main` regresyonu, fiziksel mobil/çok tarayıcı, Compose ve release kontrolleri halen bekler.
 
 ## 1. Proje altyapısı
 
@@ -115,11 +117,11 @@ OCR/fatura okuma ve anomali uyarıları PDF’de **isteğe bağlıdır**; iki zo
 
 | ID | Görev | Durum | Kanıt / kalan iş |
 | --- | --- | --- | --- |
-| WEB-01 | Türkçe dashboard, ürün, iş ortağı/depo ve gerçek API | Tamamlandı | [Frontend v2](../frontend/VALIDATION_V2.md): dashboard ve gerçek API katalog ekranları; mevcut işlemler korundu; görsel polish [FRONTEND_VISION.md](FRONTEND_VISION.md) kapsamında devam edecek. |
+| WEB-01 | Türkçe dashboard, ürün, iş ortağı/depo ve gerçek API | Tamamlandı | [Premium UI/UX raporu](../frontend/UI_REFINEMENT_REPORT.md): ilk ekranda gerçek operasyon özeti, satış/sevkiyat, net mikro metinler, hızlı aksiyonlar ve korunmuş API. |
 | WEB-02 | Çok satırlı alış, stok/movement, ayrı emir–dispatch–post ve EKP/lot sonucu | Tamamlandı | [browser testi](../frontend/tests/browser/dashboard.spec.ts); 1.543,50 / 18,16 EUR ve 85 paket doğrulandı. |
 | WEB-03 | Decimal string, next_cursor, durumlar, onay ve aynı anahtarlı retry | Tamamlandı | [Frontend v2 gerçek E2E](../frontend/VALIDATION_V2.md): commit sonrası response kaybı, aynı UUID+gövdeyle güvenli retry, tek kesin satış; Decimal string ve cursor/proxy koruması. |
-| WEB-04 | Masaüstü/tablet/mobil görünüm ve loopback proxy | Tamamlandı | [Responsive ve a11y](../frontend/VALIDATION_V2.md): 360/390/768/1024/1440 viewport, 18 görünüm axe 0 otomatik ihlal, mobil form/onay/odak; fiziksel cihaz, Safari/Firefox ve insan incelemesi henüz değil. |
-| WEB-05 | Parçalama/satış/tam lot/recall/ML gerçek işlem ekranları | Tamamlandı | [Frontend V2](../frontend/VALIDATION_V2.md): kesim, lotlu satış/sevkiyat, ileri/geri izleme, recall, iki ML tahmin ve gerçek/sapma; 14 Chromium E2E + 1 model 503 testi. Görsel dil/okunurluk iyileştirmesi ayrı iş paketidir. |
+| WEB-04 | Masaüstü/tablet/mobil görünüm ve loopback proxy | Tamamlandı | [Premium UX](../frontend/UI_REFINEMENT_REPORT.md): beş viewport/35 dolu ekran kontrolü ve 33 axe taraması 0 otomatik ihlal; mobil kartlar, 44px dokunma, odak ve loopback proxy korunuyor. Gerçek fiziksel telefon ve farklı tarayıcı henüz test edilmedi. |
+| WEB-05 | Parçalama/satış/tam lot/recall/ML gerçek işlem ekranları | Tamamlandı | [PR #17](https://github.com/EminAly1/byteme-avatar-2026/pull/17): gerçek satış/recall/cutting/AI akışları korundu, teknik ID'ler ikincil, AI özet ve mobil kartlar, market etki sırası iyileştirildi; 14 Chromium E2E + 1 gerçek model 503 testi raporlandı. |
 | WEB-06 | Üretim oturumu ve yetkili dağıtım | Doğrulama gerekiyor | Vite anahtarı yerel demoya uygundur; üretim auth/deployment uygulanmadı. |
 
 ## 8. Otomatik testler
@@ -128,8 +130,8 @@ OCR/fatura okuma ve anomali uyarıları PDF’de **isteğe bağlıdır**; iki zo
 | --- | --- | --- | --- |
 | TST-01 | Mevcut backend health/config/Decimal/stok/iş kuralları | Tamamlandı | [Görev 09 test raporu](../ml/reports/validation.json): önceki 131 backend korunarak toplam 181 test (162 backend + 19 ML), gerçek izole MySQL; son merge sonrası main ve frontend/Android testleri ayrıca koşulmalı. |
 | TST-02 | Gerçek MySQL migration, satır kilidi, yarış, rollback ve idempotency | Tamamlandı | [Görev 7 MySQL testleri](../tests/test_cuttings_mysql.py), [migration](../tests/test_cutting_migrations_mysql.py) ve eski satış/recall testleri: parçalama/recall kilit yarışı, maliyet/rollback ve şema geçişleri. |
-| TST-03 | Temiz npm kurulumu, typecheck, build ve frontend unit/component | Tamamlandı | [Frontend v2 raporu](../frontend/VALIDATION_V2.md): `npm ci`, typecheck, build; **38 unit/component passed** (eski 25 dahil). 543 kB JS chunk uyarısı ileride performans iyileştirmesi gerektiriyor. |
-| TST-04 | Gerçek FastAPI/MySQL/Vite/Chromium ile alış–üretim–stok ve demo | Tamamlandı | [Frontend v2 raporu](../frontend/VALIDATION_V2.md): **14 gerçek Chromium E2E + 1 gerçek missing-model 503**, eski dört test korunarak izole MySQL; UI üzerinden alış/üretim/parçalama/satış/recall/tahmin demo. |
+| TST-03 | Temiz npm kurulumu, typecheck, build ve frontend unit/component | Tamamlandı | [Premium UX](../frontend/UI_REFINEMENT_REPORT.md): `npm ci`, typecheck, build; **43 unit/component geçti** (önceki 38 dahil). Route-lazy loading sonrası ilk dashboard JS ~543→332 kB, Vite uyarısı yok. |
+| TST-04 | Gerçek FastAPI/MySQL/Vite/Chromium ile alış–üretim–stok ve demo | Tamamlandı | [Premium UX gerçek testleri](../frontend/UI_REFINEMENT_REPORT.md): **14 Chromium E2E + 1 gerçek missing-model 503** izole MySQL/ FastAPI; önce/sonra test fixture verileri ve operasyon UUID'leri değişmedi. |
 | TST-05 | Parçalama, Kotlin satış/sync, recall yarışları ve iki ML modelinin değerlendirmesi | Tamamlandı | [Kesim/recall](../database/cutting-validation.md), [API 28 Android cihazı](../android/VALIDATION.md) ve [iki sentetik ML modeli](../ml/EVALUATION_REPORT.md) ayrı kabul testlerinde doğrulandı. **Tümünün yeni main'de tek koşuda testi, API 35 ve gerçek veri hâlâ TST-06/final doğrulama kapsamı.** |
 | TST-06 | GitHub main merge sonrası kontroller ve PR check/policy doğrulaması | Doğrulama gerekiyor | Üç PR artık `main` içinde; bu raporun testleri yerel birleşim adayında koşuldu. Son `main` ve güncel CI/PR kontrolleri ayrı çalıştırılmalı. |
 
