@@ -45,3 +45,27 @@ Gıda işletmesi üretim ve stok yönetimini günlük kullanıma uygun, güçlü
 - Zaman önceliği: yarışmanın zorunlu kapsamı ve Android/ML teslimi güvenceye alınmadan uzun süren görsel polish'a odaklanma. Temel çalışan UX → tam entegrasyon → profesyonel görsel iyileştirme ve ek özellik sırası.
 
 Bu belge tasarım iş paketinin gereksinimidir, UI'ın zaten hazır olduğuna ilişkin test kanıtı değildir.
+
+
+## Görsel kalite denetimi — 25 Ekim 2026, Frontend v2 sonrası karar
+
+İşlevsel [Frontend v2](../frontend/VALIDATION_V2.md) PR #15 ile kabul edildi. Bir sonraki bağımsız geliştirme yalnız **frontend/** üzerinde tasarım/okunabilirlik/etkileşim ergonomisi iyileştirmesidir; backend, API gövdeleri, kesin maliyet, stok, recall ve tahmin hesapları **değiştirilmeyecek**. İzlenebilirlik, satış, sevkiyat, kesim ve AI akışları regresyona uğramamalı. Son görünüm ve mobil kullanıcı deneyimi yarışma videosundan **önce** doğrulanmalı; videodan sonra büyük UI refactor yapılmamalı.
+
+### Gerçek Chromium ekran görüntülerinden saptanan sorunlar
+- **Dashboard:** Büyük tanıtım banner'ı kritik KPI/hızlı aksiyonlardan önce çok yer kaplıyor. Hiyerarşi ve ekranın ilk bakışta anlaşılabilirliği geliştirilsin; sahte metrik eklenmesin.
+- **Mobil satış:** Uzun kutu/form dizilimi, yön bulma ve `Formu kapat` gibi belirsiz etiketler. Kullanıcıya adım mantığı, görünür satış özeti, akıllı alan açıklamaları ve alttaki kritik onay için uygun ergonomi gerekiyor.
+- **Kuzu parçalama masaüstü:** Parça adı/lot kodu satırlarında metinler birleşik görünüyor; satır hiyerarşisi, boşluk, monospace ID sunumu ve maliyet karşılaştırması gözden geçirilsin.
+- **AI mobil:** Tekrarlanan sentetik veri uyarıları, altı basamaklı tahminler, çok uzun yatay kayan tablolar, göz yoran teknik UUID/metadata ve kalabalık sayfa. Özet → karşılaştırma → isteğe bağlı teknik detay hiyerarşisi kurulmalı. UI görünümünde kg/EUR en fazla anlamlı 2–3 ondalık tercih edilsin; **ham API değeri ve hesaplar değişmesin**, teknik ayrıntıda tam hassasiyet görülebilsin. Verim oranını anlamlı yüzde gösterimiyle açıkla.
+- **Recall:** Etkilenen market ve 85 paket bilgisi raporun ilerleyen kısmında; üstte etki özeti, kritik durum ve aksiyonlara kolay erişim sağlanmalı. Teknik UUID'ler birincil başlık olmamalı. İlk kademe/son tüketici stok belirsizliği kesin biçimde korunmalı.
+- **Mobil dashboard:** Uzun, yatay kayan operasyon/lot tabloları mobilde önemli satır verilerini saklıyor. Anlamlı responsive kart alternatifi veya açık tablonun tamamına erişim sağla.
+
+### Görsel yön ve metin dili
+Koyu gece laciverti/sıcak açık gri yüzeyler/rafine zümrüt-teal aksanlar bir başlangıç paletidir, zorunlu hex değil. Renkleri semantik tokenlarla belirle; kırmızı sadece gerçek engel/geri çağırma, amber uyarı, yeşil başarı gibi kullanılmalı. Ana CTA belirgin, ikincil işlemler sakin; hiçbiri ton farkı yüzünden kaybolmamalı. Tipografi için tablo, fiyat, stok, teknik kod ve gövde metninde farklı öncelikler. Türkçe metinler kısa ve işlem odaklı: `Formu kapat` yerine bağlama göre `Satış geçmişine dön`, `Yeni satış formunu gizle`; `Prediction UUID` yerine `Tahmin kaydı` + kopyalanabilir teknik referans. Birim/tarih/zaman dilimi açık yazılsın. Hassas 409/503/422 mesajlarının anlamı korunmalı.
+
+### Polishing kabul kanıtı
+- Önce/sonra **aynı demo ve aynı viewport/benzer veri** ile dashboard, satış, kesim, lot izleme, recall ve AI ekranları.
+- 360×800, 390×844, 768×1024, 1024×768, 1440×900: kritik eylem ulaşılabilir; gereksiz yatay sayfa taşması yok. iPhone 360 genişlik hedefi minimum. Mobil kart veya kontrollü tablo davranışı açık ve test edilmiş.
+- Renk kontrastı, klavye/focus ve reduced-motion korunur. Otomatik axe testi manuel kullanılabilirlik testinin yerine geçmez.
+- Önceki 38 unit/component + 14 Chromium E2E + 1 eksik-model testi, ilgili frontend regresyonu geçmeli. Kullanıcı aksiyonlarının idempotency anahtarı/gövdesi ve backend hata cevabı değişmemeli.
+- Vite'ın ~543 kB chunk uyarısı için **tercihen route-level lazy loading** yapılabilir, ancak kullanıcı iş akışı bozulmadan typecheck/build + kritik E2E ile doğrulanmalı. Uyarı eşiğini yükseltmek çözüm değildir.
+- Şeffaf, tek ekran özeti + detay katmanı öncelikli; sadece süs olsun diye grafik/animasyon ekleme. Hiçbir gerçek veri sahte demo sayısıyla ikame edilmesin.
