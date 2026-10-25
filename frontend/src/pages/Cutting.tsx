@@ -449,6 +449,14 @@ export function CuttingPage() {
       retry: false,
     });
   const c = query.data;
+  const mass =
+    c?.status === "posted"
+      ? balance(
+          c.inputs[0]?.quantity || "",
+          c.outputs.map((o) => o.quantity),
+          [c.loss_quantity],
+        )
+      : null;
   return (
     <State
       loading={data.loading || stocks.isPending || query.isPending}
@@ -482,13 +490,42 @@ export function CuttingPage() {
           />
           {c.status === "posted" ? (
             <>
+              {mass && (
+                <div
+                  className="weight-balance"
+                  aria-label="Kayıtlı ağırlık dengesi"
+                >
+                  <div>
+                    <small>Başlangıç ağırlığı</small>
+                    <strong>{amount(mass.input)} kg</strong>
+                  </div>
+                  <b>=</b>
+                  <div>
+                    <small>Toplam parça ağırlığı</small>
+                    <strong>{amount(mass.output)} kg</strong>
+                  </div>
+                  <b>+</b>
+                  <div>
+                    <small>Açıklanan fark</small>
+                    <strong>{amount(c.loss_quantity)} kg</strong>
+                  </div>
+                </div>
+              )}
               <div className="stat-grid">
                 <StatCard
                   label="Gerçek toplam maliyet"
                   value={eur(c.total_cost)}
                   note="Backend kesin kaydı"
                 />
-                <StatCard label="Kayıtlı çıktı lotu" value={c.outputs.length} />
+                <StatCard
+                  label="Maliyet dağıtımı"
+                  value={
+                    c.allocation_method === "value"
+                      ? "Değere göre"
+                      : "Miktara göre"
+                  }
+                  note="Kayıt anındaki reçete"
+                />
                 <StatCard
                   label="Açıklanmış fark"
                   value={amount(c.loss_quantity) + " kg"}
@@ -526,11 +563,7 @@ export function CuttingPage() {
                         <td>{amount(o.quantity)} kg</td>
                         <td>{eur(o.allocated_cost)}</td>
                         <td>{eur(o.unit_cost_display)}</td>
-                        <td>
-                          {eur(
-                            o.reference_eur_per_kg ?? undefined,
-                          )}
-                        </td>
+                        <td>{eur(o.reference_eur_per_kg ?? undefined)}</td>
                       </tr>
                     );
                   })}

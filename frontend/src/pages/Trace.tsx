@@ -38,78 +38,94 @@ export function BuyerReport({ report }: { report: TraceReport }) {
   return (
     <Section
       title="Bilinen marketler ve sevkiyatlar"
-      subtitle="Yalnız kayıtlı ilk kademe teslimatlar. Satış ile bağlı sevkiyat miktarı iki kez toplanmaz."
+      subtitle="Kayıtlı ilk kademe teslimatlar. Satışa bağlı sevkiyat ikinci kez toplanmaz."
     >
-      <div className="stat-grid compact">
+      <div className="shipment-totals">
         {report.total_shipped_quantities.map((t) => (
-          <StatCard
-            key={t.product_id + t.unit}
-            label={
-              report.lots.find((l) => l.product_id === t.product_id)?.product
-                .name || "Kayıtlı ürün"
-            }
-            value={amount(t.quantity) + " " + units[t.unit]}
-            note="Backend toplam sevk miktarı"
-          />
+          <div key={t.product_id + t.unit}>
+            <span>
+              {report.lots.find((l) => l.product_id === t.product_id)?.product
+                .name || "Kayıtlı ürün"}{" "}
+              · Toplam sevk
+            </span>
+            <strong>
+              {amount(t.quantity)} {units[t.unit]}
+            </strong>
+          </div>
         ))}
       </div>
       {!report.buyers.length ? (
         <Empty>Bu kapsamda kayıtlı alıcı bulunmuyor.</Empty>
       ) : (
         <div className="buyer-grid">
-          {report.buyers.map((b) => (
-            <article className="buyer-card" key={b.customer_id}>
-              <div className="buyer-heading">
-                <Building2 size={20} />
-                <h3>{b.current_customer.name}</h3>
-              </div>
-              <p className="code">{b.customer_id}</p>
-              {b.recipient_snapshots.map((r, i) => (
-                <div className="contact-snapshot" key={r.shipment_id + "-" + i}>
-                  <strong>{r.recipient_name}</strong>
-                  <p>
-                    {r.recipient_contact || "İletişim bilgisi kaydedilmemiş"}
-                  </p>
-                  <Link
-                    className="text-button"
-                    to={"/sevkiyatlar?shipment=" + r.shipment_id}
-                  >
-                    Teslim belgesi · {dateTime(r.shipped_at)}
-                  </Link>
+          {[...report.buyers]
+            .sort((a, b) =>
+              a.current_customer.name.localeCompare(
+                b.current_customer.name,
+                "tr",
+              ),
+            )
+            .map((b) => (
+              <article className="buyer-card" key={b.customer_id}>
+                <div className="buyer-heading">
+                  <Building2 size={20} />
+                  <h3>{b.current_customer.name}</h3>
                 </div>
-              ))}
-              {b.quantities.map((q) => (
-                <div className="buyer-quantity" key={q.lot_id + q.unit}>
-                  <LotLink
-                    id={q.lot_id}
-                    code={
-                      report.lots.find((l) => l.id === q.lot_id)?.external_code
-                    }
-                  />
-                  <dl>
-                    <div>
-                      <dt>Sevk edilmiş</dt>
-                      <dd>
-                        {amount(q.shipped_quantity)} {units[q.unit]}
-                      </dd>
+                {b.quantities.map((q) => (
+                  <div className="buyer-quantity" key={q.lot_id + q.unit}>
+                    <LotLink
+                      id={q.lot_id}
+                      code={
+                        report.lots.find((l) => l.id === q.lot_id)
+                          ?.external_code
+                      }
+                    />
+                    <dl>
+                      <div>
+                        <dt>Sevk edilmiş</dt>
+                        <dd>
+                          {amount(q.shipped_quantity)} {units[q.unit]}
+                        </dd>
+                      </div>
+                      <div>
+                        <dt>Kayıtlı satış</dt>
+                        <dd>
+                          {amount(q.recorded_sale_quantity)} {units[q.unit]}
+                        </dd>
+                      </div>
+                    </dl>
+                  </div>
+                ))}
+                <p className="unknown-note">
+                  Market kalanı: <strong>Bilinmiyor</strong>
+                  <br />
+                  Son tüketici satışı ve ikinci kademe alıcı:{" "}
+                  <strong>Bilinmiyor</strong>
+                </p>
+                <details>
+                  <summary>Alıcı iletişimi ve teslim belgeleri</summary>
+                  {b.recipient_snapshots.map((r, i) => (
+                    <div
+                      className="contact-snapshot"
+                      key={r.shipment_id + "-" + i}
+                    >
+                      <strong>{r.recipient_name}</strong>
+                      <p>
+                        {r.recipient_contact ||
+                          "İletişim bilgisi kaydedilmemiş"}
+                      </p>
+                      <Link
+                        className="text-button"
+                        to={"/sevkiyatlar?shipment=" + r.shipment_id}
+                      >
+                        Teslim belgesi · {dateTime(r.shipped_at)}
+                      </Link>
                     </div>
-                    <div>
-                      <dt>Kayıtlı satış</dt>
-                      <dd>
-                        {amount(q.recorded_sale_quantity)} {units[q.unit]}
-                      </dd>
-                    </div>
-                  </dl>
-                </div>
-              ))}
-              <p className="unknown-note">
-                Market kalanı: <strong>Bilinmiyor</strong>
-                <br />
-                Son tüketici satışı ve ikinci kademe alıcı:{" "}
-                <strong>Bilinmiyor</strong>
-              </p>
-            </article>
-          ))}
+                  ))}
+                  <RecordId id={b.customer_id} label="Müşteri referansı" />
+                </details>
+              </article>
+            ))}
         </div>
       )}
     </Section>
@@ -125,7 +141,7 @@ function LotCard({ lot, onOpen }: { lot: TraceLot; onOpen: () => void }) {
           {lot.product.name} · {amount(lot.original_quantity)}{" "}
           {units[lot.product.base_unit]}
         </small>
-        <code>{lot.id}</code>
+        <small>Lot ayrıntısını aç →</small>
       </span>
       <Badge tone={lot.blocked ? "red" : "green"}>
         {lot.blocked ? "Bloke" : "Bloke değil"}
@@ -232,15 +248,18 @@ export function TraceReportView({
                             }
                           </small>
                         </div>
-                        <p className="caption">
-                          Bağlantı kaydı:{" "}
-                          <span className="code">
-                            {e.lot_link_id || "Miktar atfı kaydedilmemiş"}
-                          </span>
-                          {e.attributed_input_quantity !== null &&
-                            " · Atfedilen giriş: " +
-                              amount(e.attributed_input_quantity)}
-                        </p>
+                        <details>
+                          <summary>Bağlantı referansı ve atıf</summary>
+                          <p className="caption">
+                            Bağlantı kaydı:{" "}
+                            <span className="code">
+                              {e.lot_link_id || "Miktar atfı kaydedilmemiş"}
+                            </span>
+                            {e.attributed_input_quantity !== null &&
+                              " · Atfedilen giriş: " +
+                                amount(e.attributed_input_quantity)}
+                          </p>
+                        </details>
                       </div>
                     ))}
                 </div>
@@ -575,7 +594,7 @@ export function RecallPage() {
           <div className="recall-banner">
             <ShieldAlert size={25} />
             <div>
-              <Badge tone="red">KESİNLEŞMİŞ RECALL KAYDI</Badge>
+              <Badge tone="red">GERİ ÇAĞIRMA AKTİF</Badge>
               <h2>{q.data.reason}</h2>
               <p>
                 {dateTime(q.data.created_at)} · Kaynak:{" "}
@@ -583,10 +602,10 @@ export function RecallPage() {
               </p>
             </div>
           </div>
-          <RecordId id={id} label="Recall UUID" />
+          <RecordId id={id} label="Geri çağırma kaydı" />
           <div className="stat-grid">
             <StatCard
-              label="Recall üyeliğindeki lot"
+              label="Bloke edilen lot"
               value={q.data.report.lots.length}
             />
             <StatCard
@@ -602,7 +621,8 @@ export function RecallPage() {
               value={q.data.report.blocked_stocks.length}
             />
           </div>
-          <TraceReportView report={q.data.report} />
+          <BuyerReport report={q.data.report} />
+          <TraceReportView report={q.data.report} showBuyers={false} />
         </div>
       )}
     </State>

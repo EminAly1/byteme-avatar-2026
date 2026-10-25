@@ -62,59 +62,81 @@ function TradeLines({
   const { fields, append, remove } = useFieldArray({ control, name: "lines" });
   return (
     <>
-      <div className="form-grid">
-        <Field name="customer_id" label="Müşteri">
-          <Options
-            items={data.parties.filter((p) => p.roles.includes("customer"))}
-          />
-        </Field>
-      </div>
-      {fields.map((f, i) => (
-        <div className="line-card" key={f.id}>
-          <div className="line-title">
-            <h4>
-              {price ? "Satış" : "Sevk"} satırı {i + 1}
-            </h4>
-            <button
-              className="icon-button"
-              type="button"
-              aria-label={`İşlem satırı ${i + 1} sil`}
-              disabled={fields.length === 1}
-              onClick={() => remove(i)}
-            >
-              <Trash2 size={17} />
-            </button>
-          </div>
-          <div className="form-grid">
-            <LotSelector
-              name={`lines.${i}.source`}
-              label={`Lot / konum ${i + 1}`}
-              stocks={stocks}
-              {...data}
+      <fieldset className="form-section">
+        <legend>
+          <span>1</span>Müşteri seçimi
+        </legend>
+        <div className="form-grid">
+          <Field name="customer_id" label="Müşteri">
+            <Options
+              items={data.parties.filter((p) => p.roles.includes("customer"))}
             />
-            <NumberInput
-              name={`lines.${i}.quantity`}
-              label={`Miktar ${i + 1}`}
-              hint="Lot ürününün stok birimi kullanılır; adet/paket tam sayı olmalıdır."
-            />
-            {price && (
-              <NumberInput
-                name={`lines.${i}.unit_price`}
-                label={`Birim fiyat ${i + 1} (EUR)`}
-              />
-            )}
-          </div>
+          </Field>
         </div>
-      ))}
-      <ArrayError name="lines" />
-      <button
-        className="button"
-        type="button"
-        onClick={() => append({ source: "", quantity: "", unit_price: "" })}
-      >
-        <Plus size={16} />
-        İşlem satırı ekle
-      </button>
+      </fieldset>
+      <fieldset className="form-section">
+        <legend>
+          <span>2</span>Ürün, lot ve miktar
+        </legend>
+        <p className="caption">
+          Lot seçeneklerinde ürün, depo ve kullanılabilir miktar birlikte
+          gösterilir.
+        </p>
+        {fields.map((f, i) => (
+          <div className="line-card" key={f.id}>
+            <div className="line-title">
+              <h4>
+                {price ? "Satış" : "Sevk"} satırı {i + 1}
+              </h4>
+              <button
+                className="icon-button"
+                type="button"
+                aria-label={`İşlem satırı ${i + 1} sil`}
+                disabled={fields.length === 1}
+                onClick={() => remove(i)}
+              >
+                <Trash2 size={17} />
+              </button>
+            </div>
+            <div className="form-grid">
+              <LotSelector
+                name={`lines.${i}.source`}
+                label={`Lot / konum ${i + 1}`}
+                stocks={stocks}
+                {...data}
+              />
+              <NumberInput
+                name={`lines.${i}.quantity`}
+                label={`Miktar ${i + 1}`}
+                hint="Lot ürününün stok birimi kullanılır; adet/paket tam sayı olmalıdır."
+              />
+              {price && (
+                <NumberInput
+                  name={`lines.${i}.unit_price`}
+                  label={`Birim fiyat ${i + 1} (EUR)`}
+                />
+              )}
+            </div>
+          </div>
+        ))}
+        <ArrayError name="lines" />
+        <button
+          className="button"
+          type="button"
+          onClick={() => append({ source: "", quantity: "", unit_price: "" })}
+        >
+          <Plus size={16} />
+          İşlem satırı ekle
+        </button>
+      </fieldset>
+      <div className="money-note">
+        <strong>3 · Gözden geçirme ve onay</strong>
+        <p>
+          Devam ettiğinizde müşteri, lot ve miktar özeti açılır. Kesin kayıt
+          için ayrıca onayınız istenir. Toplam tutar onaydan sonra sunucudan
+          alınır.
+        </p>
+      </div>
     </>
   );
 }
@@ -199,7 +221,7 @@ function LinesTable({
               id={l.lot_id}
               code={data.lots.find((x) => x.id === l.lot_id)?.external_code}
             />
-            <small className="code">Satır: {l.id}</small>
+            <RecordId label="Satır referansı" id={l.id} />
           </td>
           <td>{data.locations.find((x) => x.id === l.location_id)?.name}</td>
           <td>
@@ -211,7 +233,9 @@ function LinesTable({
               <td>{eur((l as SaleDetail["lines"][number]).total_amount)}</td>
             </>
           )}
-          <td className="code">{l.stock_movement_id}</td>
+          <td>
+            <RecordId label="Stok hareketi" id={l.stock_movement_id} />
+          </td>
         </tr>
       ))}
     </Table>
@@ -259,7 +283,7 @@ export function Sales() {
               className="button primary"
               onClick={() => setCreating(!creating)}
             >
-              {creating ? "Formu kapat" : "Yeni satış"}
+              {creating ? "Satış geçmişine dön" : "Yeni satış"}
             </button>
           }
         >

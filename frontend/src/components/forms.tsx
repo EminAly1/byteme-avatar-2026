@@ -13,7 +13,7 @@ import type { z } from "zod";
 import { ApiError, newCommand, send, type Command } from "../lib/api";
 import { ErrorBox, Success } from "./ui";
 import { loadPending, savePending, clearPending } from "../lib/pending";
-import { ConfirmDialog } from "./workflow";
+import { ConfirmDialog } from "./dialogs";
 
 interface Props<T extends FieldValues> {
   schema: z.ZodType<T>;

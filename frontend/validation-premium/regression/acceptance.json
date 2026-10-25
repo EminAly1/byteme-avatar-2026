@@ -1,0 +1,73 @@
+[
+  {
+    "scenario": "two independent 25 kg cuts",
+    "source_lots": [
+      "15e99b81-e44e-43fc-9a95-7b2a86078647",
+      "86eefb5c-0309-4299-bb66-b29ae29396e5"
+    ],
+    "cutting_ids": [
+      "e642e657-ec09-4440-81cf-e5a427870f47",
+      "7b8f1a66-dea5-40d8-b710-45f63ad4d796"
+    ],
+    "cost_each": "287.500000",
+    "backend_422_verified": true
+  },
+  {
+    "scenario": "sale + linked + independent shipment",
+    "sale_id": "dfeeefde-e037-48e4-a451-b40605296700",
+    "shipment_id": "42149ea0-0800-4522-8516-31f84cfe1189",
+    "shared_movement": "2e79f3d7-098f-4d9f-ade5-b0cf697c7e3f",
+    "stock": "10→9→9→7"
+  },
+  {
+    "scenario": "trace/recall canonical demo",
+    "recall_id": "d2db4aed-c754-463f-ad2a-3237f9ebc8eb",
+    "total_shipped": "85.000000",
+    "markets": 3
+  },
+  {
+    "scenario": "stale LOT_BLOCKED and expired selector",
+    "blocked_lot": "a67a1474-b70a-4566-b44b-f135aba79c9f",
+    "stock_unchanged": "10.000000"
+  },
+  {
+    "scenario": "real commit/lost HTTP response/retry",
+    "sale_id": "90654384-21c8-45f9-9666-1dcb1850e485",
+    "same_key": true,
+    "same_body": true,
+    "stock_after_both": "9.000000"
+  },
+  {
+    "scenario": "production ML UI + actual API closure",
+    "prediction_id": "5c28bd2c-d963-41dc-9ca5-9d362fdc9b4a",
+    "operation_id": "bd4ef7c6-5a73-459b-8dfb-a8bd686d4511",
+    "actual_quantity": "85.000000"
+  },
+  {
+    "scenario": "cutting ML UI + actual API closure",
+    "prediction_id": "e3adeb76-6409-41c8-aff6-f9d8b4bd7163",
+    "operation_id": "ec79fc3c-d78f-44a7-926a-4e6b6f65bae7",
+    "actual_kg": "22.000000"
+  },
+  {
+    "scenario": "responsive",
+    "viewports": [
+      "360x800",
+      "390x844",
+      "768x1024",
+      "1024x768",
+      "1440x900"
+    ],
+    "mobile_sale": true,
+    "keyboard_menu": true,
+    "legacy_redirects": 5
+  },
+  {
+    "scenario": "byproduct/other_loss/recipe availability",
+    "cutting_id": "a48cd53b-fcbf-44e0-80c7-133a112eb145",
+    "byproduct_lot": "6eb8e6e3-c662-4ce3-9009-656490fe0515",
+    "byproduct_stock": "2.000000",
+    "other_loss": "1.000000",
+    "original_cost_preserved": true
+  }
+]

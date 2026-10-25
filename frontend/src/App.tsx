@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import {
   NavLink,
   Navigate,
@@ -29,16 +29,59 @@ import {
   X,
   Search,
 } from "lucide-react";
-import { Products, Parties, Locations } from "./pages/Catalog";
-import { Receipts } from "./pages/Receipts";
-import { Stocks } from "./pages/Stocks";
-import { Operations, OperationPage } from "./pages/Operations";
-import { Dashboard } from "./pages/Dashboard";
-import { Cuttings, CuttingPage } from "./pages/Cutting";
-import { Sales, SalePage, Shipments } from "./pages/Sales";
-import { Traceability, Recalls, RecallPage } from "./pages/Trace";
-import { Predictions } from "./pages/Predictions";
-import { PageHeader } from "./components/workflow";
+import { PageHeader } from "./components/presentation";
+import { State } from "./components/ui";
+const Products = lazy(() =>
+  import("./pages/Catalog").then((m) => ({ default: m.Products })),
+);
+const Parties = lazy(() =>
+  import("./pages/Catalog").then((m) => ({ default: m.Parties })),
+);
+const Locations = lazy(() =>
+  import("./pages/Catalog").then((m) => ({ default: m.Locations })),
+);
+const Receipts = lazy(() =>
+  import("./pages/Receipts").then((m) => ({ default: m.Receipts })),
+);
+const Stocks = lazy(() =>
+  import("./pages/Stocks").then((m) => ({ default: m.Stocks })),
+);
+const Operations = lazy(() =>
+  import("./pages/Operations").then((m) => ({ default: m.Operations })),
+);
+const OperationPage = lazy(() =>
+  import("./pages/Operations").then((m) => ({ default: m.OperationPage })),
+);
+const Dashboard = lazy(() =>
+  import("./pages/Dashboard").then((m) => ({ default: m.Dashboard })),
+);
+const Cuttings = lazy(() =>
+  import("./pages/Cutting").then((m) => ({ default: m.Cuttings })),
+);
+const CuttingPage = lazy(() =>
+  import("./pages/Cutting").then((m) => ({ default: m.CuttingPage })),
+);
+const Sales = lazy(() =>
+  import("./pages/Sales").then((m) => ({ default: m.Sales })),
+);
+const SalePage = lazy(() =>
+  import("./pages/Sales").then((m) => ({ default: m.SalePage })),
+);
+const Shipments = lazy(() =>
+  import("./pages/Sales").then((m) => ({ default: m.Shipments })),
+);
+const Traceability = lazy(() =>
+  import("./pages/Trace").then((m) => ({ default: m.Traceability })),
+);
+const Recalls = lazy(() =>
+  import("./pages/Trace").then((m) => ({ default: m.Recalls })),
+);
+const RecallPage = lazy(() =>
+  import("./pages/Trace").then((m) => ({ default: m.RecallPage })),
+);
+const Predictions = lazy(() =>
+  import("./pages/Predictions").then((m) => ({ default: m.Predictions })),
+);
 
 const primary = [
   { path: "/", label: "Genel bakış", icon: LayoutDashboard },
@@ -140,7 +183,7 @@ export function App() {
               <Sprout size={24} />
             </span>
             <div>
-              ByteMe<small>OPERATIONS PLATFORM</small>
+              ByteMe<small>ÜRETİM VE STOK YÖNETİMİ</small>
             </div>
           </NavLink>
           <button
@@ -193,7 +236,7 @@ export function App() {
             <strong>{title}</strong>
           </div>
           <div className="topbar-right">
-            <NavLink className="topbar-search" to="/izlenebilirlik">
+            <NavLink className="topbar-search" aria-label="Lot kaydı bul" to="/izlenebilirlik">
               <Search size={16} />
               <span>Lot kaydı bul</span>
             </NavLink>
@@ -205,7 +248,12 @@ export function App() {
         </header>
         <main id="main-content" tabIndex={-1}>
           <PageHeader
-            title={detail ? title + " ayrıntısı" : title}
+            title={
+              detail
+                ? ({ Satışlar: "Satış", "Dış üretim": "Üretim emri" }[title] ||
+                    title) + " ayrıntısı"
+                : title
+            }
             description={
               location.pathname === "/"
                 ? "Üretim, stok ve dağıtım kayıtlarını tek yerden yönetin."
@@ -222,49 +270,51 @@ export function App() {
               </button>
             }
           />
-          <Routes>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/urunler" element={<Products />} />
-            <Route path="/is-ortaklari" element={<Parties />} />
-            <Route path="/depolar" element={<Locations />} />
-            <Route path="/alislar" element={<Receipts />} />
-            <Route path="/stoklar" element={<Stocks />} />
-            <Route path="/uretim" element={<Operations />} />
-            <Route path="/uretim/:id" element={<OperationPage />} />
-            <Route path="/parcalama" element={<Cuttings />} />
-            <Route path="/parcalama/:id" element={<CuttingPage />} />
-            <Route path="/satislar" element={<Sales />} />
-            <Route path="/satislar/:id" element={<SalePage />} />
-            <Route path="/sevkiyatlar" element={<Shipments />} />
-            <Route path="/izlenebilirlik" element={<Traceability />} />
-            <Route path="/geri-cagirma" element={<Recalls />} />
-            <Route path="/geri-cagirma/:id" element={<RecallPage />} />
-            <Route path="/yapay-zeka" element={<Predictions />} />
-            {Object.entries({
-              parcalama: "parcalama",
-              satis: "satislar",
-              izleme: "izlenebilirlik",
-              recall: "geri-cagirma",
-              ai: "yapay-zeka",
-            }).map(([from, to]) => (
+          <Suspense fallback={<State loading>{null}</State>}>
+            <Routes>
+              <Route path="/" element={<Dashboard />} />
+              <Route path="/urunler" element={<Products />} />
+              <Route path="/is-ortaklari" element={<Parties />} />
+              <Route path="/depolar" element={<Locations />} />
+              <Route path="/alislar" element={<Receipts />} />
+              <Route path="/stoklar" element={<Stocks />} />
+              <Route path="/uretim" element={<Operations />} />
+              <Route path="/uretim/:id" element={<OperationPage />} />
+              <Route path="/parcalama" element={<Cuttings />} />
+              <Route path="/parcalama/:id" element={<CuttingPage />} />
+              <Route path="/satislar" element={<Sales />} />
+              <Route path="/satislar/:id" element={<SalePage />} />
+              <Route path="/sevkiyatlar" element={<Shipments />} />
+              <Route path="/izlenebilirlik" element={<Traceability />} />
+              <Route path="/geri-cagirma" element={<Recalls />} />
+              <Route path="/geri-cagirma/:id" element={<RecallPage />} />
+              <Route path="/yapay-zeka" element={<Predictions />} />
+              {Object.entries({
+                parcalama: "parcalama",
+                satis: "satislar",
+                izleme: "izlenebilirlik",
+                recall: "geri-cagirma",
+                ai: "yapay-zeka",
+              }).map(([from, to]) => (
+                <Route
+                  key={from}
+                  path={"/plan/" + from}
+                  element={<Navigate replace to={"/" + to} />}
+                />
+              ))}
               <Route
-                key={from}
-                path={"/plan/" + from}
-                element={<Navigate replace to={"/" + to} />}
+                path="*"
+                element={
+                  <section className="panel planned">
+                    <h2>Sayfa bulunamadı</h2>
+                    <NavLink className="button" to="/">
+                      Genel bakışa dön
+                    </NavLink>
+                  </section>
+                }
               />
-            ))}
-            <Route
-              path="*"
-              element={
-                <section className="panel planned">
-                  <h2>Sayfa bulunamadı</h2>
-                  <NavLink className="button" to="/">
-                    Genel bakışa dön
-                  </NavLink>
-                </section>
-              }
-            />
-          </Routes>
+            </Routes>
+          </Suspense>
           <footer className="page-footer">
             <span>ByteMe · AVATAR 2026</span>
             <span>Kayıtlı lotlar. Gerçek maliyetler.</span>

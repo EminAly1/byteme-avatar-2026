@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { it, expect, vi } from "vitest";
 import { PredictionResult } from "../src/pages/Predictions";
 import type { Prediction } from "../src/lib/modules";
@@ -33,6 +33,9 @@ it("tahmin ayrı etiketlenir; gerçekleşme null ise sayı uydurulmaz", () => {
   expect(
     screen.getByText(/Gerçek işletme verileriyle doğruluğu henüz/),
   ).toBeVisible();
+  expect(screen.getByText(prediction.id)).not.toBeVisible();
+  fireEvent.click(screen.getByText('Model bilgisi, teknik referans ve tam hassasiyet'));
+  fireEvent.click(screen.getByText('Tahmin kaydı', {exact:false, selector:'summary'}));
   expect(screen.getByText(prediction.id)).toBeVisible();
   expect(screen.getByText(/production-ridge-v1-test/)).toBeVisible();
 });
@@ -52,9 +55,11 @@ it("backend gerçekleşmesi ve mutlak/yüzdesel sapma ayrı sütunlarda gösteri
       }}
     />,
   );
-  expect(screen.getByRole("cell", { name: "85" })).toBeVisible();
-  expect(screen.getByRole("cell", { name: "1,3" })).toBeVisible();
-  expect(screen.getByRole("cell", { name: "1,529412%" })).toBeVisible();
+  expect(screen.getByRole("cell", { name: "85 paket" })).toBeVisible();
+  expect(screen.getByRole("cell", { name: "1,3 paket" })).toBeVisible();
+  expect(screen.getByRole("cell", { name: "1,53%" })).toBeVisible();
+  fireEvent.click(screen.getByText('Model bilgisi, teknik referans ve tam hassasiyet'));
+  expect(screen.getByText(/"percentage_deviation": "1.529412"/)).toBeVisible();
 });
 it("MODEL_UNAVAILABLE 503 sahte tahmin yerine anlaşılır hata üretir", async () => {
   vi.stubGlobal(

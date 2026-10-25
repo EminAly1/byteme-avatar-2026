@@ -1,3 +1,4 @@
+const artifactDir = process.env.AVATAR_E2E_ARTIFACT_DIR || "validation-v2";
 import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 import { mkdir, writeFile } from "node:fs/promises";
@@ -41,9 +42,9 @@ test("WCAG AA otomatik kontrast, etiket ve yapı denetimi: desktop/mobil ana ekr
       });
     }
   }
-  await mkdir("validation-v2", { recursive: true });
+  await mkdir(artifactDir, { recursive: true });
   await writeFile(
-    "validation-v2/accessibility.json",
+    artifactDir + "/accessibility.json",
     JSON.stringify(evidence, null, 2) + "\n",
   );
   expect(

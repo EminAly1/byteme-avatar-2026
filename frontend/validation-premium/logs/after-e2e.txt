@@ -1,0 +1,25 @@
+
+> byteme-avatar-web@0.1.0 test:e2e
+> playwright test
+
+
+Running 14 tests using 1 worker
+
+(node:22928) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 tests/browser/accessibility-v2.spec.ts:5:1 › WCAG AA otomatik kontrast, etiket ve yapı denetimi: desktop/mobil ana ekranlar (26.2s)
+  ✓   2 tests/browser/dashboard.spec.ts:49:1 › gerçek UI: çok satırlı alış → sevk → üretim kapanışı → doğru EKP ve stok (14.4s)
+  ✓   3 tests/browser/dashboard.spec.ts:248:1 › belgedeki mevcut demo gerçek API kaydından gösterilir (1.7s)
+  ✓   4 tests/browser/dashboard.spec.ts:265:1 › tablet ve mobil yerleşim; recall onay verilmeden işlem başlatmaz (2.1s)
+  ✓   5 tests/browser/dashboard.spec.ts:303:1 › yerel proxy uzak origin/host ve originsiz yazmayı reddeder; gizli dosya servis edilmez (44ms)
+  ✓   6 tests/browser/integration-v2.spec.ts:52:1 › reçete UI → quantity/value kesimleri; eksik açıklama ve gerçek backend 422; iki ayrı kaynak lot (6.1s)
+  ✓   7 tests/browser/integration-v2.spec.ts:185:1 › lotlu UI satış → bağlı sevkiyat aynı hareket; bağımsız sevkiyat yeni çıkış (3.5s)
+  ✓   8 tests/browser/integration-v2.spec.ts:259:1 › gerçek ileri/geri izleme ve ET recall → Market A/B/C 30/25/30; onay şart (3.7s)
+  ✓   9 tests/browser/integration-v2.spec.ts:352:1 › stale lot seçimi sonrası gerçek LOT_BLOCKED; süresi geçmiş lot seçenekleri kapalı (2.8s)
+  ✓  10 tests/browser/integration-v2.spec.ts:391:1 › gerçek commit sonrası kayıp cevap: reload ve aynı UUID/gövde ile retry tek satış üretir (3.0s)
+  ✓  11 tests/browser/integration-v2.spec.ts:444:1 › üretim ML UI: gerçek forecast UUID → kapanış sonrası 85 paket ve Decimal sapma (2.4s)
+  ✓  12 tests/browser/integration-v2.spec.ts:499:1 › kesim ML UI: beş gerçek ürün eşlemesi ve 25 kg tahmin/gerçek/sapma (2.0s)
+  ✓  13 tests/browser/integration-v2.spec.ts:558:1 › beş viewport: gerçek modüller, mobil satış ve drawer klavye erişimi; sayfa taşmaz (36.4s)
+  ✓  14 tests/browser/integration-v2.spec.ts:669:1 › yan ürün ayrı lot/stok; diğer kayıp açıklaması ve reçete kullanılabilirliği gerçek UI (3.6s)
+
+  14 passed (1.8m)
