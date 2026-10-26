@@ -1,0 +1,577 @@
+......................................................FE
+==================================== ERRORS ====================================
+_ ERROR at teardown of test_upgrade_downgrade_preserves_old_lot_sale_and_cost __
+
+self = <sqlalchemy.engine.base.Connection object at 0x7fd8db87ae10>
+dialect = <sqlalchemy.dialects.mysql.pymysql.MySQLDialect_pymysql object at 0x7fd8da8aef00>
+context = <sqlalchemy.dialects.mysql.mysqldb.MySQLExecutionContext_mysqldb object at 0x7fd8db879c70>
+statement = <sqlalchemy.dialects.mysql.base.MySQLDDLCompiler object at 0x7fd8db879760>
+parameters = [immutabledict({})]
+
+    def _exec_single_context(
+        self,
+        dialect: Dialect,
+        context: ExecutionContext,
+        statement: Union[str, Compiled],
+        parameters: Optional[_AnyMultiExecuteParams],
+    ) -> CursorResult[Any]:
+        """continue the _execute_context() method for a single DBAPI
+        cursor.execute() or cursor.executemany() call.
+
+        """
+        if dialect.bind_typing is BindTyping.SETINPUTSIZES:
+            generic_setinputsizes = context._prepare_set_input_sizes()
+
+            if generic_setinputsizes:
+                try:
+                    dialect.do_set_input_sizes(
+                        context.cursor, generic_setinputsizes, context
+                    )
+                except BaseException as e:
+                    self._handle_dbapi_exception(
+                        e, str(statement), parameters, None, context
+                    )
+
+        cursor, str_statement, parameters = (
+            context.cursor,
+            context.statement,
+            context.parameters,
+        )
+
+        effective_parameters: Optional[_AnyExecuteParams]
+
+        if not context.executemany:
+            effective_parameters = parameters[0]
+        else:
+            effective_parameters = parameters
+
+        if self._has_events or self.engine._has_events:
+            for fn in self.dispatch.before_cursor_execute:
+                str_statement, effective_parameters = fn(
+                    self,
+                    cursor,
+                    str_statement,
+                    effective_parameters,
+                    context,
+                    context.executemany,
+                )
+
+        if self._echo:
+            self._log_info(str_statement)
+
+            stats = context._get_cache_stats()
+
+            if not self.engine.hide_parameters:
+                self._log_info(
+                    "[%s] %r",
+                    stats,
+                    sql_util._repr_params(
+                        effective_parameters,
+                        batches=10,
+                        ismulti=context.executemany,
+                    ),
+                )
+            else:
+                self._log_info(
+                    "[%s] [SQL parameters hidden due to hide_parameters=True]",
+                    stats,
+                )
+
+        evt_handled: bool = False
+        try:
+            if context.execute_style is ExecuteStyle.EXECUTEMANY:
+                effective_parameters = cast(
+                    "_CoreMultiExecuteParams", effective_parameters
+                )
+                if self.dialect._has_events:
+                    for fn in self.dialect.dispatch.do_executemany:
+                        if fn(
+                            cursor,
+                            str_statement,
+                            effective_parameters,
+                            context,
+                        ):
+                            evt_handled = True
+                            break
+                if not evt_handled:
+                    self.dialect.do_executemany(
+                        cursor,
+                        str_statement,
+                        effective_parameters,
+                        context,
+                    )
+            elif not effective_parameters and context.no_parameters:
+                if self.dialect._has_events:
+                    for fn in self.dialect.dispatch.do_execute_no_params:
+                        if fn(cursor, str_statement, context):
+                            evt_handled = True
+                            break
+                if not evt_handled:
+                    self.dialect.do_execute_no_params(
+                        cursor, str_statement, context
+                    )
+            else:
+                effective_parameters = cast(
+                    "_CoreSingleExecuteParams", effective_parameters
+                )
+                if self.dialect._has_events:
+                    for fn in self.dialect.dispatch.do_execute:
+                        if fn(
+                            cursor,
+                            str_statement,
+                            effective_parameters,
+                            context,
+                        ):
+                            evt_handled = True
+                            break
+                if not evt_handled:
+>                   self.dialect.do_execute(
+                        cursor, str_statement, effective_parameters, context
+                    )
+
+backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1963:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/default.py:943: in do_execute
+    cursor.execute(statement, parameters)
+backend/.venv/lib/python3.12/site-packages/pymysql/cursors.py:153: in execute
+    result = self._query(query)
+backend/.venv/lib/python3.12/site-packages/pymysql/cursors.py:322: in _query
+    conn.query(q)
+backend/.venv/lib/python3.12/site-packages/pymysql/connections.py:563: in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+backend/.venv/lib/python3.12/site-packages/pymysql/connections.py:825: in _read_query_result
+    result.read()
+backend/.venv/lib/python3.12/site-packages/pymysql/connections.py:1199: in read
+    first_packet = self.connection._read_packet()
+backend/.venv/lib/python3.12/site-packages/pymysql/connections.py:775: in _read_packet
+    packet.raise_for_error()
+backend/.venv/lib/python3.12/site-packages/pymysql/protocol.py:219: in raise_for_error
+    err.raise_mysql_exception(self._data)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+data = b"\xff\x11\x06#HY000Cannot drop index 'uq_movement_reversal': needed in a foreign key constraint"
+
+    def raise_mysql_exception(data):
+        errno = struct.unpack("<h", data[1:3])[0]
+        # https://dev.mysql.com/doc/dev/mysql-server/latest/page_protocol_basic_err_packet.html
+        # Error packet has optional sqlstate that is 5 bytes and starts with '#'.
+        if data[3] == 0x23:  # '#'
+            # sqlstate = data[4:9].decode()
+            # TODO: Append (sqlstate) in the error message. This will be come in next minor release.
+            errval = data[9:].decode("utf-8", "replace")
+        else:
+            errval = data[3:].decode("utf-8", "replace")
+        errorclass = error_map.get(errno)
+        if errorclass is None:
+            errorclass = InternalError if errno < 1000 else OperationalError
+>       raise errorclass(errno, errval)
+E       pymysql.err.OperationalError: (1553, "Cannot drop index 'uq_movement_reversal': needed in a foreign key constraint")
+
+backend/.venv/lib/python3.12/site-packages/pymysql/err.py:150: OperationalError
+
+The above exception was the direct cause of the following exception:
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7fd8da8ad880>
+
+    @pytest.fixture
+    def migration_db(monkeypatch):
+        settings=get_settings().model_copy(update={'mysql_database':'avatar_migration_test'})
+        engine=create_engine(settings.database_url());assert engine.url.database=='avatar_migration_test'
+        monkeypatch.setattr('app.database.get_engine',lambda:engine)
+        config=Config(str(Path(__file__).resolve().parents[1]/'backend/alembic.ini'))
+        command.downgrade(config,'base');command.upgrade(config,PARENT)
+        try:yield engine,config
+        finally:
+            # Explicitly purge only this test fixture, not an application downgrade.
+            existing=set(inspect(engine).get_table_names())
+            with engine.begin() as connection:
+                for table in reversed(Base.metadata.sorted_tables):
+                    if table.name not in existing:continue
+                    if table.name=='stock_movements':
+                        connection.execute(delete(table).where(table.c.reversal_of.is_not(None)))
+                    connection.execute(delete(table))
+>           command.downgrade(config,'base');command.upgrade(config,'head');engine.dispose()
+
+tests/test_transfers_returns_migrations_mysql.py:36:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend/.venv/lib/python3.12/site-packages/alembic/command.py:455: in downgrade
+    script.run_env()
+backend/.venv/lib/python3.12/site-packages/alembic/script/base.py:586: in run_env
+    util.load_python_file(self.dir, "env.py")
+backend/.venv/lib/python3.12/site-packages/alembic/util/pyfiles.py:95: in load_python_file
+    module = load_module_py(module_id, path)
+backend/.venv/lib/python3.12/site-packages/alembic/util/pyfiles.py:113: in load_module_py
+    spec.loader.exec_module(module)  # type: ignore
+<frozen importlib._bootstrap_external>:999: in exec_module
+    ???
+<frozen importlib._bootstrap>:488: in _call_with_frames_removed
+    ???
+backend/alembic/env.py:22: in <module>
+    context.run_migrations()
+<string>:8: in run_migrations
+    ???
+backend/.venv/lib/python3.12/site-packages/alembic/runtime/environment.py:946: in run_migrations
+    self.get_context().run_migrations(**kw)
+backend/.venv/lib/python3.12/site-packages/alembic/runtime/migration.py:623: in run_migrations
+    step.migration_fn(**kw)
+backend/alembic/versions/e1307a26b001_add_atomic_lot_transfers_and_quarantine_.py:153: in downgrade
+    op.drop_constraint('uq_movement_reversal', 'stock_movements', type_='unique')
+<string>:8: in drop_constraint
+    ???
+<string>:3: in drop_constraint
+    ???
+backend/.venv/lib/python3.12/site-packages/alembic/operations/ops.py:221: in drop_constraint
+    return operations.invoke(op)
+backend/.venv/lib/python3.12/site-packages/alembic/operations/base.py:441: in invoke
+    return fn(self, operation)
+backend/.venv/lib/python3.12/site-packages/alembic/operations/toimpl.py:200: in drop_constraint
+    operations.impl.drop_constraint(
+backend/.venv/lib/python3.12/site-packages/alembic/ddl/mysql.py:172: in drop_constraint
+    super().drop_constraint(const)
+backend/.venv/lib/python3.12/site-packages/alembic/ddl/impl.py:389: in drop_constraint
+    self._exec(schema.DropConstraint(const))
+backend/.venv/lib/python3.12/site-packages/alembic/ddl/impl.py:246: in _exec
+    return conn.execute(construct, params)
+backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1415: in execute
+    return meth(
+backend/.venv/lib/python3.12/site-packages/sqlalchemy/sql/ddl.py:187: in _execute_on_connection
+    return connection._execute_ddl(
+backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1526: in _execute_ddl
+    ret = self._execute_context(
+backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1842: in _execute_context
+    return self._exec_single_context(
+backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1982: in _exec_single_context
+    self._handle_dbapi_exception(
+backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:2351: in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1963: in _exec_single_context
+    self.dialect.do_execute(
+backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/default.py:943: in do_execute
+    cursor.execute(statement, parameters)
+backend/.venv/lib/python3.12/site-packages/pymysql/cursors.py:153: in execute
+    result = self._query(query)
+backend/.venv/lib/python3.12/site-packages/pymysql/cursors.py:322: in _query
+    conn.query(q)
+backend/.venv/lib/python3.12/site-packages/pymysql/connections.py:563: in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+backend/.venv/lib/python3.12/site-packages/pymysql/connections.py:825: in _read_query_result
+    result.read()
+backend/.venv/lib/python3.12/site-packages/pymysql/connections.py:1199: in read
+    first_packet = self.connection._read_packet()
+backend/.venv/lib/python3.12/site-packages/pymysql/connections.py:775: in _read_packet
+    packet.raise_for_error()
+backend/.venv/lib/python3.12/site-packages/pymysql/protocol.py:219: in raise_for_error
+    err.raise_mysql_exception(self._data)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+data = b"\xff\x11\x06#HY000Cannot drop index 'uq_movement_reversal': needed in a foreign key constraint"
+
+    def raise_mysql_exception(data):
+        errno = struct.unpack("<h", data[1:3])[0]
+        # https://dev.mysql.com/doc/dev/mysql-server/latest/page_protocol_basic_err_packet.html
+        # Error packet has optional sqlstate that is 5 bytes and starts with '#'.
+        if data[3] == 0x23:  # '#'
+            # sqlstate = data[4:9].decode()
+            # TODO: Append (sqlstate) in the error message. This will be come in next minor release.
+            errval = data[9:].decode("utf-8", "replace")
+        else:
+            errval = data[3:].decode("utf-8", "replace")
+        errorclass = error_map.get(errno)
+        if errorclass is None:
+            errorclass = InternalError if errno < 1000 else OperationalError
+>       raise errorclass(errno, errval)
+E       sqlalchemy.exc.OperationalError: (pymysql.err.OperationalError) (1553, "Cannot drop index 'uq_movement_reversal': needed in a foreign key constraint")
+E       [SQL: ALTER TABLE stock_movements DROP INDEX uq_movement_reversal]
+E       (Background on this error at: https://sqlalche.me/e/20/e3q8)
+
+backend/.venv/lib/python3.12/site-packages/pymysql/err.py:150: OperationalError
+----------------------------- Captured stdout call -----------------------------
+No new upgrade operations detected.
+=================================== FAILURES ===================================
+____________ test_upgrade_downgrade_preserves_old_lot_sale_and_cost ____________
+
+self = <sqlalchemy.engine.base.Connection object at 0x7fd8db98f530>
+dialect = <sqlalchemy.dialects.mysql.pymysql.MySQLDialect_pymysql object at 0x7fd8da8aef00>
+context = <sqlalchemy.dialects.mysql.mysqldb.MySQLExecutionContext_mysqldb object at 0x7fd8db89b4a0>
+statement = <sqlalchemy.dialects.mysql.base.MySQLDDLCompiler object at 0x7fd8db89b3b0>
+parameters = [immutabledict({})]
+
+    def _exec_single_context(
+        self,
+        dialect: Dialect,
+        context: ExecutionContext,
+        statement: Union[str, Compiled],
+        parameters: Optional[_AnyMultiExecuteParams],
+    ) -> CursorResult[Any]:
+        """continue the _execute_context() method for a single DBAPI
+        cursor.execute() or cursor.executemany() call.
+
+        """
+        if dialect.bind_typing is BindTyping.SETINPUTSIZES:
+            generic_setinputsizes = context._prepare_set_input_sizes()
+
+            if generic_setinputsizes:
+                try:
+                    dialect.do_set_input_sizes(
+                        context.cursor, generic_setinputsizes, context
+                    )
+                except BaseException as e:
+                    self._handle_dbapi_exception(
+                        e, str(statement), parameters, None, context
+                    )
+
+        cursor, str_statement, parameters = (
+            context.cursor,
+            context.statement,
+            context.parameters,
+        )
+
+        effective_parameters: Optional[_AnyExecuteParams]
+
+        if not context.executemany:
+            effective_parameters = parameters[0]
+        else:
+            effective_parameters = parameters
+
+        if self._has_events or self.engine._has_events:
+            for fn in self.dispatch.before_cursor_execute:
+                str_statement, effective_parameters = fn(
+                    self,
+                    cursor,
+                    str_statement,
+                    effective_parameters,
+                    context,
+                    context.executemany,
+                )
+
+        if self._echo:
+            self._log_info(str_statement)
+
+            stats = context._get_cache_stats()
+
+            if not self.engine.hide_parameters:
+                self._log_info(
+                    "[%s] %r",
+                    stats,
+                    sql_util._repr_params(
+                        effective_parameters,
+                        batches=10,
+                        ismulti=context.executemany,
+                    ),
+                )
+            else:
+                self._log_info(
+                    "[%s] [SQL parameters hidden due to hide_parameters=True]",
+                    stats,
+                )
+
+        evt_handled: bool = False
+        try:
+            if context.execute_style is ExecuteStyle.EXECUTEMANY:
+                effective_parameters = cast(
+                    "_CoreMultiExecuteParams", effective_parameters
+                )
+                if self.dialect._has_events:
+                    for fn in self.dialect.dispatch.do_executemany:
+                        if fn(
+                            cursor,
+                            str_statement,
+                            effective_parameters,
+                            context,
+                        ):
+                            evt_handled = True
+                            break
+                if not evt_handled:
+                    self.dialect.do_executemany(
+                        cursor,
+                        str_statement,
+                        effective_parameters,
+                        context,
+                    )
+            elif not effective_parameters and context.no_parameters:
+                if self.dialect._has_events:
+                    for fn in self.dialect.dispatch.do_execute_no_params:
+                        if fn(cursor, str_statement, context):
+                            evt_handled = True
+                            break
+                if not evt_handled:
+                    self.dialect.do_execute_no_params(
+                        cursor, str_statement, context
+                    )
+            else:
+                effective_parameters = cast(
+                    "_CoreSingleExecuteParams", effective_parameters
+                )
+                if self.dialect._has_events:
+                    for fn in self.dialect.dispatch.do_execute:
+                        if fn(
+                            cursor,
+                            str_statement,
+                            effective_parameters,
+                            context,
+                        ):
+                            evt_handled = True
+                            break
+                if not evt_handled:
+>                   self.dialect.do_execute(
+                        cursor, str_statement, effective_parameters, context
+                    )
+
+backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1963:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/default.py:943: in do_execute
+    cursor.execute(statement, parameters)
+backend/.venv/lib/python3.12/site-packages/pymysql/cursors.py:153: in execute
+    result = self._query(query)
+backend/.venv/lib/python3.12/site-packages/pymysql/cursors.py:322: in _query
+    conn.query(q)
+backend/.venv/lib/python3.12/site-packages/pymysql/connections.py:563: in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+backend/.venv/lib/python3.12/site-packages/pymysql/connections.py:825: in _read_query_result
+    result.read()
+backend/.venv/lib/python3.12/site-packages/pymysql/connections.py:1199: in read
+    first_packet = self.connection._read_packet()
+backend/.venv/lib/python3.12/site-packages/pymysql/connections.py:775: in _read_packet
+    packet.raise_for_error()
+backend/.venv/lib/python3.12/site-packages/pymysql/protocol.py:219: in raise_for_error
+    err.raise_mysql_exception(self._data)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+data = b"\xff\x11\x06#HY000Cannot drop index 'uq_movement_reversal': needed in a foreign key constraint"
+
+    def raise_mysql_exception(data):
+        errno = struct.unpack("<h", data[1:3])[0]
+        # https://dev.mysql.com/doc/dev/mysql-server/latest/page_protocol_basic_err_packet.html
+        # Error packet has optional sqlstate that is 5 bytes and starts with '#'.
+        if data[3] == 0x23:  # '#'
+            # sqlstate = data[4:9].decode()
+            # TODO: Append (sqlstate) in the error message. This will be come in next minor release.
+            errval = data[9:].decode("utf-8", "replace")
+        else:
+            errval = data[3:].decode("utf-8", "replace")
+        errorclass = error_map.get(errno)
+        if errorclass is None:
+            errorclass = InternalError if errno < 1000 else OperationalError
+>       raise errorclass(errno, errval)
+E       pymysql.err.OperationalError: (1553, "Cannot drop index 'uq_movement_reversal': needed in a foreign key constraint")
+
+backend/.venv/lib/python3.12/site-packages/pymysql/err.py:150: OperationalError
+
+The above exception was the direct cause of the following exception:
+
+migration_db = (Engine(mysql+pymysql://avatar:***@127.0.0.1:33327/avatar_migration_test?charset=utf8mb4), <alembic.config.Config object at 0x7fd8dd1588c0>)
+
+    def test_upgrade_downgrade_preserves_old_lot_sale_and_cost(migration_db):
+        engine,config=migration_db;seed_old(engine);before=legacy_snapshot(engine)
+        command.upgrade(config,'head');command.check(config)
+        assert NEW_TABLES<=set(inspect(engine).get_table_names()) and legacy_snapshot(engine)==before
+        uniques=inspect(engine).get_unique_constraints('stock_movements')
+        assert any(row['column_names']==['reversal_of'] for row in uniques)
+>       command.downgrade(config,PARENT)
+
+tests/test_transfers_returns_migrations_mysql.py:65:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend/.venv/lib/python3.12/site-packages/alembic/command.py:455: in downgrade
+    script.run_env()
+backend/.venv/lib/python3.12/site-packages/alembic/script/base.py:586: in run_env
+    util.load_python_file(self.dir, "env.py")
+backend/.venv/lib/python3.12/site-packages/alembic/util/pyfiles.py:95: in load_python_file
+    module = load_module_py(module_id, path)
+backend/.venv/lib/python3.12/site-packages/alembic/util/pyfiles.py:113: in load_module_py
+    spec.loader.exec_module(module)  # type: ignore
+<frozen importlib._bootstrap_external>:999: in exec_module
+    ???
+<frozen importlib._bootstrap>:488: in _call_with_frames_removed
+    ???
+backend/alembic/env.py:22: in <module>
+    context.run_migrations()
+<string>:8: in run_migrations
+    ???
+backend/.venv/lib/python3.12/site-packages/alembic/runtime/environment.py:946: in run_migrations
+    self.get_context().run_migrations(**kw)
+backend/.venv/lib/python3.12/site-packages/alembic/runtime/migration.py:623: in run_migrations
+    step.migration_fn(**kw)
+backend/alembic/versions/e1307a26b001_add_atomic_lot_transfers_and_quarantine_.py:153: in downgrade
+    op.drop_constraint('uq_movement_reversal', 'stock_movements', type_='unique')
+<string>:8: in drop_constraint
+    ???
+<string>:3: in drop_constraint
+    ???
+backend/.venv/lib/python3.12/site-packages/alembic/operations/ops.py:221: in drop_constraint
+    return operations.invoke(op)
+backend/.venv/lib/python3.12/site-packages/alembic/operations/base.py:441: in invoke
+    return fn(self, operation)
+backend/.venv/lib/python3.12/site-packages/alembic/operations/toimpl.py:200: in drop_constraint
+    operations.impl.drop_constraint(
+backend/.venv/lib/python3.12/site-packages/alembic/ddl/mysql.py:172: in drop_constraint
+    super().drop_constraint(const)
+backend/.venv/lib/python3.12/site-packages/alembic/ddl/impl.py:389: in drop_constraint
+    self._exec(schema.DropConstraint(const))
+backend/.venv/lib/python3.12/site-packages/alembic/ddl/impl.py:246: in _exec
+    return conn.execute(construct, params)
+backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1415: in execute
+    return meth(
+backend/.venv/lib/python3.12/site-packages/sqlalchemy/sql/ddl.py:187: in _execute_on_connection
+    return connection._execute_ddl(
+backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1526: in _execute_ddl
+    ret = self._execute_context(
+backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1842: in _execute_context
+    return self._exec_single_context(
+backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1982: in _exec_single_context
+    self._handle_dbapi_exception(
+backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:2351: in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1963: in _exec_single_context
+    self.dialect.do_execute(
+backend/.venv/lib/python3.12/site-packages/sqlalchemy/engine/default.py:943: in do_execute
+    cursor.execute(statement, parameters)
+backend/.venv/lib/python3.12/site-packages/pymysql/cursors.py:153: in execute
+    result = self._query(query)
+backend/.venv/lib/python3.12/site-packages/pymysql/cursors.py:322: in _query
+    conn.query(q)
+backend/.venv/lib/python3.12/site-packages/pymysql/connections.py:563: in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+backend/.venv/lib/python3.12/site-packages/pymysql/connections.py:825: in _read_query_result
+    result.read()
+backend/.venv/lib/python3.12/site-packages/pymysql/connections.py:1199: in read
+    first_packet = self.connection._read_packet()
+backend/.venv/lib/python3.12/site-packages/pymysql/connections.py:775: in _read_packet
+    packet.raise_for_error()
+backend/.venv/lib/python3.12/site-packages/pymysql/protocol.py:219: in raise_for_error
+    err.raise_mysql_exception(self._data)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+data = b"\xff\x11\x06#HY000Cannot drop index 'uq_movement_reversal': needed in a foreign key constraint"
+
+    def raise_mysql_exception(data):
+        errno = struct.unpack("<h", data[1:3])[0]
+        # https://dev.mysql.com/doc/dev/mysql-server/latest/page_protocol_basic_err_packet.html
+        # Error packet has optional sqlstate that is 5 bytes and starts with '#'.
+        if data[3] == 0x23:  # '#'
+            # sqlstate = data[4:9].decode()
+            # TODO: Append (sqlstate) in the error message. This will be come in next minor release.
+            errval = data[9:].decode("utf-8", "replace")
+        else:
+            errval = data[3:].decode("utf-8", "replace")
+        errorclass = error_map.get(errno)
+        if errorclass is None:
+            errorclass = InternalError if errno < 1000 else OperationalError
+>       raise errorclass(errno, errval)
+E       sqlalchemy.exc.OperationalError: (pymysql.err.OperationalError) (1553, "Cannot drop index 'uq_movement_reversal': needed in a foreign key constraint")
+E       [SQL: ALTER TABLE stock_movements DROP INDEX uq_movement_reversal]
+E       (Background on this error at: https://sqlalche.me/e/20/e3q8)
+
+backend/.venv/lib/python3.12/site-packages/pymysql/err.py:150: OperationalError
+----------------------------- Captured stdout call -----------------------------
+No new upgrade operations detected.
+=============================== warnings summary ===============================
+backend/.venv/lib/python3.12/site-packages/starlette/testclient.py:37
+  /workspace/byteme-avatar-2026/backend/.venv/lib/python3.12/site-packages/starlette/testclient.py:37: DeprecationWarning: The anyio.abc.BlockingPortal alias is deprecated, use anyio.from_thread.BlockingPortal instead.
+    _PortalFactoryType = typing.Callable[[], typing.ContextManager[anyio.abc.BlockingPortal]]
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/test_transfers_returns_migrations_mysql.py::test_upgrade_downgrade_preserves_old_lot_sale_and_cost
+ERROR tests/test_transfers_returns_migrations_mysql.py::test_upgrade_downgrade_preserves_old_lot_sale_and_cost
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 2 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 54 passed, 1 warning, 1 error in 19.50s

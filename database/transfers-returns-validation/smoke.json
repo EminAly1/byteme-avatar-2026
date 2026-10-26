@@ -1,0 +1,15 @@
+{
+  "database": "avatar_task13_acceptance_test",
+  "base": "http://127.0.0.1:8004",
+  "health_auth_and_model_checks": {
+    "/health no-key": 200,
+    "/health/ready no-key": 200,
+    "/v1/transfers no-key": 401,
+    "/v1/transfers with-key": 200,
+    "/v1/returns with-key": 200,
+    "/v1/predictions/models with-key": 200
+  },
+  "mysql": "8.0.46",
+  "migration_head": "e1307a26b001",
+  "api_key_in_responses": false
+}

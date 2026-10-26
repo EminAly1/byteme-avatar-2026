@@ -13,6 +13,7 @@ def quantity(value):
 
 
 def distribution(db, lot_ids):
+    from app import inventory_adjustments as adjustments
     sale_lines = graph.rows_for(db, m.SaleLine, m.SaleLine.lot_id, lot_ids)
     shipment_lines = graph.rows_for(db, m.ShipmentLine, m.ShipmentLine.lot_id, lot_ids)
     sales = graph.rows_for(db, m.Sale, m.Sale.id, [x.sale_id for x in sale_lines])
@@ -24,6 +25,13 @@ def distribution(db, lot_ids):
     groups = {}
     shipped_movements = set()
     linked_sale_lines = {x.sale_line_id for x in shipment_lines if x.sale_line_id}
+    returns = graph.rows_for(db, m.CustomerReturnLine, m.CustomerReturnLine.lot_id, lot_ids)
+    cancellations = graph.rows_for(db, m.SaleCancellationLine, m.SaleCancellationLine.lot_id, lot_ids)
+    returned_quantities, cancelled_quantities = defaultdict(Decimal), defaultdict(Decimal)
+    for row in returns:
+        returned_quantities[row.sale_line_id] += row.quantity
+    for row in cancellations:
+        cancelled_quantities[row.sale_line_id] += row.quantity
 
     def group(customer_id, line):
         key = (customer_id, line.lot_id, line.product_id, line.unit)
@@ -31,13 +39,16 @@ def distribution(db, lot_ids):
             groups[key] = {'lot_id': line.lot_id, 'product_id': line.product_id, 'unit': line.unit,
                            'recorded_sale_quantity': Decimal(0), 'unshipped_sale_quantity': Decimal(0),
                            'shipped_quantity': Decimal(0), 'sale_line_ids': [], 'shipment_line_ids': []}
+            groups[key].update(returned_quantity=Decimal(0), cancelled_sale_quantity=Decimal(0))
         return groups[key]
 
     for line in sale_lines:
         entry = group(sale_map[line.sale_id].customer_id, line)
         entry['recorded_sale_quantity'] += line.quantity
+        entry['returned_quantity'] += returned_quantities[line.id]
+        entry['cancelled_sale_quantity'] += cancelled_quantities[line.id]
         if line.id not in linked_sale_lines:
-            entry['unshipped_sale_quantity'] += line.quantity
+            entry['unshipped_sale_quantity'] += line.quantity - cancelled_quantities[line.id]
         entry['sale_line_ids'].append(line.id)
     for shipment in shipments:
         buyers[shipment.customer_id]['recipient_snapshots'].append({
@@ -53,11 +64,22 @@ def distribution(db, lot_ids):
             entry['shipped_quantity'] += line.quantity
             totals[(line.product_id, line.unit)] += line.quantity
     for (customer_id, *_), entry in sorted(groups.items()):
+        # This is only the recorded shipped-minus-returned balance. It is not
+        # the customer's remaining stock or proof of end-consumer sales.
+        entry['recorded_delivery_less_returns_quantity'] = entry['shipped_quantity'] - entry['returned_quantity']
         buyers[customer_id]['quantities'].append({k: quantity(v) if isinstance(v, Decimal) else v for k, v in entry.items()})
+    return_headers = graph.rows_for(db, m.CustomerReturn, m.CustomerReturn.id, [x.return_id for x in returns])
+    cancellation_headers = graph.rows_for(db, m.SaleCancellation, m.SaleCancellation.id, [x.cancellation_id for x in cancellations])
     return {
         'sales': [{**services.entity(s), 'line_scope': 'affected_lots_only', 'lines': [services.entity(x) for x in sale_lines if x.sale_id == s.id]} for s in sales],
         'shipments': [{**services.entity(s), 'line_scope': 'affected_lots_only', 'lines': [services.entity(x) for x in shipment_lines if x.shipment_id == s.id]} for s in shipments],
         'buyers': [buyers[k] for k in sorted(buyers)],
+        'customer_returns': [{**adjustments.correction_summary(row), 'line_scope': 'affected_lots_only',
+                              'lines': [services.entity(line) for line in returns if line.return_id == row.id]}
+                             for row in return_headers],
+        'sale_cancellations': [{**adjustments.correction_summary(row), 'line_scope': 'affected_lots_only',
+                                'lines': [services.entity(line) for line in cancellations if line.cancellation_id == row.id]}
+                               for row in cancellation_headers],
         'total_shipped_quantities': [{'product_id': p, 'unit': u, 'quantity': quantity(q)} for (p, u), q in sorted(totals.items())],
         'second_tier_distributions': [],
         'unknown_distributions': [{'customer_id': k, 'market_remaining_quantity': None, 'final_consumer_sold_quantity': None,
@@ -70,6 +92,7 @@ def report(db, source_id, traversal, direction='forward'):
     services.get(db, m.Lot, source_id)
     # Include dispatched draft orders, without inventing unposted output lots.
     movements = graph.rows_for(db, m.StockMovement, m.StockMovement.lot_id, traversal.lot_ids)
+    transfers = graph.rows_for(db, m.StockTransfer, m.StockTransfer.lot_id, traversal.lot_ids)
     operation_ids = set(traversal.operation_ids) | {x.operation_id for x in movements if x.operation_id}
     operations = graph.rows_for(db, m.Operation, m.Operation.id, operation_ids)
     inputs = graph.rows_for(db, m.OperationInput, m.OperationInput.operation_id, operation_ids)
@@ -123,6 +146,7 @@ def report(db, source_id, traversal, direction='forward'):
         'edges': edges, 'cycle_detected': graph.has_cycle(traversal.lot_ids, edges),
         'stocks': stocks,
         'blocked_stocks': [x for x in stocks if x['blocked'] and Decimal(x['quantity']) > 0],
+        'transfers': [services.entity(row) for row in transfers],
         **distribution(db, traversal.lot_ids),
     }
 

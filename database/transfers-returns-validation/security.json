@@ -1,0 +1,24 @@
+{
+  "date": "2026-10-26",
+  "scanner": "Gitleaks8.24.3 plus actual private credential byte comparison",
+  "candidate_private_values": 9,
+  "source_files_scanned": 463,
+  "actual_secret_paths": [],
+  "history_gitleaks_leaks": 0,
+  "nonignored_source_gitleaks_leaks": 0,
+  "existing_local_configs": [
+    {
+      "path": ".env",
+      "mode": "0o600",
+      "ignored": true,
+      "tracked": false
+    },
+    {
+      "path": "backend/.env.runtime",
+      "mode": "0o600",
+      "ignored": true,
+      "tracked": false
+    }
+  ],
+  "scope": "Available Git history + current tracked/nonignored candidate files. Runtime private env stays outside Git. No client bundle/APK changed in Task13."
+}

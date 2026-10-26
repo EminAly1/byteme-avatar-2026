@@ -1,0 +1,50 @@
+{
+  "main_sha": "b569830017f419b7b71e3e2067c7c0c5f7ceaeb4",
+  "branch": "feature/lot-transfers-returns",
+  "date": "2026-10-26",
+  "timezone": "Europe/Istanbul",
+  "baseline_passed": 194,
+  "final_passed": 256,
+  "new_passed": 62,
+  "backend_passed": 237,
+  "ml_passed": 19,
+  "failed": 0,
+  "skipped": 0,
+  "new_test_modules": {
+    "tests.test_transfers_returns_http": 3,
+    "tests.test_transfers_returns_migrations_mysql": 3,
+    "tests.test_transfers_returns_mysql": 56
+  },
+  "real_mysql": "8.0.46",
+  "database_schema_head": "e1307a26b001",
+  "isolation": {
+    "instance": "avatar-task13-mysql",
+    "host": "127.0.0.1:33327",
+    "core_schema": "avatar_task13_core_test",
+    "migration_schema": "avatar_migration_test",
+    "final_demo_schema": "avatar_task13_acceptance_test",
+    "earlier_draft_demo_preserved": "avatar_task13_demo_test"
+  },
+  "cancellation_policy": "Exact same-lot/location reversal, then paired quarantine relocation; all3movements have explicit CancellationLine FKs and commit once. No lot consumption counter rewind.",
+  "demo": {
+    "two_external_invocations_identical": true,
+    "two_internal_flows_each_identical": true,
+    "all_29_tables_unchanged_on_replay": true,
+    "legacy_production_markets_cutting_recall_predictions_profit_unchanged": true,
+    "current_balances_kg": {
+      "warehouse_a": "10",
+      "warehouse_b": "2",
+      "quarantine": "5"
+    },
+    "after_recall_all_available_quantities": "0",
+    "gross_lot_consumed_quantity": "8.000000",
+    "gross_lot_consumed_cost": "77.600000",
+    "original_lot_total_cost": "194.000000",
+    "return_credit": "40.00",
+    "return_cost_reversal": "19.400000",
+    "cancellation_credit": "60.00",
+    "cancellation_cost_reversal": "29.100000"
+  },
+  "scope": "Only backend/, database/, tests/. Clients/shared docs/checklist/Compose/ML training untouched.",
+  "pdf_production_correction_test": true
+}

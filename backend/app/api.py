@@ -8,7 +8,7 @@ from fastapi.responses import JSONResponse
 from sqlalchemy import and_, or_, select
 from sqlalchemy.orm import Session
 
-from app import models as m, schemas as s, services, sales, traceability, recalls, cuttings
+from app import models as m, schemas as s, services, sales, traceability, recalls, cuttings, inventory_adjustments as adjustments
 from app.commands import execute
 from app.config import get_settings
 from app.database import get_engine
@@ -156,6 +156,9 @@ def sale_get(sale_id: UUID, db: DB):
 
 @router.get('/sales/{sale_id}/profitability')
 def sale_profitability(sale_id: UUID, db: DB):
+    # One coherent read snapshot across immutable sale and concurrent corrections.
+    # This override belongs to this read connection, never a posting transaction.
+    db.connection(execution_options={'isolation_level': 'REPEATABLE READ'})
     return sales.profitability(db, services.get(db, m.Sale, sale_id))
 
 
@@ -167,6 +170,65 @@ def shipment_create(body: s.ShipmentCreate, key: Key):
 @router.get('/shipments/{shipment_id}')
 def shipment_get(shipment_id: UUID, db: DB):
     return sales.shipment_detail(db, services.get(db, m.Shipment, shipment_id))
+
+
+@router.post('/transfers', status_code=201)
+def transfer_create(body: s.TransferCreate, key: Key):
+    return write('transfers', key, body, adjustments.create_transfer)
+
+
+@router.get('/transfers/{transfer_id}')
+def transfer_get(transfer_id: UUID, db: DB):
+    return adjustments.transfer_detail(db, services.get(db, m.StockTransfer, transfer_id))
+
+
+@router.get('/transfers')
+def transfer_list(db: DB, limit: Limit = 50, cursor: UUID | None = None, lot_id: UUID | None = None):
+    query = select(m.StockTransfer).order_by(m.StockTransfer.id).limit(limit + 1)
+    if lot_id:
+        query = query.where(m.StockTransfer.lot_id == str(lot_id))
+    if cursor:
+        query = query.where(m.StockTransfer.id > str(cursor))
+    rows = db.scalars(query).all()
+    return {'items': [services.entity(row) for row in rows[:limit]],
+            'next_cursor': rows[limit - 1].id if len(rows) > limit else None}
+
+
+@router.post('/returns', status_code=201)
+def customer_return_create(body: s.CustomerReturnCreate, key: Key):
+    return write('returns', key, body, adjustments.create_return)
+
+
+@router.get('/returns/{return_id}')
+def customer_return_get(return_id: UUID, db: DB):
+    return adjustments.return_detail(db, services.get(db, m.CustomerReturn, return_id))
+
+
+@router.get('/returns')
+def customer_return_list(db: DB, limit: Limit = 50, cursor: UUID | None = None, sale_id: UUID | None = None):
+    query = select(m.CustomerReturn).order_by(m.CustomerReturn.id).limit(limit + 1)
+    if sale_id:
+        query = query.where(m.CustomerReturn.sale_id == str(sale_id))
+    if cursor:
+        query = query.where(m.CustomerReturn.id > str(cursor))
+    rows = db.scalars(query).all()
+    return {'items': [adjustments.correction_summary(row) for row in rows[:limit]],
+            'next_cursor': rows[limit - 1].id if len(rows) > limit else None}
+
+
+@router.post('/sales/{sale_id}/cancel')
+def sale_cancel(sale_id: UUID, body: s.SaleCancelCreate, key: Key):
+    return write(f'sales:{sale_id}:cancel', key, body,
+                 lambda db, payload: adjustments.cancel_sale(db, sale_id, payload), 200)
+
+
+@router.get('/sales/{sale_id}/cancellation')
+def sale_cancellation(sale_id: UUID, db: DB):
+    services.get(db, m.Sale, sale_id)
+    row = adjustments.cancellation_for(db, sale_id)
+    if row is None:
+        raise DomainError('NOT_FOUND', 'Satışın iptal kaydı yok', 404)
+    return adjustments.cancellation_detail(db, row)
 
 
 router.add_api_route('/sales', listing(m.Sale, sales.sale_summary), methods=['GET'], name='list_sales')

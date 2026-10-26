@@ -45,6 +45,7 @@ def profitability(db, sale):
     Use immutable SaleLine.consumed_cost snapshots, not today's lot balance,
     a rounded display EKP, a forecast, or the selling price of another sale.
     """
+    from app.inventory_adjustments import financial_adjustments
     rows = db.scalars(select(m.SaleLine).where(m.SaleLine.sale_id == sale.id)
                       .order_by(m.SaleLine.line_no)).all()
     with localcontext() as context:
@@ -62,11 +63,17 @@ def profitability(db, sale):
             }
 
         cost = sum((row.consumed_cost for row in rows), Decimal('0'))
+        adjustments = financial_adjustments(db, sale, rows)
+        credit = Decimal(adjustments['return_credit_eur']) + Decimal(adjustments['cancellation_credit_eur'])
         return {
             'sale_id': sale.id, 'currency': 'EUR',
             'basis': 'recorded_net_sale_and_consumed_lot_cost',
-            'limitations': ['Vergi, iskonto, müşteri iadesi ve genel gider muhasebesi kapsam dışıdır.'],
+            'limitations': ['Vergi, iskonto, genel gider ve nakit geri ödeme muhasebesi kapsam dışıdır.',
+                            'Üst alanlar orijinal satışı korur; düzeltmeler ve netleşmiş sonuç ayrı alanlardadır.'],
             **metrics(sale.total_amount, cost),
+            'adjustments': adjustments,
+            'net_after_adjustments': metrics(sale.total_amount - credit,
+                                             cost - Decimal(adjustments['cost_reversal_eur'])),
             'lines': [{
                 'sale_line_id': row.id, 'lot_id': row.lot_id,
                 'stock_movement_id': row.stock_movement_id,
@@ -137,6 +144,8 @@ def linked_sale(db, request):
     sale = services.get(db, m.Sale, request.sale_id, lock=True)
     if sale.customer_id != str(request.customer_id):
         raise DomainError('CUSTOMER_MISMATCH', 'Sevkiyat müşterisi satış müşterisiyle eşleşmelidir', 422)
+    if db.scalar(select(m.SaleCancellation.id).where(m.SaleCancellation.sale_id == sale.id)):
+        raise DomainError('SALE_CANCELLED', 'İptal edilmiş satış sevk edilemez')
     return sale
 
 
