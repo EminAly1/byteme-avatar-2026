@@ -1,0 +1,56 @@
+{
+  "date": "2026-10-26",
+  "timezone": "Europe/Istanbul",
+  "base_main_sha": "ad5bfa3ed1e8401262db50238a1a4127a0326b62",
+  "branch": "feature/release-integration-v1",
+  "backend_ml": {
+    "passed": 194,
+    "failed": 0,
+    "skipped": 0,
+    "backend": 175,
+    "ml": 19
+  },
+  "frontend": {
+    "unit": 45,
+    "chromium_e2e": 15,
+    "real_missing_model_503": 1,
+    "typecheck": true,
+    "build": true
+  },
+  "android": {
+    "host_executions": 32,
+    "distinct_host_tests": 16,
+    "lint_issues": 0,
+    "apk_build": true,
+    "api28_passed": 4,
+    "api28_failed": 0,
+    "api35_retry_passed": 3,
+    "api35_retry_failed": 1,
+    "physical_device": false,
+    "rerun_on_26_october": false,
+    "evidence": "Preserved25October XML, state, instrumentation logs, PNG and APK hash; SDK lost at environment renewal."
+  },
+  "compose": {
+    "services": 3,
+    "all_healthy": true,
+    "normal_build_dns_failed": true,
+    "build_proxy_ca_succeeded": true,
+    "loopback_only": true,
+    "migration_head": "dc9109a1f001",
+    "models": 2
+  },
+  "demo": {
+    "same_jury_database_as_android_api28": true,
+    "full_replay_creates_no_new_records": true,
+    "all_24_table_hashes_equal_to_saved_post_android_evidence": true,
+    "lost_reply_same_key_body_sale": true,
+    "profitability_read_only": true,
+    "data_origin": "KURGUSAL / SYNTHETIC"
+  },
+  "decision": {
+    "local_demo": "GO",
+    "full_pdf_submission": "NO-GO",
+    "internet_production": "NO-GO"
+  },
+  "open": "Transfer/customer returns/rework, second tier distribution acceptance, API35 offline timeout, dedicated web profitability panel, physical/HTTPS/browser acceptance, production auth/TLS, real historical ML data, final video/package/tag/submission."
+}

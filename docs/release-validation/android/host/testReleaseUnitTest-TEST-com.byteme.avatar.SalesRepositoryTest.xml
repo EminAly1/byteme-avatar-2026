@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.byteme.avatar.SalesRepositoryTest" tests="15" skipped="0" failures="0" errors="0" timestamp="2026-10-25T18:15:35" hostname="286faf58637d" time="1.249">
+  <properties/>
+  <testcase name="successWithWrongLotIsUncertainAndNotConfirmed" classname="com.byteme.avatar.SalesRepositoryTest" time="0.233"/>
+  <testcase name="cleartextIsLimitedToDebugLoopbackAndReleaseRequiresHttps" classname="com.byteme.avatar.SalesRepositoryTest" time="0.05"/>
+  <testcase name="insufficientStockRequiresNewReview" classname="com.byteme.avatar.SalesRepositoryTest" time="0.077"/>
+  <testcase name="changingServerCannotSendPreviouslyApprovedSaleToNewServer" classname="com.byteme.avatar.SalesRepositoryTest" time="0.035"/>
+  <testcase name="unauthorizedRequiresExplicitApproval" classname="com.byteme.avatar.SalesRepositoryTest" time="0.045"/>
+  <testcase name="roomCatalogAndDraftAreStoredWithoutCentralStockChange" classname="com.byteme.avatar.SalesRepositoryTest" time="0.038"/>
+  <testcase name="enqueueSameDraftCannotGenerateSecondKey" classname="com.byteme.avatar.SalesRepositoryTest" time="0.032"/>
+  <testcase name="keyAndFrozenBodySurviveDatabaseCloseReopen" classname="com.byteme.avatar.SalesRepositoryTest" time="0.044"/>
+  <testcase name="ambiguousDisconnectResendsIdenticalBodyAndKeyAfterRecovery" classname="com.byteme.avatar.SalesRepositoryTest" time="0.082"/>
+  <testcase name="mismatchedCustomerLotLocationAndUnitAreRejected" classname="com.byteme.avatar.SalesRepositoryTest" time="0.034"/>
+  <testcase name="successfulServerResponseConfirmsInRoomWithoutPredictingStock" classname="com.byteme.avatar.SalesRepositoryTest" time="0.048"/>
+  <testcase name="catalogPaginationReadsAllPagesAndPreservesSnapshotOnCycle" classname="com.byteme.avatar.SalesRepositoryTest" time="0.363"/>
+  <testcase name="recalledLotIsConflictAndNeverBlindlyRetried" classname="com.byteme.avatar.SalesRepositoryTest" time="0.055"/>
+  <testcase name="invalidRequestIsNotRetriedAutomatically" classname="com.byteme.avatar.SalesRepositoryTest" time="0.049"/>
+  <testcase name="serverUnavailableKeepsSameKeyRetryable" classname="com.byteme.avatar.SalesRepositoryTest" time="0.063"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[Oct 25, 2026 6:15:36 PM okhttp3.mockwebserver.MockWebServer$SocketHandler handle
+WARNING: MockWebServer[39005] connection from /127.0.0.1 didn't make a request
+]]></system-err>
+</testsuite>

@@ -154,6 +154,11 @@ def sale_get(sale_id: UUID, db: DB):
     return sales.sale_detail(db, services.get(db, m.Sale, sale_id))
 
 
+@router.get('/sales/{sale_id}/profitability')
+def sale_profitability(sale_id: UUID, db: DB):
+    return sales.profitability(db, services.get(db, m.Sale, sale_id))
+
+
 @router.post('/shipments', status_code=201)
 def shipment_create(body: s.ShipmentCreate, key: Key):
     return write('shipments', key, body, sales.create_shipment)

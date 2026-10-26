@@ -1,0 +1,18 @@
+{
+  "serial": "emulator-5554",
+  "sdk": "28",
+  "database": "avatar_release_demo_acceptance_test",
+  "real_sale_id": "b6340bae-6bf1-4a37-a11c-38a78301c3db",
+  "central_stock": "5.000000",
+  "source_lot_blocked": true,
+  "outbox_states": [
+    "CONFIRMED",
+    "NEEDS_ACTION"
+  ],
+  "offline_drafts": 1,
+  "original_server_command_verified_before_replay": true,
+  "same_sale_on_replay": true,
+  "outbox_key_body_state_survive_process_restart": true,
+  "backend_unchanged_by_replay_and_restart": true,
+  "physical_device": false
+}

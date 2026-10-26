@@ -2,12 +2,12 @@ services:
   mysql:
     image: mysql:8.0
     environment:
-      MYSQL_DATABASE: ${MYSQL_DATABASE:-avatar}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-avatar_demo_test}
       MYSQL_USER: ${MYSQL_USER:-avatar}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD:?Set MYSQL_PASSWORD in .env}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?Set MYSQL_ROOT_PASSWORD in .env}
     ports:
-      - "127.0.0.1:3306:3306"
+      - "127.0.0.1:${MYSQL_PUBLISHED_PORT:-3306}:3306"
     volumes:
       - mysql_data:/var/lib/mysql
     healthcheck:
@@ -17,16 +17,23 @@ services:
       retries: 30
       start_period: 30s
   backend:
-    build: ./backend
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
     environment:
       MYSQL_HOST: mysql
       MYSQL_PORT: 3306
-      MYSQL_DATABASE: ${MYSQL_DATABASE:-avatar}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-avatar_demo_test}
       MYSQL_USER: ${MYSQL_USER:-avatar}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD:?Set MYSQL_PASSWORD in .env}
-      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:5173}
+      AVATAR_API_KEY: ${AVATAR_API_KEY:?Set AVATAR_API_KEY in .env}
+      AVATAR_ML_MODEL_DIR: /app/ml/models
+      CORS_ORIGINS: http://127.0.0.1:5173
     ports:
       - "127.0.0.1:8000:8000"
+      # Frontend shares this network namespace; only these host loopback ports
+      # are published. Upstream remains literal 127.0.0.1:8000 (no DNS allowlist).
+      - "127.0.0.1:5173:5173"
     depends_on:
       mysql:
         condition: service_healthy
@@ -37,12 +44,18 @@ services:
       retries: 12
   frontend:
     build: ./frontend
+    network_mode: "service:backend"
     environment:
-      VITE_API_PROXY_TARGET: http://backend:8000
-    ports:
-      - "127.0.0.1:5173:5173"
+      AVATAR_API_PROXY_TARGET: http://127.0.0.1:8000
+      AVATAR_API_KEY: ${AVATAR_API_KEY:?Set AVATAR_API_KEY in .env}
+      AVATAR_DEMO_CONTAINER_BIND: "1"
     depends_on:
       backend:
         condition: service_healthy
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:5173/').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
 volumes:
   mysql_data:

@@ -1,0 +1,108 @@
+
+> byteme-avatar-web@0.1.0 test:e2e
+> playwright test --grep lotlu UI satış
+
+
+Running 1 test using 1 worker
+
+(node:33496) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 tests/browser/integration-v2.spec.ts:185:1 › lotlu UI satış → bağlı sevkiyat aynı hareket; bağımsız sevkiyat yeni çıkış (14.4s)
+
+
+  1) tests/browser/integration-v2.spec.ts:185:1 › lotlu UI satış → bağlı sevkiyat aynı hareket; bağımsız sevkiyat yeni çıkış
+
+    TimeoutError: locator.click: Timeout 10000ms exceeded.
+    Call log:
+      - waiting for getByRole('row').filter({ hasText: 'V2-8e917929 Market' }).getByRole('button', { name: 'Sevkiyatı aç', exact: true })
+        - locator resolved to <button class="text-button">Sevkiyatı aç</button>
+      - attempting click action
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <dialog open="" class="detail-drawer" aria-labelledby="_r_a_">…</dialog> intercepts pointer events
+        - retrying click action
+        - waiting 20ms
+        - waiting for element to be visible, enabled and stable
+        - element is visible, enabled and stable
+        - scrolling into view if needed
+        - done scrolling
+        - <td class="">…</td> from <dialog open="" class="detail-drawer" aria-labelledby="_r_a_">…</dialog> subtree intercepts pointer events
+      2 × retrying click action
+          - waiting 100ms
+          - waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <dialog open="" class="detail-drawer" aria-labelledby="_r_a_">…</dialog> intercepts pointer events
+      4 × retrying click action
+          - waiting 500ms
+          - waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <dialog open="" class="detail-drawer" aria-labelledby="_r_a_">…</dialog> intercepts pointer events
+        - retrying click action
+          - waiting 500ms
+          - waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <td class="">…</td> from <dialog open="" class="detail-drawer" aria-labelledby="_r_a_">…</dialog> subtree intercepts pointer events
+        - retrying click action
+          - waiting 500ms
+          - waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <dialog open="" class="detail-drawer" aria-labelledby="_r_a_">…</dialog> intercepts pointer events
+        - retrying click action
+          - waiting 500ms
+          - waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <dialog open="" class="detail-drawer" aria-labelledby="_r_a_">…</dialog> intercepts pointer events
+      - retrying click action
+        - waiting 500ms
+        - waiting for element to be visible, enabled and stable
+        - element is visible, enabled and stable
+        - scrolling into view if needed
+        - done scrolling
+        - <dialog open="" class="detail-drawer" aria-labelledby="_r_a_">…</dialog> intercepts pointer events
+      - retrying click action
+        - waiting 500ms
+        - waiting for element to be visible, enabled and stable
+        - element is visible, enabled and stable
+        - scrolling into view if needed
+        - done scrolling
+        - <td class="">…</td> from <dialog open="" class="detail-drawer" aria-labelledby="_r_a_">…</dialog> subtree intercepts pointer events
+      - retrying click action
+        - waiting 500ms
+
+
+      228 |   await page.keyboard.press('Escape');
+      229 |   const openShipment = page.getByRole('row').filter({hasText:s.customer.name}).getByRole('button',{name:'Sevkiyatı aç',exact:true});
+    > 230 |   await openShipment.click();
+          |                      ^
+      231 |   await expect(page.getByRole('button',{name:'Ayrıntıyı kapat',exact:true})).toBeFocused();
+      232 |   await page.keyboard.press('Shift+Tab');
+      233 |   await expect(page.getByRole('dialog').locator('summary').filter({hasText:'Stok hareketi'}).last()).toBeFocused();
+        at /workspace/byteme-avatar-2026/frontend/tests/browser/integration-v2.spec.ts:230:22
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/integration-v2-lotlu-UI-sa-eac72-ağımsız-sevkiyat-yeni-çıkış/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/integration-v2-lotlu-UI-sa-eac72-ağımsız-sevkiyat-yeni-çıkış/error-context.md
+
+    Error Context: test-results/integration-v2-lotlu-UI-sa-eac72-ağımsız-sevkiyat-yeni-çıkış/error-context.md
+
+  1 failed
+    tests/browser/integration-v2.spec.ts:185:1 › lotlu UI satış → bağlı sevkiyat aynı hareket; bağımsız sevkiyat yeni çıkış
+npm notice
+npm notice New major version of npm available! 11.9.0 -> 12.2.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.1
+npm notice To update run: npm install -g npm@12.2.1
+npm notice

@@ -3,3 +3,7 @@ dist
 .env
 .env.*
 !.env.example
+test-results
+playwright-report
+validation-v2
+validation-premium

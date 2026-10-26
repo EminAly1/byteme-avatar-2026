@@ -1,0 +1,160 @@
+{
+  "production": {
+    "alpha": 10.0,
+    "baseline": {
+      "predicted_finished_quantity": {
+        "mae": 2.647265379918527,
+        "rmse": 3.626324092845254,
+        "unit": "package",
+        "n": 120
+      },
+      "predicted_yield_ratio": {
+        "mae": 0.01714786731587964,
+        "rmse": 0.02104985384192211,
+        "unit": "ratio",
+        "n": 120
+      },
+      "predicted_ekp_eur_per_unit": {
+        "mae": 0.5424262898119216,
+        "rmse": 0.6744862215330902,
+        "unit": "EUR/package",
+        "n": 120
+      },
+      "predicted_total_cost_eur": {
+        "mae": 19.53185818600968,
+        "rmse": 24.91933124443501,
+        "unit": "EUR",
+        "n": 120
+      }
+    },
+    "ridge": {
+      "predicted_finished_quantity": {
+        "mae": 1.1331402848014684,
+        "rmse": 1.5775096960982236,
+        "unit": "package",
+        "n": 120
+      },
+      "predicted_yield_ratio": {
+        "mae": 0.007236933494860583,
+        "rmse": 0.008839173970446637,
+        "unit": "ratio",
+        "n": 120
+      },
+      "predicted_ekp_eur_per_unit": {
+        "mae": 0.1838693733156547,
+        "rmse": 0.24447248864544754,
+        "unit": "EUR/package",
+        "n": 120
+      },
+      "predicted_total_cost_eur": {
+        "mae": 9.85095655313427,
+        "rmse": 12.590720051816096,
+        "unit": "EUR",
+        "n": 120
+      }
+    }
+  },
+  "cutting": {
+    "alpha": 0.1,
+    "baseline": {
+      "predicted_leg_kg": {
+        "mae": 0.1555791063060329,
+        "rmse": 0.18789282715354527,
+        "unit": "kg",
+        "n": 120
+      },
+      "predicted_shoulder_kg": {
+        "mae": 0.10501573942489878,
+        "rmse": 0.12739855784053405,
+        "unit": "kg",
+        "n": 120
+      },
+      "predicted_back_kg": {
+        "mae": 0.12369699257829651,
+        "rmse": 0.15738042395238452,
+        "unit": "kg",
+        "n": 120
+      },
+      "predicted_rib_kg": {
+        "mae": 0.08987151402551392,
+        "rmse": 0.11442520989548265,
+        "unit": "kg",
+        "n": 120
+      },
+      "predicted_mince_kg": {
+        "mae": 0.10680804306113768,
+        "rmse": 0.13790158944555228,
+        "unit": "kg",
+        "n": 120
+      },
+      "predicted_total_weight_kg": {
+        "mae": 0.25480773204873186,
+        "rmse": 0.3339090549711056,
+        "unit": "kg",
+        "n": 120
+      },
+      "predicted_difference_kg": {
+        "mae": 0.25480773204873186,
+        "rmse": 0.3339090549711056,
+        "unit": "kg",
+        "n": 120
+      },
+      "predicted_yield_ratio": {
+        "mae": 0.009107701358079019,
+        "rmse": 0.011432849665733272,
+        "unit": "ratio",
+        "n": 120
+      }
+    },
+    "ridge": {
+      "predicted_leg_kg": {
+        "mae": 0.08663537335663114,
+        "rmse": 0.10834671230698671,
+        "unit": "kg",
+        "n": 120
+      },
+      "predicted_shoulder_kg": {
+        "mae": 0.10012382718867482,
+        "rmse": 0.12137540555431023,
+        "unit": "kg",
+        "n": 120
+      },
+      "predicted_back_kg": {
+        "mae": 0.10209001000035907,
+        "rmse": 0.1278244839842538,
+        "unit": "kg",
+        "n": 120
+      },
+      "predicted_rib_kg": {
+        "mae": 0.08436943810272789,
+        "rmse": 0.10719029306651638,
+        "unit": "kg",
+        "n": 120
+      },
+      "predicted_mince_kg": {
+        "mae": 0.09854999040629644,
+        "rmse": 0.12812168121229123,
+        "unit": "kg",
+        "n": 120
+      },
+      "predicted_total_weight_kg": {
+        "mae": 0.21016155506714715,
+        "rmse": 0.2650582371400339,
+        "unit": "kg",
+        "n": 120
+      },
+      "predicted_difference_kg": {
+        "mae": 0.21016155506714715,
+        "rmse": 0.2650582371400339,
+        "unit": "kg",
+        "n": 120
+      },
+      "predicted_yield_ratio": {
+        "mae": 0.00743638346949424,
+        "rmse": 0.009053058477815087,
+        "unit": "ratio",
+        "n": 120
+      }
+    }
+  }
+}

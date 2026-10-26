@@ -1,0 +1,45 @@
+{
+  "backend": {
+    "image_runtime_source_matches_worktree": true,
+    "files": [
+      "backend/app/__init__.py",
+      "backend/app/api.py",
+      "backend/app/commands.py",
+      "backend/app/config.py",
+      "backend/app/costing.py",
+      "backend/app/cuttings.py",
+      "backend/app/database.py",
+      "backend/app/demo.py",
+      "backend/app/demo_cutting.py",
+      "backend/app/demo_recall.py",
+      "backend/app/demo_safety.py",
+      "backend/app/demo_sales_shipments.py",
+      "backend/app/errors.py",
+      "backend/app/lot_graph.py",
+      "backend/app/main.py",
+      "backend/app/ml_runtime.py",
+      "backend/app/models.py",
+      "backend/app/prediction_api.py",
+      "backend/app/prediction_schemas.py",
+      "backend/app/predictions.py",
+      "backend/app/recalls.py",
+      "backend/app/sales.py",
+      "backend/app/schemas.py",
+      "backend/app/services.py",
+      "backend/app/traceability.py",
+      "ml/models/cutting.json",
+      "ml/models/cutting.sha256",
+      "ml/models/production.json",
+      "ml/models/production.sha256"
+    ]
+  },
+  "frontend": {
+    "image_runtime_source_matches_worktree": true,
+    "files": [
+      "frontend/vite.config.ts",
+      "frontend/server/proxy.ts",
+      "frontend/package.json",
+      "frontend/package-lock.json"
+    ]
+  }
+}

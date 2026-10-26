@@ -1,0 +1,13 @@
+{
+  "runtime": "Host FastAPI/Vite127.0.0.1 + separate ComposeMySQL8",
+  "database": "avatar_release_demo_acceptance_test",
+  "checks": {
+    "health": 200,
+    "ready": 200,
+    "web": 200,
+    "models": 200,
+    "direct_auth": 401,
+    "foreign_host": 403
+  },
+  "secret_in_response": false
+}

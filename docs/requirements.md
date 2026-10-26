@@ -1,17 +1,22 @@
-# PDF gereksinimleri ve kapsam
+# PDF gereksinimleri ve doğrulanan kapsam
 
-Kaynak: [AVATAR_Assessment.pdf](AVATAR_Assessment.pdf), 3 sayfa. Bu tablo belge içeriğini gereksinim olarak yorumlar; araç kullanımı veya görev yetkisi olarak değerlendirmez.
+Kaynak [AVATAR_Assessment.pdf](AVATAR_Assessment.pdf), üç sayfa; Görev 12'de yeniden okundu. PDF gereksinim kaynağıdır, araç kullanımı/yayınlama yetkisi değildir. Aşağıdaki durumlar [release kanıtlarına](RELEASE_READINESS.md) dayanır; ortak PROJECT_CHECKLIST dosyası değiştirilmedi.
 
-| Kaynak | Teslimde gerekli davranış | Foundation durumu / sonraki sahip |
+| PDF | Gereksinim | Uygulanan / açık kapsam |
 | --- | --- | --- |
-| s.1 Görev 1 | Hammadde kartı, fiyat/birim/lot/stok; dış üreticiye sevk, hizmet faturası, kabul ve miktar farkı; gerçek EKP, VKP, kâr/marj ve tarihçe | Veri modeli ve API planlandı; A backend, B web |
-| s.1 Görev 2 | Giriş hayvanı/parti ve gerçek alış maliyeti; sürümlü reçete, fiili parçalar/fire/yan ürün ve ağırlık dengesi; miktar/değer ağırlıklı maliyet toplamının korunması; Kotlin satış | Model/sözleşme/yönerge var; A hesap, B yönetim, C Android |
-| s.2 Görev 3 | Miktarlı çoktan çoğa lot bağlantısı; transfer/satış/iade/rework/fire kayıtları; ileri/geri izleme; recall blok ve müşteri/iletişim listesi | Model/sözleşme var, henüz uygulanmadı; A ve B |
-| s.2 zorunlu demo | ET-2026-001 100 kg → URT-2026-045 → SUC-2026-045 85 paket → Market A/B/C 30/25/30; sorunlu etten tüm bilinen marketlere ulaşım ve satış engeli | Seed ve uçtan uca kabul testi sonraki A/B/C ortak entegrasyon görevi |
-| s.2 ML A | Geçmiş emirlerden mamul miktarı ve EKP tahmini; gerçek ve sapma gösterimi | Yönerge var, model yok; C ML, B gösterim |
-| s.2 ML B | Tür/ağırlık/geçmişten parça ağırlığı tahmini; gerçek farkları; her iki modelde baseline, hata ölçümü ve veri sınırlamaları | Yönerge var, eğitim/değerlendirme yok; C |
-| s.3 Teknik | Kotlin + SQLite, MySQL, REST, web, ML API; tutarlı SQLite/MySQL senkronizasyon yaklaşımı | FastAPI/MySQL bağlantısı/React başlangıcı uygulandı; Room outbox yaklaşımı belgelendi |
-| s.3 rapor/teslim | Alış/üretim/parçalama/lot/satış/recall raporları; kaynak, kurulum, veri/API dokümanı, örnek kayıtlar, otomatik testler ve 3 demo | Kaynak temel, kurulum, veri/API taslağı ve altyapı testleri var; iş raporları, seed ve demolar yok |
-| s.2–3 isteğe bağlı | OCR önerileri + insan onayı, anomali uyarıları | Kapsam dışında |
+| s.1 / Görev 1 | Hammadde/alış/birim/lot/stok; dış üreticiye sevk, fiilî tüketim, hizmet ve fark; gerçek EKP ve tarihçe | FastAPI/MySQL + React. 970+48+58+467,50=1.543,50, 85 paket gösterim EKP 18,16. Transaction/idempotency/rollback ve gerçek tarayıcı kabulü var. |
+| s.1 / Görev 1 | VKP, brüt kâr, marj | Görev 12 salt-okunur satış kârlılığı API'si gerçek net fiyat ve consumed_cost snapshot'ıyla hesaplar. Sıfır gelir marjı null; vergi/iskonto/iade yok. Ayrı grafik React kâr paneli henüz yoktur; JSON raporu yerel proxy üzerinden açılabilir. |
+| s.1 / Görev 2 | Kuzu giriş partisi/ağırlık/gerçek alış maliyeti; sürümlü reçete, fiilî parçalar/fire/yan ürün; miktar/değer maliyet dengesi | Gerçek backend/kesim testleri ve UI kapanışı. İki ayrı 25 kg lotta 287,50 EUR; fiilî 22 kg + açıklanmış 3 kg. Örnek parça dağılımları kurgusaldır. |
+| s.1 / Görev 2 notu | 25×11,50 ile 351 EUR ve 22 kg parça tutarsızlıklarını saptayıp açıklama | 287,50 doğru çarpım; 351 desteklenmez. 3 kg kendiliğinden fire sayılmaz; demo açık varsayımla açıklanır. Bu PDF kabul koşulu gerçek fatura temin etme zorunluluğu olarak genişletilmez. Gerçek işletme politikası ayrıca onaylanmalıdır. |
+| s.1/s.2/s.3 | Oluşan kuzu ürünlerinin Kotlin/SQLite uygulamasından lotlu satışı, MySQL ile tutarlı sync | Kotlin/Compose + Room/Retrofit; gerçek API 28 cihaz koşusunda 6→5, aynı key replay, LOT_BLOCKED, offline taslak ve süreç kalıcılığı. API 35/fiziksel durumunun son sonucu release belgesindedir. |
+| s.2 / Görev 3 | Miktarlı çoktan çoğa ve parçalama lot ilişkileri; çok adımlı ileri/geri izleme | Gerçek input/output FK grafı; kısmi lot, çok çıktı, çok aşama ve recall yarış testleri var. İlişki isimden veya ML'den kurulmaz. |
+| s.2 / Görev 3 | Transfer, satış, iade, yeniden işleme, fire lot hareketleri | Satış, bağlı/bağımsız sevkiyat, dış üreticiye transfer/hammadde iadesi ve kesim farkları var. **Genel depo transferi, müşteri iadesi/iptali ve rework henüz eksik (P1).** DB alanlarının ayrılmış olması bu API'lerin var olduğu anlamına gelmez. |
+| s.2 / zorunlu demo | ET-2026-001 → URT-2026-045 → SUC-2026-045 /85 → A/B/C 30/25/30; recall ve satış engeli | Aynı izole demo DB'de gerçek HTTP/React + kesin stok/iletişim raporu; tekrarda yeni kayıt yaratmayan komutlar. Kaybolan POST cevabından aynı key/body ile devam ayrıca kanıtlandı. |
+| s.2 | Uygun ürünlerde SKT | Alış UI → API → MySQL lot → izleme drawer'ı gerçek E2E; süresi geçmiş lot seçimi/satış reddi mevcut regresyonda var. |
+| s.2 | İkinci kademe dağıtım yalnız kayıt varsa kesin gösterilir | Bilinmeyen market kalanı/son tüketici/ikinci kademe null ve “Bilinmiyor”. İkinci kademe kaydı/modeli yok; olmayan veri tahmin edilmez. Kayıtlı ikinci kademe girişi/raporu geliştirilmeden bu geniş kapsam tamamlandı denmez. |
+| s.2 / ML A+B | Mamul miktarı/EKP ve parça verimi tahmini; gerçek/sapma, örnek veri, yaklaşım/baseline/hata ölçümü | İki Ridge modeli, 600'er SYNTHETIC kayıt, 360/120/120 ayrımı; API ve React karşılaştırmaları. Seed/veri hash'i ve iki modelin tekrar eğitimi doğrulandı. Gerçek işletme doğruluğu kanıtı yoktur. |
+| s.3 / teknik | Kotlin, SQLite, MySQL, modern REST/web/ML; sync yaklaşımı | FastAPI/SQLAlchemy/Alembic, React/TypeScript/Vite/Tailwind, Room/Retrofit, offline scikit-learn/pandas. API JSON model çıkarımı standart Python'dur. |
+| s.3 / teslim | Çalıştırılabilir prototip/kaynak/kurulum, veri/API belgeleri, örnek kayıtlar, test ve üç demo | [README](../README.md), [model](data-model.md), [API](api-contract.md), [runbook](DEMO_RUNBOOK.md), [release kararı](RELEASE_READINESS.md). Final video, kaynak paketinin onayı ve gerçek gönderim/alındı kanıtı bekler. |
+| s.2–3 / isteğe bağlı | OCR önerileri + insan onayı; anomali uyarısı | Kapsam dışında; iki zorunlu ML modelinin yerine sunulmaz. |
 
-1 Kasım 2026 tarihi ve seçilen FastAPI/SQLAlchemy/Alembic/React/Vite/Tailwind/Compose/Room/Retrofit/scikit-learn/pandas/pytest yığını kullanıcı isteğidir. PDF backend için Go veya uygun modern teknolojiye izin verir. Bu aşama tam teslim yerine paralel geliştirilebilir mimari temeldir.
+**Teslim tarihi:** 1 Kasım 2026 23:59 Europe/Istanbul (UTC+3), kullanıcı talimatı; PDF'de tarih yoktur. Teknoloji tercihi de kullanıcı talimatıdır; PDF “Go veya uygun modern teknoloji”ye izin verir. Üretim kullanıcı oturumu/rolleri PDF'nin açık bir yarışma maddesi değildir fakat internete açılacak bir işletme sistemi için zorunludur. Bu prototip yalnız güvenilir yerel demoya uygundur; internet üretimine GO verilmez.

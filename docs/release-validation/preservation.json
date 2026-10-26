@@ -1,0 +1,55 @@
+{
+  "critical_files_byte_unchanged": [
+    "backend/app/costing.py",
+    "backend/app/commands.py",
+    "backend/app/services.py",
+    "backend/app/cuttings.py",
+    "backend/app/recalls.py",
+    "backend/app/lot_graph.py",
+    "docs/PROJECT_CHECKLIST.md",
+    "AGENTS.md"
+  ],
+  "all_existing_sales_functions_ast_unchanged": true,
+  "frontend_src_byte_unchanged": true,
+  "ml_models_byte_unchanged": true,
+  "android_host_xml_tests": 32,
+  "lint_issues": 0,
+  "apk_sha256_matches_saved_evidence": true,
+  "previous_named_volumes_preserved": [
+    "avatar-android-8bba8c-data",
+    "avatar-cutting-4c573c-data",
+    "avatar-integration-20261024-d26a1f-data",
+    "avatar-recall-20261024-910ab7-data",
+    "avatar-sales-20261024-e87e83-data",
+    "byteme-avatar-2026_mysql_data",
+    "avatar-release-v1_mysql_data"
+  ],
+  "all_current_volumes": [
+    "2a49b2c836b2bf8bf0a1f4a11822a2f6db8c303b31f99ddca93da4899c5ad658",
+    "991a494b08abbb4f41d075d912cb2e89dd5ba980094aa2fb9e18c4c670c3c019",
+    "8973a6dbb3e3b5e8c10b953b6e58468d16db1f3b799c5a78835702459444013b",
+    "avatar-android-8bba8c-data",
+    "avatar-cutting-4c573c-data",
+    "avatar-integration-20261024-d26a1f-data",
+    "avatar-recall-20261024-910ab7-data",
+    "avatar-release-v1_mysql_data",
+    "avatar-sales-20261024-e87e83-data",
+    "b211aee965de999c7786521ede7099b95048cbc409cbce4b5f752885449807e3",
+    "byteme-avatar-2026_mysql_data",
+    "d80fdb690f0f80bfd6e9e8b0fddf55ade3f9ce1623c653793290fb99a41b61b4"
+  ],
+  "all_initial_volumes_preserved": true,
+  "initial_volume_names": [
+    "2a49b2c836b2bf8bf0a1f4a11822a2f6db8c303b31f99ddca93da4899c5ad658",
+    "991a494b08abbb4f41d075d912cb2e89dd5ba980094aa2fb9e18c4c670c3c019",
+    "8973a6dbb3e3b5e8c10b953b6e58468d16db1f3b799c5a78835702459444013b",
+    "avatar-android-8bba8c-data",
+    "avatar-cutting-4c573c-data",
+    "avatar-integration-20261024-d26a1f-data",
+    "avatar-recall-20261024-910ab7-data",
+    "avatar-sales-20261024-e87e83-data",
+    "b211aee965de999c7786521ede7099b95048cbc409cbce4b5f752885449807e3",
+    "byteme-avatar-2026_mysql_data",
+    "d80fdb690f0f80bfd6e9e8b0fddf55ade3f9ce1623c653793290fb99a41b61b4"
+  ]
+}

@@ -1,0 +1,51 @@
+{
+  "scanner": "exact actual private credential bytes; no credential values retained",
+  "candidate_secret_values": 9,
+  "existing_local_configs": [
+    {
+      "path": ".env",
+      "mode": "0o600",
+      "tracked": false,
+      "ignored": true
+    },
+    {
+      "path": "backend/.env.runtime",
+      "mode": "0o600",
+      "tracked": false,
+      "ignored": true
+    }
+  ],
+  "source": {
+    "files_or_entries_scanned": 359,
+    "secret_value_hits": []
+  },
+  "frontend_dist": {
+    "files_or_entries_scanned": 23,
+    "secret_value_hits": []
+  },
+  "apk_uncompressed_entries": {
+    "android/app/build/outputs/apk/debug/app-debug.apk": {
+      "files_or_entries_scanned": 162,
+      "secret_value_hits": []
+    },
+    "android/app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk": {
+      "files_or_entries_scanned": 118,
+      "secret_value_hits": []
+    }
+  },
+  "docker_images": {
+    "avatar-release-v1-backend": {
+      "files_or_entries_scanned": 2,
+      "secret_value_hits": []
+    },
+    "avatar-release-v1-frontend": {
+      "files_or_entries_scanned": 2,
+      "secret_value_hits": []
+    }
+  },
+  "history_gitleaks": {
+    "version": "8.24.3",
+    "leaks": 0
+  },
+  "scope": "Available Git refs/history + current nonignored source + actual build artifacts. Runtime environment necessarily contains server key; its values are not exported."
+}

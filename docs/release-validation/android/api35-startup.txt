@@ -1,0 +1,4 @@
+10-25 19:06:58.543   572   610 I ActivityManager: Start proc 2636:com.byteme.avatar/u0a148 for added application com.byteme.avatar
+10-25 19:07:13.691   572   609 I ActivityManager: Extending process start timeout by 13202ms for ProcessRecord{e8fe36b 2636:com.byteme.avatar/u0a148}
+10-25 19:07:31.073   572  2774 E ActivityManager: Reason: Process ProcessRecord{e8fe36b 2636:com.byteme.avatar/u0a148} failed to complete startup
+10-25 19:07:31.190   572  2774 I ActivityManager: Killing 2636:com.byteme.avatar/u0a148 (adj 0): bg anr

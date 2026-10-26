@@ -1,0 +1,61 @@
+{
+  "main_sha": "12dbb144497d3c35697a53debabbf218d53a0684",
+  "statuses": {
+    "health": 200,
+    "ready": 200,
+    "frontend": 200,
+    "models_via_proxy": 200,
+    "direct_requires_key": 401,
+    "forged_key_replaced": 200,
+    "foreign_host": 403,
+    "foreign_origin": 403,
+    "originless_write": 403,
+    "cross_site": 403
+  },
+  "containers": {
+    "mysql": {
+      "health": "healthy",
+      "network_mode": "avatar-release-v1_default",
+      "ports": {
+        "3306/tcp": [
+          {
+            "HostIp": "127.0.0.1",
+            "HostPort": "33326"
+          }
+        ],
+        "33060/tcp": null
+      },
+      "image": "sha256:6cd09145362dfe6831b14545de3d5fd6cc75c37cfd6ef8561429c1fc73518b39"
+    },
+    "backend": {
+      "health": "healthy",
+      "network_mode": "avatar-release-v1_default",
+      "ports": {
+        "5173/tcp": [
+          {
+            "HostIp": "127.0.0.1",
+            "HostPort": "5173"
+          }
+        ],
+        "8000/tcp": [
+          {
+            "HostIp": "127.0.0.1",
+            "HostPort": "8000"
+          }
+        ]
+      },
+      "image": "sha256:f8d972efd76ebf53432f6123fb2702a48ca0df5d0c8b2b7afd94b34ac9c9babf",
+      "uid": "1000",
+      "migration_head": "dc9109a1f001"
+    },
+    "frontend": {
+      "health": "healthy",
+      "network_mode": "container:2967dc2bd9b5a7a572b6df998a01ec97f62ac48992e492fff5041321adabec69",
+      "ports": {},
+      "image": "sha256:4e7a39fc18f9c715bc91b95c644cd2c23995f81ea98401db879425bf86998fc6",
+      "uid": "1000"
+    }
+  },
+  "model_count": 2,
+  "secrets_in_responses": false
+}

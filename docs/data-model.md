@@ -1,67 +1,73 @@
-# Veri modeli — planlanan, henüz migration değil
+# Uygulanan veri modeli
 
-Merkezi veri MySQL 8 / InnoDB. UUID kimlikleri CHAR(36), UTC DATETIME(6), miktar DECIMAL(18,6), maliyet DECIMAL(18,6), nihai EUR tutarı DECIMAL(18,2). Para API'de string. Ürün stok birimi tek ve açık; kg↔paket dönüşümü ürün bazında sürümlenir. Bu diyagram başlangıç şema sözleşmesidir; tablolar henüz oluşturulmadı.
+Görev 12; kaynak taban `12dbb144497d3c35697a53debabbf218d53a0684`. Merkezi otorite MySQL 8 / InnoDB; Alembic head **dc9109a1f001**, **24 domain tablosu**. [Makine okunur şema](release-validation/schema.json), [migration/kilit testleri](release-validation/backend-tests.txt). Bu belge taslak değil, mevcut uygulamanın sözleşmesidir.
+
+UUID'ler VARCHAR(36), zamanlar UTC DATETIME(6), miktar/lot maliyeti DECIMAL(18,6), satış birim fiyatı/tutarı DECIMAL(18,2). API para/miktarları metindir. `package_weight_kg` ürün kartında tutulur; ayrı paket dönüşüm sürüm tablosu yoktur. Ürün/reçete güncelleme kapsamı aşağıda belirtilir.
 
 ```mermaid
 erDiagram
-    PARTY ||--o{ RECEIPT : supplies
-    RECEIPT ||--|{ RECEIPT_LINE : contains
-    PRODUCT ||--o{ LOT : identifies
-    RECEIPT_LINE o|--|| LOT : creates
-    LOT ||--o{ OPERATION_INPUT : consumed_by
-    OPERATION ||--|{ OPERATION_INPUT : consumes
-    OPERATION ||--|{ OPERATION_OUTPUT : produces
-    LOT ||--o| OPERATION_OUTPUT : output_lot
-    OPERATION_INPUT ||--o{ LOT_LINK : source
-    OPERATION_OUTPUT ||--o{ LOT_LINK : target
-    OPERATION ||--o{ SERVICE_COST : incurs
-    RECIPE_VERSION ||--o{ OPERATION : governs
-    RECIPE_VERSION ||--|{ RECIPE_LINE : defines
-    PRODUCT ||--o{ RECIPE_LINE : output
-    LOT ||--o{ STOCK_MOVEMENT : moves
-    LOCATION ||--o{ STOCK_MOVEMENT : at
-    LOT ||--o{ STOCK_BALANCE : balance
-    LOCATION ||--o{ STOCK_BALANCE : holds
-    PARTY ||--o{ SALE : buys
-    SALE ||--|{ SALE_LINE : contains
-    LOT ||--o{ SALE_LINE : sold_from
-    SALE_LINE ||--|| STOCK_MOVEMENT : decrements
-    SHIPMENT ||--|{ SHIPMENT_LINE : contains
-    PARTY ||--o{ SHIPMENT : receives
-    LOT ||--o{ SHIPMENT_LINE : shipped_from
-    SHIPMENT_LINE ||--|| STOCK_MOVEMENT : dispatches
-    RECALL ||--|{ RECALL_LOT : blocks
-    LOT ||--o{ RECALL_LOT : affected
-    IDEMPOTENCY_REQUEST ||--o| SALE : deduplicates
+    PARTIES ||--o{ RECEIPTS : supplier
+    PARTIES o|--o{ LOCATIONS : producer
+    LOCATIONS ||--o{ RECEIPTS : received_at
+    RECEIPTS ||--|{ RECEIPT_LINES : contains
+    PRODUCTS ||--o{ LOTS : identifies
+    PARTIES o|--o{ LOTS : supplier
+    LOTS ||--o| RECEIPT_LINES : purchased_lot
+    PRODUCTS ||--o{ RECEIPT_LINES : purchased_product
+    RECIPE_VERSIONS ||--|{ RECIPE_LINES : defines
+    PRODUCTS ||--o{ RECIPE_LINES : output_product
+    RECIPE_VERSIONS o|--o{ OPERATIONS : snapshot_source
+    OPERATIONS ||--o{ OPERATION_INPUTS : consumes
+    OPERATIONS ||--o{ OPERATION_OUTPUTS : produces
+    OPERATIONS ||--o{ OPERATION_DIFFERENCES : explains
+    OPERATIONS ||--o{ SERVICE_COSTS : service_invoice
+    LOTS ||--o{ OPERATION_INPUTS : actual_input
+    LOTS ||--o| OPERATION_OUTPUTS : new_output
+    OPERATION_INPUTS ||--o{ LOT_LINKS : source
+    OPERATION_OUTPUTS ||--o{ LOT_LINKS : target
+    LOTS ||--o{ STOCK_MOVEMENTS : ledger
+    LOCATIONS ||--o{ STOCK_MOVEMENTS : at
+    LOTS ||--o{ STOCK_BALANCES : balance
+    LOCATIONS ||--o{ STOCK_BALANCES : holds
+    PARTIES ||--o{ SALES : customer
+    SALES ||--|{ SALE_LINES : contains
+    LOTS ||--o{ SALE_LINES : sold_from
+    STOCK_MOVEMENTS ||--o| SALE_LINES : posted_issue
+    SALES o|--o{ SHIPMENTS : linked_delivery
+    PARTIES ||--o{ SHIPMENTS : customer
+    SHIPMENTS ||--|{ SHIPMENT_LINES : contains
+    SALE_LINES o|--o| SHIPMENT_LINES : optional_full_line
+    LOTS ||--o{ SHIPMENT_LINES : shipped_from
+    STOCK_MOVEMENTS ||--o| SHIPMENT_LINES : shared_or_new_issue
+    LOTS ||--o{ RECALLS : source
+    RECALLS ||--|{ RECALL_LOTS : blocks
+    LOTS ||--o{ RECALL_LOTS : membership
+    OPERATIONS o|--o{ PREDICTION_RECORDS : forecast_context
 ```
 
-| Tablo | Önemli alanlar ve kısıtlar |
+| Tablolar | Uygulanan kapsam |
 | --- | --- |
-| party | supplier/customer/producer rolü, ad, iletişim; gerekli alıcı iletişimi erişim kontrollü |
-| product | SKU unique, ad, tür (raw/finished/byproduct), base_unit, paket kg dönüşüm sürümü |
-| receipt / receipt_line | supplier_id, belge/tarih; product_id, lot_id, quantity>0, toplam gerçek net maliyet, currency=EUR |
-| lot | product_id, supplier_id nullable, external_code, received_at, expires_at nullable, blocked; üretilen lot için receipt_line gerekmez (yukarıdaki ilişki receipt_line yönünde zorunlu) |
-| location | depo/dış üretici/karantina; dış üreticideki stok da işletmeye aittir |
-| recipe_version / recipe_line | tür, version unique, ürünler, planlanan oranlar, maliyet anahtarı quantity/value, değer katsayıları; kullanılan sürüm değiştirilemez |
-| operation | kind=external_production/cutting/rework, code unique, producer_id nullable, recipe_version_id, status=draft/posted, tarihi; kapanışta cost snapshot, fark miktarı ve açıklaması |
-| operation_input | operation_id, lot_id FK, gerçek consumed_quantity>0, gönderilen/iade miktarları ayrı hareketler; bir lot birçok emre girebilir |
-| operation_output | operation_id, lot_id FK unique, quantity>0, kind=product/byproduct, allocated_cost, allocation_weight snapshot |
-| lot_link | input_id FK, output_id FK, attributed_input_quantity>0; unique(input_id,output_id). Her iki satır aynı operasyonda olmalı; her girdinin dağıtılan miktarı fiili tüketime eşit |
-| service_cost | operation_id, fatura referansı, amount>=0, currency; hammadde bedelini tekrar içermez |
-| stock_movement | lot_id, location_id, signed_quantity≠0, type, transfer_group_id nullable, operation/receipt/sale/shipment referansı, reversal_of nullable, timestamp; immutable |
-| stock_balance | PK(lot_id,location_id), quantity>=0; defterden türetilebilir, transaction içinde güncellenir |
-| sale / sale_line | müşteri nullable (anonim perakende), client_request_id; satır lot FK, quantity>0, net fiyat, stock_movement_id unique FK |
-| shipment / shipment_line | alıcı ve iletişim snapshot, sevk tarihi, lot FK, quantity, stock_movement_id unique FK; satışa bağlı sevkiyatta ikinci kez stok düşürülmez |
-| recall / recall_lot | reason, source_lot_id, opened_at; PK(recall_id,lot_id), status; kaynak ve transitive türev lotlar |
-| idempotency_request | scope+key unique, request_hash, response, status, created_at; satış ve diğer posted komutların güvenli tekrarı |
+| products | SKU unique; raw/finished/byproduct; kg/package/unit; species ve paket kg. Kartlar create/list ile yönetilir; ayrı bir fiyat listesi/VKP alanı yoktur. |
+| parties / locations | İş ortağı rolleri JSON, iletişim; warehouse/external_producer/quarantine. Bunlar kullanıcı oturumu veya RBAC rolleri değildir. |
+| receipts / receipt_lines / lots | Tedarikçi, kabul konumu, zaman, referans, lot FK, miktar, toplam maliyet, opsiyonel alış birim fiyatı/SKT. Lot kodu global unique değildir. Üretilen lotun alış satırı olmayabilir. |
+| recipe_versions / recipe_lines | `(code,version)` unique; tür/giriş ürünü, quantity/value, parça ürünleri ve referans EUR/kg. Eski sürüm maliyeti değişmez; availability ayrı komuttur. |
+| operations / inputs / outputs / differences / service_costs | Taslak/kesin kapanış, gerçek tüketim ve maliyetler, çıktı lotları, açıklanmış fire/diğer kayıp, hizmet faturası. `allocation_snapshot` reçeteyi işlemde dondurur. DB'de rework türünün ayrılmış olması çalışan rework API'si anlamına gelmez. |
+| lot_links | Gerçek input/output FK çiftleri; unique(input_id,output_id); miktar atfı. İsim veya model tahmininden bağ üretilmez. |
+| stock_movements / stock_balances | İmzalı değişmez defter; lot/konum bakiyesi PK ve negatif stok CHECK. Transfer grubu ve `reversal_of` alanları vardır; genel transfer/müşteri iadesi/iptal API'leri henüz yoktur. |
+| sales / sale_lines | Müşteri zorunlu FK; kesin net fiyat/tutar ve **consumed_cost** snapshot'ı; benzersiz stok hareketi. Tarihsel kârlılık bu maliyetten okunur; bugünkü stok veya gösterim EKP'sinden türetilmez. |
+| shipments / shipment_lines | Alıcı/iletişim snapshot'ı; bağlı sevk tam satış satırının hareketini paylaşır; bağımsız sevk yeni hareket oluşturur. Aynı hareket iki sevkiyatta kullanılamaz. |
+| recalls / recall_lots | Kaynak ve transitive türev üyeliği, atomik blok. Ayrı status/lifecycle veya blok kaldırma endpoint'i yoktur. |
+| idempotency_requests | PK(scope,key); canonical request hash + orijinal durum/cevap. İş kaydıyla aynı transaction. JSON cevapta ID bulunması Sale'a fiziksel FK olduğu anlamına gelmez. |
+| prediction_records | Append-only tahmin/model/özellik/bağlam/sonuç snapshot'ı; yalnız operation_id gerçek FK. Bağlam JSON'undaki ürün eşlemeleri snapshot'tır; ledger/recall kararlarını yönetmez. |
 
-## İşlem bütünlüğü
+## Transaction ve raporlama
 
-- Sevk bir mülkiyet tüketimi değildir: aynı lotun depodan dış üretici konumuna iki eşleşen hareketi tek transaction içinde yazılır. Tüketim/çıktı kabulü kapanışta kaydedilir.
-- Stok değiştiren işlem: idempotency kontrolü → ilgili lotları ve bakiye satırlarını deterministik ID sırasıyla `SELECT ... FOR UPDATE` → blok/son tarih/stoğu doğrula → hareket ve bakiye → maliyet/lot bağlantıları → commit. Hata halinde tamamı rollback. Yeni bakiye satırı unique kısıtıyla yarışa karşı korunur.
-- Recall ve satış aynı lot kilitleme protokolünü kullanır. Recall oluştururken soy grafına bağlı lotlar sabit sırada kilitlenir; üretim de girdileri kilitleyip blok durumunu kontrol eder. Kapanmış graf değiştirilemez; yeni türev oluşturma recall ile yarışamaz. Deadlock için sınırlı transaction retry uygulanır.
-- Lot_link döngü oluşturamaz; yalnızca yeni çıktı lotlarına yönelir. Geri/ileri rapor visited kümesiyle çok adımlı dolaşır. Tahmini bir karışım oranı gerçek kayıt diye sunulmaz; kesin ayrım bilinmiyorsa bütün ortak çıktılar etkilenmiş sayılır.
-- Dağıtılan tutar toplamı girdi gerçek tüketim maliyeti + hizmete eşittir. Kuruş artığı deterministik satıra gider; gösterim yuvarlaması defter toplamını değiştirmez.
-- İade ve yeniden işleme kaynak lot ve ters hareket referansını korur. Bilinen alıcı yoksa izleme “anonim/bilinmiyor” der. İkinci kademe dağıtım yalnızca ayrı kaydı varsa raporlanır.
+İlgili lotlar deterministik sırayla `FOR UPDATE` kilitlenir; bloke/SKT/bakiye yeniden kontrol edilir. Defter, bakiye, kesin maliyet, lot bağları ve idempotency cevabı birlikte commit/rollback olur. Yeni bakiye yarışları unique kısıtla korunur. Recall grafı kilitlerden sonra yeniden doğrulanır. Gerçek InnoDB 1213 deadlock sonrası aynı komutun tekrarını ve kısmi yazıların geri alınmasını Görev 12 testi doğrular; limit üç denemedir. Limit tüketimi ayrıca kontrollü sürücü hatasıyla sınanır.
 
-Gelecek MySQL testleri: eşzamanlı çift satış negatif stok üretmez; recall/satış yarışı; deadlock retry; idempotent tekrar; para dağıtım toplamı; çoktan çoğa ve çok adımlı lot grafı. SQLite bu testlerin yerine geçmez.
+Dağıtım toplamı gerçek tüketim + hizmet toplamına eşittir. 18,16 EUR gösterim EKP'si 85 ile çarpılıp yeni toplam yaratılmaz. Kısmi lotlarda kümülatif maliyet yuvarlaması son tüketimde artığı korur.
+
+`GET /v1/sales/{id}/profitability` yalnız SaleLine net tutarı ve `consumed_cost` üzerinden VKP, brüt kâr ve marj okur. Yeni muhasebe kaydı/migration oluşturmaz; iade, vergi, iskonto ve genel gider hesabı değildir. Farklı stok birimleri tek miktar toplamında birleştirilmez.
+
+İleri/geri izleme visited kümesiyle bütün kesin grafı dolaşır. Kaydı olmayan market kalanı, son tüketici satışı ve ikinci kademe dağıtım **bilinmiyor/null** kalır. İkinci kademe dağıtım kayıt tablosu yoktur. Genel transfer, müşteri iadesi/ters hareket ve rework için ayrı API/migration/yarış testleri gerekir; ayrılmış alanlar tamamlanmış özellik sayılmaz.
+
+Room'un sekiz cihaz tablosu MySQL'in kopyası veya stok otoritesi değildir: [Android veri sözleşmesi](../android/README.md). Offline yalnız taslak, kesin satış server onayından sonra; değişmez key/body outbox'ta korunur.

@@ -1,0 +1,24 @@
+import {test,expect} from '@playwright/test';
+import {api,prefix,confirm} from './fixtures';
+import type {Party,Product,Location,ReceiptDetail,Lot} from '../../src/lib/types';
+test('alış UI → gerçek lot kaydında SKT roundtrip ve stok uygunluğu',async({page,request})=>{
+ const p=prefix(),supplier=await api<Party>(request,'/parties',{name:p+' KURGUSAL SKT tedarikçisi',roles:['supplier']}),location=await api<Location>(request,'/locations',{name:p+' KURGUSAL SKT deposu'}),product=await api<Product>(request,'/products',{sku:p+'-EXP',name:p+' KURGUSAL et',type:'raw',base_unit:'kg'});
+ const expiry=new Date();expiry.setUTCDate(expiry.getUTCDate()+90);const date=expiry.toISOString().slice(0,10);
+ await page.goto('/alislar');
+ await page.getByLabel('Tedarikçi',{exact:true}).selectOption(supplier.id);
+ await page.getByLabel('Kabul deposu',{exact:true}).selectOption(location.id);
+ await page.getByLabel('Belge / alış referansı',{exact:true}).fill(p+'-SKT');
+ await page.getByLabel('Ürün 1',{exact:true}).selectOption(product.id);
+ await page.getByLabel('Lot numarası 1',{exact:true}).fill(p+'-EXP-LOT');
+ await page.getByLabel('Miktar 1',{exact:true}).fill('2');
+ await page.getByLabel('Toplam maliyet 1 (EUR)',{exact:true}).fill('19,40');
+ await page.getByLabel('Son tüketim tarihi 1',{exact:true}).fill(date);
+ const response=page.waitForResponse(r=>r.request().method()==='POST'&&r.url().endsWith('/receipts'));
+ await confirm(page,'Alışı kaydet');const receipt=await(await response).json() as ReceiptDetail;
+ await expect(page.getByText('Alış kaydedildi. Lotlar ve stok hareketleri oluşturuldu.',{exact:true})).toBeVisible();
+ const lot=await api<Lot>(request,'/lots/'+receipt.lines[0].lot_id);expect(lot.expires_at).toBe(date);
+ expect(lot.external_code).toBe(p+'-EXP-LOT');expect(lot.product_id).toBe(product.id);
+ const stocks=await api<{items:Array<{available_quantity:string}>}>(request,'/stocks?lot_id='+lot.id);expect(stocks.items[0].available_quantity).toBe('2.000000');
+ await page.goto('/izlenebilirlik?lot='+lot.id);await page.getByRole('button').filter({hasText:p+'-EXP-LOT'}).first().click();
+ await expect(page.getByRole('dialog')).toContainText(date);
+});

@@ -1,0 +1,57 @@
+{
+  "date": "2026-10-26",
+  "scanner": "Gitleaks8.24.3 + actual private credential byte comparison; no values retained",
+  "candidate_actual_secret_values": 6,
+  "existing_local_configs": [
+    {
+      "path": ".env",
+      "mode": "0o600",
+      "tracked": false,
+      "ignored": true
+    },
+    {
+      "path": "backend/.env.runtime",
+      "mode": "0o600",
+      "tracked": false,
+      "ignored": true
+    }
+  ],
+  "source": {
+    "files_or_entries_scanned": 428,
+    "secret_value_hits": []
+  },
+  "frontend_dist": {
+    "files_or_entries_scanned": 23,
+    "secret_value_hits": []
+  },
+  "apk_uncompressed_entries": {
+    "android/app/build/outputs/apk/debug/app-debug.apk": {
+      "files_or_entries_scanned": 162,
+      "secret_value_hits": []
+    },
+    "android/app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk": {
+      "files_or_entries_scanned": 118,
+      "secret_value_hits": []
+    }
+  },
+  "docker_images": {
+    "avatar-release-v1-backend": {
+      "files_or_entries_scanned": 2,
+      "secret_value_hits": []
+    },
+    "avatar-release-v1-frontend": {
+      "files_or_entries_scanned": 2,
+      "secret_value_hits": []
+    }
+  },
+  "history_gitleaks": {
+    "leaks": 0,
+    "available_commits_total": 51,
+    "scanned_nonmerge_commits": 26
+  },
+  "current_source_gitleaks": {
+    "exit_code": 0,
+    "leaks": 0
+  },
+  "scope": "Available local Git refs/history and current nonignored source, frontend dist, uncompressed application/test APK entries, image config/history. Runtime API key intentionally stays server-side. Existing ignored local configs are not deliverables."
+}

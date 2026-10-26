@@ -1,0 +1,118 @@
+
+> byteme-avatar-web@0.1.0 test:e2e
+> playwright test
+
+
+Running 15 tests using 1 worker
+
+(node:29101) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 tests/browser/accessibility-v2.spec.ts:5:1 › WCAG AA otomatik kontrast, etiket ve yapı denetimi: desktop/mobil ana ekranlar (40.9s)
+  ✓   2 tests/browser/dashboard.spec.ts:49:1 › gerçek UI: çok satırlı alış → sevk → üretim kapanışı → doğru EKP ve stok (20.1s)
+  ✓   3 tests/browser/dashboard.spec.ts:248:1 › belgedeki mevcut demo gerçek API kaydından gösterilir (2.1s)
+  ✓   4 tests/browser/dashboard.spec.ts:265:1 › tablet ve mobil yerleşim; recall onay verilmeden işlem başlatmaz (3.2s)
+  ✓   5 tests/browser/dashboard.spec.ts:303:1 › yerel proxy uzak origin/host ve originsiz yazmayı reddeder; gizli dosya servis edilmez (179ms)
+  ✓   6 tests/browser/integration-v2.spec.ts:52:1 › reçete UI → quantity/value kesimleri; eksik açıklama ve gerçek backend 422; iki ayrı kaynak lot (9.8s)
+  ✘   7 tests/browser/integration-v2.spec.ts:185:1 › lotlu UI satış → bağlı sevkiyat aynı hareket; bağımsız sevkiyat yeni çıkış (14.9s)
+(node:31169) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   8 tests/browser/integration-v2.spec.ts:259:1 › gerçek ileri/geri izleme ve ET recall → Market A/B/C 30/25/30; onay şart (4.8s)
+  ✓   9 tests/browser/integration-v2.spec.ts:352:1 › stale lot seçimi sonrası gerçek LOT_BLOCKED; süresi geçmiş lot seçenekleri kapalı (3.6s)
+  ✓  10 tests/browser/integration-v2.spec.ts:391:1 › gerçek commit sonrası kayıp cevap: reload ve aynı UUID/gövde ile retry tek satış üretir (3.8s)
+  ✓  11 tests/browser/integration-v2.spec.ts:444:1 › üretim ML UI: gerçek forecast UUID → kapanış sonrası 85 paket ve Decimal sapma (3.5s)
+  ✓  12 tests/browser/integration-v2.spec.ts:499:1 › kesim ML UI: beş gerçek ürün eşlemesi ve 25 kg tahmin/gerçek/sapma (3.4s)
+  ✓  13 tests/browser/integration-v2.spec.ts:558:1 › beş viewport: gerçek modüller, mobil satış ve drawer klavye erişimi; sayfa taşmaz (56.8s)
+  ✓  14 tests/browser/integration-v2.spec.ts:669:1 › yan ürün ayrı lot/stok; diğer kayıp açıklaması ve reçete kullanılabilirliği gerçek UI (6.4s)
+  ✓  15 tests/browser/release-hardening.spec.ts:4:1 › alış UI → gerçek lot kaydında SKT roundtrip ve stok uygunluğu (3.7s)
+
+
+  1) tests/browser/integration-v2.spec.ts:185:1 › lotlu UI satış → bağlı sevkiyat aynı hareket; bağımsız sevkiyat yeni çıkış
+
+    TimeoutError: locator.click: Timeout 10000ms exceeded.
+    Call log:
+      - waiting for getByRole('row').filter({ hasText: 'V2-31810223 Market' }).getByRole('button', { name: 'Sevkiyatı aç', exact: true })
+        - locator resolved to <button class="text-button">Sevkiyatı aç</button>
+      - attempting click action
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <td class="">…</td> from <dialog open="" class="detail-drawer" aria-labelledby="_r_a_">…</dialog> subtree intercepts pointer events
+        - retrying click action
+        - waiting 20ms
+        - waiting for element to be visible, enabled and stable
+        - element is visible, enabled and stable
+        - scrolling into view if needed
+        - done scrolling
+        - <td class="">…</td> from <dialog open="" class="detail-drawer" aria-labelledby="_r_a_">…</dialog> subtree intercepts pointer events
+      2 × retrying click action
+          - waiting 100ms
+          - waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <dialog open="" class="detail-drawer" aria-labelledby="_r_a_">…</dialog> intercepts pointer events
+      4 × retrying click action
+          - waiting 500ms
+          - waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <td class="">…</td> from <dialog open="" class="detail-drawer" aria-labelledby="_r_a_">…</dialog> subtree intercepts pointer events
+        - retrying click action
+          - waiting 500ms
+          - waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <td class="">…</td> from <dialog open="" class="detail-drawer" aria-labelledby="_r_a_">…</dialog> subtree intercepts pointer events
+        - retrying click action
+          - waiting 500ms
+          - waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <dialog open="" class="detail-drawer" aria-labelledby="_r_a_">…</dialog> intercepts pointer events
+        - retrying click action
+          - waiting 500ms
+          - waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <dialog open="" class="detail-drawer" aria-labelledby="_r_a_">…</dialog> intercepts pointer events
+      2 × retrying click action
+          - waiting 500ms
+          - waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <td class="">…</td> from <dialog open="" class="detail-drawer" aria-labelledby="_r_a_">…</dialog> subtree intercepts pointer events
+      - retrying click action
+        - waiting 500ms
+
+
+      228 |   await page.keyboard.press('Escape');
+      229 |   const openShipment = page.getByRole('row').filter({hasText:s.customer.name}).getByRole('button',{name:'Sevkiyatı aç',exact:true});
+    > 230 |   await openShipment.click();
+          |                      ^
+      231 |   await expect(page.getByRole('button',{name:'Ayrıntıyı kapat',exact:true})).toBeFocused();
+      232 |   await page.keyboard.press('Shift+Tab');
+      233 |   await expect(page.getByRole('dialog').locator('summary').filter({hasText:'Stok hareketi'}).last()).toBeFocused();
+        at /workspace/byteme-avatar-2026/frontend/tests/browser/integration-v2.spec.ts:230:22
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/integration-v2-lotlu-UI-sa-eac72-ağımsız-sevkiyat-yeni-çıkış/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/integration-v2-lotlu-UI-sa-eac72-ağımsız-sevkiyat-yeni-çıkış/error-context.md
+
+    Error Context: test-results/integration-v2-lotlu-UI-sa-eac72-ağımsız-sevkiyat-yeni-çıkış/error-context.md
+
+  1 failed
+    tests/browser/integration-v2.spec.ts:185:1 › lotlu UI satış → bağlı sevkiyat aynı hareket; bağımsız sevkiyat yeni çıkış
+  14 passed (3.0m)
+npm notice
+npm notice New major version of npm available! 11.9.0 -> 12.2.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.1
+npm notice To update run: npm install -g npm@12.2.1
+npm notice
