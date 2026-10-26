@@ -1,0 +1,35 @@
+{
+  "sdk": 28,
+  "image": "AOSP default x86_64",
+  "physical_device": false,
+  "tests": [
+    {
+      "class": "com.byteme.avatar.BackendDemoTest",
+      "name": "realKotlinSaleSixToFiveReplayAndStaleRecallRejection",
+      "seconds": "62.781",
+      "passed": true
+    },
+    {
+      "class": "com.byteme.avatar.DeviceTests",
+      "name": "realSqliteFileRetainsDraftKeyAndConfirmedIdsAfterReopen",
+      "seconds": "2.234",
+      "passed": true
+    },
+    {
+      "class": "com.byteme.avatar.DeviceTests",
+      "name": "keystoreSecretIsEncryptedAndSurvivesNewSettingsInstance",
+      "seconds": "0.328",
+      "passed": true
+    },
+    {
+      "class": "com.byteme.avatar.OfflineDeviceTest",
+      "name": "radiosOffCatalogAndDraftPersistWithoutOutboxOrConfirmedSale",
+      "seconds": "33.81",
+      "passed": true
+    }
+  ],
+  "passed": 4,
+  "failed": 0,
+  "skipped": 0,
+  "test_verifier_change": "Read-only stock checks use independent HTTP clients; all business assertions retained."
+}

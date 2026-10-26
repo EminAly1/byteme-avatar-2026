@@ -1,0 +1,92 @@
+[
+  {
+    "width": 1440,
+    "route": "/",
+    "violations": []
+  },
+  {
+    "width": 1440,
+    "route": "/parcalama",
+    "violations": []
+  },
+  {
+    "width": 1440,
+    "route": "/satislar",
+    "violations": []
+  },
+  {
+    "width": 1440,
+    "route": "/izlenebilirlik",
+    "violations": []
+  },
+  {
+    "width": 1440,
+    "route": "/geri-cagirma",
+    "violations": []
+  },
+  {
+    "width": 1440,
+    "route": "/yapay-zeka",
+    "violations": []
+  },
+  {
+    "width": 1440,
+    "route": "/urunler",
+    "violations": []
+  },
+  {
+    "width": 1440,
+    "route": "/alislar",
+    "violations": []
+  },
+  {
+    "width": 1440,
+    "route": "/uretim",
+    "violations": []
+  },
+  {
+    "width": 390,
+    "route": "/",
+    "violations": []
+  },
+  {
+    "width": 390,
+    "route": "/parcalama",
+    "violations": []
+  },
+  {
+    "width": 390,
+    "route": "/satislar",
+    "violations": []
+  },
+  {
+    "width": 390,
+    "route": "/izlenebilirlik",
+    "violations": []
+  },
+  {
+    "width": 390,
+    "route": "/geri-cagirma",
+    "violations": []
+  },
+  {
+    "width": 390,
+    "route": "/yapay-zeka",
+    "violations": []
+  },
+  {
+    "width": 390,
+    "route": "/urunler",
+    "violations": []
+  },
+  {
+    "width": 390,
+    "route": "/alislar",
+    "violations": []
+  },
+  {
+    "width": 390,
+    "route": "/uretim",
+    "violations": []
+  }
+]

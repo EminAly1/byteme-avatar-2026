@@ -1,0 +1,32 @@
+{
+  "test_database_preserved": "avatar_release_demo_test",
+  "private_device_backup": "/tmp/avatar-release-api28-first-vde89t1s",
+  "device_data_copied_before_reset": true,
+  "tests": [
+    {
+      "class": "com.byteme.avatar.BackendDemoTest",
+      "name": "realKotlinSaleSixToFiveReplayAndStaleRecallRejection",
+      "passed": false,
+      "failure_type": null
+    },
+    {
+      "class": "com.byteme.avatar.DeviceTests",
+      "name": "realSqliteFileRetainsDraftKeyAndConfirmedIdsAfterReopen",
+      "passed": true,
+      "failure_type": null
+    },
+    {
+      "class": "com.byteme.avatar.DeviceTests",
+      "name": "keystoreSecretIsEncryptedAndSurvivesNewSettingsInstance",
+      "passed": true,
+      "failure_type": null
+    },
+    {
+      "class": "com.byteme.avatar.OfflineDeviceTest",
+      "name": "radiosOffCatalogAndDraftPersistWithoutOutboxOrConfirmedSale",
+      "passed": true,
+      "failure_type": null
+    }
+  ],
+  "note": "Real Kotlin sale and recall persisted; final verification request returned IOException/EOF. Not counted as a passing run."
+}

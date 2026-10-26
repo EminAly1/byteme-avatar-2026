@@ -39,6 +39,45 @@ def sale_detail(db, sale):
     return result
 
 
+def profitability(db, sale):
+    """Read-only net sale / recognized lot cost report, never a stock posting.
+
+    Use immutable SaleLine.consumed_cost snapshots, not today's lot balance,
+    a rounded display EKP, a forecast, or the selling price of another sale.
+    """
+    rows = db.scalars(select(m.SaleLine).where(m.SaleLine.sale_id == sale.id)
+                      .order_by(m.SaleLine.line_no)).all()
+    with localcontext() as context:
+        context.prec = 48
+
+        def metrics(revenue, cost):
+            profit = revenue - cost
+            margin = profit / revenue * Decimal('100') if revenue else None
+            return {
+                'net_revenue_eur': format(revenue, '.2f'),
+                'recognized_cost_eur': format(cost, '.6f'),
+                'gross_profit_eur': format(profit, '.6f'),
+                'gross_profit_display_eur': format(profit.quantize(CENT, rounding=ROUND_HALF_UP), '.2f'),
+                'margin_percent': format(margin.quantize(Decimal('.000001'), rounding=ROUND_HALF_UP), '.6f') if margin is not None else None,
+            }
+
+        cost = sum((row.consumed_cost for row in rows), Decimal('0'))
+        return {
+            'sale_id': sale.id, 'currency': 'EUR',
+            'basis': 'recorded_net_sale_and_consumed_lot_cost',
+            'limitations': ['Vergi, iskonto, müşteri iadesi ve genel gider muhasebesi kapsam dışıdır.'],
+            **metrics(sale.total_amount, cost),
+            'lines': [{
+                'sale_line_id': row.id, 'lot_id': row.lot_id,
+                'stock_movement_id': row.stock_movement_id,
+                'quantity': format(row.quantity, '.6f'), 'unit': row.unit,
+                'vkp_eur_per_unit': format(row.unit_price, '.2f'),
+                'recognized_unit_cost_eur': format((row.consumed_cost / row.quantity).quantize(Decimal('.000001'), rounding=ROUND_HALF_UP), '.6f'),
+                **metrics(row.total_amount, row.consumed_cost),
+            } for row in rows],
+        }
+
+
 def shipment_detail(db, shipment):
     return {**services.entity(shipment), 'lines': [services.entity(row) for row in db.scalars(
         select(m.ShipmentLine).where(m.ShipmentLine.shipment_id == shipment.id).order_by(m.ShipmentLine.line_no))]}

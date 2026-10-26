@@ -1,0 +1,6 @@
+{
+  "generic_scanner_matches": 65,
+  "actual_private_credential_byte_matches": 0,
+  "finding": "All heuristic matches were fictional database UUIDs under the JSON field primary_key; no API credentials.",
+  "resolution": "Manifest now uses explicit identity_columns/identity_values; no scanner allowlist or ignored finding. Ledger unchanged."
+}

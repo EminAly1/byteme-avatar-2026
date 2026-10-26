@@ -1,0 +1,37 @@
+{
+  "sdk": 35,
+  "image": "AOSP default x86_64",
+  "method": "Direct real AndroidJUnitRunner after warm-start; no Gradle reinstall",
+  "passed": 3,
+  "failed": 1,
+  "skipped": 0,
+  "tests": [
+    {
+      "class": "com.byteme.avatar.BackendDemoTest",
+      "test": "realKotlinSaleSixToFiveReplayAndStaleRecallRejection",
+      "code": 0,
+      "passed": true
+    },
+    {
+      "class": "com.byteme.avatar.DeviceTests",
+      "test": "realSqliteFileRetainsDraftKeyAndConfirmedIdsAfterReopen",
+      "code": 0,
+      "passed": true
+    },
+    {
+      "class": "com.byteme.avatar.DeviceTests",
+      "test": "keystoreSecretIsEncryptedAndSurvivesNewSettingsInstance",
+      "code": 0,
+      "passed": true
+    },
+    {
+      "class": "com.byteme.avatar.OfflineDeviceTest",
+      "test": "radiosOffCatalogAndDraftPersistWithoutOutboxOrConfirmedSale",
+      "code": -2,
+      "passed": false
+    }
+  ],
+  "error": "OfflineDeviceTest.kt:35: waitUntil network.connected=false timed out after 60000 ms. Full API35 acceptance remains failed.",
+  "root_cause": "Not conclusively isolated; inspect actual emulator connectivity separately.",
+  "physical_device": false
+}

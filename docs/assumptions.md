@@ -15,7 +15,16 @@ Kaynak docs/AVATAR_Assessment.pdf (3 sayfa), gerçekten okunmuştur. Belge gerek
 | Lot kimliği | İç UUID, tedarikçi lot kodundan ayrıdır; kod global benzersiz varsayılmaz. Parti+ürün+tedarikçi ile gelen tekrarlar idempotency ile yönetilir. |
 | Recall kapsamı | İleri/geri izleme tam kayıt grafını dolaşır; yalnızca kaydedilmiş ikinci kademe alıcı gösterilir. Türetilen tüm etkilenen lotlar bloklanır; kapatılmamış üretimde bloke girdi kullanımı da reddedilir. |
 | Offline satış | PDF tutarlı SQLite/MySQL senkronizasyonu ister ama çatışma kuralı vermez. Güvenli varsayım: offline yalnızca taslak, kesin satış backend onayından sonra. |
-| Güvenlik | Kimlik doğrulama ve roller henüz uygulanmaz. Health dışında iş endpoint'leri açılmadan yetkilendirme gerekir; foundation internete açık üretim hizmeti değildir. |
-| ML | İki model zorunlu; OCR ve anomali isteğe bağlı ve bu aşama dışında. Veri miktarı bilinmiyor; sentetik veri açıkça etiketlenecek. |
+| Güvenlik | İş endpoint’leri X-API-Key ile yerel demo istemcisini doğrular; gerçek kullanıcı oturumu ve roller yoktur. İnternet üretimi ve fiziksel cihaz HTTPS kabulü uygulanmadı. |
+| ML | İki model zorunlu; OCR ve anomali isteğe bağlı ve bu aşama dışında. Her model 600 SYNTHETIC kayıtla eğitildi; gerçek tarihsel kayıt 0. Gerçek işletme performansı doğrulanmadı. |
 
-FastAPI kullanıcının seçimi ve PDF'nin “Go veya uygun modern teknoloji” koşuluyla uyumludur. Android/ML bu aşamada yalnızca yönergedir. Domain API'leri, tablolar ve üç uçtan uca demo sonraki geliştirme görevleridir.
+FastAPI kullanıcının seçimi ve PDF'nin “Go veya uygun modern teknoloji” koşuluyla uyumludur. Android ve iki sentetik ML modeli uygulanmıştır; güncel kanıt RELEASE_READINESS.md içindedir.
+
+
+## Görev 12 kapsam açıklaması
+
+Kuzu notunda PDF adaydan çelişkiyi saptayıp açıklamasını ister; gerçek fatura sunma koşulu eklemez. 287,50 EUR ve açıkça kurgusal parça ağırlıklarıyla yapılan demo bu açıklamayı somutlaştırır; 3 kg farkın gerçek işletme sınıfı otomatik atanmaz.
+
+VKP raporu gerçekleşmiş SaleLine.unit_price değerini net EUR fiyatı olarak kullanır. Brüt kâr Sale.total_amount − SaleLine.consumed_cost toplamıdır; marj net gelire bölünür, sıfır gelirde null. Yeni stok/muhasebe kaydı oluşturulmaz. Vergi, iskonto, müşteri iadesi ve genel giderler modellenmediğinden şirket net kârı iddiası yoktur.
+
+Demo kayıtları ayrı *_test şemasında KURGUSAL/SYNTHETIC veri setidir. ET/URT/SUC kodları PDF senaryosu için korunur. Eski seed isimleri/payload'ları değiştirilmedi: sabit idempotency anahtarlarının gövdelerini sonradan değiştirmek 409 yaratır. Veri seti manifest'i ve demo raporu kayıtların tamamını kurgusal olarak etiketler; gerçek işletme verisiyle birleştirilmez.

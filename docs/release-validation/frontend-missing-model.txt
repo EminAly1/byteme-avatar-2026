@@ -1,0 +1,14 @@
+
+> byteme-avatar-web@0.1.0 test:e2e:missing-models
+> playwright test --config playwright.missing-models.config.ts
+
+[WebServer] (node:41532) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 1 test using 1 worker
+
+(node:41559) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/model-unavailable/model.spec.ts:4:1 › gerçek eksik-model backend 503: hata görünür, sahte tahmin/metrik yok (1.5s)
+
+  1 passed (3.6s)

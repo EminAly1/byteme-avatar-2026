@@ -1,0 +1,9 @@
+[
+  {
+    "scenario": "sale + linked + independent shipment",
+    "sale_id": "465aa7b3-b641-4f81-9205-89253ae8c4b9",
+    "shipment_id": "27112096-b1ef-44f5-8d42-a0a24a5f9a2a",
+    "shared_movement": "ecd39016-3c3c-4993-abb7-3123b79a55b0",
+    "stock": "10→9→9→7"
+  }
+]

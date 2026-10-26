@@ -1,0 +1,24 @@
+{
+  "reports": [
+    "android/app/build/test-results/testDebugUnitTest/TEST-com.byteme.avatar.ComposeSmokeTest.xml",
+    "android/app/build/test-results/testDebugUnitTest/TEST-com.byteme.avatar.SalesRepositoryTest.xml",
+    "android/app/build/test-results/testReleaseUnitTest/TEST-com.byteme.avatar.ComposeSmokeTest.xml",
+    "android/app/build/test-results/testReleaseUnitTest/TEST-com.byteme.avatar.SalesRepositoryTest.xml"
+  ],
+  "host_executions": 32,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "timestamps": [
+    "2026-10-25T18:15:10",
+    "2026-10-25T18:15:15",
+    "2026-10-25T18:15:30",
+    "2026-10-25T18:15:35"
+  ],
+  "lint_issues": 0,
+  "apk": {
+    "path": "android/app/build/outputs/apk/debug/app-debug.apk",
+    "bytes": 17608683,
+    "sha256": "4cdb02856b54841bd71036b82976f0e24011c73532f57da9a12e022af0c9d804"
+  }
+}

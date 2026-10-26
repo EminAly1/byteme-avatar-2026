@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<testsuite name="com.byteme.avatar.BackendDemoTest" tests="4" failures="0" errors="0" skipped="0" time="101.174" timestamp="2026-10-25T18:45:10" hostname="localhost">
+  <properties>
+    <property name="device" value="emulator-5554 - 9" />
+    <property name="flavor" value="" />
+    <property name="project" value=":app" />
+  </properties>
+  <testcase name="realKotlinSaleSixToFiveReplayAndStaleRecallRejection" classname="com.byteme.avatar.BackendDemoTest" time="62.781" />
+  <testcase name="realSqliteFileRetainsDraftKeyAndConfirmedIdsAfterReopen" classname="com.byteme.avatar.DeviceTests" time="2.234" />
+  <testcase name="keystoreSecretIsEncryptedAndSurvivesNewSettingsInstance" classname="com.byteme.avatar.DeviceTests" time="0.328" />
+  <testcase name="radiosOffCatalogAndDraftPersistWithoutOutboxOrConfirmedSale" classname="com.byteme.avatar.OfflineDeviceTest" time="33.81" />
+</testsuite>

@@ -225,7 +225,12 @@ test("lotlu UI satış → bağlı sevkiyat aynı hareket; bağımsız sevkiyat 
   );
   expect(await stock(request, s.lot, s.location.id)).toBe("9.000000");
   await expect(page.getByRole("dialog")).toBeVisible();
-  await page.keyboard.press('Escape');
+  // The POST response can arrive before the new native modal receives focus.
+  // Exercise Escape only after its focus target is ready, then verify closure.
+  const closeShipment = page.getByRole('button', {name:'Ayrıntıyı kapat',exact:true});
+  await expect(closeShipment).toBeFocused();
+  await closeShipment.press('Escape');
+  await expect(page.getByRole('dialog')).toBeHidden();
   const openShipment = page.getByRole('row').filter({hasText:s.customer.name}).getByRole('button',{name:'Sevkiyatı aç',exact:true});
   await openShipment.click();
   await expect(page.getByRole('button',{name:'Ayrıntıyı kapat',exact:true})).toBeFocused();

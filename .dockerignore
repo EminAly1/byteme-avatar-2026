@@ -1,0 +1,16 @@
+**
+!backend/
+!backend/Dockerfile
+!backend/requirements.txt
+!backend/app/
+!backend/app/**
+!backend/alembic/
+!backend/alembic/**
+!backend/alembic.ini
+!ml/
+!ml/models/
+!ml/models/*.json
+!ml/models/*.sha256
+**/__pycache__/
+**/*.pyc
+**/.env*

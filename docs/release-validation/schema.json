@@ -1,0 +1,1762 @@
+{
+  "products": {
+    "columns": {
+      "species": {
+        "type": "VARCHAR(200)",
+        "nullable": true,
+        "primary_key": false,
+        "foreign_keys": []
+      },
+      "sku": {
+        "type": "VARCHAR(64)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      },
+      "name": {
+        "type": "VARCHAR(200)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      },
+      "type": {
+        "type": "VARCHAR(24)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      },
+      "base_unit": {
+        "type": "VARCHAR(16)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      },
+      "package_weight_kg": {
+        "type": "NUMERIC(18, 6)",
+        "nullable": true,
+        "primary_key": false,
+        "foreign_keys": []
+      },
+      "id": {
+        "type": "VARCHAR(36)",
+        "nullable": false,
+        "primary_key": true,
+        "foreign_keys": []
+      },
+      "created_at": {
+        "type": "DATETIME",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      }
+    },
+    "constraints": [
+      {
+        "name": "ck_product_unit",
+        "type": "CheckConstraint"
+      },
+      {
+        "name": null,
+        "type": "UniqueConstraint"
+      },
+      {
+        "name": "ck_product_weight",
+        "type": "CheckConstraint"
+      },
+      {
+        "name": "ck_product_type",
+        "type": "CheckConstraint"
+      },
+      {
+        "name": null,
+        "type": "PrimaryKeyConstraint"
+      }
+    ]
+  },
+  "parties": {
+    "columns": {
+      "name": {
+        "type": "VARCHAR(200)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      },
+      "roles": {
+        "type": "JSON",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      },
+      "contact": {
+        "type": "VARCHAR(300)",
+        "nullable": true,
+        "primary_key": false,
+        "foreign_keys": []
+      },
+      "id": {
+        "type": "VARCHAR(36)",
+        "nullable": false,
+        "primary_key": true,
+        "foreign_keys": []
+      },
+      "created_at": {
+        "type": "DATETIME",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      }
+    },
+    "constraints": [
+      {
+        "name": null,
+        "type": "PrimaryKeyConstraint"
+      }
+    ]
+  },
+  "locations": {
+    "columns": {
+      "name": {
+        "type": "VARCHAR(200)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      },
+      "kind": {
+        "type": "VARCHAR(24)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      },
+      "party_id": {
+        "type": "VARCHAR(36)",
+        "nullable": true,
+        "primary_key": false,
+        "foreign_keys": [
+          "parties.id"
+        ]
+      },
+      "id": {
+        "type": "VARCHAR(36)",
+        "nullable": false,
+        "primary_key": true,
+        "foreign_keys": []
+      },
+      "created_at": {
+        "type": "DATETIME",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      }
+    },
+    "constraints": [
+      {
+        "name": null,
+        "type": "ForeignKeyConstraint"
+      },
+      {
+        "name": null,
+        "type": "PrimaryKeyConstraint"
+      },
+      {
+        "name": "ck_location_kind",
+        "type": "CheckConstraint"
+      }
+    ]
+  },
+  "lots": {
+    "columns": {
+      "product_id": {
+        "type": "VARCHAR(36)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": [
+          "products.id"
+        ]
+      },
+      "supplier_id": {
+        "type": "VARCHAR(36)",
+        "nullable": true,
+        "primary_key": false,
+        "foreign_keys": [
+          "parties.id"
+        ]
+      },
+      "external_code": {
+        "type": "VARCHAR(100)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      },
+      "received_at": {
+        "type": "DATETIME",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      },
+      "expires_at": {
+        "type": "DATE",
+        "nullable": true,
+        "primary_key": false,
+        "foreign_keys": []
+      },
+      "blocked": {
+        "type": "BOOLEAN",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      },
+      "original_quantity": {
+        "type": "NUMERIC(18, 6)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      },
+      "total_cost": {
+        "type": "NUMERIC(18, 6)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      },
+      "consumed_quantity": {
+        "type": "NUMERIC(18, 6)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      },
+      "consumed_cost": {
+        "type": "NUMERIC(18, 6)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      },
+      "id": {
+        "type": "VARCHAR(36)",
+        "nullable": false,
+        "primary_key": true,
+        "foreign_keys": []
+      },
+      "created_at": {
+        "type": "DATETIME",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      }
+    },
+    "constraints": [
+      {
+        "name": null,
+        "type": "ForeignKeyConstraint"
+      },
+      {
+        "name": "ck_lot_original",
+        "type": "CheckConstraint"
+      },
+      {
+        "name": null,
+        "type": "ForeignKeyConstraint"
+      },
+      {
+        "name": "ck_lot_consumed",
+        "type": "CheckConstraint"
+      },
+      {
+        "name": null,
+        "type": "PrimaryKeyConstraint"
+      },
+      {
+        "name": "ck_lot_cost",
+        "type": "CheckConstraint"
+      },
+      {
+        "name": "ck_lot_consumed_cost",
+        "type": "CheckConstraint"
+      }
+    ]
+  },
+  "receipts": {
+    "columns": {
+      "supplier_id": {
+        "type": "VARCHAR(36)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": [
+          "parties.id"
+        ]
+      },
+      "location_id": {
+        "type": "VARCHAR(36)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": [
+          "locations.id"
+        ]
+      },
+      "received_at": {
+        "type": "DATETIME",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      },
+      "reference": {
+        "type": "VARCHAR(100)",
+        "nullable": true,
+        "primary_key": false,
+        "foreign_keys": []
+      },
+      "id": {
+        "type": "VARCHAR(36)",
+        "nullable": false,
+        "primary_key": true,
+        "foreign_keys": []
+      },
+      "created_at": {
+        "type": "DATETIME",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      }
+    },
+    "constraints": [
+      {
+        "name": null,
+        "type": "PrimaryKeyConstraint"
+      },
+      {
+        "name": null,
+        "type": "ForeignKeyConstraint"
+      },
+      {
+        "name": null,
+        "type": "ForeignKeyConstraint"
+      }
+    ]
+  },
+  "receipt_lines": {
+    "columns": {
+      "receipt_id": {
+        "type": "VARCHAR(36)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": [
+          "receipts.id"
+        ]
+      },
+      "product_id": {
+        "type": "VARCHAR(36)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": [
+          "products.id"
+        ]
+      },
+      "lot_id": {
+        "type": "VARCHAR(36)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": [
+          "lots.id"
+        ]
+      },
+      "quantity": {
+        "type": "NUMERIC(18, 6)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      },
+      "total_cost": {
+        "type": "NUMERIC(18, 6)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      },
+      "unit_price": {
+        "type": "NUMERIC(18, 6)",
+        "nullable": true,
+        "primary_key": false,
+        "foreign_keys": []
+      },
+      "id": {
+        "type": "VARCHAR(36)",
+        "nullable": false,
+        "primary_key": true,
+        "foreign_keys": []
+      },
+      "created_at": {
+        "type": "DATETIME",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      }
+    },
+    "constraints": [
+      {
+        "name": null,
+        "type": "PrimaryKeyConstraint"
+      },
+      {
+        "name": null,
+        "type": "ForeignKeyConstraint"
+      },
+      {
+        "name": "ck_receipt_values",
+        "type": "CheckConstraint"
+      },
+      {
+        "name": null,
+        "type": "UniqueConstraint"
+      },
+      {
+        "name": null,
+        "type": "ForeignKeyConstraint"
+      },
+      {
+        "name": null,
+        "type": "ForeignKeyConstraint"
+      }
+    ]
+  },
+  "recipe_versions": {
+    "columns": {
+      "code": {
+        "type": "VARCHAR(100)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      },
+      "version": {
+        "type": "INTEGER",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      },
+      "species": {
+        "type": "VARCHAR(200)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      },
+      "input_product_id": {
+        "type": "VARCHAR(36)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": [
+          "products.id"
+        ]
+      },
+      "allocation_method": {
+        "type": "VARCHAR(16)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      },
+      "available": {
+        "type": "BOOLEAN",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      },
+      "id": {
+        "type": "VARCHAR(36)",
+        "nullable": false,
+        "primary_key": true,
+        "foreign_keys": []
+      },
+      "created_at": {
+        "type": "DATETIME",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      }
+    },
+    "constraints": [
+      {
+        "name": "uq_recipe_version",
+        "type": "UniqueConstraint"
+      },
+      {
+        "name": null,
+        "type": "ForeignKeyConstraint"
+      },
+      {
+        "name": "ck_recipe_method",
+        "type": "CheckConstraint"
+      },
+      {
+        "name": null,
+        "type": "PrimaryKeyConstraint"
+      },
+      {
+        "name": "ck_recipe_version",
+        "type": "CheckConstraint"
+      }
+    ]
+  },
+  "recipe_lines": {
+    "columns": {
+      "recipe_version_id": {
+        "type": "VARCHAR(36)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": [
+          "recipe_versions.id"
+        ]
+      },
+      "product_id": {
+        "type": "VARCHAR(36)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": [
+          "products.id"
+        ]
+      },
+      "reference_eur_per_kg": {
+        "type": "NUMERIC(18, 6)",
+        "nullable": true,
+        "primary_key": false,
+        "foreign_keys": []
+      },
+      "id": {
+        "type": "VARCHAR(36)",
+        "nullable": false,
+        "primary_key": true,
+        "foreign_keys": []
+      },
+      "created_at": {
+        "type": "DATETIME",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      }
+    },
+    "constraints": [
+      {
+        "name": null,
+        "type": "ForeignKeyConstraint"
+      },
+      {
+        "name": "ck_recipe_reference",
+        "type": "CheckConstraint"
+      },
+      {
+        "name": null,
+        "type": "PrimaryKeyConstraint"
+      },
+      {
+        "name": "uq_recipe_product",
+        "type": "UniqueConstraint"
+      },
+      {
+        "name": null,
+        "type": "ForeignKeyConstraint"
+      }
+    ]
+  },
+  "operations": {
+    "columns": {
+      "code": {
+        "type": "VARCHAR(100)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      },
+      "kind": {
+        "type": "VARCHAR(24)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      },
+      "producer_id": {
+        "type": "VARCHAR(36)",
+        "nullable": true,
+        "primary_key": false,
+        "foreign_keys": [
+          "parties.id"
+        ]
+      },
+      "recipe_version_id": {
+        "type": "VARCHAR(36)",
+        "nullable": true,
+        "primary_key": false,
+        "foreign_keys": [
+          "recipe_versions.id"
+        ]
+      },
+      "allocation_snapshot": {
+        "type": "JSON",
+        "nullable": true,
+        "primary_key": false,
+        "foreign_keys": []
+      },
+      "status": {
+        "type": "VARCHAR(16)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      },
+      "posted_at": {
+        "type": "DATETIME",
+        "nullable": true,
+        "primary_key": false,
+        "foreign_keys": []
+      },
+      "total_material_cost": {
+        "type": "NUMERIC(18, 6)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      },
+      "total_service_cost": {
+        "type": "NUMERIC(18, 6)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      },
+      "total_cost": {
+        "type": "NUMERIC(18, 6)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      },
+      "loss_quantity": {
+        "type": "NUMERIC(18, 6)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      },
+      "loss_reason": {
+        "type": "VARCHAR(500)",
+        "nullable": true,
+        "primary_key": false,
+        "foreign_keys": []
+      },
+      "allocation_method": {
+        "type": "VARCHAR(16)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      },
+      "id": {
+        "type": "VARCHAR(36)",
+        "nullable": false,
+        "primary_key": true,
+        "foreign_keys": []
+      },
+      "created_at": {
+        "type": "DATETIME",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      }
+    },
+    "constraints": [
+      {
+        "name": null,
+        "type": "ForeignKeyConstraint"
+      },
+      {
+        "name": "ck_operation_status",
+        "type": "CheckConstraint"
+      },
+      {
+        "name": "fk_operations_recipe_version",
+        "type": "ForeignKeyConstraint"
+      },
+      {
+        "name": null,
+        "type": "UniqueConstraint"
+      },
+      {
+        "name": "ck_operation_values",
+        "type": "CheckConstraint"
+      },
+      {
+        "name": "ck_operation_kind",
+        "type": "CheckConstraint"
+      },
+      {
+        "name": null,
+        "type": "PrimaryKeyConstraint"
+      }
+    ]
+  },
+  "operation_inputs": {
+    "columns": {
+      "operation_id": {
+        "type": "VARCHAR(36)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": [
+          "operations.id"
+        ]
+      },
+      "lot_id": {
+        "type": "VARCHAR(36)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": [
+          "lots.id"
+        ]
+      },
+      "location_id": {
+        "type": "VARCHAR(36)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": [
+          "locations.id"
+        ]
+      },
+      "quantity": {
+        "type": "NUMERIC(18, 6)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      },
+      "consumed_cost": {
+        "type": "NUMERIC(18, 6)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      },
+      "id": {
+        "type": "VARCHAR(36)",
+        "nullable": false,
+        "primary_key": true,
+        "foreign_keys": []
+      },
+      "created_at": {
+        "type": "DATETIME",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      }
+    },
+    "constraints": [
+      {
+        "name": null,
+        "type": "ForeignKeyConstraint"
+      },
+      {
+        "name": "ck_input_values",
+        "type": "CheckConstraint"
+      },
+      {
+        "name": null,
+        "type": "ForeignKeyConstraint"
+      },
+      {
+        "name": null,
+        "type": "PrimaryKeyConstraint"
+      },
+      {
+        "name": null,
+        "type": "ForeignKeyConstraint"
+      },
+      {
+        "name": "uq_operation_input",
+        "type": "UniqueConstraint"
+      }
+    ]
+  },
+  "operation_outputs": {
+    "columns": {
+      "operation_id": {
+        "type": "VARCHAR(36)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": [
+          "operations.id"
+        ]
+      },
+      "lot_id": {
+        "type": "VARCHAR(36)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": [
+          "lots.id"
+        ]
+      },
+      "quantity": {
+        "type": "NUMERIC(18, 6)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      },
+      "reference_eur_per_kg": {
+        "type": "NUMERIC(18, 6)",
+        "nullable": true,
+        "primary_key": false,
+        "foreign_keys": []
+      },
+      "explanation": {
+        "type": "VARCHAR(500)",
+        "nullable": true,
+        "primary_key": false,
+        "foreign_keys": []
+      },
+      "allocation_weight": {
+        "type": "NUMERIC(18, 6)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      },
+      "allocated_cost": {
+        "type": "NUMERIC(18, 6)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      },
+      "id": {
+        "type": "VARCHAR(36)",
+        "nullable": false,
+        "primary_key": true,
+        "foreign_keys": []
+      },
+      "created_at": {
+        "type": "DATETIME",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      }
+    },
+    "constraints": [
+      {
+        "name": null,
+        "type": "UniqueConstraint"
+      },
+      {
+        "name": null,
+        "type": "ForeignKeyConstraint"
+      },
+      {
+        "name": null,
+        "type": "ForeignKeyConstraint"
+      },
+      {
+        "name": null,
+        "type": "PrimaryKeyConstraint"
+      },
+      {
+        "name": "ck_output_values",
+        "type": "CheckConstraint"
+      }
+    ]
+  },
+  "operation_differences": {
+    "columns": {
+      "operation_id": {
+        "type": "VARCHAR(36)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": [
+          "operations.id"
+        ]
+      },
+      "kind": {
+        "type": "VARCHAR(24)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      },
+      "quantity": {
+        "type": "NUMERIC(18, 6)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      },
+      "reason": {
+        "type": "VARCHAR(500)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      },
+      "id": {
+        "type": "VARCHAR(36)",
+        "nullable": false,
+        "primary_key": true,
+        "foreign_keys": []
+      },
+      "created_at": {
+        "type": "DATETIME",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      }
+    },
+    "constraints": [
+      {
+        "name": "ck_difference_quantity",
+        "type": "CheckConstraint"
+      },
+      {
+        "name": "ck_difference_kind",
+        "type": "CheckConstraint"
+      },
+      {
+        "name": null,
+        "type": "PrimaryKeyConstraint"
+      },
+      {
+        "name": null,
+        "type": "ForeignKeyConstraint"
+      }
+    ]
+  },
+  "lot_links": {
+    "columns": {
+      "input_id": {
+        "type": "VARCHAR(36)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": [
+          "operation_inputs.id"
+        ]
+      },
+      "output_id": {
+        "type": "VARCHAR(36)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": [
+          "operation_outputs.id"
+        ]
+      },
+      "attributed_input_quantity": {
+        "type": "NUMERIC(18, 6)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      },
+      "id": {
+        "type": "VARCHAR(36)",
+        "nullable": false,
+        "primary_key": true,
+        "foreign_keys": []
+      },
+      "created_at": {
+        "type": "DATETIME",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      }
+    },
+    "constraints": [
+      {
+        "name": null,
+        "type": "ForeignKeyConstraint"
+      },
+      {
+        "name": "uq_lot_link",
+        "type": "UniqueConstraint"
+      },
+      {
+        "name": null,
+        "type": "ForeignKeyConstraint"
+      },
+      {
+        "name": "ck_link_quantity",
+        "type": "CheckConstraint"
+      },
+      {
+        "name": null,
+        "type": "PrimaryKeyConstraint"
+      }
+    ]
+  },
+  "service_costs": {
+    "columns": {
+      "operation_id": {
+        "type": "VARCHAR(36)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": [
+          "operations.id"
+        ]
+      },
+      "amount": {
+        "type": "NUMERIC(18, 6)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      },
+      "currency": {
+        "type": "VARCHAR(3)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      },
+      "invoice_reference": {
+        "type": "VARCHAR(100)",
+        "nullable": true,
+        "primary_key": false,
+        "foreign_keys": []
+      },
+      "id": {
+        "type": "VARCHAR(36)",
+        "nullable": false,
+        "primary_key": true,
+        "foreign_keys": []
+      },
+      "created_at": {
+        "type": "DATETIME",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      }
+    },
+    "constraints": [
+      {
+        "name": null,
+        "type": "PrimaryKeyConstraint"
+      },
+      {
+        "name": null,
+        "type": "ForeignKeyConstraint"
+      },
+      {
+        "name": "ck_service_amount",
+        "type": "CheckConstraint"
+      }
+    ]
+  },
+  "stock_balances": {
+    "columns": {
+      "lot_id": {
+        "type": "VARCHAR(36)",
+        "nullable": false,
+        "primary_key": true,
+        "foreign_keys": [
+          "lots.id"
+        ]
+      },
+      "location_id": {
+        "type": "VARCHAR(36)",
+        "nullable": false,
+        "primary_key": true,
+        "foreign_keys": [
+          "locations.id"
+        ]
+      },
+      "quantity": {
+        "type": "NUMERIC(18, 6)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      }
+    },
+    "constraints": [
+      {
+        "name": null,
+        "type": "ForeignKeyConstraint"
+      },
+      {
+        "name": "ck_balance_nonnegative",
+        "type": "CheckConstraint"
+      },
+      {
+        "name": null,
+        "type": "PrimaryKeyConstraint"
+      },
+      {
+        "name": null,
+        "type": "ForeignKeyConstraint"
+      }
+    ]
+  },
+  "stock_movements": {
+    "columns": {
+      "lot_id": {
+        "type": "VARCHAR(36)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": [
+          "lots.id"
+        ]
+      },
+      "location_id": {
+        "type": "VARCHAR(36)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": [
+          "locations.id"
+        ]
+      },
+      "quantity": {
+        "type": "NUMERIC(18, 6)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      },
+      "type": {
+        "type": "VARCHAR(32)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      },
+      "operation_id": {
+        "type": "VARCHAR(36)",
+        "nullable": true,
+        "primary_key": false,
+        "foreign_keys": [
+          "operations.id"
+        ]
+      },
+      "receipt_line_id": {
+        "type": "VARCHAR(36)",
+        "nullable": true,
+        "primary_key": false,
+        "foreign_keys": [
+          "receipt_lines.id"
+        ]
+      },
+      "transfer_group_id": {
+        "type": "VARCHAR(36)",
+        "nullable": true,
+        "primary_key": false,
+        "foreign_keys": []
+      },
+      "reversal_of": {
+        "type": "VARCHAR(36)",
+        "nullable": true,
+        "primary_key": false,
+        "foreign_keys": [
+          "stock_movements.id"
+        ]
+      },
+      "id": {
+        "type": "VARCHAR(36)",
+        "nullable": false,
+        "primary_key": true,
+        "foreign_keys": []
+      },
+      "created_at": {
+        "type": "DATETIME",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      }
+    },
+    "constraints": [
+      {
+        "name": "ck_movement_nonzero",
+        "type": "CheckConstraint"
+      },
+      {
+        "name": null,
+        "type": "ForeignKeyConstraint"
+      },
+      {
+        "name": null,
+        "type": "ForeignKeyConstraint"
+      },
+      {
+        "name": null,
+        "type": "ForeignKeyConstraint"
+      },
+      {
+        "name": null,
+        "type": "ForeignKeyConstraint"
+      },
+      {
+        "name": null,
+        "type": "PrimaryKeyConstraint"
+      },
+      {
+        "name": null,
+        "type": "ForeignKeyConstraint"
+      }
+    ]
+  },
+  "idempotency_requests": {
+    "columns": {
+      "scope": {
+        "type": "VARCHAR(128)",
+        "nullable": false,
+        "primary_key": true,
+        "foreign_keys": []
+      },
+      "key": {
+        "type": "VARCHAR(36)",
+        "nullable": false,
+        "primary_key": true,
+        "foreign_keys": []
+      },
+      "request_hash": {
+        "type": "VARCHAR(64)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      },
+      "http_status": {
+        "type": "INTEGER",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      },
+      "response": {
+        "type": "JSON",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      },
+      "created_at": {
+        "type": "DATETIME",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      }
+    },
+    "constraints": [
+      {
+        "name": null,
+        "type": "PrimaryKeyConstraint"
+      }
+    ]
+  },
+  "sales": {
+    "columns": {
+      "customer_id": {
+        "type": "VARCHAR(36)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": [
+          "parties.id"
+        ]
+      },
+      "sold_at": {
+        "type": "DATETIME",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      },
+      "currency": {
+        "type": "VARCHAR(3)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      },
+      "total_amount": {
+        "type": "NUMERIC(18, 2)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      },
+      "id": {
+        "type": "VARCHAR(36)",
+        "nullable": false,
+        "primary_key": true,
+        "foreign_keys": []
+      },
+      "created_at": {
+        "type": "DATETIME",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      }
+    },
+    "constraints": [
+      {
+        "name": null,
+        "type": "PrimaryKeyConstraint"
+      },
+      {
+        "name": null,
+        "type": "ForeignKeyConstraint"
+      },
+      {
+        "name": "ck_sale_amount",
+        "type": "CheckConstraint"
+      }
+    ]
+  },
+  "sale_lines": {
+    "columns": {
+      "sale_id": {
+        "type": "VARCHAR(36)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": [
+          "sales.id"
+        ]
+      },
+      "line_no": {
+        "type": "INTEGER",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      },
+      "product_id": {
+        "type": "VARCHAR(36)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": [
+          "products.id"
+        ]
+      },
+      "lot_id": {
+        "type": "VARCHAR(36)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": [
+          "lots.id"
+        ]
+      },
+      "location_id": {
+        "type": "VARCHAR(36)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": [
+          "locations.id"
+        ]
+      },
+      "stock_movement_id": {
+        "type": "VARCHAR(36)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": [
+          "stock_movements.id"
+        ]
+      },
+      "quantity": {
+        "type": "NUMERIC(18, 6)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      },
+      "unit": {
+        "type": "VARCHAR(16)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      },
+      "unit_price": {
+        "type": "NUMERIC(18, 2)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      },
+      "total_amount": {
+        "type": "NUMERIC(18, 2)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      },
+      "consumed_cost": {
+        "type": "NUMERIC(18, 6)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      },
+      "id": {
+        "type": "VARCHAR(36)",
+        "nullable": false,
+        "primary_key": true,
+        "foreign_keys": []
+      },
+      "created_at": {
+        "type": "DATETIME",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      }
+    },
+    "constraints": [
+      {
+        "name": null,
+        "type": "ForeignKeyConstraint"
+      },
+      {
+        "name": "uq_sale_line_number",
+        "type": "UniqueConstraint"
+      },
+      {
+        "name": null,
+        "type": "ForeignKeyConstraint"
+      },
+      {
+        "name": null,
+        "type": "PrimaryKeyConstraint"
+      },
+      {
+        "name": "ck_sale_line_values",
+        "type": "CheckConstraint"
+      },
+      {
+        "name": "ck_sale_line_unit",
+        "type": "CheckConstraint"
+      },
+      {
+        "name": null,
+        "type": "ForeignKeyConstraint"
+      },
+      {
+        "name": null,
+        "type": "ForeignKeyConstraint"
+      },
+      {
+        "name": "uq_sale_lot_location",
+        "type": "UniqueConstraint"
+      },
+      {
+        "name": null,
+        "type": "UniqueConstraint"
+      },
+      {
+        "name": null,
+        "type": "ForeignKeyConstraint"
+      }
+    ]
+  },
+  "shipments": {
+    "columns": {
+      "customer_id": {
+        "type": "VARCHAR(36)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": [
+          "parties.id"
+        ]
+      },
+      "sale_id": {
+        "type": "VARCHAR(36)",
+        "nullable": true,
+        "primary_key": false,
+        "foreign_keys": [
+          "sales.id"
+        ]
+      },
+      "recipient_name": {
+        "type": "VARCHAR(200)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      },
+      "recipient_contact": {
+        "type": "VARCHAR(300)",
+        "nullable": true,
+        "primary_key": false,
+        "foreign_keys": []
+      },
+      "shipped_at": {
+        "type": "DATETIME",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      },
+      "id": {
+        "type": "VARCHAR(36)",
+        "nullable": false,
+        "primary_key": true,
+        "foreign_keys": []
+      },
+      "created_at": {
+        "type": "DATETIME",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      }
+    },
+    "constraints": [
+      {
+        "name": null,
+        "type": "PrimaryKeyConstraint"
+      },
+      {
+        "name": null,
+        "type": "ForeignKeyConstraint"
+      },
+      {
+        "name": null,
+        "type": "ForeignKeyConstraint"
+      }
+    ]
+  },
+  "shipment_lines": {
+    "columns": {
+      "shipment_id": {
+        "type": "VARCHAR(36)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": [
+          "shipments.id"
+        ]
+      },
+      "line_no": {
+        "type": "INTEGER",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      },
+      "sale_line_id": {
+        "type": "VARCHAR(36)",
+        "nullable": true,
+        "primary_key": false,
+        "foreign_keys": [
+          "sale_lines.id"
+        ]
+      },
+      "product_id": {
+        "type": "VARCHAR(36)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": [
+          "products.id"
+        ]
+      },
+      "lot_id": {
+        "type": "VARCHAR(36)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": [
+          "lots.id"
+        ]
+      },
+      "location_id": {
+        "type": "VARCHAR(36)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": [
+          "locations.id"
+        ]
+      },
+      "stock_movement_id": {
+        "type": "VARCHAR(36)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": [
+          "stock_movements.id"
+        ]
+      },
+      "quantity": {
+        "type": "NUMERIC(18, 6)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      },
+      "unit": {
+        "type": "VARCHAR(16)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      },
+      "consumed_cost": {
+        "type": "NUMERIC(18, 6)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      },
+      "id": {
+        "type": "VARCHAR(36)",
+        "nullable": false,
+        "primary_key": true,
+        "foreign_keys": []
+      },
+      "created_at": {
+        "type": "DATETIME",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      }
+    },
+    "constraints": [
+      {
+        "name": null,
+        "type": "ForeignKeyConstraint"
+      },
+      {
+        "name": null,
+        "type": "ForeignKeyConstraint"
+      },
+      {
+        "name": null,
+        "type": "PrimaryKeyConstraint"
+      },
+      {
+        "name": null,
+        "type": "ForeignKeyConstraint"
+      },
+      {
+        "name": null,
+        "type": "UniqueConstraint"
+      },
+      {
+        "name": null,
+        "type": "ForeignKeyConstraint"
+      },
+      {
+        "name": "uq_shipment_line_number",
+        "type": "UniqueConstraint"
+      },
+      {
+        "name": null,
+        "type": "ForeignKeyConstraint"
+      },
+      {
+        "name": "ck_shipment_line_unit",
+        "type": "CheckConstraint"
+      },
+      {
+        "name": "ck_shipment_line_values",
+        "type": "CheckConstraint"
+      },
+      {
+        "name": null,
+        "type": "UniqueConstraint"
+      },
+      {
+        "name": null,
+        "type": "ForeignKeyConstraint"
+      },
+      {
+        "name": "uq_shipment_lot_location",
+        "type": "UniqueConstraint"
+      }
+    ]
+  },
+  "recalls": {
+    "columns": {
+      "source_lot_id": {
+        "type": "VARCHAR(36)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": [
+          "lots.id"
+        ]
+      },
+      "reason": {
+        "type": "VARCHAR(500)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      },
+      "id": {
+        "type": "VARCHAR(36)",
+        "nullable": false,
+        "primary_key": true,
+        "foreign_keys": []
+      },
+      "created_at": {
+        "type": "DATETIME",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      }
+    },
+    "constraints": [
+      {
+        "name": null,
+        "type": "ForeignKeyConstraint"
+      },
+      {
+        "name": null,
+        "type": "PrimaryKeyConstraint"
+      }
+    ]
+  },
+  "recall_lots": {
+    "columns": {
+      "recall_id": {
+        "type": "VARCHAR(36)",
+        "nullable": false,
+        "primary_key": true,
+        "foreign_keys": [
+          "recalls.id"
+        ]
+      },
+      "lot_id": {
+        "type": "VARCHAR(36)",
+        "nullable": false,
+        "primary_key": true,
+        "foreign_keys": [
+          "lots.id"
+        ]
+      }
+    },
+    "constraints": [
+      {
+        "name": null,
+        "type": "ForeignKeyConstraint"
+      },
+      {
+        "name": null,
+        "type": "ForeignKeyConstraint"
+      },
+      {
+        "name": null,
+        "type": "PrimaryKeyConstraint"
+      }
+    ]
+  },
+  "prediction_records": {
+    "columns": {
+      "kind": {
+        "type": "VARCHAR(24)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      },
+      "operation_id": {
+        "type": "VARCHAR(36)",
+        "nullable": true,
+        "primary_key": false,
+        "foreign_keys": [
+          "operations.id"
+        ]
+      },
+      "model_version": {
+        "type": "VARCHAR(100)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      },
+      "feature_schema_version": {
+        "type": "VARCHAR(40)",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      },
+      "features": {
+        "type": "JSON",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      },
+      "context": {
+        "type": "JSON",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      },
+      "prediction": {
+        "type": "JSON",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      },
+      "id": {
+        "type": "VARCHAR(36)",
+        "nullable": false,
+        "primary_key": true,
+        "foreign_keys": []
+      },
+      "created_at": {
+        "type": "DATETIME",
+        "nullable": false,
+        "primary_key": false,
+        "foreign_keys": []
+      }
+    },
+    "constraints": [
+      {
+        "name": null,
+        "type": "ForeignKeyConstraint"
+      },
+      {
+        "name": "ck_prediction_kind",
+        "type": "CheckConstraint"
+      },
+      {
+        "name": null,
+        "type": "PrimaryKeyConstraint"
+      }
+    ]
+  }
+}

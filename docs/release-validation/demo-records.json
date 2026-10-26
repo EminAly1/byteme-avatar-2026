@@ -1,0 +1,2271 @@
+{
+  "database": "avatar_release_demo_acceptance_test",
+  "declaration": "All records in this dedicated demo schema are fictional.",
+  "business_data": false,
+  "seed_payloads_and_ledger_changed": false,
+  "tables": {
+    "idempotency_requests": {
+      "identity_columns": [
+        "scope",
+        "key"
+      ],
+      "record_count": 66,
+      "records": [
+        {
+          "identity_values": [
+            "cuttings",
+            "0c7298ba-7e7e-5402-b762-859e93be6f90"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "cuttings",
+            "4f9c64c3-da4f-5b39-8935-f17fbeaec673"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "cuttings",
+            "b0827d5f-a86d-5c68-b3e5-4977a3a01901"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "cuttings:43fa6ed4-afb0-406b-a71c-9d6cc668841c:post",
+            "9638776f-7db5-5d8a-be4a-ef95c80ef2f0"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "cuttings:55882859-d76b-419d-9212-c48050f19595:post",
+            "404cc492-2e0d-573a-a9f7-886d8aa61fe9"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "cuttings:ff3efd72-00b6-4d58-89e8-b4e0683c16a7:post",
+            "3985fad9-41ac-5265-ae9a-9bf7e5877145"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "locations",
+            "60d1e75b-82c4-52fe-8ee2-9540036205e4"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "locations",
+            "655b0456-b986-5c9e-a840-c6116c70701d"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "locations",
+            "7dea8439-e767-5082-bb68-2705d531b76d"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "locations",
+            "8d7770f4-3170-5c17-9a81-4eeaf594377c"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "locations",
+            "f73b484c-b728-58eb-992e-a266640c703f"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "operations",
+            "6a598ba5-ec42-5093-b3fe-3185d6fcdd5f"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "operations",
+            "afb06635-a1b6-562a-b858-175b18f8cafc"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "operations:2eea8234-bf83-4955-acb9-61541a2a6395:dispatch",
+            "e5949064-0886-5252-8195-83130c221bb9"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "operations:2eea8234-bf83-4955-acb9-61541a2a6395:post",
+            "3d472c09-9baf-5214-a19d-be0f64cb7469"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "operations:4e47d7d1-840e-4207-aced-cc688270b182:dispatch",
+            "e053254b-f6e6-55c8-9950-220309c0eb76"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "operations:4e47d7d1-840e-4207-aced-cc688270b182:post",
+            "34a8f2c2-c912-5af8-8eca-5aa20375c642"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "parties",
+            "5dfef13c-4c6d-5666-8410-918666c41c2d"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "parties",
+            "6c70d011-7b9a-52bb-a28b-5e8f92041f9e"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "parties",
+            "72234d40-e88e-53a6-a14d-80c85364cbfa"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "parties",
+            "a71380a3-e65e-5b58-9185-56dc05c1760c"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "parties",
+            "b1dfdd19-a063-586f-8f47-bf7a46228fc3"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "parties",
+            "c5b5272a-251a-5e12-9f9d-f0561521cbaf"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "parties",
+            "dc6b0c04-b32f-572e-8126-2d13f728e70f"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "parties",
+            "e4d5b7cd-9c84-50d3-aa8f-67f7c479f336"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "parties",
+            "fad386e8-392f-5825-9861-2c4cf0f646e3"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "predictions:cutting",
+            "3c3ff65c-e64e-5c6d-8ab3-4023a6442964"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "predictions:production",
+            "1d13f1e9-5051-50b9-b4cb-18fe5e16f907"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "products",
+            "0a3398ec-6e5c-5726-b09a-c46ca9861adc"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "products",
+            "2e107388-2c05-5161-9040-c64bf8bd6a61"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "products",
+            "3bddb07e-f4ab-5726-87aa-21c10a4b5839"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "products",
+            "45af125c-05a2-576a-8741-e3a5ea104179"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "products",
+            "5f5c8a97-5037-55fc-8282-b1c0f3196416"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "products",
+            "7ff33d64-4141-5d6a-af8a-ad9e3e8102cc"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "products",
+            "9ad7b82b-87bd-553c-9059-f21d601fa727"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "products",
+            "a0297376-c189-5995-8117-979aba1fcb97"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "products",
+            "ab1d96a4-0f03-52ed-a080-7b29d46690d5"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "products",
+            "addee114-53fd-5450-b459-dd7c969235ad"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "products",
+            "b94686be-5963-5af8-92cd-ebeaaded75f2"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "products",
+            "c0d98003-9437-5d09-bf31-52382a3ded49"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "products",
+            "c4515029-d48c-5404-aac7-6ca57c1ae458"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "products",
+            "c7529bfd-64d7-5a30-932c-a45c5e95ea6c"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "products",
+            "ca17e525-843d-58e3-90a7-f9f30922da4a"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "products",
+            "d904a4ba-fe90-5c56-b37e-fb6c1434e177"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "products",
+            "e7545b15-6310-5f0e-b532-997d30ad22d8"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "products",
+            "ef3fcda6-345d-5ea1-902e-eccf897ddad2"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "products",
+            "effbbdf7-8a45-5803-997c-7ae448c7f747"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "products",
+            "feb15a83-7645-5513-80ea-fe8739ee4c06"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "recalls",
+            "01a0fc81-c032-55f2-a2ac-177d26fcfcfa"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "recalls",
+            "44208b7a-f656-4e4a-91c8-721eccb90b93"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "receipts",
+            "2418ed7b-c9a4-556f-86d2-d9c15205792a"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "receipts",
+            "3161e6da-2b50-5fc8-b51c-fb42f057f702"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "receipts",
+            "b1b6cc68-a69a-59d7-b972-1af32992afa0"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "receipts",
+            "befe5323-1899-5646-9634-90d6d58745eb"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "receipts",
+            "cd2fcd86-9aab-5839-b7ff-25ff4d709775"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "recipes",
+            "656a39fb-2ac1-56c5-9292-46a060d9d100"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "recipes",
+            "7befe865-5a9f-5c01-b003-870fe397797d"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "recipes",
+            "cf8466d1-8089-5090-b011-0fe53e1ea8ea"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "sales",
+            "6c28e3e3-efa9-5d02-8b18-d5523a5717b8"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "sales",
+            "6edfcc99-ba69-4239-910c-fed4cf2a4d06"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "sales",
+            "c39fab85-d2c9-55b8-8964-6d74ba6c4f68"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "sales",
+            "e8415720-ac3f-5f80-bdee-4aa577b9702a"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "sales",
+            "f45e1eac-727e-5c1d-aedb-92467b31c878"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "shipments",
+            "7c40faaf-2b0e-5c64-b96d-b831743d62dd"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "shipments",
+            "b1162ae9-592f-544e-bacc-f08849f7c4fc"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "shipments",
+            "c92822b4-4527-5bc6-8b59-173173a20c75"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        }
+      ]
+    },
+    "parties": {
+      "identity_columns": [
+        "id"
+      ],
+      "record_count": 9,
+      "records": [
+        {
+          "identity_values": [
+            "10727a35-cf17-4bc2-954a-5ffe78946de9"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "2ca2c07d-a948-41c6-95a1-7e34a4c9609b"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "3c79ee86-97f9-4758-866b-ebf363869562"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "4e3f7c28-7c82-4ccc-aa67-a69ba8483ed3"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "b7785f25-b79e-4b1e-9867-d4d5c9b77339"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "bd59f1d9-f0af-4fa9-8fce-f722284d193d"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "d8efa47c-02ba-41a6-9611-ac1220ae9ed5"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "da30cdb0-5b1c-4284-b0a8-39b57e7e7998"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "e073d74c-c40b-48c1-9c02-5817a67b9ccd"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        }
+      ]
+    },
+    "products": {
+      "identity_columns": [
+        "id"
+      ],
+      "record_count": 20,
+      "records": [
+        {
+          "identity_values": [
+            "1dc97b49-bdc9-470c-9e6f-5d2a4675147d"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "2ae307bb-b8ae-40e0-97fa-b14dd4c1c77f"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "2b22cb67-baeb-401b-88e7-afc0f4a21024"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "2ddd1e3f-a41d-488a-b004-695a30655952"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "327316bd-5546-4e16-939e-07e4649b3822"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "366f8616-b57f-419d-81b2-71f23d7f2ece"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "3d5bfa31-104b-4e07-96f5-2ec33b7fe8be"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "47fabf43-ee3a-4819-b6ce-19aa6863fae1"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "51b5670c-5cdd-45be-8495-be3f6f0dfb0d"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "51fdd69e-5e2b-4efb-8843-ac54b16cc4ad"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "55c99dce-57ba-4922-a88f-315c654c7c28"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "58d130ab-e78c-461a-8a55-d03a0b4356bc"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "717d0cef-85f6-4248-afdc-43746a9acd28"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "7f8caf0d-569a-45c9-947b-460fab5c8611"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "814b2ff1-c762-45bf-9b09-c2cae8517c47"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "97511fc0-d4a8-4316-ba4a-022cbd6af12b"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "b7646c8e-df72-4976-a21c-ef2cd9acfcd0"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "bcfb80ee-4cd2-4b72-949a-7baa100bd5c9"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "e691bd6c-2312-4cf3-855e-83dac1d6f685"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "f81f593f-a0ea-490e-b1da-6610698c4540"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        }
+      ]
+    },
+    "locations": {
+      "identity_columns": [
+        "id"
+      ],
+      "record_count": 5,
+      "records": [
+        {
+          "identity_values": [
+            "0ca335d5-aa46-4a57-be9e-6f1c0de4f670"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "82429ed0-6428-45ae-a0e0-8cd19f43c47f"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "c43426ce-9553-4eea-9a08-2d82c3041471"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "cb8b06b3-e413-4abf-9210-87041de73ba0"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "d46a6519-aec5-4efc-942f-8e479a256bae"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        }
+      ]
+    },
+    "lots": {
+      "identity_columns": [
+        "id"
+      ],
+      "record_count": 26,
+      "records": [
+        {
+          "identity_values": [
+            "319c13a2-ed0c-4703-a689-9c63cf0ce40f"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "370d7a18-b93c-4fd5-bd6f-5a38526a89dd"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "3a89620c-a1ad-4eb1-8e88-0fb2e8a2da64"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "3c6caf9a-75ae-4555-93be-4e743c8433ec"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "4506205f-15ac-4c97-8141-72971705f28c"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "45ad63d5-8105-4464-958f-6862dfd45191"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "517cb6a7-3cab-48e2-8c66-a7a3d44ade9f"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "61bf554f-c1c2-442f-b520-50eacb8c821a"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "64157834-62d1-4f9e-8403-0af1411fa419"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "6585c997-472b-4aa0-b7ff-b1560aa9ee82"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "6a0fc270-ce40-4c18-8922-aafcd6220282"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "6f99b2a8-1170-477c-9b2f-2fbdaeffa5c2"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "72da3c76-f2a7-4d2d-ab69-4f4e93bca537"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "8353586a-892f-4485-ac49-f8489aa95e9a"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "83718f35-87ee-46fa-99f4-838c3514ead4"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "83767147-11ec-4a4a-9215-3fc9e3e7e3a8"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "9b08cc34-718f-4dfa-b3ab-5bcff6c4ca24"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "9f161d32-c28a-4709-a2de-45b3a5814106"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "d6d1cf02-166d-4f67-a2f5-e4e5e9aac146"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "d778b527-85df-4e5b-9b63-50b43ae61219"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "dc92bb16-af2c-4819-96ba-b1c9c1d80cd5"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "ede3ff56-05dc-4e8b-a526-1ff21ed9633c"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "ee631b70-82a9-4b52-9907-c19581b05e5b"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "f4f0e105-2ee3-4656-96c7-1a90840e0938"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "f51f5eae-9860-4d06-ad89-9529a1cf7044"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "fe31a25f-94bc-4e4f-9641-f42b74763d9c"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        }
+      ]
+    },
+    "recipe_versions": {
+      "identity_columns": [
+        "id"
+      ],
+      "record_count": 3,
+      "records": [
+        {
+          "identity_values": [
+            "57c2d6ef-b9c1-4a82-92f4-24cea7b60151"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "c0c4cc04-605c-4654-90f5-4f7ee0d4d177"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "d264cfca-e19e-4ee9-93e7-47fbd238c36c"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        }
+      ]
+    },
+    "sales": {
+      "identity_columns": [
+        "id"
+      ],
+      "record_count": 5,
+      "records": [
+        {
+          "identity_values": [
+            "5f879a12-3e26-4522-aeff-e444a91c72b2"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "b6340bae-6bf1-4a37-a11c-38a78301c3db"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "dfb77184-7b35-41dc-bfbb-fd541ecee333"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "efa1bb91-f431-4ec8-91cb-18608692b0a9"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "f980b5dd-bf31-4755-a4c4-95808048a2ae"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        }
+      ]
+    },
+    "operations": {
+      "identity_columns": [
+        "id"
+      ],
+      "record_count": 5,
+      "records": [
+        {
+          "identity_values": [
+            "2eea8234-bf83-4955-acb9-61541a2a6395"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "43fa6ed4-afb0-406b-a71c-9d6cc668841c"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "4e47d7d1-840e-4207-aced-cc688270b182"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "55882859-d76b-419d-9212-c48050f19595"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "ff3efd72-00b6-4d58-89e8-b4e0683c16a7"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        }
+      ]
+    },
+    "recalls": {
+      "identity_columns": [
+        "id"
+      ],
+      "record_count": 2,
+      "records": [
+        {
+          "identity_values": [
+            "28cdd337-2b9a-4af0-a24f-5d2c74ef919e"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "38454b61-2b46-4ed3-9045-c9a6281e7a79"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        }
+      ]
+    },
+    "receipts": {
+      "identity_columns": [
+        "id"
+      ],
+      "record_count": 5,
+      "records": [
+        {
+          "identity_values": [
+            "32766056-5529-4d6b-bfdb-ff0e606beeb1"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "7f1d9825-cf45-43ee-a547-623320dde65d"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "885f5e24-772b-4196-ad78-05fe06f36a1e"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "c2cffc1b-2908-465e-ad4f-d88c819f5589"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "d0ab7420-1a25-49a7-bb7c-5d8850702729"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        }
+      ]
+    },
+    "recipe_lines": {
+      "identity_columns": [
+        "id"
+      ],
+      "record_count": 15,
+      "records": [
+        {
+          "identity_values": [
+            "04b078aa-6a52-48c5-8420-7c0cbad67335"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "10feeb55-22f3-4cd5-b86d-f830a9b61a45"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "1684f9e1-839d-4dad-808d-2c3ff33e02fd"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "3d64c9a9-72a5-43aa-ac7c-377ad902b0b2"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "5f01f9f7-654c-40b0-b819-03ec2d12f894"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "680bee1c-c3fe-46cd-97e9-ea968d4dc955"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "6e3e8d0a-1aae-4bfd-8b12-cec7be229b42"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "6e747e3f-627d-4155-93f5-32a6083b8608"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "6ec8158e-8320-4a9c-b97e-510e5e3be174"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "750555b1-d4e0-4c9e-b7de-6d8b184d53c7"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "a8c6184d-a6c3-438d-a8a2-60315b48186d"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "afac2c78-e63f-4730-8030-45f0c4fcc54e"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "c9b5f840-c7b1-45c4-a08a-82ecdc96eeae"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "cc28dfbf-e1bc-431d-8b72-764e5250641f"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "cc2aeb6e-d0f9-407d-b309-c5aa2fb15418"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        }
+      ]
+    },
+    "shipments": {
+      "identity_columns": [
+        "id"
+      ],
+      "record_count": 3,
+      "records": [
+        {
+          "identity_values": [
+            "1385d267-5ec7-4b4a-bd76-16b3a2bba951"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "714387da-66c7-4267-a906-dc7c9a84726e"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "a22a216c-1bb0-4f01-8f7e-c1e28d01c023"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        }
+      ]
+    },
+    "stock_balances": {
+      "identity_columns": [
+        "lot_id",
+        "location_id"
+      ],
+      "record_count": 32,
+      "records": [
+        {
+          "identity_values": [
+            "319c13a2-ed0c-4703-a689-9c63cf0ce40f",
+            "cb8b06b3-e413-4abf-9210-87041de73ba0"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "370d7a18-b93c-4fd5-bd6f-5a38526a89dd",
+            "0ca335d5-aa46-4a57-be9e-6f1c0de4f670"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "370d7a18-b93c-4fd5-bd6f-5a38526a89dd",
+            "d46a6519-aec5-4efc-942f-8e479a256bae"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "3a89620c-a1ad-4eb1-8e88-0fb2e8a2da64",
+            "d46a6519-aec5-4efc-942f-8e479a256bae"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "3c6caf9a-75ae-4555-93be-4e743c8433ec",
+            "cb8b06b3-e413-4abf-9210-87041de73ba0"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "4506205f-15ac-4c97-8141-72971705f28c",
+            "0ca335d5-aa46-4a57-be9e-6f1c0de4f670"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "4506205f-15ac-4c97-8141-72971705f28c",
+            "d46a6519-aec5-4efc-942f-8e479a256bae"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "45ad63d5-8105-4464-958f-6862dfd45191",
+            "d46a6519-aec5-4efc-942f-8e479a256bae"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "517cb6a7-3cab-48e2-8c66-a7a3d44ade9f",
+            "d46a6519-aec5-4efc-942f-8e479a256bae"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "61bf554f-c1c2-442f-b520-50eacb8c821a",
+            "cb8b06b3-e413-4abf-9210-87041de73ba0"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "64157834-62d1-4f9e-8403-0af1411fa419",
+            "cb8b06b3-e413-4abf-9210-87041de73ba0"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "6585c997-472b-4aa0-b7ff-b1560aa9ee82",
+            "d46a6519-aec5-4efc-942f-8e479a256bae"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "6a0fc270-ce40-4c18-8922-aafcd6220282",
+            "c43426ce-9553-4eea-9a08-2d82c3041471"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "6f99b2a8-1170-477c-9b2f-2fbdaeffa5c2",
+            "cb8b06b3-e413-4abf-9210-87041de73ba0"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "72da3c76-f2a7-4d2d-ab69-4f4e93bca537",
+            "0ca335d5-aa46-4a57-be9e-6f1c0de4f670"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "72da3c76-f2a7-4d2d-ab69-4f4e93bca537",
+            "d46a6519-aec5-4efc-942f-8e479a256bae"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "8353586a-892f-4485-ac49-f8489aa95e9a",
+            "cb8b06b3-e413-4abf-9210-87041de73ba0"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "83718f35-87ee-46fa-99f4-838c3514ead4",
+            "d46a6519-aec5-4efc-942f-8e479a256bae"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "83767147-11ec-4a4a-9215-3fc9e3e7e3a8",
+            "82429ed0-6428-45ae-a0e0-8cd19f43c47f"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "83767147-11ec-4a4a-9215-3fc9e3e7e3a8",
+            "c43426ce-9553-4eea-9a08-2d82c3041471"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "9b08cc34-718f-4dfa-b3ab-5bcff6c4ca24",
+            "82429ed0-6428-45ae-a0e0-8cd19f43c47f"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "9b08cc34-718f-4dfa-b3ab-5bcff6c4ca24",
+            "c43426ce-9553-4eea-9a08-2d82c3041471"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "9f161d32-c28a-4709-a2de-45b3a5814106",
+            "cb8b06b3-e413-4abf-9210-87041de73ba0"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "d6d1cf02-166d-4f67-a2f5-e4e5e9aac146",
+            "d46a6519-aec5-4efc-942f-8e479a256bae"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "d778b527-85df-4e5b-9b63-50b43ae61219",
+            "82429ed0-6428-45ae-a0e0-8cd19f43c47f"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "d778b527-85df-4e5b-9b63-50b43ae61219",
+            "c43426ce-9553-4eea-9a08-2d82c3041471"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "dc92bb16-af2c-4819-96ba-b1c9c1d80cd5",
+            "cb8b06b3-e413-4abf-9210-87041de73ba0"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "ede3ff56-05dc-4e8b-a526-1ff21ed9633c",
+            "cb8b06b3-e413-4abf-9210-87041de73ba0"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "ee631b70-82a9-4b52-9907-c19581b05e5b",
+            "cb8b06b3-e413-4abf-9210-87041de73ba0"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "f4f0e105-2ee3-4656-96c7-1a90840e0938",
+            "cb8b06b3-e413-4abf-9210-87041de73ba0"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "f51f5eae-9860-4d06-ad89-9529a1cf7044",
+            "cb8b06b3-e413-4abf-9210-87041de73ba0"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "fe31a25f-94bc-4e4f-9641-f42b74763d9c",
+            "d46a6519-aec5-4efc-942f-8e479a256bae"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        }
+      ]
+    },
+    "operation_differences": {
+      "identity_columns": [
+        "id"
+      ],
+      "record_count": 3,
+      "records": [
+        {
+          "identity_values": [
+            "6661d4d0-72da-43ad-948e-277b6ca4c671"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "c1e903ad-a8f8-48cf-a59a-bb400196bd3e"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "e97a1bd9-8c23-439a-aebe-2189a570dee4"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        }
+      ]
+    },
+    "operation_inputs": {
+      "identity_columns": [
+        "id"
+      ],
+      "record_count": 9,
+      "records": [
+        {
+          "identity_values": [
+            "11c62d58-7780-4f03-977c-f13c11d92cff"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "1c8fcc04-ec66-45e5-9886-623192b02f5a"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "2958b673-2ac1-4c3f-9c06-43efdd5bccd3"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "29e43765-b868-438e-af99-d7ea25ea5c76"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "3dc8bff9-5b4a-4397-9865-1f80c422f8d6"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "6dc5c855-7049-427c-870c-64d4a9b8ed2c"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "6e40ff54-2cc5-4aeb-bd32-765d88e5ef01"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "bc027eab-3e74-4ca2-9428-208353cf2c4e"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "ec849199-c9fa-49a5-ac5e-ac9b6fb27982"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        }
+      ]
+    },
+    "operation_outputs": {
+      "identity_columns": [
+        "id"
+      ],
+      "record_count": 17,
+      "records": [
+        {
+          "identity_values": [
+            "07f2fbda-589b-4ab8-b108-d802d4248f3c"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "17a05335-3ddc-401c-9420-a86e1a4582f7"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "25ab43d6-e54e-4961-a7c9-5aa638cb1861"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "525f852a-5bbc-4782-836c-833a6a67a9f9"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "562466d7-8764-4d0e-a7b6-5142f69b9210"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "777b950a-472f-4da6-b1d9-39f7bc7c03eb"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "79f44f80-d29a-42cc-8835-1c1b1f257a6f"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "7fde87c4-ad2c-46e5-86b9-c82ab73ab623"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "8040a72f-b159-41d2-8687-2a69271bfd61"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "c1fd61f6-11b5-4c29-a31a-ebebc5e89338"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "cf2b0020-eab1-4cdb-8cc7-be3ee8b1b53f"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "d38d2cc6-9e4b-4ddf-968e-a6362071e36d"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "e85842a5-09fa-4232-bd2a-a553218b0802"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "e8b0290c-7d3c-4dc0-908c-cf7a77ffb257"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "ed425dd5-f8f3-4714-ad39-9a5babd34c9c"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "f8b08c61-234e-4564-af61-d0ab6001663c"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "fca1c0e5-235e-4dbd-aabd-a97e7cecec1a"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        }
+      ]
+    },
+    "prediction_records": {
+      "identity_columns": [
+        "id"
+      ],
+      "record_count": 2,
+      "records": [
+        {
+          "identity_values": [
+            "47d72053-d606-4561-999e-6061c3d74d9c"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "5648b1eb-75c0-43f4-8596-a9b57e531a59"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        }
+      ]
+    },
+    "recall_lots": {
+      "identity_columns": [
+        "recall_id",
+        "lot_id"
+      ],
+      "record_count": 8,
+      "records": [
+        {
+          "identity_values": [
+            "28cdd337-2b9a-4af0-a24f-5d2c74ef919e",
+            "3c6caf9a-75ae-4555-93be-4e743c8433ec"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "28cdd337-2b9a-4af0-a24f-5d2c74ef919e",
+            "61bf554f-c1c2-442f-b520-50eacb8c821a"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "28cdd337-2b9a-4af0-a24f-5d2c74ef919e",
+            "64157834-62d1-4f9e-8403-0af1411fa419"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "28cdd337-2b9a-4af0-a24f-5d2c74ef919e",
+            "9f161d32-c28a-4709-a2de-45b3a5814106"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "28cdd337-2b9a-4af0-a24f-5d2c74ef919e",
+            "ede3ff56-05dc-4e8b-a526-1ff21ed9633c"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "28cdd337-2b9a-4af0-a24f-5d2c74ef919e",
+            "f4f0e105-2ee3-4656-96c7-1a90840e0938"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "38454b61-2b46-4ed3-9045-c9a6281e7a79",
+            "6a0fc270-ce40-4c18-8922-aafcd6220282"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "38454b61-2b46-4ed3-9045-c9a6281e7a79",
+            "83767147-11ec-4a4a-9215-3fc9e3e7e3a8"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        }
+      ]
+    },
+    "receipt_lines": {
+      "identity_columns": [
+        "id"
+      ],
+      "record_count": 9,
+      "records": [
+        {
+          "identity_values": [
+            "0d0ba460-ad76-4f8c-93d6-ad430bd1048d"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "133102f9-47bf-475a-8289-9c5107a9b1bb"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "2c066eb4-b4cb-42fb-8fbf-12d9002671a3"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "5bbcbf3b-42de-436e-942f-e03ba2c559dc"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "5fa78be9-8fd3-4b40-b4b8-3542004b8792"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "96135a9b-3caa-457d-a5d0-96eb0497ff61"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "97775553-f5a3-44e9-9da0-90167f824574"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "cf96dcce-bbd5-4f52-858c-f27734120f9d"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "ffa85f48-53c4-4ee1-bca0-5ff3ccbd414b"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        }
+      ]
+    },
+    "service_costs": {
+      "identity_columns": [
+        "id"
+      ],
+      "record_count": 2,
+      "records": [
+        {
+          "identity_values": [
+            "c5d1faa9-1f79-4870-9d62-2436009ab19e"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "e747de9c-90d7-4ce1-9996-815d3558ed41"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        }
+      ]
+    },
+    "lot_links": {
+      "identity_columns": [
+        "id"
+      ],
+      "record_count": 21,
+      "records": [
+        {
+          "identity_values": [
+            "09b7f479-0a56-4cea-9fe0-1344d3c8266a"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "1f20b3e4-7f45-465b-aa7a-0ad5aa91f0b9"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "2dc28e4e-0867-4c5f-b81f-240469cad620"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "3b724ea9-fae2-42a9-8636-056ee68a3d4a"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "3f9294d1-94bf-4e16-b65c-a9358117fd95"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "42431f47-753c-44a1-b3e1-efa832f9ab52"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "4fd05777-a870-452f-8543-43c5e8dc5bb7"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "507adfeb-7ff8-4387-9c4d-d211b64a3b2d"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "63a9bcc6-fecf-4547-8586-f78458d992c6"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "75e07b37-e063-4715-b5d6-1abf0cfb84d1"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "7d266f56-350c-4843-9956-66e27d54d4e7"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "823b50b8-ce3d-4837-bc4d-1e416cdedc3d"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "b1af4f0e-efab-47d8-a6d2-50d53feb118d"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "c2f93030-d0b5-4f6a-be4d-9bc02e5c28c3"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "c8d3f043-a850-4bbb-897a-ffd998e1695f"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "c9a3a6fc-a0d6-498b-b213-0023a3f44edb"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "cc091663-2e87-42d7-852f-77d340404703"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "d5d65b44-41a7-4700-b008-4cd31bba9472"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "ddcb5f89-9902-4b60-98b6-f65d968d053f"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "e469aa8f-2020-4e10-8d52-dcafb0889e15"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "f138bdaf-2706-4185-9061-7e428ba8cd25"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        }
+      ]
+    },
+    "stock_movements": {
+      "identity_columns": [
+        "id"
+      ],
+      "record_count": 52,
+      "records": [
+        {
+          "identity_values": [
+            "0ccbe798-a866-46f6-aa9d-14a14d35feca"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "168c1cf1-ee86-474e-8d2e-02727ee511f7"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "193d2376-237a-4096-abe7-b1bb575447b2"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "1bd779eb-49bf-4c16-ad93-825882ab1420"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "1eb698ad-3bc0-477a-803a-74e0e473b3f3"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "1ed488e8-ec90-4c60-b7ce-d917eaba52ee"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "22614556-772c-4c65-8438-715ddd3c359e"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "2746634c-8037-4931-bf25-8a298b8b656c"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "2bbed9b8-8484-4d1d-ba35-b6d34e1ac207"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "2dd239d7-3095-4780-b81f-f4d4644d29ff"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "30c7d0b9-d3dd-43f6-bdd0-a26b7b9182bb"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "33894983-508d-48d5-ae43-e296c309ea38"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "35be98c6-4f38-41a4-bf3c-dadb3c6b3d52"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "4acafb91-4df7-4992-93cc-81fc9937aaca"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "4b5ed8f6-bc98-4449-82c4-dff4adab740c"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "52cdd61d-24b5-46cb-bbf4-aeb8c54a81a5"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "5a2e9c69-aca3-42a9-895b-9035158d83be"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "5d7ef67d-9c3d-4ab9-bd7a-4c99672ec409"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "6c4b9d69-1848-4d35-8a16-441f1adeb6d8"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "77c90b0b-9a74-46d6-806d-dd8f97c4e682"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "7a9d7302-5f51-4b74-8519-948774f62f46"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "7da27cf9-5d0c-4671-82bc-762994cbf094"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "7f1be608-3a6e-4395-a122-195da3ba998c"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "82088977-7bb9-4aff-a406-8e8f58d4e5d5"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "87089381-ac9d-4080-bdee-5c1a5ab7c155"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "88705dc5-e53c-43b2-bc5a-955913e9e0a5"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "8974b977-5a8d-4cd9-9b52-7a4ae17fabc5"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "8aa62d80-a4dc-4261-b816-02c94a1009a7"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "8c3b6169-3b98-48c6-bb42-7a61f8813dba"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "97795531-285e-424a-a8cf-e6b75260d298"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "9797b7cd-973a-4b4b-9fb4-99155cbf6474"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "a3c43e0b-9cd5-4e46-9416-34bf045e6270"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "a4d0fdb3-0cab-4870-846d-4cce1e47f1e9"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "a848abdc-73c4-4e4f-b174-529122870f61"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "b2e7b5d4-de45-44be-8987-db94129eea7f"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "b6860bfe-3ad0-4a36-9f27-446be65e7cad"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "ba032b96-d2ce-4ffe-9483-d2fa937dc8bd"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "ca668de5-277b-4bef-88c3-caa93efe9b76"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "d46ea338-4825-412e-a4c7-f57eb46f94f0"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "d6a79266-7da5-40c7-98ac-f5bbcb80d8ef"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "dba5083f-7bd8-4d00-8388-67795299e7d0"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "dcb8a7f1-b7c1-4e15-a340-ac927461a485"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "e132949d-f041-4f79-86f0-9953e8c95b45"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "e2919c63-f667-4409-9620-7f9930661bef"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "eb54171e-b081-4bc5-a7bb-a4af1203f1ed"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "f27ff769-03e3-402f-9f23-d5aff15a4708"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "f51da580-5101-4b60-b715-9c5d0e752cdd"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "faeb9616-d3c4-49f7-a052-d13209fc06cb"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "fcf1cc3c-5a28-41a4-b4eb-6ed396c0167e"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "fd06ce26-e3eb-4687-9dea-7c5ffd245a32"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "fef96637-5264-4ac6-9593-e6901f591c11"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "ffd11cd3-8449-45fd-b86e-bd888f50512c"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        }
+      ]
+    },
+    "sale_lines": {
+      "identity_columns": [
+        "id"
+      ],
+      "record_count": 5,
+      "records": [
+        {
+          "identity_values": [
+            "0585fb5c-7fbe-4b6b-a56a-f83804fe950b"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "55ef2437-366c-43bc-bf46-08d219ed38c2"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "667c56ee-a924-4885-ab4e-4f7d33d06894"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "a275dbb4-5955-4a13-86b9-cb211db8ef2a"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "aa022823-58a5-49e8-9037-1d5aeadcb156"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        }
+      ]
+    },
+    "shipment_lines": {
+      "identity_columns": [
+        "id"
+      ],
+      "record_count": 3,
+      "records": [
+        {
+          "identity_values": [
+            "19cdf8c4-a21c-4f60-9d78-41a5227d89ca"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "3d66e3df-67d3-40eb-8274-d2ce4e46c404"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        },
+        {
+          "identity_values": [
+            "60f5f177-a91e-43ba-80a7-cda70529682e"
+          ],
+          "data_origin": "KURGUSAL / SYNTHETIC"
+        }
+      ]
+    }
+  }
+}

@@ -61,7 +61,9 @@ class BackendDemoTest {
             // Repeat exactly the durable request: proves no second server issue.
             val replay=remote.sell(row.key,row.body.toRequestBody("application/json".toMediaType()))
             assertEquals(confirmed.id,replay.body()!!.id)
-            assertEquals("5.000000",allPages {remote.stocks(it)}.single {it.lot_id==lot && it.location_id==location}.quantity)
+            // A read-only verifier must not reuse a connection left idle during
+            // software-emulated UI steps. Keep POST retry behavior unchanged.
+            assertEquals("5.000000",allPages {api(base,key).stocks(it)}.single {it.lot_id==lot && it.location_id==location}.quantity)
             compose.onNodeWithText("Satışlar",useUnmergedTree=true).performClick()
             compose.onNodeWithTag("main-list").performScrollToNode(hasTestTag("confirmed-${confirmed.id}"))
             File(app.filesDir,"demo-confirmed.png").outputStream().use {InstrumentationRegistry.getInstrumentation().uiAutomation.takeScreenshot().compress(Bitmap.CompressFormat.PNG,100,it)}
@@ -75,7 +77,7 @@ class BackendDemoTest {
             val rejected=repo.enqueue(rejectedDraft.id);repo.drain()
             assertEquals("NEEDS_ACTION",repo.dao.outbox(rejected.key)?.state)
             assertEquals("LOT_BLOCKED",repo.dao.outbox(rejected.key)?.errorCode)
-            assertEquals("5.000000",allPages {remote.stocks(it)}.single {it.lot_id==lot && it.location_id==location}.quantity)
+            assertEquals("5.000000",allPages {api(base,key).stocks(it)}.single {it.lot_id==lot && it.location_id==location}.quantity)
             assertEquals(1,repo.dao.salesFlow().first().count {it.outboxKey!=null})
             scenario.recreate()
             assertEquals(row.key,repo.dao.outbox(row.key)?.key)

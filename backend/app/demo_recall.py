@@ -7,9 +7,11 @@ import urllib.error
 import urllib.request
 from decimal import Decimal
 from uuid import NAMESPACE_URL, uuid5
+from app.demo_safety import require_local_demo
 
 
 def main():
+    require_local_demo()
     secret = os.environ.get('AVATAR_API_KEY')
     if not secret:
         raise SystemExit('AVATAR_API_KEY process ortamında gerekli; değeri loglamayın.')

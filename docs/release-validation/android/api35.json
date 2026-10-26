@@ -1,0 +1,10 @@
+{
+  "sdk": 35,
+  "image": "AOSP default x86_64",
+  "physical_device": false,
+  "discovered": 0,
+  "passed": 0,
+  "suite_failed": true,
+  "reason": "Instrumentation process did not complete startup; ActivityManager bg ANR killed process before test discovery. No KVM; software emulation. Root cause not conclusively isolated.",
+  "retry": "api35-retry.json: 3 pass /1 fail; full API35 not accepted"
+}
