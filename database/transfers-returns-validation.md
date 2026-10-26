@@ -89,4 +89,6 @@ PDF mamul lotu için ek kabul:30paket satışın1+29paket iadesi18,158824 +526,6
 
 Tamamlanan backend kabulü: bağımsız lot transferi; gerçek satış/sevkiyat kaynaklı kısmi/tam müşteri iadesi; yalnız sevksiz satışın tam iptali; gerçek FK hareketleri; stok/maliyet dengesi; transaction/idempotency/recall ve yarışlar; orijinal/düzeltilmiş kârlılığın ayrılması.
 
+Karantina geri kazanımı tarihsel defter maliyetiyle kaydedilir. Geri kazanılabilir piyasa değeri ve kalite kaynaklı değer düşüklüğü bu veriden hesaplanmaz; şirketin gerçek net kârı iddiası yoktur.
+
 Kalan: **rework**, ayrı kalite onayı ve geri kazanım stoğunu güvenle yeniden değerleyip kullanıma açma, bağımsız sevkiyat iadesinin kaynak satışa eşlenmesi, kısmi iptal, nakit iade/ödeme ve istemci ekranları. LOT-05'in tamamına bitti denmez. Ortak API/ER/checklist bu görev sınırı gereği değiştirilmedi; entegrasyon sorumlusu yeni sözleşmeyi bu backend belgesinden aktarabilir. Fiziksel cihaz veya frontend kabulü yapılmış sayılmaz.

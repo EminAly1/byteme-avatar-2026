@@ -80,6 +80,8 @@ Her satır için aynı gerçek lot ve **orijinal depo konumunda** pozitif sale_c
 
 ## 4. Maliyet, kredi ve kârlılık
 
+`restored_cost` tarihsel **defter maliyetidir**; iade ürünün geri kazanılabilir piyasa değeri veya kalite onayı değildir. Karantina ürününe ilişkin değer düşüklüğü/vergi/imhaya dair veri yoksa bir tutar uydurulmaz; bunlar ayrı kalite/değerleme sürecinde ele alınmalıdır. Net kâr alanı yalnız kayıtlı satış kredisi ve tarihsel COGS düzeltmesine dayanır.
+
 İade kredisi nakit ödeme veya resmî credit-note iddiası değildir. `cash_refund_status=not_recorded`; kaydedilen şey net satış geliri düzeltmesi ve tarihsel COGS ters kaydıdır. EUR dışı, vergi, iskonto, ödeme sağlayıcısı veya banka iadesi bu sürümde yoktur.
 
 Satırın orijinal miktarı Q, toplam net tutarı R, kesin tüketim maliyeti C olsun. Önceki iade miktarı q0, yeni kümülatif miktar q1 için:
