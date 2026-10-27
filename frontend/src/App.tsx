@@ -21,6 +21,7 @@ import {
   ArrowLeftRight,
   Network,
   BellRing,
+  FileText,
   ShieldAlert,
   Sparkles,
   Sprout,
@@ -96,6 +97,8 @@ const Distributions = lazy(() =>
 );
 
 const Alerts = lazy(() => import('./pages/Alerts').then(m => ({ default: m.Alerts })));
+const Documents = lazy(() => import('./pages/Documents').then(m => ({ default: m.Documents })));
+const SaleDocument = lazy(() => import('./pages/Documents').then(m => ({ default: m.SaleDocument })));
 
 const primary = [
   { path: "/", label: "Genel bakış", icon: LayoutDashboard },
@@ -103,6 +106,7 @@ const primary = [
   { path: "/uretim", label: "Dış üretim", icon: Factory },
   { path: "/parcalama", label: "Kuzu parçalama", icon: Scissors },
   { path: "/satislar", label: "Satışlar", icon: ShoppingBag },
+  { path: "/belgeler", label: "Belge merkezi", icon: FileText },
   { path: "/sevkiyatlar", label: "Sevkiyatlar", icon: Truck },
   { path: "/dagitimlar", label: "İkinci kademe dağıtım", icon: Network },
   { path: "/hareketler", label: "Stok hareket merkezi", icon: ArrowLeftRight },
@@ -295,6 +299,8 @@ export function App() {
             <Routes>
               <Route path="/" element={<Dashboard />} />
               <Route path="/uyarilar" element={<Alerts />} />
+              <Route path="/belgeler" element={<Documents />} />
+              <Route path="/belgeler/satis/:id" element={<SaleDocument />} />
               <Route path="/urunler" element={<Products />} />
               <Route path="/is-ortaklari" element={<Parties />} />
               <Route path="/depolar" element={<Locations />} />
