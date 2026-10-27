@@ -1,13 +1,13 @@
 # AVATAR 2026 — Ek Özellikler Yol Haritası
 
-> **Durum:** Planlandı — mevcut işlevlerin tamamlandığını belirtmez.  
+> **Durum:** EK-02 anomali MVP yerel kabulü tamamlandı (PR #31); diğer ek paketler planlıdır, tam release/teslim kabulü ayrı.  
 > **Ekip:** ByteMe. **Ürün adı/markası:** ekip isminden bağımsız; “İZORA” yalnız geçici aday, marka doğrulaması ve nihai görsel onay bekliyor.  
 > **Başlangıç:** 25 Ekim 2026. **Plan öncelik güncellemesi:** 27 Ekim 2026. **Yarışma teslimi:** 1 Kasım 2026, 23:59 (Europe/Istanbul).  
 > **Ana takip:** [PROJECT_CHECKLIST.md](PROJECT_CHECKLIST.md). **Görsel kriterler:** [FRONTEND_VISION.md](FRONTEND_VISION.md).
 
 ## Değişmez çalışma kuralları
 
-1. **Ön koşul / sürüm kapısı:** Görev 12 release-integration PR #20 main'e alındı ve yerel demo GO; eksik zorunlu LOT-10, frontend kullanıcı akışları ve teslim NO-GO hâlâ önceliklidir. Zorunlu yarışma kapsamı ve video/teslim riske atılmaz. Her opsiyonel özellik ayrı branch/PR, gerçek test ve geri alma planıyla geliştirilir.
+1. **Ön koşul / sürüm kapısı:** Görev 12 PR #20, ikinci kademe PR #27 ve React iş akışları PR #29 `main` dalında; EK-02 PR #31 de birleştirildi. Yerel iş akışları kabul kanıtlıdır, **son birleşik `main` tam regresyonu, release/video ve gönderim hâlâ açık**. Her opsiyonel özellik ayrı branch/PR ve hedefli testle geliştirilir; zorunlu teslim riske atılmaz. Zorunlu yarışma kapsamı ve video/teslim riske atılmaz. Her opsiyonel özellik ayrı branch/PR, gerçek test ve geri alma planıyla geliştirilir.
 2. MySQL merkezî kesin kayıt; Room/SQLite yalnız mobil cache, taslak ve outbox. Frontend ve Android stok, maliyet, kesin satış veya recall otoritesi olamaz.
 3. İleri özelliklerde veri ve kimlik güvenliği önceliklidir. Prototip X-API-Key **gerçek kullanıcı/rol yetkilendirmesi değildir**; halka açık internete mevcut sistemi açma. TLS/rol/erişim denetimi ve belgelerde güvenli saklama gereklidir.
 4. Fatura OCR, tahmin ve anomali çıktıları **insan onayı olmadan kesin stok veya maliyet defterine yazılmaz**. Desteklenmeyen gerçek-zaman, doğruluk veya resmî belge iddiası yapılmaz.
@@ -20,9 +20,9 @@
 
 | ID | Öncelik | Paket | Durum | Bitiş/kabul özeti |
 | --- | --- | --- | --- | --- |
-| KAPI-00 | **Zorunlu önce** | Release/yarışma teslim kapısı | Yerel demo GO / tam teslim NO-GO | PR #20 yerel Compose+demo GO; LOT-10 ve kullanıcı akışları/video/tag/gönderim tamamlanmadı |
+| KAPI-00 | **Zorunlu önce** | Release/yarışma teslim kapısı | Yerel demo GO / tam teslim NO-GO | PR #20/27/29 işlevlerinin dar kabulü ve PR #31 anomali MVP kabulü var; son birleşik test, video/tag/APK paketi/gönderim yapılmadı |
 | EK-01 | **P2** | Mobil ↔ web güncel veri/senkronizasyonu | Planlandı (30 Ekim sonrasına ertelenebilir) | Sunucu onaylı satış/lot/recall web'de kendiliğinden yenilenir; Android uygulama aktifken refresh; offline kesin satış iddiası yok |
-| EK-02 | **P1 — 29 Ekim hedefi** | Anomali ve akıllı uyarı merkezi — MVP | Planlandı | EKP/verim sapması, SKT, azalan stok, mükerrer belge; açıklanabilir kurallar + yalnız kanıtlanırsa ayrı ML değerlendirmesi |
+| EK-02 | **P1 — 29 Ekim hedefi** | Anomali ve akıllı uyarı merkezi — MVP | **MVP tamamlandı; final birleşik kabul bekliyor** | [PR #31](https://github.com/EminAly1/byteme-avatar-2026/pull/31), [teknik kabul](ANOMALY_ALERTS_MVP.md): SKT geçmiş/yaklaşan, bloke lot, yapılandırılmış düşük stok, kayıtlı tahmin–gerçekleşme EKP/verim; 53 hedefli backend, 72 React unit ve 4 Chromium. **Mükerrer fatura alarmı EK-03/04/05 belge kimliği sonrası; henüz yok.** Gerçek anomali ML iddiası yok |
 | EK-03 | **P2** | Güvenli belge altyapısı + mobil fotoğraf yükleme | Planlandı (fatura taslağını bloke etmez) | Mobil kameradan belge yüklendiğinde merkezî kayıtta ve web inceleme listesinde görünür; güvenli metadata/dosya/izinler |
 | EK-04 | **P2** | Fatura ve irsaliye OCR + insan onay ekranı | Planlandı (30 Ekim sonrasında) | Türkçe alanlar, kalemler, güven puanı, hata düzeltme; onaysız kesin stok/alış yok; gerçek ölçüm raporu |
 | EK-05 | **P1 — 30 Ekim hedefi** | Profesyonel proforma/satış özeti taslağı, PDF/çıktı — MVP | Planlandı | Gerçek satış/sevkiyat verisinden düzenlenebilir belge taslağı; A4 PDF/yazdır, tarihçe; satışın kesin defteri değişmez |
@@ -45,15 +45,15 @@
 | --- | --- | --- |
 | **27 Ekim** | Devam eden Görev 15 — LOT-10 kayıtlı ikinci kademe zinciri | Kod + dar MySQL testleri + PR; başarısız iş ana dalda yarım açılmaz |
 | **28 Ekim** | Görev 16 — transfer, iade, iptal, rework, ikinci kademe ve kâr için mevcut premium React arayüzü | Gerçek API, temel responsive işlem kabulü; pahalı dekoratif yeniden tasarım yok |
-| **29 Ekim** | **EK-02 anomali/uyarı MVP** | Açıklanabilir kural tabanlı SKT, eşik üstü üretim verim/EKP sapması, stok seviyesi/gerçek lot blokajı; okunur kaynak UUID/eşik/severity; salt-okunur API ve web uyarı listesi; gerçek ML doğruluğu iddiası yok |
+| **29 Ekim** | **EK-02 anomali/uyarı MVP** | **27 Ekim yerel MVP ve PR #31 tamamlandı**. 29 Ekim hedefi erken karşılandı; son birleşik regresyon 31 Ekim. Desteklenen 6 kod, salt-okunur ve sentetik tahmin sınırları açık |
 | **30 Ekim** | **EK-05 proforma/satış özeti PDF MVP** + release kontrollerini başlat | Gerçek Sale/Shipment kaynaklı, güzel A4 önizleme/print/PDF, izinli taslak alanları; kesin satır/lot/maliyet değişmez; 'resmî e-Fatura' iddiası yok |
 | **31 Ekim** | Son `main` regresyonu, release, Android APK yolu, kullanım kılavuzu, yalnız üretilmiş log/görsel temizliği, video ve **gönderim hazırlığı** | P0'a rastlanırsa yalnız düzeltme; ek özellik branch'i kapalı kalır. Public repo/≤15 dk video linkleri kontrol edilir |
 | **1 Kasım (yedek)** | Gönderim ve alındı teyidi | Son tarih **23:59 Türkiye saati**; son dakikaya bırakma |
 
-### EK-02 — 29 Ekim MVP için sınır
-- **Önce kurallar, sonra gerekirse gerçek veriyle anomali ML.** Mevcut Ridge verim/EKP tahmini ve gerçekleşme sapması varsa yalnız ilgili kapanmış işlemle karşılaştır; çıktı oluşmadan veri uydurma.
+### EK-02 — MVP yerel kabulü ve kalan işler (PR #31)
+- **Uygulandı:** 5 kural ailesi/6 kod, aynı operasyon FK'lı ve işlem öncesi kayıtlı Ridge tahmin–gerçekleşme karşılaştırması, salt-okunur MySQL ve /uyarilar. Mevcut sentetik ML gerçek anomali doğruluğu iddiası değildir.
 - SKT yaklaşması ve kayıtlı düşük stok dahil; ürün birimleri birbirine toplama. İlgili lot/işlem/kural/eşik/gözlenen değer/severity ve ne yapılacağını kullanıcıya açık Türkçe göster.
-- Listelemek/detay ve isteğe bağlı okundu durumu yeterli; dış e-posta/push, sahte aktivite sayacı, yeni eğitim pipeline'ı, kapsamlı iş akışı bu sprintte yok.
+- **Kalan:** okundu/bildirim geçmişi, e-posta/push, web'den eşik yönetimi ve belge altyapısı gelince mükerrer fatura denetimi. Yeni eğitim pipeline'ı bu sürümde yok.
 - Güvenli smoke: eşik altı/üstü, boş veri, blokeli lot, tekrar taramada mükerrer olay yok, stok ve recall defteri mutasyonsuz.
 
 ### EK-05 — 30 Ekim MVP için sınır
