@@ -1,13 +1,13 @@
 # AVATAR 2026 — Ek Özellikler Yol Haritası
 
-> **Durum:** EK-02 anomali MVP yerel kabulü tamamlandı (PR #31); diğer ek paketler planlıdır, tam release/teslim kabulü ayrı.  
+> **Durum:** EK-02 anomali MVP (PR #31) ve EK-05 PDF/proforma MVP (PR #33) yerel kabulü tamamlandı; diğer ek paketler planlıdır, tam release/teslim kabulü ayrı.  
 > **Ekip:** ByteMe. **Ürün adı/markası:** ekip isminden bağımsız; “İZORA” yalnız geçici aday, marka doğrulaması ve nihai görsel onay bekliyor.  
 > **Başlangıç:** 25 Ekim 2026. **Plan öncelik güncellemesi:** 27 Ekim 2026. **Yarışma teslimi:** 1 Kasım 2026, 23:59 (Europe/Istanbul).  
 > **Ana takip:** [PROJECT_CHECKLIST.md](PROJECT_CHECKLIST.md). **Görsel kriterler:** [FRONTEND_VISION.md](FRONTEND_VISION.md).
 
 ## Değişmez çalışma kuralları
 
-1. **Ön koşul / sürüm kapısı:** Görev 12 PR #20, ikinci kademe PR #27 ve React iş akışları PR #29 `main` dalında; EK-02 PR #31 de birleştirildi. Yerel iş akışları kabul kanıtlıdır, **son birleşik `main` tam regresyonu, release/video ve gönderim hâlâ açık**. Her opsiyonel özellik ayrı branch/PR ve hedefli testle geliştirilir; zorunlu teslim riske atılmaz. Zorunlu yarışma kapsamı ve video/teslim riske atılmaz. Her opsiyonel özellik ayrı branch/PR, gerçek test ve geri alma planıyla geliştirilir.
+1. **Ön koşul / sürüm kapısı:** Görev 12 PR #20, ikinci kademe PR #27 ve React iş akışları PR #29 `main` dalında; EK-02 PR #31 ve EK-05 PR #33 de birleştirildi. Yerel iş akışları kabul kanıtlıdır, **son birleşik `main` tam regresyonu, release/video ve gönderim hâlâ açık**. Her opsiyonel özellik ayrı branch/PR ve hedefli testle geliştirilir; zorunlu teslim riske atılmaz. Zorunlu yarışma kapsamı ve video/teslim riske atılmaz. Her opsiyonel özellik ayrı branch/PR, gerçek test ve geri alma planıyla geliştirilir.
 2. MySQL merkezî kesin kayıt; Room/SQLite yalnız mobil cache, taslak ve outbox. Frontend ve Android stok, maliyet, kesin satış veya recall otoritesi olamaz.
 3. İleri özelliklerde veri ve kimlik güvenliği önceliklidir. Prototip X-API-Key **gerçek kullanıcı/rol yetkilendirmesi değildir**; halka açık internete mevcut sistemi açma. TLS/rol/erişim denetimi ve belgelerde güvenli saklama gereklidir.
 4. Fatura OCR, tahmin ve anomali çıktıları **insan onayı olmadan kesin stok veya maliyet defterine yazılmaz**. Desteklenmeyen gerçek-zaman, doğruluk veya resmî belge iddiası yapılmaz.
@@ -20,12 +20,12 @@
 
 | ID | Öncelik | Paket | Durum | Bitiş/kabul özeti |
 | --- | --- | --- | --- | --- |
-| KAPI-00 | **Zorunlu önce** | Release/yarışma teslim kapısı | Yerel demo GO / tam teslim NO-GO | PR #20/27/29 işlevlerinin dar kabulü ve PR #31 anomali MVP kabulü var; son birleşik test, video/tag/APK paketi/gönderim yapılmadı |
+| KAPI-00 | **Zorunlu önce** | Release/yarışma teslim kapısı | Yerel demo GO / tam teslim NO-GO | PR #20/27/29 işlevlerinin dar kabulü ve PR #31 anomali ve PR #33 proforma PDF yerel MVP kabulü var; son birleşik test, Docker image rebuild, video/tag/APK paketi/gönderim yapılmadı |
 | EK-01 | **P2** | Mobil ↔ web güncel veri/senkronizasyonu | Planlandı (30 Ekim sonrasına ertelenebilir) | Sunucu onaylı satış/lot/recall web'de kendiliğinden yenilenir; Android uygulama aktifken refresh; offline kesin satış iddiası yok |
 | EK-02 | **P1 — 29 Ekim hedefi** | Anomali ve akıllı uyarı merkezi — MVP | **MVP tamamlandı; final birleşik kabul bekliyor** | [PR #31](https://github.com/EminAly1/byteme-avatar-2026/pull/31), [teknik kabul](ANOMALY_ALERTS_MVP.md): SKT geçmiş/yaklaşan, bloke lot, yapılandırılmış düşük stok, kayıtlı tahmin–gerçekleşme EKP/verim; 53 hedefli backend, 72 React unit ve 4 Chromium. **Mükerrer fatura alarmı EK-03/04/05 belge kimliği sonrası; henüz yok.** Gerçek anomali ML iddiası yok |
 | EK-03 | **P2** | Güvenli belge altyapısı + mobil fotoğraf yükleme | Planlandı (fatura taslağını bloke etmez) | Mobil kameradan belge yüklendiğinde merkezî kayıtta ve web inceleme listesinde görünür; güvenli metadata/dosya/izinler |
 | EK-04 | **P2** | Fatura ve irsaliye OCR + insan onay ekranı | Planlandı (30 Ekim sonrasında) | Türkçe alanlar, kalemler, güven puanı, hata düzeltme; onaysız kesin stok/alış yok; gerçek ölçüm raporu |
-| EK-05 | **P1 — 30 Ekim hedefi** | Profesyonel proforma/satış özeti taslağı, PDF/çıktı — MVP | Planlandı | Gerçek satış/sevkiyat verisinden düzenlenebilir belge taslağı; A4 PDF/yazdır, tarihçe; satışın kesin defteri değişmez |
+| EK-05 | **P1 — 30 Ekim hedefi** | Profesyonel proforma/satış özeti taslağı, PDF/çıktı — MVP | **MVP tamamlandı; final birleşik kabul bekliyor** | [PR #33](https://github.com/EminAly1/byteme-avatar-2026/pull/33), [teknik kabul](PROFORMA_PDF_MVP.md): kesin satış/sevkiyat/iade/iptal kayıtları, geçici düzenlenebilir taslak notları, ReportLab/DejaVu gerçek A4 PDF indir ve ayrı yazdırma; 27 hedefli backend, 83 React unit ve 3 Chromium; 30 tablo hash değişmedi. **Belge arşivi/tarihçe yok, OCR yok, resmî GİB e-Fatura değil.** |
 | EK-06 | **P2** | Ortak minimalist ürün kimliği / ikon | Planlandı | ByteMe'den bağımsız ürün simgesi; anlamlı üç aşamalı izlenebilirlik; Android adaptive icon, web favicon/PWA ve masaüstü kısayolunda aynı vektör |
 | EK-07 | **P2** | Açık/koyu görünüm ve vurgu seçenekleri | Planlandı | Önce iki eksiksiz tema (sistem/manuel/kalıcı); dört bağımsız tema yerine gerekirse 2 tema × 2 erişilebilir vurgu paleti |
 | EK-08 | **P2** | QR / barkodla lot izleme | Planlandı | Android kamera ve web tarama; lotun kesin UUID'sine yönlendirme; bozuk/tekrar kod ve bloke lot testleri |
@@ -46,7 +46,7 @@
 | **27 Ekim** | Devam eden Görev 15 — LOT-10 kayıtlı ikinci kademe zinciri | Kod + dar MySQL testleri + PR; başarısız iş ana dalda yarım açılmaz |
 | **28 Ekim** | Görev 16 — transfer, iade, iptal, rework, ikinci kademe ve kâr için mevcut premium React arayüzü | Gerçek API, temel responsive işlem kabulü; pahalı dekoratif yeniden tasarım yok |
 | **29 Ekim** | **EK-02 anomali/uyarı MVP** | **27 Ekim yerel MVP ve PR #31 tamamlandı**. 29 Ekim hedefi erken karşılandı; son birleşik regresyon 31 Ekim. Desteklenen 6 kod, salt-okunur ve sentetik tahmin sınırları açık |
-| **30 Ekim** | **EK-05 proforma/satış özeti PDF MVP** + release kontrollerini başlat | Gerçek Sale/Shipment kaynaklı, güzel A4 önizleme/print/PDF, izinli taslak alanları; kesin satır/lot/maliyet değişmez; 'resmî e-Fatura' iddiası yok |
+| **30 Ekim** | **EK-05 proforma/satış özeti PDF MVP** + release kontrollerini başlat | **27 Ekim yerel MVP ve PR #33 tamamlandı**: gerçek A4 ReportLab PDF, Türkçe, iade/iptal, salt-okunur MySQL. Docker image rebuild, tüm `main` testleri, cihaz ve final demo 31 Ekim kabulüne açık. |
 | **31 Ekim** | Son `main` regresyonu, release, Android APK yolu, kullanım kılavuzu, yalnız üretilmiş log/görsel temizliği, video ve **gönderim hazırlığı** | P0'a rastlanırsa yalnız düzeltme; ek özellik branch'i kapalı kalır. Public repo/≤15 dk video linkleri kontrol edilir |
 | **1 Kasım (yedek)** | Gönderim ve alındı teyidi | Son tarih **23:59 Türkiye saati**; son dakikaya bırakma |
 
@@ -56,11 +56,11 @@
 - **Kalan:** okundu/bildirim geçmişi, e-posta/push, web'den eşik yönetimi ve belge altyapısı gelince mükerrer fatura denetimi. Yeni eğitim pipeline'ı bu sürümde yok.
 - Güvenli smoke: eşik altı/üstü, boş veri, blokeli lot, tekrar taramada mükerrer olay yok, stok ve recall defteri mutasyonsuz.
 
-### EK-05 — 30 Ekim MVP için sınır
-- **EK-03 belge fotoğraf yükleme ve EK-04 OCR gerekmiyor.** Uygulamadaki **kesinleşmiş Sale/Shipment** kayıtları belgeyi besler; önce mevcut kayıtlar üzerinden **Proforma / Satış Özeti** yazdır/indir.
-- Kullanıcı düzenleyebilsin: taslak belge başlığı, notlar, vade/teslim notu gibi **muhasebe dışı alanlar**; kaynak satış miktar/fiyat/lot ve kesin muhasebe değişmez. Kalem düzeltme gerekliyse ayrı açık fark/onay akışı veya güvenli taslak bilgi satırı; 'kaynak satış tutarı değişti' izlenimi verilmez.
-- A4 şık tipografi, tutarlı ürün kimliği **isim/logo henüz kesin değilse nötr simge**, yazdırma stili ve tarayıcı PDF; sunucu kalıcılığı ancak güvenli erişim + sınırlı migration ve yeterli test mümkünse. Kaydetme mümkün değilse açıkça *geçici yerel taslak* olarak göster.
-- **Resmî e-Fatura/e-Arşiv değildir.** GİB entegrasyonu, vergisel kesin belge numaralama, mali mühür ve gönderim bu sprintte yok.
+### EK-05 — MVP yerel kabulü ve kalan işler (PR #33)
+- **Uygulandı:** EK-03 belge fotoğraf yükleme ve EK-04 OCR gerektirmeden kesinleşmiş Sale/Shipment kayıtlarından proforma ve satış özeti, gerçek PDF indirme ve ayrı yazdırma. Henüz resmî fatura, kalıcı arşiv veya sürüm tarihi değildir.
+- **Uygulandı:** Kullanıcı yalnız başlık/not/vade/teslim/satıcı beyanı gibi taslak alanlarını değiştirir; kaynak satış miktar/fiyat/lot ve kesin muhasebe değişmez. Kısmi/tam iade ve iptal orijinal/net satış tutarından ayrı gösterilir.
+- **Uygulandı:** Nötr simgeli A4 tasarım, lisanslı DejaVu fontlarla sunucu PDF'si ve ayrı yazdırma; 45 kalemli 8 sayfa örneği. Taslak **yalnız React state** içinde; sunucu arşivi veya eski taslaklara geri dönüş yok.
+- **Sınır:** Resmî e-Fatura/e-Arşiv değildir; GİB, KDV, kesin mali numara, ödeme, mali mühür ve gönderim yok. Bunun yanında fiziksel yazıcı, Docker image rebuild ve son birleşik `main` testi doğrulanmalı.
 - Smoke: örnek satışla doğru ürün/adet/EUR toplamı, A4 print/PDF render, bozuk veri/boş kayıt, kritik alan salt-okunurluğu, mobil önizleme. Gizli müşteri verisini repoya commit etme.
 
 ### Geliştirmeler kalıcı plandan çıkarılmadı
