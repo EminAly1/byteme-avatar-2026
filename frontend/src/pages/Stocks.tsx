@@ -1,3 +1,4 @@
+import { useSearchParams } from "react-router-dom";
 import { useState } from "react";
 import { useCatalog, useRecords } from "../lib/data";
 import { Section, State, Table, Badge } from "../components/ui";
@@ -13,10 +14,11 @@ import {
 import type { Movement, Stock } from "../lib/types";
 
 export function Stocks() {
+  const [search] = useSearchParams();
   const data = useCatalog(),
-    [product, setProduct] = useState(""),
-    [lot, setLot] = useState(""),
-    [location, setLocation] = useState(""),
+    [product, setProduct] = useState(search.get("product") || ""),
+    [lot, setLot] = useState(search.get("lot") || ""),
+    [location, setLocation] = useState(search.get("location") || ""),
     [tab, setTab] = useState("stocks");
   const stock = useRecords<Stock>("/stocks"),
     movements = useRecords<Movement>("/stock-movements");

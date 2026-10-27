@@ -1,3 +1,4 @@
+import { DashboardAlerts } from "../components/Alerts";
 import { useMediaQuery } from "../hooks/useMediaQuery";
 import { Link } from "react-router-dom";
 import {
@@ -105,6 +106,7 @@ export function Dashboard() {
             />
           ))}
         </div>
+        <DashboardAlerts />
         {unavailable > 0 && (
           <div className="notice warning">
             <ShieldAlert size={20} />
