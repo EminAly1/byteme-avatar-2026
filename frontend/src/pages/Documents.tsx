@@ -48,10 +48,12 @@ function Editor({saleId}:{saleId:string}) {
       {notice&&<p className="notice" role="status">{notice}</p>}
       <div className="document-workspace"><aside className="document-editor" aria-label="Belge taslak ayarları"><Section title="Taslak ayarları" subtitle="Kesin müşteri, satış tarihi, fiyat, miktar ve lot alanları kilitlidir.">
         <form ref={form} className="stack" onSubmit={e=>e.preventDefault()}>
-          <label>Belge görünümü<select value={kind} onChange={e=>setKind(e.target.value as DocumentKind)}><option value="proforma">Proforma taslağı</option><option value="sale_summary">Satış özeti</option></select></label>
+          <fieldset disabled={!!busy} className="document-fields">
+          <label>Belge görünümü<select aria-label="Belge görünümü" value={kind} onChange={e=>setKind(e.target.value as DocumentKind)}><option value="proforma">Proforma taslağı</option><option value="sale_summary">Satış özeti</option></select></label>
           <label>Belge düzenleme tarihi<input type="date" required value={draft.document_date} onChange={e=>setDraft({...draft,document_date:e.target.value})}/></label>
           {fields.map(([name,label])=><label key={name}>{label}{['description','seller_contact','payment_note','delivery_note','note'].includes(name)?<textarea rows={name==='note'?4:2} maxLength={draftLimits[name]} value={draft[name]} onChange={e=>setDraft({...draft,[name]:e.target.value})}/>:<input maxLength={draftLimits[name]} value={draft[name]} onChange={e=>setDraft({...draft,[name]:e.target.value})}/>}<small>En fazla {draftLimits[name]} karakter ve 21 satır.{name.startsWith('seller')?' Kullanıcı girişi; doğrulanmadı.':''}</small></label>)}
           <label className="document-demo-toggle"><input type="checkbox" checked={draft.demo} onChange={e=>setDraft({...draft,demo:e.target.checked})}/> Kurgusal demo belgesi (kullanıcı beyanı)</label>
+          </fieldset>
         </form>
       </Section></aside><section className="document-preview" aria-label="Belge önizleme alanı"><div className="document-preview-caption"><span>A4 · 210 × 297 mm · EUR</span><span>Ekrana uyarlanmış önizleme</span></div><DocumentSheet source={q.data} kind={kind} draft={draft}/></section></div>
     </>}</State></div>;

@@ -5,6 +5,7 @@
 .document-workspace{display:grid;grid-template-columns:minmax(240px,300px) minmax(0,1fr);gap:24px;align-items:start}
 .document-editor .section-head{margin-bottom:20px}.document-editor label{display:flex;flex-direction:column;gap:6px;font-weight:600;font-size:var(--text-sm)}
 .document-editor label small{font-size:11px;font-weight:400;color:var(--muted)}.document-editor input,.document-editor select,.document-editor textarea{width:100%;min-width:0;max-width:100%}
+.document-fields{display:contents}
 .document-editor .document-demo-toggle{flex-direction:row;align-items:flex-start;gap:10px}.document-demo-toggle input{width:16px;flex-shrink:0;margin-top:3px}
 .document-preview{min-width:0;background:#e8ecf0;border:1px solid #d7dde5;border-radius:var(--radius);padding:18px;overflow:hidden}
 .document-preview-caption{display:flex;gap:10px;justify-content:space-between;flex-wrap:wrap;color:#526074;font-size:11px;margin-bottom:14px}
@@ -15,6 +16,7 @@
 .document-masthead{display:flex;align-items:center;gap:12px;padding-bottom:18px;border-bottom:2px solid #172b49;letter-spacing:.1em;font-size:9px;font-weight:650}
 .document-symbol{display:flex;gap:3px;align-items:flex-end;height:22px}.document-symbol i{width:5px;background:#172b49;height:14px}.document-symbol i:nth-child(2){height:22px}.document-symbol i:nth-child(3){height:18px}
 .document-disclaimer{font-size:10px;letter-spacing:.025em;font-weight:750}.document-demo{color:#80500b;font-size:10px;font-weight:650}
+.document-source-state{font-size:11px;color:#80500b;margin-top:8px}
 .document-meta{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:22px 0 12px}.document-meta dt{font-size:10px;color:#526074}.document-meta dd{margin:0;font-size:11px}
 .document-id{font-size:9px;color:#526074;overflow-wrap:anywhere}.document-text{white-space:pre-wrap;overflow-wrap:anywhere}.document-parties{display:grid;grid-template-columns:1fr 1fr;gap:24px;border-bottom:1px solid #dbe1e9;padding-bottom:22px;margin:12px 0 22px}
 .document-lines{width:100%;table-layout:fixed;border-collapse:collapse;font-size:10px}.document-lines th{font-size:9px;background:#edf1f6;letter-spacing:0;color:#172b49;text-transform:none;text-align:right;white-space:normal;padding:10px 7px}
@@ -29,7 +31,7 @@
 @media print{
   body:has(.document-sheet){background:white;color:#172b49}
   body:has(.document-sheet) .sidebar,body:has(.document-sheet) .topbar,body:has(.document-sheet) .page-header,body:has(.document-sheet) .page-footer,body:has(.document-sheet) .skip-link,body:has(.document-sheet) .document-toolbar,body:has(.document-sheet) .document-editor,body:has(.document-sheet) .document-preview-caption,body:has(.document-sheet) .document-root>.notice,body:has(.document-sheet) .document-output-error{display:none!important}
-  body:has(.document-sheet) .app-layout,body:has(.document-sheet) .workspace,body:has(.document-sheet) #main-content,.document-workspace,.document-preview{display:block!important;width:auto!important;max-width:none!important;margin:0!important;padding:0!important;border:0!important;overflow:visible!important;background:white!important}
+  body:has(.document-sheet) .app-layout,body:has(.document-sheet) .main-column,body:has(.document-sheet) #main-content,.document-workspace,.document-preview{display:block!important;width:auto!important;max-width:none!important;margin:0!important;padding:0!important;border:0!important;overflow:visible!important;background:white!important}
   .document-sheet{width:178mm!important;max-width:none!important;min-height:0!important;padding:0!important;box-shadow:none;font-size:10pt;print-color-adjust:exact;-webkit-print-color-adjust:exact}
   .document-sheet h2{font-size:25pt}.document-sheet h3{break-after:avoid}.document-sheet thead{display:table-header-group}.document-sheet tr,.document-parties,.document-totals,.document-status{break-inside:avoid}.document-sheet .document-lines{font-size:8pt}.document-sheet .document-lines th{font-size:7pt}.document-sheet .document-lines td{padding:10px 7px}.document-meta{grid-template-columns:1fr 1fr}.document-parties{grid-template-columns:1fr 1fr}
 }

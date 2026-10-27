@@ -9,6 +9,7 @@ export function DocumentSheet({source:s,kind,draft:d}:{source:DocumentSource;kin
     </header>
     <h2>{d.title || (kind==='proforma'?'Proforma taslağı':'Satış özeti')}</h2>
     <p className="document-disclaimer">{documentLabels[kind]}</p>
+    <p className="document-source-state">Kaynak durumu: <strong>{s.state_label}{(s.state==='cancelled'||s.state==='returned')?' — GÜNCEL ÖDEME TALEBİ DEĞİLDİR':''}</strong></p>
     {d.demo&&<p className="document-demo">KURGUSAL DEMO — kullanıcı beyanı</p>}
     <dl className="document-meta"><div><dt>Belge tarihi</dt><dd>{d.document_date||'Girilmedi'}</dd></div><div><dt>Taslak referansı</dt><dd>{d.reference||'Girilmedi'}</dd></div><div><dt>Kesin satış tarihi · Türkiye</dt><dd>{dateTime(s.sold_at)}</dd></div></dl>
     <p className="document-id">Kaynak satış: {s.sale_id}</p>

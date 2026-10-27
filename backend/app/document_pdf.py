@@ -37,7 +37,9 @@ def fonts():
 
 def number(value, money=False):
     # Formatting only; totals and adjustments were read / computed by the existing ledger service.
-    text = format(Decimal(value), ',.2f') if money else format(Decimal(value), ',f').rstrip('0').rstrip('.') if '.' in value else format(Decimal(value), ',f')
+    text = format(Decimal(value), ',.2f' if money else ',f')
+    if not money and '.' in text:
+        text = text.rstrip('0').rstrip('.')
     return text.replace(',', '_').replace('.', ',').replace('_', '.') + (' EUR' if money else '')
 
 
@@ -50,15 +52,15 @@ def render_pdf(data, kind, draft):
     output = BytesIO()
     styles = {
         'body': ParagraphStyle('body', fontName='Document', fontSize=8, leading=12, textColor=NAVY,
-                               spaceAfter=4, splitLongWords=True),
+                               spaceAfter=3, splitLongWords=True),
         'small': ParagraphStyle('small', fontName='Document', fontSize=6.8, leading=10, textColor=GRAY,
-                                spaceAfter=4, splitLongWords=True),
+                                spaceAfter=3, splitLongWords=True),
         'title': ParagraphStyle('title', fontName='DocumentBold', fontSize=23, leading=29,
                                textColor=NAVY, spaceAfter=10, splitLongWords=True),
-        'heading': ParagraphStyle('heading', fontName='DocumentBold', fontSize=10, leading=15,
-                                 textColor=NAVY, spaceBefore=12, spaceAfter=7),
+        'heading': ParagraphStyle('heading', fontName='DocumentBold', fontSize=10, leading=14,
+                                 textColor=NAVY, spaceBefore=9, spaceAfter=6),
         'right': ParagraphStyle('right', fontName='Document', fontSize=8, leading=12,
-                               textColor=NAVY, alignment=TA_RIGHT, spaceAfter=4, splitLongWords=True),
+                               textColor=NAVY, alignment=TA_RIGHT, spaceAfter=3, splitLongWords=True),
     }
 
     def p(text, style='body'):
@@ -69,8 +71,8 @@ def render_pdf(data, kind, draft):
         t = Table(rows, colWidths=[width * mm for width in widths], repeatRows=1 if header else 0,
                   hAlign='LEFT', splitByRow=1)
         commands = [('VALIGN', (0, 0), (-1, -1), 'TOP'), ('LEFTPADDING', (0, 0), (-1, -1), 5),
-                    ('RIGHTPADDING', (0, 0), (-1, -1), 5), ('TOPPADDING', (0, 0), (-1, -1), 8),
-                    ('BOTTOMPADDING', (0, 0), (-1, -1), 7),
+                    ('RIGHTPADDING', (0, 0), (-1, -1), 5), ('TOPPADDING', (0, 0), (-1, -1), 6),
+                    ('BOTTOMPADDING', (0, 0), (-1, -1), 5),
                     ('LINEBELOW', (0, 0), (-1, -1), .4, LINE)]
         if header:
             commands += [('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#edf1f6'))]
@@ -79,6 +81,7 @@ def render_pdf(data, kind, draft):
 
     title = draft.title or ('Proforma taslağı' if kind == 'proforma' else 'Satış özeti')
     story = [p('TİCARİ BELGE / GEÇİCİ TASLAK', 'small'), p(title, 'title'), p(DISCLAIMERS[kind]),
+             p('Kaynak durumu: ' + data['state_label'] + (' — GÜNCEL ÖDEME TALEBİ DEĞİLDİR' if data['state'] in ('cancelled', 'returned') else '')),
              p('KURGUSAL DEMO — kullanıcı beyanı' if draft.demo else 'Geçici taslak — sunucuda saklanmıyor', 'small'),
              p(f'Belge tarihi: {draft.document_date.strftime("%d.%m.%Y")}  ·  Taslak referansı: {draft.reference or "Girilmedi"}', 'small'),
              p('Kaynak satış: ' + data['sale_id'], 'small'),
