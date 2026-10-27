@@ -150,6 +150,8 @@ def create_return(db, request):
         original_sale_movement(db, sold)
         if timestamp < max(sale.sold_at, shipment.shipped_at):
             raise DomainError('RETURN_BEFORE_DELIVERY', 'İade tarihi satış/sevkiyattan önce olamaz', 422)
+        from app.second_tier import validate_return
+        validate_return(db, shipped, item.quantity, timestamp)
         product = services.get(db, m.Product, sold.product_id)
         services.counted_quantity(product, item.quantity)
         if item.unit != sold.unit:

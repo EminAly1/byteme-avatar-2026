@@ -344,3 +344,13 @@ class ReworkPost(Schema):
         if len({(x.product_id, x.lot_code) for x in self.outputs}) != len(self.outputs):
             raise ValueError('Çıktı ürün/lot kodu tekrarlanamaz')
         return self
+
+
+class SecondTierCreate(Schema):
+    source_shipment_line_id: UUID
+    recipient_party_id: UUID
+    quantity: PositiveQuantity
+    unit: Literal['kg', 'package', 'unit']
+    distributed_at: AwareDatetime
+    reference: Code
+    evidence_note: Reason
