@@ -422,3 +422,29 @@ class SaleCancellationLine(Identified, Base):
     unit: Mapped[str] = mapped_column(String(16))
     credit_amount: Mapped[Decimal] = mapped_column(Numeric(18, 2))
     restored_cost: Mapped[Decimal] = mapped_column(Q)
+
+
+class SecondTierDistribution(Identified, Base):
+    """Immutable operator evidence; no claim about recipient physical inventory."""
+    __tablename__ = 'second_tier_distributions'
+    __table_args__ = (
+        CheckConstraint('quantity > 0', name='ck_second_tier_quantity'),
+        CheckConstraint("unit IN ('kg','package','unit')", name='ck_second_tier_unit'),
+        CheckConstraint("unit = 'kg' OR quantity = FLOOR(quantity)", name='ck_second_tier_counted'),
+        CheckConstraint('source_customer_id <> recipient_party_id', name='ck_second_tier_recipient'),
+        UniqueConstraint('source_shipment_line_id', 'reference', name='uq_second_tier_reference'),
+        Index('ix_second_tier_lot', 'source_lot_id', 'id'),
+        Index('ix_second_tier_recipient', 'recipient_party_id', 'id'), OPTIONS,
+    )
+    source_shipment_line_id: Mapped[str] = mapped_column(ForeignKey('shipment_lines.id'))
+    source_customer_id: Mapped[str] = mapped_column(ForeignKey('parties.id'))
+    source_lot_id: Mapped[str] = mapped_column(ForeignKey('lots.id'))
+    product_id: Mapped[str] = mapped_column(ForeignKey('products.id'))
+    recipient_party_id: Mapped[str] = mapped_column(ForeignKey('parties.id'))
+    recipient_name: Mapped[str] = mapped_column(String(200))
+    recipient_contact: Mapped[str | None] = mapped_column(String(300))
+    quantity: Mapped[Decimal] = mapped_column(Q)
+    unit: Mapped[str] = mapped_column(String(16))
+    distributed_at: Mapped[datetime] = mapped_column(DATETIME(fsp=6))
+    reference: Mapped[str] = mapped_column(String(100))
+    evidence_note: Mapped[str] = mapped_column(String(500))

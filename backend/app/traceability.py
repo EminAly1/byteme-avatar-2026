@@ -1,4 +1,4 @@
-"""Read reports over recorded production and first-tier distribution only."""
+"""Read recorded production/distribution; never infer external physical stock."""
 from collections import defaultdict
 from decimal import Decimal
 
@@ -70,6 +70,26 @@ def distribution(db, lot_ids):
         buyers[customer_id]['quantities'].append({k: quantity(v) if isinstance(v, Decimal) else v for k, v in entry.items()})
     return_headers = graph.rows_for(db, m.CustomerReturn, m.CustomerReturn.id, [x.return_id for x in returns])
     cancellation_headers = graph.rows_for(db, m.SaleCancellation, m.SaleCancellation.id, [x.cancellation_id for x in cancellations])
+    from app import second_tier
+    second_tier_records = second_tier.report(db, lot_ids)
+    allocated = defaultdict(Decimal)
+    for row in second_tier_records:
+        allocated[row['source_shipment_line_id']] += Decimal(row['quantity'])
+    unknown = []
+    for customer_id in sorted(buyers):
+        recorded = [row for row in second_tier_records if row['source_customer_id'] == customer_id]
+        unknown.append({'customer_id': customer_id, 'market_remaining_quantity': None,
+            'final_consumer_sold_quantity': None, 'second_tier_recipients': [
+                {'distribution_id': row['id'], 'recipient_party_id': row['recipient_party_id'],
+                 'recipient_name': row['recipient_name'], 'recipient_contact': row['recipient_contact']}
+                for row in recorded] or None,
+            'external_inventory_verified': False,
+            'distribution_completeness': 'partial_documentation_only' if recorded else 'not_documented',
+            'unallocated_documented_quantities': [
+                {'source_shipment_line_id': line.id, 'lot_id': line.lot_id, 'product_id': line.product_id,
+                 'unit': line.unit, 'quantity': quantity(line.quantity - allocated[line.id]
+                     - returned_quantities[line.sale_line_id]), 'physical_stock': False}
+                for line in shipment_lines if ship_map[line.shipment_id].customer_id == customer_id]})
     return {
         'sales': [{**services.entity(s), 'line_scope': 'affected_lots_only', 'lines': [services.entity(x) for x in sale_lines if x.sale_id == s.id]} for s in sales],
         'shipments': [{**services.entity(s), 'line_scope': 'affected_lots_only', 'lines': [services.entity(x) for x in shipment_lines if x.shipment_id == s.id]} for s in shipments],
@@ -81,10 +101,9 @@ def distribution(db, lot_ids):
                                 'lines': [services.entity(line) for line in cancellations if line.cancellation_id == row.id]}
                                for row in cancellation_headers],
         'total_shipped_quantities': [{'product_id': p, 'unit': u, 'quantity': quantity(q)} for (p, u), q in sorted(totals.items())],
-        'second_tier_distributions': [],
-        'unknown_distributions': [{'customer_id': k, 'market_remaining_quantity': None, 'final_consumer_sold_quantity': None,
-                                   'second_tier_recipients': None} for k in sorted(buyers)],
-        'distribution_scope': 'Recorded company-to-customer deliveries only; no second-tier records exist in this schema. Shipped quantity is not market remaining stock or end-consumer sales.',
+        'second_tier_distributions': second_tier_records,
+        'unknown_distributions': unknown,
+        'distribution_scope': 'Recorded company deliveries and operator-reported second-tier events only. External physical stock and consumer sales remain unknown; second-tier quantities are not additional company shipments.',
     }
 
 

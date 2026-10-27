@@ -13,7 +13,7 @@ from app.commands import execute
 from app.config import get_settings
 from app.database import get_engine
 from app.errors import DomainError
-from app import reworks
+from app import reworks, second_tier
 
 
 def authenticate(x_api_key: Annotated[str | None, Header()] = None):
@@ -42,6 +42,33 @@ Limit = Annotated[int, Query(ge=1, le=100)]
 def write(scope, key, payload, service, status=201):
     body, code = execute(scope, key, payload, service, status)
     return JSONResponse(body, status_code=code)
+
+
+@router.post('/distributions/second-tier', status_code=201)
+def second_tier_create(body: s.SecondTierCreate, key: Key):
+    return write('distributions:second-tier', key, body, second_tier.create)
+
+
+@router.get('/distributions/second-tier/{distribution_id}')
+def second_tier_get(distribution_id: UUID, db: DB):
+    return second_tier.detail(db, services.get(db, m.SecondTierDistribution, distribution_id))
+
+
+@router.get('/distributions/second-tier')
+def second_tier_list(db: DB, limit: Limit = 50, cursor: UUID | None = None,
+                     source_shipment_line_id: UUID | None = None,
+                     source_lot_id: UUID | None = None, recipient_party_id: UUID | None = None):
+    model = m.SecondTierDistribution
+    query = select(model).order_by(model.id).limit(limit + 1)
+    for field, value in [('source_shipment_line_id', source_shipment_line_id),
+                         ('source_lot_id', source_lot_id), ('recipient_party_id', recipient_party_id)]:
+        if value is not None:
+            query = query.where(getattr(model, field) == str(value))
+    if cursor:
+        query = query.where(model.id > str(cursor))
+    rows = db.scalars(query).all()
+    return {'items': [second_tier.detail(db, row) for row in rows[:limit]],
+            'next_cursor': rows[limit - 1].id if len(rows) > limit else None}
 
 
 @router.post('/products', status_code=201)
