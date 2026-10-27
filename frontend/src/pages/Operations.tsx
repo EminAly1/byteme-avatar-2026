@@ -418,6 +418,8 @@ export function OperationPage() {
       }),
     ).values(),
   );
+  if (op?.kind === "rework")
+    return <Navigate replace to={"/hareketler/rework/" + op.id} />;
   if (op?.kind === "cutting")
     return <Navigate replace to={"/parcalama/" + op.id} />;
   return (

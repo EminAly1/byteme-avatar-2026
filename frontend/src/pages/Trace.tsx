@@ -1,3 +1,4 @@
+import { DistributionEvidence } from "../components/DistributionEvidence";
 import { useState } from "react";
 import {
   Link,
@@ -99,9 +100,12 @@ export function BuyerReport({ report }: { report: TraceReport }) {
                 <p className="unknown-note">
                   Market kalanı: <strong>Bilinmiyor</strong>
                   <br />
-                  Son tüketici satışı ve ikinci kademe alıcı:{" "}
-                  <strong>Bilinmiyor</strong>
+                  Son tüketici satışı: <strong>Bilinmiyor</strong>
                 </p>
+                <DistributionEvidence
+                  report={report}
+                  customerId={b.customer_id}
+                />
                 <details>
                   <summary>Alıcı iletişimi ve teslim belgeleri</summary>
                   {b.recipient_snapshots.map((r, i) => (
@@ -202,8 +206,11 @@ export function TraceReportView({
                   <Link
                     className="text-button"
                     to={
-                      (op.kind === "cutting" ? "/parcalama/" : "/uretim/") +
-                      op.id
+                      (op.kind === "cutting"
+                        ? "/parcalama/"
+                        : op.kind === "rework"
+                          ? "/hareketler/rework/"
+                          : "/uretim/") + op.id
                     }
                   >
                     İşlemi aç
@@ -613,7 +620,7 @@ export function RecallPage() {
               value={q.data.report.affected_finished_lot_ids.length}
             />
             <StatCard
-              label="Bilinen alıcı"
+              label="Birinci kademe alıcı"
               value={q.data.report.buyers.length}
             />
             <StatCard

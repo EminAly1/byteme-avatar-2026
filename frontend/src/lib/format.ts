@@ -16,6 +16,10 @@ export const locationKinds = {
 };
 export const movementTypes: Record<string, string> = {
   receipt: "Alış girişi",
+  transfer_out: "Depo transfer çıkışı", transfer_in: "Depo transfer kabulü",
+  customer_return: "Müşteri iadesi · karantina", sale_cancellation: "Satış iptali ters hareketi",
+  cancel_hold_out: "İptal karantina çıkışı", cancel_hold_in: "İptal karantina kabulü",
+  rework_input: "Rework tüketimi", rework_output: "Rework yeni lot kabulü",
   dispatch_out: "Üreticiye sevk",
   dispatch_in: "Üreticide kabul",
   production_input: "Üretim tüketimi",

@@ -1,3 +1,4 @@
+import { ProfitabilityPanel } from "../components/Profitability";
 import { useState } from "react";
 import {
   Link,
@@ -207,6 +208,7 @@ function LinesTable({
         "Konum",
         "Miktar",
         ...(shipment ? [] : ["Birim fiyat", "Satır tutarı"]),
+        ...(shipment ? ["Sonraki dağıtım"] : []),
         "Stok hareketi",
       ]}
       empty={!record.lines.length}
@@ -232,6 +234,13 @@ function LinesTable({
               <td>{eur((l as SaleDetail["lines"][number]).unit_price)}</td>
               <td>{eur((l as SaleDetail["lines"][number]).total_amount)}</td>
             </>
+          )}
+          {shipment && (
+            <td>
+              <Link className="text-button" to={"/dagitimlar?source=" + l.id}>
+                İkinci kademe bildirimi oluştur
+              </Link>
+            </td>
           )}
           <td>
             <RecordId label="Stok hareketi" id={l.stock_movement_id} />
@@ -406,6 +415,18 @@ export function SalePage() {
             <StatCard label="Kesin satış tutarı" value={eur(s.total_amount)} />
             <StatCard label="Satış tarihi" value={dateTime(s.sold_at)} />
             <StatCard label="Lot satırı" value={s.lines.length} />
+          </div>
+          <ProfitabilityPanel saleId={s.id} />
+          <div className="quick-links">
+            <Link className="button" to={"/hareketler?islem=iade&sale=" + s.id}>
+              Müşteri iadesi
+            </Link>
+            <Link
+              className="button"
+              to={"/hareketler?islem=iptal&sale=" + s.id}
+            >
+              Satış iptali
+            </Link>
           </div>
           <Section title="Satış satırları ve stok hareketleri">
             <LinesTable record={s} data={data} />

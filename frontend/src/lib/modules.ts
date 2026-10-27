@@ -1,3 +1,4 @@
+import type { SecondTier } from './operational-types';
 import type {
   Entity,
   Input,
@@ -142,12 +143,15 @@ export interface TraceReport {
     unit: Unit;
     quantity: string;
   }>;
-  second_tier_distributions: unknown[];
+  second_tier_distributions: SecondTier[];
   unknown_distributions: Array<{
     customer_id: string;
     market_remaining_quantity: null;
     final_consumer_sold_quantity: null;
-    second_tier_recipients: null;
+    second_tier_recipients: Array<{ distribution_id: string; recipient_party_id: string; recipient_name: string; recipient_contact: string | null }> | null;
+    external_inventory_verified?: false;
+    distribution_completeness?: string;
+    unallocated_documented_quantities?: Array<{ source_shipment_line_id: string; lot_id: string; product_id: string; unit: Unit; quantity: string; physical_stock: false }>;
   }>;
 }
 export interface Recall extends Entity {

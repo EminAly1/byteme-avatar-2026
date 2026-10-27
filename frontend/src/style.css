@@ -2207,3 +2207,12 @@ th.numeric {
     word-break: break-word;
   }
 }
+
+/* Operational flows reuse the existing surfaces, spacing and mobile card system. */
+.tabs a { padding: 10px 16px; border-radius: var(--radius-sm, 8px); color: var(--ink); font-weight: 600; }
+.tabs a.active { color: var(--brand); background: var(--surface); box-shadow: var(--shadow); }
+.distribution-evidence { display: grid; gap: 12px; margin: 16px 0; min-width: 0; }
+.evidence-record, .documented-remainder { padding: 12px; border: 1px solid var(--border); border-radius: 10px; overflow-wrap: anywhere; }
+.documented-remainder { background: var(--canvas); }
+.documented-remainder p { font-size: var(--text-xs); margin-bottom: 6px; }
+.correction-summary { border-top: 1px solid var(--border); padding-top: 18px; }
