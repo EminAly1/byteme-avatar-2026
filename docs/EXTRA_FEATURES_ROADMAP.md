@@ -2,30 +2,30 @@
 
 > **Durum:** Planlandı — mevcut işlevlerin tamamlandığını belirtmez.  
 > **Ekip:** ByteMe. **Ürün adı/markası:** ekip isminden bağımsız; “İZORA” yalnız geçici aday, marka doğrulaması ve nihai görsel onay bekliyor.  
-> **Başlangıç:** 25 Ekim 2026. **Yarışma teslimi:** 1 Kasım 2026, 23:59 (Europe/Istanbul).  
+> **Başlangıç:** 25 Ekim 2026. **Plan öncelik güncellemesi:** 27 Ekim 2026. **Yarışma teslimi:** 1 Kasım 2026, 23:59 (Europe/Istanbul).  
 > **Ana takip:** [PROJECT_CHECKLIST.md](PROJECT_CHECKLIST.md). **Görsel kriterler:** [FRONTEND_VISION.md](FRONTEND_VISION.md).
 
 ## Değişmez çalışma kuralları
 
-1. **Ön koşul / sürüm kapısı:** Görev 12 release-integration raporu ve PR değerlendirilip P0'lar kapatılmadan yeni ortak backend özelliği başlatılmaz. Zorunlu yarışma kapsamı ve video/teslim riske atılmaz. Her opsiyonel özellik ayrı branch/PR, gerçek test ve geri alma planıyla geliştirilir.
+1. **Ön koşul / sürüm kapısı:** Görev 12 release-integration PR #20 main'e alındı ve yerel demo GO; eksik zorunlu LOT-10, frontend kullanıcı akışları ve teslim NO-GO hâlâ önceliklidir. Zorunlu yarışma kapsamı ve video/teslim riske atılmaz. Her opsiyonel özellik ayrı branch/PR, gerçek test ve geri alma planıyla geliştirilir.
 2. MySQL merkezî kesin kayıt; Room/SQLite yalnız mobil cache, taslak ve outbox. Frontend ve Android stok, maliyet, kesin satış veya recall otoritesi olamaz.
 3. İleri özelliklerde veri ve kimlik güvenliği önceliklidir. Prototip X-API-Key **gerçek kullanıcı/rol yetkilendirmesi değildir**; halka açık internete mevcut sistemi açma. TLS/rol/erişim denetimi ve belgelerde güvenli saklama gereklidir.
 4. Fatura OCR, tahmin ve anomali çıktıları **insan onayı olmadan kesin stok veya maliyet defterine yazılmaz**. Desteklenmeyen gerçek-zaman, doğruluk veya resmî belge iddiası yapılmaz.
-5. Her modül: mevcut backend + web + Android (ilgiliyse) regresyon testleri, izole *_test MySQL, bir mutlu yol + başarısızlık + tekrar/idempotency + mobil/masaüstü kabul. Önceki testler silinmez/skip edilmez.
+5. **Hızlı ama güvenli test:** Her kod PR'ında ilgili modül için en az pozitif, olumsuz, idempotency/rollback ve gerçek veriye etki testi; mevcut iş kurallarını bozan değişiklikte ilgili regresyon. 30–31 Ekim'de son `main` tam backend/ML + frontend/browser + mümkün Android ve demo regresyonu. Hiçbir zaman eski test silinmez/skip edilmez; tüm testleri yalnız en sona bırakma.
 6. Tüm demo belge ve müşteri bilgileri kurgusal etiketli kalır; sır/gerçek kişisel belge örnekleri commit edilmez.
 
 ## Uygulama sırası ve durum tablosu
 
-Sıra, iş bağımlılıklarını da gözeten **yönetici önceliğidir**. Açık görev varken sonraki ortak modüle geçme. Test kanıtı olmadan işaretleme yapma.
+**29–30 Ekim hedefi için EK-02 ve EK-05 öne çekildi.** Diğer bütün EK maddeleri korunur. Aynı backend migration alanını iki ayrı ajanla eşzamanlı değiştirme; her değişiklik tek PR'da gözden geçirilir. Test kanıtı olmadan işaretleme yapma.
 
 | ID | Öncelik | Paket | Durum | Bitiş/kabul özeti |
 | --- | --- | --- | --- | --- |
-| KAPI-00 | **Zorunlu önce** | Görev 12 / release kabulü | Bekliyor | Compose, regresyon, P0, APK/ML ve demo GO değerlendirmesi; ayrı zorunlu checklist'te izlenir |
-| EK-01 | **P1** | Mobil ↔ web güncel veri/senkronizasyonu | Planlandı | Sunucu onaylı satış/lot/recall web'de kendiliğinden yenilenir; Android uygulama aktifken refresh; offline kesin satış iddiası yok |
-| EK-02 | **P1** | Anomali ve akıllı uyarı merkezi | Planlandı | EKP/verim sapması, SKT, azalan stok, mükerrer belge; açıklanabilir kurallar + yalnız kanıtlanırsa ayrı ML değerlendirmesi |
-| EK-03 | **P1** | Güvenli belge altyapısı + mobil fotoğraf yükleme | Planlandı | Mobil kameradan belge yüklendiğinde merkezî kayıtta ve web inceleme listesinde görünür; güvenli metadata/dosya/izinler |
-| EK-04 | **P1** | Fatura ve irsaliye OCR + insan onay ekranı | Planlandı | Türkçe alanlar, kalemler, güven puanı, hata düzeltme; onaysız kesin stok/alış yok; gerçek ölçüm raporu |
-| EK-05 | **P1/P2** | Profesyonel fatura/proforma ve sevk belgesi taslağı, PDF/çıktı | Planlandı | Gerçek satış/sevkiyat verisinden düzenlenebilir belge taslağı; A4 PDF/yazdır, tarihçe; satışın kesin defteri değişmez |
+| KAPI-00 | **Zorunlu önce** | Release/yarışma teslim kapısı | Yerel demo GO / tam teslim NO-GO | PR #20 yerel Compose+demo GO; LOT-10 ve kullanıcı akışları/video/tag/gönderim tamamlanmadı |
+| EK-01 | **P2** | Mobil ↔ web güncel veri/senkronizasyonu | Planlandı (30 Ekim sonrasına ertelenebilir) | Sunucu onaylı satış/lot/recall web'de kendiliğinden yenilenir; Android uygulama aktifken refresh; offline kesin satış iddiası yok |
+| EK-02 | **P1 — 29 Ekim hedefi** | Anomali ve akıllı uyarı merkezi — MVP | Planlandı | EKP/verim sapması, SKT, azalan stok, mükerrer belge; açıklanabilir kurallar + yalnız kanıtlanırsa ayrı ML değerlendirmesi |
+| EK-03 | **P2** | Güvenli belge altyapısı + mobil fotoğraf yükleme | Planlandı (fatura taslağını bloke etmez) | Mobil kameradan belge yüklendiğinde merkezî kayıtta ve web inceleme listesinde görünür; güvenli metadata/dosya/izinler |
+| EK-04 | **P2** | Fatura ve irsaliye OCR + insan onay ekranı | Planlandı (30 Ekim sonrasında) | Türkçe alanlar, kalemler, güven puanı, hata düzeltme; onaysız kesin stok/alış yok; gerçek ölçüm raporu |
+| EK-05 | **P1 — 30 Ekim hedefi** | Profesyonel proforma/satış özeti taslağı, PDF/çıktı — MVP | Planlandı | Gerçek satış/sevkiyat verisinden düzenlenebilir belge taslağı; A4 PDF/yazdır, tarihçe; satışın kesin defteri değişmez |
 | EK-06 | **P2** | Ortak minimalist ürün kimliği / ikon | Planlandı | ByteMe'den bağımsız ürün simgesi; anlamlı üç aşamalı izlenebilirlik; Android adaptive icon, web favicon/PWA ve masaüstü kısayolunda aynı vektör |
 | EK-07 | **P2** | Açık/koyu görünüm ve vurgu seçenekleri | Planlandı | Önce iki eksiksiz tema (sistem/manuel/kalıcı); dört bağımsız tema yerine gerekirse 2 tema × 2 erişilebilir vurgu paleti |
 | EK-08 | **P2** | QR / barkodla lot izleme | Planlandı | Android kamera ve web tarama; lotun kesin UUID'sine yönlendirme; bozuk/tekrar kod ve bloke lot testleri |
@@ -36,6 +36,37 @@ Sıra, iş bağımlılıklarını da gözeten **yönetici önceliğidir**. Açı
 | TEM-SON | **En son** | Temiz `main` / teslim artefaktları | Bekliyor | Test **kaynakları** korunur; üretilmiş logs/screenshots/APK/build/cache gerekiyorsa CI/Release'e taşınır; link/test kırılmaz |
 
 **P1:** yarışma demosuna ve kullanıcının ana hedefine doğrudan değer katan opsiyonel iş, yalnız süre/GO uygunsa. **P2:** teslim riske girmemişse; çoğu sonraki sürüm. **P3:** sonra.
+
+## 27–31 Ekim kısa sprint ve kesin kapsam
+
+**Hedef**, 29 Ekim sonuna kadar EK-02'nin; 30 Ekim sonuna kadar EK-05'in dar kapsamlı, gerçek veri kaynaklı ve test edilmiş MVP'lerinin `main` üzerinde olmasıdır. **Bu bir plan/hedeftir, tamamlanma garantisi veya gerçekleşmiş durum değildir.** 31 Ekim tam teslim/demoya ayrılan emniyet payıdır. 1 Kasım 23:59 (Europe/Istanbul) son teslimi beklemeden mümkünse 31 Ekim'de gönderim yap.
+
+| Tarih | Ana teslim | Kabul ve kesme kuralı |
+| --- | --- | --- |
+| **27 Ekim** | Devam eden Görev 15 — LOT-10 kayıtlı ikinci kademe zinciri | Kod + dar MySQL testleri + PR; başarısız iş ana dalda yarım açılmaz |
+| **28 Ekim** | Görev 16 — transfer, iade, iptal, rework, ikinci kademe ve kâr için mevcut premium React arayüzü | Gerçek API, temel responsive işlem kabulü; pahalı dekoratif yeniden tasarım yok |
+| **29 Ekim** | **EK-02 anomali/uyarı MVP** | Açıklanabilir kural tabanlı SKT, eşik üstü üretim verim/EKP sapması, stok seviyesi/gerçek lot blokajı; okunur kaynak UUID/eşik/severity; salt-okunur API ve web uyarı listesi; gerçek ML doğruluğu iddiası yok |
+| **30 Ekim** | **EK-05 proforma/satış özeti PDF MVP** + release kontrollerini başlat | Gerçek Sale/Shipment kaynaklı, güzel A4 önizleme/print/PDF, izinli taslak alanları; kesin satır/lot/maliyet değişmez; 'resmî e-Fatura' iddiası yok |
+| **31 Ekim** | Son `main` regresyonu, release, Android APK yolu, kullanım kılavuzu, yalnız üretilmiş log/görsel temizliği, video ve **gönderim hazırlığı** | P0'a rastlanırsa yalnız düzeltme; ek özellik branch'i kapalı kalır. Public repo/≤15 dk video linkleri kontrol edilir |
+| **1 Kasım (yedek)** | Gönderim ve alındı teyidi | Son tarih **23:59 Türkiye saati**; son dakikaya bırakma |
+
+### EK-02 — 29 Ekim MVP için sınır
+- **Önce kurallar, sonra gerekirse gerçek veriyle anomali ML.** Mevcut Ridge verim/EKP tahmini ve gerçekleşme sapması varsa yalnız ilgili kapanmış işlemle karşılaştır; çıktı oluşmadan veri uydurma.
+- SKT yaklaşması ve kayıtlı düşük stok dahil; ürün birimleri birbirine toplama. İlgili lot/işlem/kural/eşik/gözlenen değer/severity ve ne yapılacağını kullanıcıya açık Türkçe göster.
+- Listelemek/detay ve isteğe bağlı okundu durumu yeterli; dış e-posta/push, sahte aktivite sayacı, yeni eğitim pipeline'ı, kapsamlı iş akışı bu sprintte yok.
+- Güvenli smoke: eşik altı/üstü, boş veri, blokeli lot, tekrar taramada mükerrer olay yok, stok ve recall defteri mutasyonsuz.
+
+### EK-05 — 30 Ekim MVP için sınır
+- **EK-03 belge fotoğraf yükleme ve EK-04 OCR gerekmiyor.** Uygulamadaki **kesinleşmiş Sale/Shipment** kayıtları belgeyi besler; önce mevcut kayıtlar üzerinden **Proforma / Satış Özeti** yazdır/indir.
+- Kullanıcı düzenleyebilsin: taslak belge başlığı, notlar, vade/teslim notu gibi **muhasebe dışı alanlar**; kaynak satış miktar/fiyat/lot ve kesin muhasebe değişmez. Kalem düzeltme gerekliyse ayrı açık fark/onay akışı veya güvenli taslak bilgi satırı; 'kaynak satış tutarı değişti' izlenimi verilmez.
+- A4 şık tipografi, tutarlı ürün kimliği **isim/logo henüz kesin değilse nötr simge**, yazdırma stili ve tarayıcı PDF; sunucu kalıcılığı ancak güvenli erişim + sınırlı migration ve yeterli test mümkünse. Kaydetme mümkün değilse açıkça *geçici yerel taslak* olarak göster.
+- **Resmî e-Fatura/e-Arşiv değildir.** GİB entegrasyonu, vergisel kesin belge numaralama, mali mühür ve gönderim bu sprintte yok.
+- Smoke: örnek satışla doğru ürün/adet/EUR toplamı, A4 print/PDF render, bozuk veri/boş kayıt, kritik alan salt-okunurluğu, mobil önizleme. Gizli müşteri verisini repoya commit etme.
+
+### Geliştirmeler kalıcı plandan çıkarılmadı
+- **Teslim sonrası veya P0 yoksa sonraki sprint:** EK-01 otomatik mobil/web senkron, EK-03 mobil kamera yükleme, EK-04 Türkçe OCR ve manuel düzeltme, EK-06 ürün logosu, EK-07 açık/koyu tema, EK-08 QR lot tarama, EK-09 audit, EK-10 raporlar, EK-11 gerçek auth/TLS + yedek/restore, EK-12 bildirim. EK-02 ve EK-05 MVP'leri daha sonra tam ürün kalitesine yükseltilir.
+- **EK-11 kullanıcı/rol/TLS kamuya açık dağıtımdan önce zorunludur.** Yerel demo ile güvenli internet servisini aynı şey gibi sunma.
+- Teslimde tamamlanmayan opsiyonel değişiklikler `main` yerine ayrı branch'te kalır. Yarışma videosu yalnız çalışan, test edilmiş özellikleri gösterir.
 
 ## Paket bazında kapsam ve kabul
 
