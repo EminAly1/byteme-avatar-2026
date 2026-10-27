@@ -308,3 +308,39 @@ class SaleCancelCreate(Schema):
     acceptance_location_id: UUID
     reason: Reason
     cancelled_at: AwareDatetime | None = None
+
+
+class ReworkCreate(Schema):
+    code: Code
+    source_lot_id: UUID
+    source_location_id: UUID
+    input_quantity: PositiveQuantity
+    unit: Literal['kg'] = 'kg'
+    reason: Reason
+    output_product_ids: Annotated[list[UUID], Field(min_length=1, max_length=100)]
+    service_costs: Annotated[list[ServiceItem], Field(max_length=100)] = Field(default_factory=list)
+
+    @model_validator(mode='after')
+    def unique_products(self):
+        if len(set(self.output_product_ids)) != len(self.output_product_ids):
+            raise ValueError('Planlanan çıktı ürünleri tekrarlanamaz')
+        return self
+
+
+class ReworkOutput(OutputItem):
+    unit: Literal['kg'] = 'kg'
+    explanation: Reason | None = None
+
+
+class ReworkPost(Schema):
+    output_location_id: UUID
+    outputs: Annotated[list[ReworkOutput], Field(min_length=1, max_length=100)]
+    differences: Annotated[list[CuttingDifference], Field(max_length=100)] = Field(default_factory=list)
+    # Explicit actual costs (including []), never silently post a draft quote.
+    service_costs: Annotated[list[ServiceItem], Field(max_length=100)]
+
+    @model_validator(mode='after')
+    def unique_outputs(self):
+        if len({(x.product_id, x.lot_code) for x in self.outputs}) != len(self.outputs):
+            raise ValueError('Çıktı ürün/lot kodu tekrarlanamaz')
+        return self

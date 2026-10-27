@@ -13,6 +13,7 @@ from app.commands import execute
 from app.config import get_settings
 from app.database import get_engine
 from app.errors import DomainError
+from app import reworks
 
 
 def authenticate(x_api_key: Annotated[str | None, Header()] = None):
@@ -289,6 +290,34 @@ def cutting_list(db: DB, limit: Limit = 50, cursor: UUID | None = None):
 
 
 router.add_api_route('/cuttings', cutting_list, methods=['GET'], name='list_cuttings')
+
+
+@router.post('/reworks', status_code=201)
+def rework_create(body: s.ReworkCreate, key: Key):
+    return write('reworks', key, body, reworks.create)
+
+
+@router.get('/reworks/{rework_id}')
+def rework_get(rework_id: UUID, db: DB):
+    return reworks.detail(db, services.get(db, m.Operation, rework_id))
+
+
+@router.post('/reworks/{rework_id}/post')
+def rework_post(rework_id: UUID, body: s.ReworkPost, key: Key):
+    return write(f'reworks:{rework_id}:post', key, body,
+                 lambda db, payload: reworks.post(db, rework_id, payload), 200)
+
+
+@router.get('/reworks')
+def rework_list(db: DB, limit: Limit = 50, cursor: UUID | None = None):
+    query = select(m.Operation).where(m.Operation.kind == 'rework').order_by(m.Operation.id).limit(limit + 1)
+    if cursor:
+        query = query.where(m.Operation.id > str(cursor))
+    rows = db.scalars(query).all()
+    return {'items': [services.entity(row) for row in rows[:limit]],
+            'next_cursor': rows[limit - 1].id if len(rows) > limit else None}
+
+
 @router.get('/recipes')
 def recipe_list(db: DB, limit: Limit = 50, cursor: UUID | None = None):
     query = select(m.RecipeVersion).order_by(m.RecipeVersion.id).limit(limit+1)
