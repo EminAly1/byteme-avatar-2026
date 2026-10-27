@@ -1,0 +1,649 @@
+{
+  "data_origin": "KURGUSAL / SYNTHETIC",
+  "database": "avatar_task13_acceptance_test",
+  "transport": "real TCP HTTP → FastAPI → MySQL 8",
+  "lost_sale_response": {
+    "committed_sale_id": "e045c8d0-d7ea-4b9e-bf62-6f17cea0dbac",
+    "same_key_body_and_sale_on_retry": true
+  },
+  "flow_repeated_without_new_records": true,
+  "initial_counts": {
+    "products": 0,
+    "parties": 0,
+    "locations": 0,
+    "lots": 0,
+    "receipts": 0,
+    "receipt_lines": 0,
+    "recipe_versions": 0,
+    "recipe_lines": 0,
+    "operations": 0,
+    "operation_inputs": 0,
+    "operation_outputs": 0,
+    "operation_differences": 0,
+    "lot_links": 0,
+    "service_costs": 0,
+    "stock_balances": 0,
+    "stock_movements": 0,
+    "idempotency_requests": 0,
+    "sales": 0,
+    "sale_lines": 0,
+    "shipments": 0,
+    "shipment_lines": 0,
+    "recalls": 0,
+    "recall_lots": 0,
+    "prediction_records": 0,
+    "stock_transfers": 0,
+    "customer_returns": 0,
+    "customer_return_lines": 0,
+    "sale_cancellations": 0,
+    "sale_cancellation_lines": 0
+  },
+  "before_replay": {
+    "products": {
+      "rows": 20,
+      "sha256": "aeb775b6b928e0b85d6dcb54f02f8ff1ea09e5d6f23f3607e9641572485cb6e1"
+    },
+    "parties": {
+      "rows": 9,
+      "sha256": "d9fa518c4bb95c052efa699f8a88076627d514d7edc3755ba7cbd509185cf101"
+    },
+    "locations": {
+      "rows": 5,
+      "sha256": "5bfdd901562033e1d549c0989dd1c40a38090d7396ef2d04698bbfd8cc76edf1"
+    },
+    "lots": {
+      "rows": 26,
+      "sha256": "3d9d89b37c6f16a0853fbcfe8c5ce79e3d6ed6ce2531c43f7fcbe48addf1f4eb"
+    },
+    "receipts": {
+      "rows": 5,
+      "sha256": "c72d5abd0ec7d568af60ee87d267c496cbe17951d13386f4f894a68fc59cae9f"
+    },
+    "receipt_lines": {
+      "rows": 9,
+      "sha256": "c64d59c26a9dc4d52a3dd07f9dd82d21754e9fa3e1ee7110213811cdad12852f"
+    },
+    "recipe_versions": {
+      "rows": 3,
+      "sha256": "2962552c039d57e6f77c51a6c6a59ab7cf94c8f1142dfbadcfe5b5ebe5410997"
+    },
+    "recipe_lines": {
+      "rows": 15,
+      "sha256": "8e233e81e8087d95ea32b891a110280ea2b36a2a47c0adba05db34b186a493c1"
+    },
+    "operations": {
+      "rows": 5,
+      "sha256": "5c2ce0b09a9deff80c0936d1efa8fa3a6d70b83023e7933c626705dc03211a36"
+    },
+    "operation_inputs": {
+      "rows": 9,
+      "sha256": "4349c214eea088d64466827ce2696b3ec3b92c4bd684712216bcd2ae154fce56"
+    },
+    "operation_outputs": {
+      "rows": 17,
+      "sha256": "758d13d208f96a892e60743f11b534fdea907fb95fbbd0fff93bff04225301c4"
+    },
+    "operation_differences": {
+      "rows": 3,
+      "sha256": "965ab5f2a8679c9a414eb632a01a220a6f8c004f2ef37317192eaf1f8de4cba0"
+    },
+    "lot_links": {
+      "rows": 21,
+      "sha256": "eee07f27f3274a84ecd42759b6d0fb54a404471b31e1698888304835775c7371"
+    },
+    "service_costs": {
+      "rows": 2,
+      "sha256": "71969e28e26dfa556f5a61b470db1772728c46ac783dfd994bf8e207f2f682cc"
+    },
+    "stock_balances": {
+      "rows": 32,
+      "sha256": "b6bed9d62420dacb90733b7ad96862020c05875d6eb8c5ca9c47f269612ed908"
+    },
+    "stock_movements": {
+      "rows": 51,
+      "sha256": "270fd035e0d4ab9ad903cca9a906a6a69dbcc6eb82ad051d6e742c813d5fef6c"
+    },
+    "idempotency_requests": {
+      "rows": 64,
+      "sha256": "fd559348a8910d25b5eae85c8de469cff035f0ee64787e82009563b657a82d14"
+    },
+    "sales": {
+      "rows": 4,
+      "sha256": "8550db03e7e44aec6ac5eab8cc5429b6c2e92661a920d4d70aad23bf37e3d6ab"
+    },
+    "sale_lines": {
+      "rows": 4,
+      "sha256": "ff5ede1450e76875a1db3b5d85db9d02f45af605c001b141fa668e34cf6b668b"
+    },
+    "shipments": {
+      "rows": 3,
+      "sha256": "67be8eb515de7f53261e5cf89b35eb0c356fb45414e6205b77a2cff8a727fda3"
+    },
+    "shipment_lines": {
+      "rows": 3,
+      "sha256": "a0b5fb6aad130d541c149d845053e6c1c6fd4ebe9011744e23b7663f36acd7c5"
+    },
+    "recalls": {
+      "rows": 1,
+      "sha256": "65f5194606b224bc21ab21a601a81a7f9fb8bbd50457423983a95911dfcd0261"
+    },
+    "recall_lots": {
+      "rows": 2,
+      "sha256": "8ab9ad803210644fd96afeb87969e0a5addf0ecf7ba06641abf2826c33bd32d3"
+    },
+    "prediction_records": {
+      "rows": 2,
+      "sha256": "63c7157b6e4620b5c6661d036cc2aaf3c6ae489d3324b235349a8469ebabee22"
+    },
+    "stock_transfers": {
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "customer_returns": {
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "customer_return_lines": {
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "sale_cancellations": {
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "sale_cancellation_lines": {
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "after_replay": {
+    "products": {
+      "rows": 20,
+      "sha256": "aeb775b6b928e0b85d6dcb54f02f8ff1ea09e5d6f23f3607e9641572485cb6e1"
+    },
+    "parties": {
+      "rows": 9,
+      "sha256": "d9fa518c4bb95c052efa699f8a88076627d514d7edc3755ba7cbd509185cf101"
+    },
+    "locations": {
+      "rows": 5,
+      "sha256": "5bfdd901562033e1d549c0989dd1c40a38090d7396ef2d04698bbfd8cc76edf1"
+    },
+    "lots": {
+      "rows": 26,
+      "sha256": "3d9d89b37c6f16a0853fbcfe8c5ce79e3d6ed6ce2531c43f7fcbe48addf1f4eb"
+    },
+    "receipts": {
+      "rows": 5,
+      "sha256": "c72d5abd0ec7d568af60ee87d267c496cbe17951d13386f4f894a68fc59cae9f"
+    },
+    "receipt_lines": {
+      "rows": 9,
+      "sha256": "c64d59c26a9dc4d52a3dd07f9dd82d21754e9fa3e1ee7110213811cdad12852f"
+    },
+    "recipe_versions": {
+      "rows": 3,
+      "sha256": "2962552c039d57e6f77c51a6c6a59ab7cf94c8f1142dfbadcfe5b5ebe5410997"
+    },
+    "recipe_lines": {
+      "rows": 15,
+      "sha256": "8e233e81e8087d95ea32b891a110280ea2b36a2a47c0adba05db34b186a493c1"
+    },
+    "operations": {
+      "rows": 5,
+      "sha256": "5c2ce0b09a9deff80c0936d1efa8fa3a6d70b83023e7933c626705dc03211a36"
+    },
+    "operation_inputs": {
+      "rows": 9,
+      "sha256": "4349c214eea088d64466827ce2696b3ec3b92c4bd684712216bcd2ae154fce56"
+    },
+    "operation_outputs": {
+      "rows": 17,
+      "sha256": "758d13d208f96a892e60743f11b534fdea907fb95fbbd0fff93bff04225301c4"
+    },
+    "operation_differences": {
+      "rows": 3,
+      "sha256": "965ab5f2a8679c9a414eb632a01a220a6f8c004f2ef37317192eaf1f8de4cba0"
+    },
+    "lot_links": {
+      "rows": 21,
+      "sha256": "eee07f27f3274a84ecd42759b6d0fb54a404471b31e1698888304835775c7371"
+    },
+    "service_costs": {
+      "rows": 2,
+      "sha256": "71969e28e26dfa556f5a61b470db1772728c46ac783dfd994bf8e207f2f682cc"
+    },
+    "stock_balances": {
+      "rows": 32,
+      "sha256": "b6bed9d62420dacb90733b7ad96862020c05875d6eb8c5ca9c47f269612ed908"
+    },
+    "stock_movements": {
+      "rows": 51,
+      "sha256": "270fd035e0d4ab9ad903cca9a906a6a69dbcc6eb82ad051d6e742c813d5fef6c"
+    },
+    "idempotency_requests": {
+      "rows": 64,
+      "sha256": "fd559348a8910d25b5eae85c8de469cff035f0ee64787e82009563b657a82d14"
+    },
+    "sales": {
+      "rows": 4,
+      "sha256": "8550db03e7e44aec6ac5eab8cc5429b6c2e92661a920d4d70aad23bf37e3d6ab"
+    },
+    "sale_lines": {
+      "rows": 4,
+      "sha256": "ff5ede1450e76875a1db3b5d85db9d02f45af605c001b141fa668e34cf6b668b"
+    },
+    "shipments": {
+      "rows": 3,
+      "sha256": "67be8eb515de7f53261e5cf89b35eb0c356fb45414e6205b77a2cff8a727fda3"
+    },
+    "shipment_lines": {
+      "rows": 3,
+      "sha256": "a0b5fb6aad130d541c149d845053e6c1c6fd4ebe9011744e23b7663f36acd7c5"
+    },
+    "recalls": {
+      "rows": 1,
+      "sha256": "65f5194606b224bc21ab21a601a81a7f9fb8bbd50457423983a95911dfcd0261"
+    },
+    "recall_lots": {
+      "rows": 2,
+      "sha256": "8ab9ad803210644fd96afeb87969e0a5addf0ecf7ba06641abf2826c33bd32d3"
+    },
+    "prediction_records": {
+      "rows": 2,
+      "sha256": "63c7157b6e4620b5c6661d036cc2aaf3c6ae489d3324b235349a8469ebabee22"
+    },
+    "stock_transfers": {
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "customer_returns": {
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "customer_return_lines": {
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "sale_cancellations": {
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "sale_cancellation_lines": {
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "production": {
+    "operation_id": "819b64e2-a7ba-4f89-bf2c-b5a54763507f",
+    "code": "URT-2026-045",
+    "total_cost": "1543.500000",
+    "unit_cost_display": "18.16",
+    "output_lot_id": "fb07bab1-9b22-4a55-a8cd-c60317d586df",
+    "lot_link_count": 3
+  },
+  "markets": [
+    {
+      "name": "Market A (KURGUSAL DEMO)",
+      "shipped_quantity": "30.000000"
+    },
+    {
+      "name": "Market B (KURGUSAL DEMO)",
+      "shipped_quantity": "25.000000"
+    },
+    {
+      "name": "Market C (KURGUSAL DEMO)",
+      "shipped_quantity": "30.000000"
+    }
+  ],
+  "recall": {
+    "recall_id": "d78f9875-66a5-4edb-9f07-3e85b408e699",
+    "source_lot_code": "ET-2026-001",
+    "affected_lots": [
+      {
+        "code": "ET-2026-001",
+        "blocked": true
+      },
+      {
+        "code": "SUC-2026-045",
+        "blocked": true
+      }
+    ],
+    "markets": [
+      {
+        "name": "Market A (KURGUSAL DEMO)",
+        "shipped_quantity": "30.000000"
+      },
+      {
+        "name": "Market B (KURGUSAL DEMO)",
+        "shipped_quantity": "25.000000"
+      },
+      {
+        "name": "Market C (KURGUSAL DEMO)",
+        "shipped_quantity": "30.000000"
+      }
+    ],
+    "total_shipped_packages": "85.000000",
+    "blocked_sale_error": "LOT_BLOCKED",
+    "market_remaining_quantity": null,
+    "final_consumer_sold_quantity": null,
+    "fictional_contacts": true
+  },
+  "cutting": {
+    "data_note": "PDF bireysel parça ağırlığı veya referans fiyat vermez. Parça ağırlıkları, değer referansları, fire sınıfı/açıklaması ve satış fiyatı KURGUSAL DEMO verisidir.",
+    "comparison_note": "İki yöntem iki ayrı 25 kg lot üzerinde uygulanır; aynı kuzu iki kez tüketilmez.",
+    "source_lot_ids": {
+      "quantity": "af816a72-d865-441a-a047-7ef986addd3f",
+      "value": "e2beb6e4-037b-4740-90e3-0ac8954b4969"
+    },
+    "operation_ids": {
+      "quantity": "97acb8da-8042-4637-99c7-21c1869b4f86",
+      "value": "e2aee99f-707d-47b8-bad0-fe6a0283bee3"
+    },
+    "each_input_kg": "25.000000",
+    "each_input_cost_eur": "287.500000",
+    "each_output_kg": "22.000000",
+    "each_explained_waste_kg": "3.000000",
+    "comparison": [
+      {
+        "part": "But (DEMO)",
+        "kg": "6",
+        "fictional_reference_eur_per_kg": "20.00",
+        "quantity_allocated_cost": "78.409091",
+        "value_allocated_cost": "95.303867"
+      },
+      {
+        "part": "Omuz (DEMO)",
+        "kg": "4",
+        "fictional_reference_eur_per_kg": "14.00",
+        "quantity_allocated_cost": "52.272727",
+        "value_allocated_cost": "44.475138"
+      },
+      {
+        "part": "Sırt (DEMO)",
+        "kg": "4",
+        "fictional_reference_eur_per_kg": "24.00",
+        "quantity_allocated_cost": "52.272727",
+        "value_allocated_cost": "76.243094"
+      },
+      {
+        "part": "Kaburga (DEMO)",
+        "kg": "5",
+        "fictional_reference_eur_per_kg": "12.00",
+        "quantity_allocated_cost": "65.340910",
+        "value_allocated_cost": "47.651934"
+      },
+      {
+        "part": "Kıyma (DEMO)",
+        "kg": "3",
+        "fictional_reference_eur_per_kg": "10.00",
+        "quantity_allocated_cost": "39.204545",
+        "value_allocated_cost": "23.825967"
+      }
+    ],
+    "each_allocated_total_eur": {
+      "quantity": "287.500000",
+      "value": "287.500000"
+    },
+    "sale_id": "ce984120-dc1b-422c-b0e7-f3c5eefad5cc",
+    "sold_kg": "1.000000",
+    "sold_lot_remaining_kg": "5.000000",
+    "forward_lot_count": 6,
+    "backward_lot_count": 2
+  },
+  "predictions": {
+    "production": {
+      "id": "72b6975e-34d9-4b1d-b75f-8af4da1e1f37",
+      "model_version": "production-ridge-v1-a27a209e395c",
+      "data_origin": "SYNTHETIC",
+      "comparison": {
+        "predicted_yield_ratio": {
+          "predicted": "0.807183",
+          "actual": "0.794393",
+          "absolute_deviation": "0.012790",
+          "percentage_deviation": "1.610095"
+        },
+        "predicted_total_cost_eur": {
+          "predicted": "1517.629016",
+          "actual": "1543.500000",
+          "absolute_deviation": "25.870984",
+          "percentage_deviation": "1.676125"
+        },
+        "predicted_ekp_eur_per_unit": {
+          "predicted": "17.571540",
+          "actual": "18.158824",
+          "absolute_deviation": "0.587284",
+          "percentage_deviation": "3.234150"
+        },
+        "predicted_finished_quantity": {
+          "predicted": "86.368585",
+          "actual": "85.000000",
+          "absolute_deviation": "1.368585",
+          "percentage_deviation": "1.610100"
+        }
+      }
+    },
+    "cutting": {
+      "id": "e3ff4c50-b467-4099-8ced-e3773ac5bb11",
+      "model_version": "cutting-ridge-v1-ddd7ab8f61fd",
+      "data_origin": "SYNTHETIC",
+      "comparison": {
+        "predicted_leg_kg": {
+          "predicted": "5.875229",
+          "actual": "6.000000",
+          "absolute_deviation": "0.124771",
+          "percentage_deviation": "2.079517"
+        },
+        "predicted_rib_kg": {
+          "predicted": "4.878152",
+          "actual": "5.000000",
+          "absolute_deviation": "0.121848",
+          "percentage_deviation": "2.436960"
+        },
+        "predicted_back_kg": {
+          "predicted": "3.950854",
+          "actual": "4.000000",
+          "absolute_deviation": "0.049146",
+          "percentage_deviation": "1.228650"
+        },
+        "predicted_mince_kg": {
+          "predicted": "3.077829",
+          "actual": "3.000000",
+          "absolute_deviation": "0.077829",
+          "percentage_deviation": "2.594300"
+        },
+        "predicted_shoulder_kg": {
+          "predicted": "4.025129",
+          "actual": "4.000000",
+          "absolute_deviation": "0.025129",
+          "percentage_deviation": "0.628225"
+        },
+        "predicted_yield_ratio": {
+          "predicted": "0.872288",
+          "actual": "0.880000",
+          "absolute_deviation": "0.007712",
+          "percentage_deviation": "0.876364"
+        },
+        "predicted_difference_kg": {
+          "predicted": "3.192807",
+          "actual": "3.000000",
+          "absolute_deviation": "0.192807",
+          "percentage_deviation": "6.426900"
+        },
+        "predicted_total_weight_kg": {
+          "predicted": "21.807193",
+          "actual": "22.000000",
+          "absolute_deviation": "0.192807",
+          "percentage_deviation": "0.876395"
+        }
+      }
+    }
+  },
+  "profitability": [
+    {
+      "sale_id": "e045c8d0-d7ea-4b9e-bf62-6f17cea0dbac",
+      "currency": "EUR",
+      "basis": "recorded_net_sale_and_consumed_lot_cost",
+      "limitations": [
+        "Vergi, iskonto, genel gider ve nakit geri ödeme muhasebesi kapsam dışıdır.",
+        "Üst alanlar orijinal satışı korur; düzeltmeler ve netleşmiş sonuç ayrı alanlardadır."
+      ],
+      "net_revenue_eur": "750.00",
+      "recognized_cost_eur": "544.764706",
+      "gross_profit_eur": "205.235294",
+      "gross_profit_display_eur": "205.24",
+      "margin_percent": "27.364706",
+      "adjustments": {
+        "state": "active",
+        "return_ids": [],
+        "cancellation_id": null,
+        "return_credit_eur": "0.00",
+        "cancellation_credit_eur": "0.00",
+        "cost_reversal_eur": "0.000000",
+        "cash_refund_status": "not_recorded",
+        "lines": [
+          {
+            "sale_line_id": "f530c470-3599-42db-80a7-5b142d5d4f0f",
+            "original_sold_quantity": "30.000000",
+            "returned_quantity": "0.000000",
+            "cancelled_quantity": "0.000000"
+          }
+        ]
+      },
+      "net_after_adjustments": {
+        "net_revenue_eur": "750.00",
+        "recognized_cost_eur": "544.764706",
+        "gross_profit_eur": "205.235294",
+        "gross_profit_display_eur": "205.24",
+        "margin_percent": "27.364706"
+      },
+      "lines": [
+        {
+          "sale_line_id": "f530c470-3599-42db-80a7-5b142d5d4f0f",
+          "lot_id": "fb07bab1-9b22-4a55-a8cd-c60317d586df",
+          "stock_movement_id": "f90ee5b4-547a-4d41-aaaf-386fac588dc4",
+          "quantity": "30.000000",
+          "unit": "package",
+          "vkp_eur_per_unit": "25.00",
+          "recognized_unit_cost_eur": "18.158824",
+          "net_revenue_eur": "750.00",
+          "recognized_cost_eur": "544.764706",
+          "gross_profit_eur": "205.235294",
+          "gross_profit_display_eur": "205.24",
+          "margin_percent": "27.364706"
+        }
+      ]
+    },
+    {
+      "sale_id": "0fb3e61d-b1b2-4c85-b182-543588bb9a9a",
+      "currency": "EUR",
+      "basis": "recorded_net_sale_and_consumed_lot_cost",
+      "limitations": [
+        "Vergi, iskonto, genel gider ve nakit geri ödeme muhasebesi kapsam dışıdır.",
+        "Üst alanlar orijinal satışı korur; düzeltmeler ve netleşmiş sonuç ayrı alanlardadır."
+      ],
+      "net_revenue_eur": "625.00",
+      "recognized_cost_eur": "453.970588",
+      "gross_profit_eur": "171.029412",
+      "gross_profit_display_eur": "171.03",
+      "margin_percent": "27.364706",
+      "adjustments": {
+        "state": "active",
+        "return_ids": [],
+        "cancellation_id": null,
+        "return_credit_eur": "0.00",
+        "cancellation_credit_eur": "0.00",
+        "cost_reversal_eur": "0.000000",
+        "cash_refund_status": "not_recorded",
+        "lines": [
+          {
+            "sale_line_id": "f26f422f-3068-4847-9115-1f01c70abc04",
+            "original_sold_quantity": "25.000000",
+            "returned_quantity": "0.000000",
+            "cancelled_quantity": "0.000000"
+          }
+        ]
+      },
+      "net_after_adjustments": {
+        "net_revenue_eur": "625.00",
+        "recognized_cost_eur": "453.970588",
+        "gross_profit_eur": "171.029412",
+        "gross_profit_display_eur": "171.03",
+        "margin_percent": "27.364706"
+      },
+      "lines": [
+        {
+          "sale_line_id": "f26f422f-3068-4847-9115-1f01c70abc04",
+          "lot_id": "fb07bab1-9b22-4a55-a8cd-c60317d586df",
+          "stock_movement_id": "1700aeea-ebb6-4631-9daa-0030a32ed066",
+          "quantity": "25.000000",
+          "unit": "package",
+          "vkp_eur_per_unit": "25.00",
+          "recognized_unit_cost_eur": "18.158824",
+          "net_revenue_eur": "625.00",
+          "recognized_cost_eur": "453.970588",
+          "gross_profit_eur": "171.029412",
+          "gross_profit_display_eur": "171.03",
+          "margin_percent": "27.364706"
+        }
+      ]
+    },
+    {
+      "sale_id": "7bd8005f-bb60-4654-a3f4-bd47e7609a2e",
+      "currency": "EUR",
+      "basis": "recorded_net_sale_and_consumed_lot_cost",
+      "limitations": [
+        "Vergi, iskonto, genel gider ve nakit geri ödeme muhasebesi kapsam dışıdır.",
+        "Üst alanlar orijinal satışı korur; düzeltmeler ve netleşmiş sonuç ayrı alanlardadır."
+      ],
+      "net_revenue_eur": "750.00",
+      "recognized_cost_eur": "544.764706",
+      "gross_profit_eur": "205.235294",
+      "gross_profit_display_eur": "205.24",
+      "margin_percent": "27.364706",
+      "adjustments": {
+        "state": "active",
+        "return_ids": [],
+        "cancellation_id": null,
+        "return_credit_eur": "0.00",
+        "cancellation_credit_eur": "0.00",
+        "cost_reversal_eur": "0.000000",
+        "cash_refund_status": "not_recorded",
+        "lines": [
+          {
+            "sale_line_id": "ecd2a96f-6aed-4c9c-b7ea-c440f3feb54b",
+            "original_sold_quantity": "30.000000",
+            "returned_quantity": "0.000000",
+            "cancelled_quantity": "0.000000"
+          }
+        ]
+      },
+      "net_after_adjustments": {
+        "net_revenue_eur": "750.00",
+        "recognized_cost_eur": "544.764706",
+        "gross_profit_eur": "205.235294",
+        "gross_profit_display_eur": "205.24",
+        "margin_percent": "27.364706"
+      },
+      "lines": [
+        {
+          "sale_line_id": "ecd2a96f-6aed-4c9c-b7ea-c440f3feb54b",
+          "lot_id": "fb07bab1-9b22-4a55-a8cd-c60317d586df",
+          "stock_movement_id": "22eb5062-e9f3-4416-9384-789c3da26c27",
+          "quantity": "30.000000",
+          "unit": "package",
+          "vkp_eur_per_unit": "25.00",
+          "recognized_unit_cost_eur": "18.158824",
+          "net_revenue_eur": "750.00",
+          "recognized_cost_eur": "544.764706",
+          "gross_profit_eur": "205.235294",
+          "gross_profit_display_eur": "205.24",
+          "margin_percent": "27.364706"
+        }
+      ]
+    }
+  ],
+  "forward_lots": 2,
+  "backward_lots": 4,
+  "android": "Separate instrumentation on this same demo database; not claimed by this script."
+}

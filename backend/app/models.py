@@ -214,6 +214,7 @@ class StockMovement(Identified, Base):
     __tablename__ = "stock_movements"
     __table_args__ = (
         CheckConstraint("quantity <> 0", name="ck_movement_nonzero"),
+        UniqueConstraint("reversal_of", name="uq_movement_reversal"),
         Index("ix_movement_lot_location", "lot_id", "location_id", "id"),
         Index("ix_movement_operation", "operation_id"), OPTIONS,
     )
@@ -332,3 +333,92 @@ class PredictionRecord(Identified, Base):
     features: Mapped[dict] = mapped_column(JSON)
     context: Mapped[dict] = mapped_column(JSON)
     prediction: Mapped[dict] = mapped_column(JSON)
+
+
+class StockTransfer(Identified, Base):
+    __tablename__ = 'stock_transfers'
+    __table_args__ = (
+        CheckConstraint('quantity > 0 AND from_location_id <> to_location_id', name='ck_transfer_values'),
+        CheckConstraint("unit IN ('kg','package','unit')", name='ck_transfer_unit'),
+        Index('ix_transfer_lot', 'lot_id', 'id'), OPTIONS,
+    )
+    lot_id: Mapped[str] = mapped_column(ForeignKey('lots.id'))
+    product_id: Mapped[str] = mapped_column(ForeignKey('products.id'))
+    from_location_id: Mapped[str] = mapped_column(ForeignKey('locations.id'))
+    to_location_id: Mapped[str] = mapped_column(ForeignKey('locations.id'))
+    quantity: Mapped[Decimal] = mapped_column(Q)
+    unit: Mapped[str] = mapped_column(String(16))
+    transferred_at: Mapped[datetime] = mapped_column(DATETIME(fsp=6))
+    reference: Mapped[str | None] = mapped_column(String(100))
+    reason: Mapped[str] = mapped_column(String(500))
+    out_movement_id: Mapped[str] = mapped_column(ForeignKey('stock_movements.id'), unique=True)
+    in_movement_id: Mapped[str] = mapped_column(ForeignKey('stock_movements.id'), unique=True)
+
+
+class CustomerReturn(Identified, Base):
+    __tablename__ = 'customer_returns'
+    __table_args__ = (
+        CheckConstraint('credit_amount >= 0 AND restored_cost >= 0', name='ck_return_amounts'),
+        Index('ix_return_sale', 'sale_id', 'id'), OPTIONS,
+    )
+    sale_id: Mapped[str] = mapped_column(ForeignKey('sales.id'))
+    customer_id: Mapped[str] = mapped_column(ForeignKey('parties.id'))
+    acceptance_location_id: Mapped[str] = mapped_column(ForeignKey('locations.id'))
+    returned_at: Mapped[datetime] = mapped_column(DATETIME(fsp=6))
+    reason: Mapped[str] = mapped_column(String(500))
+    reference: Mapped[str | None] = mapped_column(String(100))
+    credit_amount: Mapped[Decimal] = mapped_column(Numeric(18, 2), default=Decimal('0'))
+    restored_cost: Mapped[Decimal] = mapped_column(Q, default=Decimal('0'))
+
+
+class CustomerReturnLine(Identified, Base):
+    __tablename__ = 'customer_return_lines'
+    __table_args__ = (
+        UniqueConstraint('return_id', 'sale_line_id', name='uq_return_sale_line'),
+        CheckConstraint('quantity > 0 AND credit_amount >= 0 AND restored_cost >= 0', name='ck_return_line_values'),
+        CheckConstraint("unit IN ('kg','package','unit')", name='ck_return_line_unit'),
+        Index('ix_return_line_sale', 'sale_line_id', 'id'), OPTIONS,
+    )
+    return_id: Mapped[str] = mapped_column(ForeignKey('customer_returns.id'))
+    sale_line_id: Mapped[str] = mapped_column(ForeignKey('sale_lines.id'))
+    shipment_line_id: Mapped[str] = mapped_column(ForeignKey('shipment_lines.id'))
+    lot_id: Mapped[str] = mapped_column(ForeignKey('lots.id'))
+    product_id: Mapped[str] = mapped_column(ForeignKey('products.id'))
+    stock_movement_id: Mapped[str] = mapped_column(ForeignKey('stock_movements.id'), unique=True)
+    quantity: Mapped[Decimal] = mapped_column(Q)
+    unit: Mapped[str] = mapped_column(String(16))
+    credit_amount: Mapped[Decimal] = mapped_column(Numeric(18, 2))
+    restored_cost: Mapped[Decimal] = mapped_column(Q)
+
+
+class SaleCancellation(Identified, Base):
+    __tablename__ = 'sale_cancellations'
+    __table_args__ = (
+        CheckConstraint('credit_amount >= 0 AND restored_cost >= 0', name='ck_cancel_amounts'), OPTIONS,
+    )
+    sale_id: Mapped[str] = mapped_column(ForeignKey('sales.id'), unique=True)
+    customer_id: Mapped[str] = mapped_column(ForeignKey('parties.id'))
+    acceptance_location_id: Mapped[str] = mapped_column(ForeignKey('locations.id'))
+    cancelled_at: Mapped[datetime] = mapped_column(DATETIME(fsp=6))
+    reason: Mapped[str] = mapped_column(String(500))
+    credit_amount: Mapped[Decimal] = mapped_column(Numeric(18, 2), default=Decimal('0'))
+    restored_cost: Mapped[Decimal] = mapped_column(Q, default=Decimal('0'))
+
+
+class SaleCancellationLine(Identified, Base):
+    __tablename__ = 'sale_cancellation_lines'
+    __table_args__ = (
+        CheckConstraint('quantity > 0 AND credit_amount >= 0 AND restored_cost >= 0', name='ck_cancel_line_values'),
+        CheckConstraint("unit IN ('kg','package','unit')", name='ck_cancel_line_unit'), OPTIONS,
+    )
+    cancellation_id: Mapped[str] = mapped_column(ForeignKey('sale_cancellations.id'))
+    sale_line_id: Mapped[str] = mapped_column(ForeignKey('sale_lines.id'), unique=True)
+    lot_id: Mapped[str] = mapped_column(ForeignKey('lots.id'))
+    product_id: Mapped[str] = mapped_column(ForeignKey('products.id'))
+    stock_movement_id: Mapped[str] = mapped_column(ForeignKey('stock_movements.id'), unique=True)
+    quarantine_out_movement_id: Mapped[str] = mapped_column(ForeignKey('stock_movements.id'), unique=True)
+    quarantine_in_movement_id: Mapped[str] = mapped_column(ForeignKey('stock_movements.id'), unique=True)
+    quantity: Mapped[Decimal] = mapped_column(Q)
+    unit: Mapped[str] = mapped_column(String(16))
+    credit_amount: Mapped[Decimal] = mapped_column(Numeric(18, 2))
+    restored_cost: Mapped[Decimal] = mapped_column(Q)

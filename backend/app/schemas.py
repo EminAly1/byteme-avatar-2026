@@ -261,3 +261,50 @@ class CuttingPost(Schema):
         if len({(x.product_id, x.lot_code) for x in self.outputs}) != len(self.outputs):
             raise ValueError('Çıktı ürün/lot kodu tekrarlanamaz')
         return self
+
+
+Reason = Annotated[str, Field(min_length=1, max_length=500)]
+
+
+class TransferCreate(Schema):
+    from_location_id: UUID
+    to_location_id: UUID
+    lot_id: UUID
+    quantity: PositiveQuantity
+    unit: Literal['kg', 'package', 'unit']
+    transferred_at: AwareDatetime | None = None
+    reference: Code | None = None
+    reason: Reason
+
+    @model_validator(mode='after')
+    def distinct_locations(self):
+        if self.from_location_id == self.to_location_id:
+            raise ValueError('Kaynak ve hedef konum aynı olamaz')
+        return self
+
+
+class CustomerReturnItem(Schema):
+    sale_line_id: UUID
+    quantity: PositiveQuantity
+    unit: Literal['kg', 'package', 'unit']
+
+
+class CustomerReturnCreate(Schema):
+    sale_id: UUID
+    acceptance_location_id: UUID
+    reason: Reason
+    reference: Code | None = None
+    returned_at: AwareDatetime | None = None
+    lines: Annotated[list[CustomerReturnItem], Field(min_length=1, max_length=100)]
+
+    @model_validator(mode='after')
+    def unique_sale_lines(self):
+        if len({line.sale_line_id for line in self.lines}) != len(self.lines):
+            raise ValueError('İade satış satırı tekrarlanamaz')
+        return self
+
+
+class SaleCancelCreate(Schema):
+    acceptance_location_id: UUID
+    reason: Reason
+    cancelled_at: AwareDatetime | None = None

@@ -1,0 +1,1008 @@
+{
+  "data_origin": "KURGUSAL / SYNTHETIC",
+  "database": "avatar_task13_demo_test",
+  "transport": "real TCP HTTP -> FastAPI -> MySQL8",
+  "scenario": {
+    "receipt": {
+      "id": "37be4075-7f72-4ce9-a9af-d8623d6cbc76",
+      "lines": [
+        {
+          "id": "fc2ee570-9c76-4445-912d-5caf7f733e6a",
+          "lot_id": "c5147554-9ddc-4c4f-87df-c095321eae29",
+          "quantity": "20.000000",
+          "created_at": "2026-10-26T07:19:31.673583+00:00",
+          "product_id": "c9b69d96-02b4-47a8-a0f9-ceb5d723dacd",
+          "receipt_id": "37be4075-7f72-4ce9-a9af-d8623d6cbc76",
+          "total_cost": "194.000000",
+          "unit_price": null
+        }
+      ],
+      "reference": "KURGUSAL-G13-ALIS",
+      "created_at": "2026-10-26T07:19:31.667924+00:00",
+      "location_id": "139a8c7c-c59f-47fd-b797-22d9cae5274b",
+      "received_at": "2026-10-25T08:00:00+00:00",
+      "supplier_id": "a2db08a7-325f-4bb3-8d6b-640dd3ad2b37"
+    },
+    "transfer": {
+      "id": "6b225dbf-7a03-4346-b739-2e6931066f89",
+      "unit": "kg",
+      "lot_id": "c5147554-9ddc-4c4f-87df-c095321eae29",
+      "reason": "KURGUSAL depo transferi",
+      "quantity": "7.000000",
+      "movements": [
+        {
+          "id": "32a5b5d2-ba85-4294-ba8f-8ff18f494449",
+          "type": "transfer_out",
+          "lot_id": "c5147554-9ddc-4c4f-87df-c095321eae29",
+          "quantity": "-7.000000",
+          "created_at": "2026-10-26T07:19:31.702958+00:00",
+          "location_id": "139a8c7c-c59f-47fd-b797-22d9cae5274b",
+          "reversal_of": null,
+          "operation_id": null,
+          "receipt_line_id": null,
+          "transfer_group_id": "6b225dbf-7a03-4346-b739-2e6931066f89"
+        },
+        {
+          "id": "cca0e9b9-6e27-4623-8c78-7220848d0771",
+          "type": "transfer_in",
+          "lot_id": "c5147554-9ddc-4c4f-87df-c095321eae29",
+          "quantity": "7.000000",
+          "created_at": "2026-10-26T07:19:31.707011+00:00",
+          "location_id": "67bb5cad-8b57-41b5-82ab-b51eea996ce8",
+          "reversal_of": null,
+          "operation_id": null,
+          "receipt_line_id": null,
+          "transfer_group_id": "6b225dbf-7a03-4346-b739-2e6931066f89"
+        }
+      ],
+      "reference": "KURGUSAL-G13-TRANSFER",
+      "created_at": "2026-10-26T07:19:31.710848+00:00",
+      "product_id": "c9b69d96-02b4-47a8-a0f9-ceb5d723dacd",
+      "cost_effect": "none",
+      "in_movement_id": "cca0e9b9-6e27-4623-8c78-7220848d0771",
+      "to_location_id": "67bb5cad-8b57-41b5-82ab-b51eea996ce8",
+      "transferred_at": "2026-10-26T07:19:31.699855+00:00",
+      "out_movement_id": "32a5b5d2-ba85-4294-ba8f-8ff18f494449",
+      "from_location_id": "139a8c7c-c59f-47fd-b797-22d9cae5274b"
+    },
+    "transfer_phase": {
+      "basis": "recorded receipt20 plus paired transfer movements -7/+7, before later sale issues",
+      "warehouse_a": "13.000000",
+      "warehouse_b": "7.000000",
+      "total": "20.000000"
+    },
+    "sale": {
+      "id": "f2a1ace8-1e5b-433e-bf77-ab04f0a9d830",
+      "lines": [
+        {
+          "id": "a0dca4e2-53f5-4093-898f-14f93c4cfb48",
+          "unit": "kg",
+          "lot_id": "c5147554-9ddc-4c4f-87df-c095321eae29",
+          "line_no": 1,
+          "sale_id": "f2a1ace8-1e5b-433e-bf77-ab04f0a9d830",
+          "quantity": "5.000000",
+          "created_at": "2026-10-26T07:19:31.752166+00:00",
+          "product_id": "c9b69d96-02b4-47a8-a0f9-ceb5d723dacd",
+          "unit_price": "20.00",
+          "location_id": "67bb5cad-8b57-41b5-82ab-b51eea996ce8",
+          "total_amount": "100.00",
+          "consumed_cost": "48.500000",
+          "stock_movement_id": "5b73992b-7f4e-4b13-a12f-55952a543a9b"
+        }
+      ],
+      "sold_at": "2026-10-26T07:19:31.733941+00:00",
+      "currency": "EUR",
+      "created_at": "2026-10-26T07:19:31.734130+00:00",
+      "customer_id": "6e8c2a22-2792-4dd9-911c-b83480bcdb20",
+      "total_amount": "100.00"
+    },
+    "shipment": {
+      "id": "76105074-f52b-4928-9a07-7ad2fc058e04",
+      "lines": [
+        {
+          "id": "aa844bbb-0d3d-47a7-8e47-d713b4a2fd72",
+          "unit": "kg",
+          "lot_id": "c5147554-9ddc-4c4f-87df-c095321eae29",
+          "line_no": 1,
+          "quantity": "5.000000",
+          "created_at": "2026-10-26T07:19:31.781254+00:00",
+          "product_id": "c9b69d96-02b4-47a8-a0f9-ceb5d723dacd",
+          "location_id": "67bb5cad-8b57-41b5-82ab-b51eea996ce8",
+          "shipment_id": "76105074-f52b-4928-9a07-7ad2fc058e04",
+          "sale_line_id": "a0dca4e2-53f5-4093-898f-14f93c4cfb48",
+          "consumed_cost": "48.500000",
+          "stock_movement_id": "5b73992b-7f4e-4b13-a12f-55952a543a9b"
+        }
+      ],
+      "sale_id": "f2a1ace8-1e5b-433e-bf77-ab04f0a9d830",
+      "created_at": "2026-10-26T07:19:31.768303+00:00",
+      "shipped_at": "2026-10-26T07:19:31.768058+00:00",
+      "customer_id": "6e8c2a22-2792-4dd9-911c-b83480bcdb20",
+      "recipient_name": "KURGUSAL Görev13 müşteri",
+      "recipient_contact": "demo-task13@example.invalid"
+    },
+    "return": {
+      "id": "574e882f-dcba-46ca-a0dc-e070f649e7b5",
+      "lines": [
+        {
+          "id": "7f73f04b-d055-42a8-b4cc-06d1d91a8f0e",
+          "unit": "kg",
+          "lot_id": "c5147554-9ddc-4c4f-87df-c095321eae29",
+          "movement": {
+            "id": "383738a7-8868-4fac-a48c-d77782ed6569",
+            "type": "customer_return",
+            "lot_id": "c5147554-9ddc-4c4f-87df-c095321eae29",
+            "quantity": "2.000000",
+            "created_at": "2026-10-26T07:19:31.828623+00:00",
+            "location_id": "ff5de898-a4c7-4247-a248-0be6e5d835cb",
+            "reversal_of": null,
+            "operation_id": null,
+            "receipt_line_id": null,
+            "transfer_group_id": null
+          },
+          "quantity": "2.000000",
+          "return_id": "574e882f-dcba-46ca-a0dc-e070f649e7b5",
+          "created_at": "2026-10-26T07:19:31.831460+00:00",
+          "product_id": "c9b69d96-02b4-47a8-a0f9-ceb5d723dacd",
+          "sale_line_id": "a0dca4e2-53f5-4093-898f-14f93c4cfb48",
+          "credit_amount": "40.00",
+          "restored_cost": "19.400000",
+          "shipment_line_id": "aa844bbb-0d3d-47a7-8e47-d713b4a2fd72",
+          "stock_movement_id": "383738a7-8868-4fac-a48c-d77782ed6569",
+          "original_sold_quantity": "5.000000",
+          "original_sale_movement_id": "5b73992b-7f4e-4b13-a12f-55952a543a9b"
+        }
+      ],
+      "reason": "KURGUSAL kısmi müşteri iadesi",
+      "sale_id": "f2a1ace8-1e5b-433e-bf77-ab04f0a9d830",
+      "currency": "EUR",
+      "reference": "KURGUSAL-G13-IADE",
+      "created_at": "2026-10-26T07:19:31.817801+00:00",
+      "customer_id": "6e8c2a22-2792-4dd9-911c-b83480bcdb20",
+      "returned_at": "2026-10-26T07:19:31.815660+00:00",
+      "credit_amount": "40.00",
+      "restored_cost": "19.400000",
+      "financial_basis": "recorded_net_sale_credit_and_cost_reversal",
+      "inventory_status": "quarantine_only",
+      "cash_refund_status": "not_recorded",
+      "acceptance_location_id": "ff5de898-a4c7-4247-a248-0be6e5d835cb"
+    },
+    "cancellation": {
+      "id": "86d09446-7033-4295-a0b7-7aeca1a2103f",
+      "lines": [
+        {
+          "id": "5ae1528b-133c-450e-99f7-b74e66869cd0",
+          "unit": "kg",
+          "lot_id": "c5147554-9ddc-4c4f-87df-c095321eae29",
+          "movement": {
+            "id": "38624097-291d-4815-a4d1-6a361be3f9e9",
+            "type": "sale_cancellation",
+            "lot_id": "c5147554-9ddc-4c4f-87df-c095321eae29",
+            "quantity": "3.000000",
+            "created_at": "2026-10-26T07:19:31.878718+00:00",
+            "location_id": "ff5de898-a4c7-4247-a248-0be6e5d835cb",
+            "reversal_of": "118defa0-537f-47b6-a399-2c1f6c27922b",
+            "operation_id": null,
+            "receipt_line_id": null,
+            "transfer_group_id": null
+          },
+          "quantity": "3.000000",
+          "created_at": "2026-10-26T07:19:31.881934+00:00",
+          "product_id": "c9b69d96-02b4-47a8-a0f9-ceb5d723dacd",
+          "sale_line_id": "c76310b4-f2c0-4d6e-91c6-f2b2e6abe3f1",
+          "credit_amount": "60.00",
+          "restored_cost": "29.100000",
+          "cancellation_id": "86d09446-7033-4295-a0b7-7aeca1a2103f",
+          "stock_movement_id": "38624097-291d-4815-a4d1-6a361be3f9e9",
+          "original_sold_quantity": "3.000000",
+          "original_sale_movement_id": "118defa0-537f-47b6-a399-2c1f6c27922b"
+        }
+      ],
+      "reason": "KURGUSAL sevk öncesi iptal",
+      "sale_id": "d8e18464-cd4d-4bd9-9a6c-9bc5906dad49",
+      "currency": "EUR",
+      "created_at": "2026-10-26T07:19:31.874024+00:00",
+      "customer_id": "6e8c2a22-2792-4dd9-911c-b83480bcdb20",
+      "cancelled_at": "2026-10-26T07:19:31.873001+00:00",
+      "credit_amount": "60.00",
+      "restored_cost": "29.100000",
+      "financial_basis": "recorded_net_sale_credit_and_cost_reversal",
+      "inventory_status": "quarantine_only",
+      "cash_refund_status": "not_recorded",
+      "acceptance_location_id": "ff5de898-a4c7-4247-a248-0be6e5d835cb"
+    },
+    "recall_id": "8ca1b90a-09b4-4a59-ad57-9177d62cc574",
+    "final_stocks": [
+      {
+        "lot_id": "c5147554-9ddc-4c4f-87df-c095321eae29",
+        "location_id": "139a8c7c-c59f-47fd-b797-22d9cae5274b",
+        "quantity": "10.000000",
+        "product_id": "c9b69d96-02b4-47a8-a0f9-ceb5d723dacd",
+        "blocked": true,
+        "available_quantity": "0.000000"
+      },
+      {
+        "lot_id": "c5147554-9ddc-4c4f-87df-c095321eae29",
+        "location_id": "67bb5cad-8b57-41b5-82ab-b51eea996ce8",
+        "quantity": "2.000000",
+        "product_id": "c9b69d96-02b4-47a8-a0f9-ceb5d723dacd",
+        "blocked": true,
+        "available_quantity": "0.000000"
+      },
+      {
+        "lot_id": "c5147554-9ddc-4c4f-87df-c095321eae29",
+        "location_id": "ff5de898-a4c7-4247-a248-0be6e5d835cb",
+        "quantity": "5.000000",
+        "product_id": "c9b69d96-02b4-47a8-a0f9-ceb5d723dacd",
+        "blocked": true,
+        "available_quantity": "0.000000"
+      }
+    ],
+    "lot": {
+      "product_id": "c9b69d96-02b4-47a8-a0f9-ceb5d723dacd",
+      "supplier_id": "a2db08a7-325f-4bb3-8d6b-640dd3ad2b37",
+      "external_code": "KURGUSAL-G13-LOT",
+      "received_at": "2026-10-25T08:00:00+00:00",
+      "expires_at": null,
+      "blocked": true,
+      "original_quantity": "20.000000",
+      "total_cost": "194.000000",
+      "consumed_quantity": "8.000000",
+      "consumed_cost": "77.600000",
+      "id": "c5147554-9ddc-4c4f-87df-c095321eae29",
+      "created_at": "2026-10-26T07:19:31.672150+00:00"
+    },
+    "profitability": {
+      "sale_id": "f2a1ace8-1e5b-433e-bf77-ab04f0a9d830",
+      "currency": "EUR",
+      "basis": "recorded_net_sale_and_consumed_lot_cost",
+      "limitations": [
+        "Vergi, iskonto, genel gider ve nakit geri ödeme muhasebesi kapsam dışıdır.",
+        "Üst alanlar orijinal satışı korur; düzeltmeler ve netleşmiş sonuç ayrı alanlardadır."
+      ],
+      "net_revenue_eur": "100.00",
+      "recognized_cost_eur": "48.500000",
+      "gross_profit_eur": "51.500000",
+      "gross_profit_display_eur": "51.50",
+      "margin_percent": "51.500000",
+      "adjustments": {
+        "state": "partially_returned",
+        "return_ids": [
+          "574e882f-dcba-46ca-a0dc-e070f649e7b5"
+        ],
+        "cancellation_id": null,
+        "return_credit_eur": "40.00",
+        "cancellation_credit_eur": "0.00",
+        "cost_reversal_eur": "19.400000",
+        "cash_refund_status": "not_recorded",
+        "lines": [
+          {
+            "sale_line_id": "a0dca4e2-53f5-4093-898f-14f93c4cfb48",
+            "original_sold_quantity": "5.000000",
+            "returned_quantity": "2.000000",
+            "cancelled_quantity": "0.000000"
+          }
+        ]
+      },
+      "net_after_adjustments": {
+        "net_revenue_eur": "60.00",
+        "recognized_cost_eur": "29.100000",
+        "gross_profit_eur": "30.900000",
+        "gross_profit_display_eur": "30.90",
+        "margin_percent": "51.500000"
+      },
+      "lines": [
+        {
+          "sale_line_id": "a0dca4e2-53f5-4093-898f-14f93c4cfb48",
+          "lot_id": "c5147554-9ddc-4c4f-87df-c095321eae29",
+          "stock_movement_id": "5b73992b-7f4e-4b13-a12f-55952a543a9b",
+          "quantity": "5.000000",
+          "unit": "kg",
+          "vkp_eur_per_unit": "20.00",
+          "recognized_unit_cost_eur": "9.700000",
+          "net_revenue_eur": "100.00",
+          "recognized_cost_eur": "48.500000",
+          "gross_profit_eur": "51.500000",
+          "gross_profit_display_eur": "51.50",
+          "margin_percent": "51.500000"
+        }
+      ]
+    },
+    "cancelled_profitability": {
+      "sale_id": "d8e18464-cd4d-4bd9-9a6c-9bc5906dad49",
+      "currency": "EUR",
+      "basis": "recorded_net_sale_and_consumed_lot_cost",
+      "limitations": [
+        "Vergi, iskonto, genel gider ve nakit geri ödeme muhasebesi kapsam dışıdır.",
+        "Üst alanlar orijinal satışı korur; düzeltmeler ve netleşmiş sonuç ayrı alanlardadır."
+      ],
+      "net_revenue_eur": "60.00",
+      "recognized_cost_eur": "29.100000",
+      "gross_profit_eur": "30.900000",
+      "gross_profit_display_eur": "30.90",
+      "margin_percent": "51.500000",
+      "adjustments": {
+        "state": "cancelled",
+        "return_ids": [],
+        "cancellation_id": "86d09446-7033-4295-a0b7-7aeca1a2103f",
+        "return_credit_eur": "0.00",
+        "cancellation_credit_eur": "60.00",
+        "cost_reversal_eur": "29.100000",
+        "cash_refund_status": "not_recorded",
+        "lines": [
+          {
+            "sale_line_id": "c76310b4-f2c0-4d6e-91c6-f2b2e6abe3f1",
+            "original_sold_quantity": "3.000000",
+            "returned_quantity": "0.000000",
+            "cancelled_quantity": "3.000000"
+          }
+        ]
+      },
+      "net_after_adjustments": {
+        "net_revenue_eur": "0.00",
+        "recognized_cost_eur": "0.000000",
+        "gross_profit_eur": "0.000000",
+        "gross_profit_display_eur": "0.00",
+        "margin_percent": null
+      },
+      "lines": [
+        {
+          "sale_line_id": "c76310b4-f2c0-4d6e-91c6-f2b2e6abe3f1",
+          "lot_id": "c5147554-9ddc-4c4f-87df-c095321eae29",
+          "stock_movement_id": "118defa0-537f-47b6-a399-2c1f6c27922b",
+          "quantity": "3.000000",
+          "unit": "kg",
+          "vkp_eur_per_unit": "20.00",
+          "recognized_unit_cost_eur": "9.700000",
+          "net_revenue_eur": "60.00",
+          "recognized_cost_eur": "29.100000",
+          "gross_profit_eur": "30.900000",
+          "gross_profit_display_eur": "30.90",
+          "margin_percent": "51.500000"
+        }
+      ]
+    },
+    "blocked_sale_code": "LOT_BLOCKED",
+    "trace": {
+      "source_lot": {
+        "product_id": "c9b69d96-02b4-47a8-a0f9-ceb5d723dacd",
+        "supplier_id": "a2db08a7-325f-4bb3-8d6b-640dd3ad2b37",
+        "external_code": "KURGUSAL-G13-LOT",
+        "received_at": "2026-10-25T08:00:00+00:00",
+        "expires_at": null,
+        "blocked": true,
+        "original_quantity": "20.000000",
+        "total_cost": "194.000000",
+        "consumed_quantity": "8.000000",
+        "consumed_cost": "77.600000",
+        "id": "c5147554-9ddc-4c4f-87df-c095321eae29",
+        "created_at": "2026-10-26T07:19:31.672150+00:00",
+        "product": {
+          "species": null,
+          "sku": "KURGUSAL-TASK13",
+          "name": "KURGUSAL Görev13 ürün",
+          "type": "raw",
+          "base_unit": "kg",
+          "package_weight_kg": null,
+          "id": "c9b69d96-02b4-47a8-a0f9-ceb5d723dacd",
+          "created_at": "2026-10-26T07:19:31.653267+00:00"
+        },
+        "supplier": {
+          "name": "KURGUSAL Görev13 tedarikçisi",
+          "roles": [
+            "supplier"
+          ],
+          "contact": null,
+          "id": "a2db08a7-325f-4bb3-8d6b-640dd3ad2b37",
+          "created_at": "2026-10-26T07:19:31.583911+00:00"
+        }
+      },
+      "direction": "forward",
+      "lots": [
+        {
+          "product_id": "c9b69d96-02b4-47a8-a0f9-ceb5d723dacd",
+          "supplier_id": "a2db08a7-325f-4bb3-8d6b-640dd3ad2b37",
+          "external_code": "KURGUSAL-G13-LOT",
+          "received_at": "2026-10-25T08:00:00+00:00",
+          "expires_at": null,
+          "blocked": true,
+          "original_quantity": "20.000000",
+          "total_cost": "194.000000",
+          "consumed_quantity": "8.000000",
+          "consumed_cost": "77.600000",
+          "id": "c5147554-9ddc-4c4f-87df-c095321eae29",
+          "created_at": "2026-10-26T07:19:31.672150+00:00",
+          "product": {
+            "species": null,
+            "sku": "KURGUSAL-TASK13",
+            "name": "KURGUSAL Görev13 ürün",
+            "type": "raw",
+            "base_unit": "kg",
+            "package_weight_kg": null,
+            "id": "c9b69d96-02b4-47a8-a0f9-ceb5d723dacd",
+            "created_at": "2026-10-26T07:19:31.653267+00:00"
+          },
+          "supplier": {
+            "name": "KURGUSAL Görev13 tedarikçisi",
+            "roles": [
+              "supplier"
+            ],
+            "contact": null,
+            "id": "a2db08a7-325f-4bb3-8d6b-640dd3ad2b37",
+            "created_at": "2026-10-26T07:19:31.583911+00:00"
+          }
+        }
+      ],
+      "context_lots": [],
+      "affected_finished_lot_ids": [],
+      "operations": [],
+      "edges": [],
+      "cycle_detected": false,
+      "stocks": [
+        {
+          "lot_id": "c5147554-9ddc-4c4f-87df-c095321eae29",
+          "location_id": "139a8c7c-c59f-47fd-b797-22d9cae5274b",
+          "quantity": "10.000000",
+          "product_id": "c9b69d96-02b4-47a8-a0f9-ceb5d723dacd",
+          "unit": "kg",
+          "location": {
+            "name": "KURGUSAL Görev13 Depo A",
+            "kind": "warehouse",
+            "party_id": null,
+            "id": "139a8c7c-c59f-47fd-b797-22d9cae5274b",
+            "created_at": "2026-10-26T07:19:31.612033+00:00"
+          },
+          "blocked": true,
+          "available_quantity": "0.000000"
+        },
+        {
+          "lot_id": "c5147554-9ddc-4c4f-87df-c095321eae29",
+          "location_id": "67bb5cad-8b57-41b5-82ab-b51eea996ce8",
+          "quantity": "2.000000",
+          "product_id": "c9b69d96-02b4-47a8-a0f9-ceb5d723dacd",
+          "unit": "kg",
+          "location": {
+            "name": "KURGUSAL Görev13 Depo B",
+            "kind": "warehouse",
+            "party_id": null,
+            "id": "67bb5cad-8b57-41b5-82ab-b51eea996ce8",
+            "created_at": "2026-10-26T07:19:31.623426+00:00"
+          },
+          "blocked": true,
+          "available_quantity": "0.000000"
+        },
+        {
+          "lot_id": "c5147554-9ddc-4c4f-87df-c095321eae29",
+          "location_id": "ff5de898-a4c7-4247-a248-0be6e5d835cb",
+          "quantity": "5.000000",
+          "product_id": "c9b69d96-02b4-47a8-a0f9-ceb5d723dacd",
+          "unit": "kg",
+          "location": {
+            "name": "KURGUSAL Görev13 karantina",
+            "kind": "quarantine",
+            "party_id": null,
+            "id": "ff5de898-a4c7-4247-a248-0be6e5d835cb",
+            "created_at": "2026-10-26T07:19:31.635033+00:00"
+          },
+          "blocked": true,
+          "available_quantity": "0.000000"
+        }
+      ],
+      "blocked_stocks": [
+        {
+          "lot_id": "c5147554-9ddc-4c4f-87df-c095321eae29",
+          "location_id": "139a8c7c-c59f-47fd-b797-22d9cae5274b",
+          "quantity": "10.000000",
+          "product_id": "c9b69d96-02b4-47a8-a0f9-ceb5d723dacd",
+          "unit": "kg",
+          "location": {
+            "name": "KURGUSAL Görev13 Depo A",
+            "kind": "warehouse",
+            "party_id": null,
+            "id": "139a8c7c-c59f-47fd-b797-22d9cae5274b",
+            "created_at": "2026-10-26T07:19:31.612033+00:00"
+          },
+          "blocked": true,
+          "available_quantity": "0.000000"
+        },
+        {
+          "lot_id": "c5147554-9ddc-4c4f-87df-c095321eae29",
+          "location_id": "67bb5cad-8b57-41b5-82ab-b51eea996ce8",
+          "quantity": "2.000000",
+          "product_id": "c9b69d96-02b4-47a8-a0f9-ceb5d723dacd",
+          "unit": "kg",
+          "location": {
+            "name": "KURGUSAL Görev13 Depo B",
+            "kind": "warehouse",
+            "party_id": null,
+            "id": "67bb5cad-8b57-41b5-82ab-b51eea996ce8",
+            "created_at": "2026-10-26T07:19:31.623426+00:00"
+          },
+          "blocked": true,
+          "available_quantity": "0.000000"
+        },
+        {
+          "lot_id": "c5147554-9ddc-4c4f-87df-c095321eae29",
+          "location_id": "ff5de898-a4c7-4247-a248-0be6e5d835cb",
+          "quantity": "5.000000",
+          "product_id": "c9b69d96-02b4-47a8-a0f9-ceb5d723dacd",
+          "unit": "kg",
+          "location": {
+            "name": "KURGUSAL Görev13 karantina",
+            "kind": "quarantine",
+            "party_id": null,
+            "id": "ff5de898-a4c7-4247-a248-0be6e5d835cb",
+            "created_at": "2026-10-26T07:19:31.635033+00:00"
+          },
+          "blocked": true,
+          "available_quantity": "0.000000"
+        }
+      ],
+      "transfers": [
+        {
+          "lot_id": "c5147554-9ddc-4c4f-87df-c095321eae29",
+          "product_id": "c9b69d96-02b4-47a8-a0f9-ceb5d723dacd",
+          "from_location_id": "139a8c7c-c59f-47fd-b797-22d9cae5274b",
+          "to_location_id": "67bb5cad-8b57-41b5-82ab-b51eea996ce8",
+          "quantity": "7.000000",
+          "unit": "kg",
+          "transferred_at": "2026-10-26T07:19:31.699855+00:00",
+          "reference": "KURGUSAL-G13-TRANSFER",
+          "reason": "KURGUSAL depo transferi",
+          "out_movement_id": "32a5b5d2-ba85-4294-ba8f-8ff18f494449",
+          "in_movement_id": "cca0e9b9-6e27-4623-8c78-7220848d0771",
+          "id": "6b225dbf-7a03-4346-b739-2e6931066f89",
+          "created_at": "2026-10-26T07:19:31.710848+00:00"
+        }
+      ],
+      "sales": [
+        {
+          "customer_id": "6e8c2a22-2792-4dd9-911c-b83480bcdb20",
+          "sold_at": "2026-10-26T07:19:31.847669+00:00",
+          "currency": "EUR",
+          "total_amount": "60.000000",
+          "id": "d8e18464-cd4d-4bd9-9a6c-9bc5906dad49",
+          "created_at": "2026-10-26T07:19:31.847850+00:00",
+          "line_scope": "affected_lots_only",
+          "lines": [
+            {
+              "sale_id": "d8e18464-cd4d-4bd9-9a6c-9bc5906dad49",
+              "line_no": 1,
+              "product_id": "c9b69d96-02b4-47a8-a0f9-ceb5d723dacd",
+              "lot_id": "c5147554-9ddc-4c4f-87df-c095321eae29",
+              "location_id": "139a8c7c-c59f-47fd-b797-22d9cae5274b",
+              "stock_movement_id": "118defa0-537f-47b6-a399-2c1f6c27922b",
+              "quantity": "3.000000",
+              "unit": "kg",
+              "unit_price": "20.000000",
+              "total_amount": "60.000000",
+              "consumed_cost": "29.100000",
+              "id": "c76310b4-f2c0-4d6e-91c6-f2b2e6abe3f1",
+              "created_at": "2026-10-26T07:19:31.854148+00:00"
+            }
+          ]
+        },
+        {
+          "customer_id": "6e8c2a22-2792-4dd9-911c-b83480bcdb20",
+          "sold_at": "2026-10-26T07:19:31.733941+00:00",
+          "currency": "EUR",
+          "total_amount": "100.000000",
+          "id": "f2a1ace8-1e5b-433e-bf77-ab04f0a9d830",
+          "created_at": "2026-10-26T07:19:31.734130+00:00",
+          "line_scope": "affected_lots_only",
+          "lines": [
+            {
+              "sale_id": "f2a1ace8-1e5b-433e-bf77-ab04f0a9d830",
+              "line_no": 1,
+              "product_id": "c9b69d96-02b4-47a8-a0f9-ceb5d723dacd",
+              "lot_id": "c5147554-9ddc-4c4f-87df-c095321eae29",
+              "location_id": "67bb5cad-8b57-41b5-82ab-b51eea996ce8",
+              "stock_movement_id": "5b73992b-7f4e-4b13-a12f-55952a543a9b",
+              "quantity": "5.000000",
+              "unit": "kg",
+              "unit_price": "20.000000",
+              "total_amount": "100.000000",
+              "consumed_cost": "48.500000",
+              "id": "a0dca4e2-53f5-4093-898f-14f93c4cfb48",
+              "created_at": "2026-10-26T07:19:31.752166+00:00"
+            }
+          ]
+        }
+      ],
+      "shipments": [
+        {
+          "customer_id": "6e8c2a22-2792-4dd9-911c-b83480bcdb20",
+          "sale_id": "f2a1ace8-1e5b-433e-bf77-ab04f0a9d830",
+          "recipient_name": "KURGUSAL Görev13 müşteri",
+          "recipient_contact": "demo-task13@example.invalid",
+          "shipped_at": "2026-10-26T07:19:31.768058+00:00",
+          "id": "76105074-f52b-4928-9a07-7ad2fc058e04",
+          "created_at": "2026-10-26T07:19:31.768303+00:00",
+          "line_scope": "affected_lots_only",
+          "lines": [
+            {
+              "shipment_id": "76105074-f52b-4928-9a07-7ad2fc058e04",
+              "line_no": 1,
+              "sale_line_id": "a0dca4e2-53f5-4093-898f-14f93c4cfb48",
+              "product_id": "c9b69d96-02b4-47a8-a0f9-ceb5d723dacd",
+              "lot_id": "c5147554-9ddc-4c4f-87df-c095321eae29",
+              "location_id": "67bb5cad-8b57-41b5-82ab-b51eea996ce8",
+              "stock_movement_id": "5b73992b-7f4e-4b13-a12f-55952a543a9b",
+              "quantity": "5.000000",
+              "unit": "kg",
+              "consumed_cost": "48.500000",
+              "id": "aa844bbb-0d3d-47a7-8e47-d713b4a2fd72",
+              "created_at": "2026-10-26T07:19:31.781254+00:00"
+            }
+          ]
+        }
+      ],
+      "buyers": [
+        {
+          "customer_id": "6e8c2a22-2792-4dd9-911c-b83480bcdb20",
+          "current_customer": {
+            "name": "KURGUSAL Görev13 müşteri",
+            "roles": [
+              "customer"
+            ],
+            "contact": "demo-task13@example.invalid",
+            "id": "6e8c2a22-2792-4dd9-911c-b83480bcdb20",
+            "created_at": "2026-10-26T07:19:31.597344+00:00"
+          },
+          "recipient_snapshots": [
+            {
+              "shipment_id": "76105074-f52b-4928-9a07-7ad2fc058e04",
+              "shipped_at": "2026-10-26T07:19:31.768058+00:00",
+              "recipient_name": "KURGUSAL Görev13 müşteri",
+              "recipient_contact": "demo-task13@example.invalid"
+            }
+          ],
+          "quantities": [
+            {
+              "lot_id": "c5147554-9ddc-4c4f-87df-c095321eae29",
+              "product_id": "c9b69d96-02b4-47a8-a0f9-ceb5d723dacd",
+              "unit": "kg",
+              "recorded_sale_quantity": "8.000000",
+              "unshipped_sale_quantity": "0.000000",
+              "shipped_quantity": "5.000000",
+              "sale_line_ids": [
+                "a0dca4e2-53f5-4093-898f-14f93c4cfb48",
+                "c76310b4-f2c0-4d6e-91c6-f2b2e6abe3f1"
+              ],
+              "shipment_line_ids": [
+                "aa844bbb-0d3d-47a7-8e47-d713b4a2fd72"
+              ],
+              "returned_quantity": "2.000000",
+              "cancelled_sale_quantity": "3.000000",
+              "recorded_delivery_less_returns_quantity": "3.000000"
+            }
+          ]
+        }
+      ],
+      "customer_returns": [
+        {
+          "sale_id": "f2a1ace8-1e5b-433e-bf77-ab04f0a9d830",
+          "customer_id": "6e8c2a22-2792-4dd9-911c-b83480bcdb20",
+          "acceptance_location_id": "ff5de898-a4c7-4247-a248-0be6e5d835cb",
+          "returned_at": "2026-10-26T07:19:31.815660+00:00",
+          "reason": "KURGUSAL kısmi müşteri iadesi",
+          "reference": "KURGUSAL-G13-IADE",
+          "credit_amount": "40.00",
+          "restored_cost": "19.400000",
+          "id": "574e882f-dcba-46ca-a0dc-e070f649e7b5",
+          "created_at": "2026-10-26T07:19:31.817801+00:00",
+          "currency": "EUR",
+          "inventory_status": "quarantine_only",
+          "financial_basis": "recorded_net_sale_credit_and_cost_reversal",
+          "cash_refund_status": "not_recorded",
+          "line_scope": "affected_lots_only",
+          "lines": [
+            {
+              "return_id": "574e882f-dcba-46ca-a0dc-e070f649e7b5",
+              "sale_line_id": "a0dca4e2-53f5-4093-898f-14f93c4cfb48",
+              "shipment_line_id": "aa844bbb-0d3d-47a7-8e47-d713b4a2fd72",
+              "lot_id": "c5147554-9ddc-4c4f-87df-c095321eae29",
+              "product_id": "c9b69d96-02b4-47a8-a0f9-ceb5d723dacd",
+              "stock_movement_id": "383738a7-8868-4fac-a48c-d77782ed6569",
+              "quantity": "2.000000",
+              "unit": "kg",
+              "credit_amount": "40.000000",
+              "restored_cost": "19.400000",
+              "id": "7f73f04b-d055-42a8-b4cc-06d1d91a8f0e",
+              "created_at": "2026-10-26T07:19:31.831460+00:00"
+            }
+          ]
+        }
+      ],
+      "sale_cancellations": [
+        {
+          "sale_id": "d8e18464-cd4d-4bd9-9a6c-9bc5906dad49",
+          "customer_id": "6e8c2a22-2792-4dd9-911c-b83480bcdb20",
+          "acceptance_location_id": "ff5de898-a4c7-4247-a248-0be6e5d835cb",
+          "cancelled_at": "2026-10-26T07:19:31.873001+00:00",
+          "reason": "KURGUSAL sevk öncesi iptal",
+          "credit_amount": "60.00",
+          "restored_cost": "29.100000",
+          "id": "86d09446-7033-4295-a0b7-7aeca1a2103f",
+          "created_at": "2026-10-26T07:19:31.874024+00:00",
+          "currency": "EUR",
+          "inventory_status": "quarantine_only",
+          "financial_basis": "recorded_net_sale_credit_and_cost_reversal",
+          "cash_refund_status": "not_recorded",
+          "line_scope": "affected_lots_only",
+          "lines": [
+            {
+              "cancellation_id": "86d09446-7033-4295-a0b7-7aeca1a2103f",
+              "sale_line_id": "c76310b4-f2c0-4d6e-91c6-f2b2e6abe3f1",
+              "lot_id": "c5147554-9ddc-4c4f-87df-c095321eae29",
+              "product_id": "c9b69d96-02b4-47a8-a0f9-ceb5d723dacd",
+              "stock_movement_id": "38624097-291d-4815-a4d1-6a361be3f9e9",
+              "quantity": "3.000000",
+              "unit": "kg",
+              "credit_amount": "60.000000",
+              "restored_cost": "29.100000",
+              "id": "5ae1528b-133c-450e-99f7-b74e66869cd0",
+              "created_at": "2026-10-26T07:19:31.881934+00:00"
+            }
+          ]
+        }
+      ],
+      "total_shipped_quantities": [
+        {
+          "product_id": "c9b69d96-02b4-47a8-a0f9-ceb5d723dacd",
+          "unit": "kg",
+          "quantity": "5.000000"
+        }
+      ],
+      "second_tier_distributions": [],
+      "unknown_distributions": [
+        {
+          "customer_id": "6e8c2a22-2792-4dd9-911c-b83480bcdb20",
+          "market_remaining_quantity": null,
+          "final_consumer_sold_quantity": null,
+          "second_tier_recipients": null
+        }
+      ],
+      "distribution_scope": "Recorded company-to-customer deliveries only; no second-tier records exist in this schema. Shipped quantity is not market remaining stock or end-consumer sales."
+    }
+  },
+  "second_full_run_same_responses_and_database": true,
+  "before_replay": {
+    "products": {
+      "rows": 21,
+      "sha256": "4246addf233c5ff762628ffa0104d8c355b993f89257448f0f30e4427e1cf1d5"
+    },
+    "parties": {
+      "rows": 11,
+      "sha256": "7b71a5d89ee16a4d8f5afbe2b4dbd95c232d40c61f3f405ae9dc38d07b9ffc4a"
+    },
+    "locations": {
+      "rows": 8,
+      "sha256": "3af44cec9029da340fa1f31328572c94b2095405da341f551c08fde0c097b32d"
+    },
+    "lots": {
+      "rows": 27,
+      "sha256": "ed0551c65f408c74974a3038d6a6b5cac0bee20c17adb2857cfb572c9fa5079f"
+    },
+    "receipts": {
+      "rows": 6,
+      "sha256": "f7b44ce63684980a959cad3424a86f6a74a4059b7ea3d6d196ff7ade45ade530"
+    },
+    "receipt_lines": {
+      "rows": 10,
+      "sha256": "9045c4e72a5439cb2660fe3958ccf225e8157d5738baaf7767c67a5cdd9f4dae"
+    },
+    "recipe_versions": {
+      "rows": 3,
+      "sha256": "dee0ced727f120b76d5a74ecd154bdd54c1621eff1677373c8379086e745695a"
+    },
+    "recipe_lines": {
+      "rows": 15,
+      "sha256": "79976170f14e03647b9cc143c176592f546617968f388ac1b5446f0cf5c1a74c"
+    },
+    "operations": {
+      "rows": 5,
+      "sha256": "491df1959eeffdcebbeb003a9d777b32bc603efc59d0e247e4b0d0d261c940b6"
+    },
+    "operation_inputs": {
+      "rows": 9,
+      "sha256": "ebb13c5652b5fefdee601080b496b6ac404dbb9112e01ffe432ea008abbd31e5"
+    },
+    "operation_outputs": {
+      "rows": 17,
+      "sha256": "b9298385363fdd919a3522b7eea60bc8c269dd4ae654f3824ab7a313b29b6136"
+    },
+    "operation_differences": {
+      "rows": 3,
+      "sha256": "5fc87aae92f78d43634e02a2a89f89fb4b0a467a813faaf94fb7b6a7bbe55a7e"
+    },
+    "lot_links": {
+      "rows": 21,
+      "sha256": "7cd5b9f386a24d11db2f0ba755df47413a7a62c3d07b6213b399ffdf7f876adc"
+    },
+    "service_costs": {
+      "rows": 2,
+      "sha256": "f60c6c84fcd5ee025b0e2ccae4294609ad885ee04cbbad035438e73546899557"
+    },
+    "stock_balances": {
+      "rows": 35,
+      "sha256": "21b84b406220652180509c68740c559bc118546364672dfb50c98345f56916ea"
+    },
+    "stock_movements": {
+      "rows": 58,
+      "sha256": "8fbceacad018b3abf8c7b497ab7b0abb50294063dc9c567395d1bbd54cdc2a5f"
+    },
+    "idempotency_requests": {
+      "rows": 78,
+      "sha256": "840a483b048185111454add860d1241309247016c7356337163b70df3f67e9ff"
+    },
+    "sales": {
+      "rows": 6,
+      "sha256": "72635c5aa45be5dd6c8601595a06b4c78cc8d2a55d6c86344d07decf3413d94c"
+    },
+    "sale_lines": {
+      "rows": 6,
+      "sha256": "cac31b63f26ab3e573086fedbc90177970e570966ae6f20e0884071316aa4c16"
+    },
+    "shipments": {
+      "rows": 4,
+      "sha256": "155744cf748fb67bc14d9d4a15933abfb5f9af4cc817e88fb6e93837bced76bb"
+    },
+    "shipment_lines": {
+      "rows": 4,
+      "sha256": "9429c770f9dd58590ae3b340f94cd34d76bfd003bcd2e77f143b25200ca443ef"
+    },
+    "recalls": {
+      "rows": 2,
+      "sha256": "db2044695453223db347f889b17b7b19a95e45f9f4ac4e7683e0e25810f66c96"
+    },
+    "recall_lots": {
+      "rows": 3,
+      "sha256": "0f7a92b0ef8ede2a94ec2748185d868810b0760008c8ae6e72beb3a1729dbf54"
+    },
+    "prediction_records": {
+      "rows": 2,
+      "sha256": "7983f17e02e0e0887f5d1934fa84f24fbca2102bde6d01de83077bf8d80f4d41"
+    },
+    "stock_transfers": {
+      "rows": 1,
+      "sha256": "14d6d3785182f9f481edf20e383e8170323232913436cbe4da03646a091b6ba6"
+    },
+    "customer_returns": {
+      "rows": 1,
+      "sha256": "50e070af8b3e7983ff97117928eed39f3c2efa52d7b608ee28bd4bde62553334"
+    },
+    "customer_return_lines": {
+      "rows": 1,
+      "sha256": "2d8336413ba6946f35447fbb1932cdd7dd7cb056840c7f26a6cac38e57f4e0c9"
+    },
+    "sale_cancellations": {
+      "rows": 1,
+      "sha256": "f2041babf4e4806741e537c1055525f071de868d12c4b0304488c3229497a1d0"
+    },
+    "sale_cancellation_lines": {
+      "rows": 1,
+      "sha256": "a14d7ec083cb381835ba161b376a04010175b30d7ae308bed823c8308a8991ec"
+    }
+  },
+  "after_replay": {
+    "products": {
+      "rows": 21,
+      "sha256": "4246addf233c5ff762628ffa0104d8c355b993f89257448f0f30e4427e1cf1d5"
+    },
+    "parties": {
+      "rows": 11,
+      "sha256": "7b71a5d89ee16a4d8f5afbe2b4dbd95c232d40c61f3f405ae9dc38d07b9ffc4a"
+    },
+    "locations": {
+      "rows": 8,
+      "sha256": "3af44cec9029da340fa1f31328572c94b2095405da341f551c08fde0c097b32d"
+    },
+    "lots": {
+      "rows": 27,
+      "sha256": "ed0551c65f408c74974a3038d6a6b5cac0bee20c17adb2857cfb572c9fa5079f"
+    },
+    "receipts": {
+      "rows": 6,
+      "sha256": "f7b44ce63684980a959cad3424a86f6a74a4059b7ea3d6d196ff7ade45ade530"
+    },
+    "receipt_lines": {
+      "rows": 10,
+      "sha256": "9045c4e72a5439cb2660fe3958ccf225e8157d5738baaf7767c67a5cdd9f4dae"
+    },
+    "recipe_versions": {
+      "rows": 3,
+      "sha256": "dee0ced727f120b76d5a74ecd154bdd54c1621eff1677373c8379086e745695a"
+    },
+    "recipe_lines": {
+      "rows": 15,
+      "sha256": "79976170f14e03647b9cc143c176592f546617968f388ac1b5446f0cf5c1a74c"
+    },
+    "operations": {
+      "rows": 5,
+      "sha256": "491df1959eeffdcebbeb003a9d777b32bc603efc59d0e247e4b0d0d261c940b6"
+    },
+    "operation_inputs": {
+      "rows": 9,
+      "sha256": "ebb13c5652b5fefdee601080b496b6ac404dbb9112e01ffe432ea008abbd31e5"
+    },
+    "operation_outputs": {
+      "rows": 17,
+      "sha256": "b9298385363fdd919a3522b7eea60bc8c269dd4ae654f3824ab7a313b29b6136"
+    },
+    "operation_differences": {
+      "rows": 3,
+      "sha256": "5fc87aae92f78d43634e02a2a89f89fb4b0a467a813faaf94fb7b6a7bbe55a7e"
+    },
+    "lot_links": {
+      "rows": 21,
+      "sha256": "7cd5b9f386a24d11db2f0ba755df47413a7a62c3d07b6213b399ffdf7f876adc"
+    },
+    "service_costs": {
+      "rows": 2,
+      "sha256": "f60c6c84fcd5ee025b0e2ccae4294609ad885ee04cbbad035438e73546899557"
+    },
+    "stock_balances": {
+      "rows": 35,
+      "sha256": "21b84b406220652180509c68740c559bc118546364672dfb50c98345f56916ea"
+    },
+    "stock_movements": {
+      "rows": 58,
+      "sha256": "8fbceacad018b3abf8c7b497ab7b0abb50294063dc9c567395d1bbd54cdc2a5f"
+    },
+    "idempotency_requests": {
+      "rows": 78,
+      "sha256": "840a483b048185111454add860d1241309247016c7356337163b70df3f67e9ff"
+    },
+    "sales": {
+      "rows": 6,
+      "sha256": "72635c5aa45be5dd6c8601595a06b4c78cc8d2a55d6c86344d07decf3413d94c"
+    },
+    "sale_lines": {
+      "rows": 6,
+      "sha256": "cac31b63f26ab3e573086fedbc90177970e570966ae6f20e0884071316aa4c16"
+    },
+    "shipments": {
+      "rows": 4,
+      "sha256": "155744cf748fb67bc14d9d4a15933abfb5f9af4cc817e88fb6e93837bced76bb"
+    },
+    "shipment_lines": {
+      "rows": 4,
+      "sha256": "9429c770f9dd58590ae3b340f94cd34d76bfd003bcd2e77f143b25200ca443ef"
+    },
+    "recalls": {
+      "rows": 2,
+      "sha256": "db2044695453223db347f889b17b7b19a95e45f9f4ac4e7683e0e25810f66c96"
+    },
+    "recall_lots": {
+      "rows": 3,
+      "sha256": "0f7a92b0ef8ede2a94ec2748185d868810b0760008c8ae6e72beb3a1729dbf54"
+    },
+    "prediction_records": {
+      "rows": 2,
+      "sha256": "7983f17e02e0e0887f5d1934fa84f24fbca2102bde6d01de83077bf8d80f4d41"
+    },
+    "stock_transfers": {
+      "rows": 1,
+      "sha256": "14d6d3785182f9f481edf20e383e8170323232913436cbe4da03646a091b6ba6"
+    },
+    "customer_returns": {
+      "rows": 1,
+      "sha256": "50e070af8b3e7983ff97117928eed39f3c2efa52d7b608ee28bd4bde62553334"
+    },
+    "customer_return_lines": {
+      "rows": 1,
+      "sha256": "2d8336413ba6946f35447fbb1932cdd7dd7cb056840c7f26a6cac38e57f4e0c9"
+    },
+    "sale_cancellations": {
+      "rows": 1,
+      "sha256": "f2041babf4e4806741e537c1055525f071de868d12c4b0304488c3229497a1d0"
+    },
+    "sale_cancellation_lines": {
+      "rows": 1,
+      "sha256": "a14d7ec083cb381835ba161b376a04010175b30d7ae308bed823c8308a8991ec"
+    }
+  },
+  "quality_release": "not implemented; all recovered stock remains quarantined",
+  "cash_refund_status": "not recorded; net sale credits and cost reversals only"
+}

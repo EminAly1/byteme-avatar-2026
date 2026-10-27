@@ -1,0 +1,112 @@
+{
+  "main_sha": "b569830017f419b7b71e3e2067c7c0c5f7ceaeb4",
+  "prs": [
+    {
+      "pr": 1,
+      "merge_commit": "223ff8b4785d6635fd9e6e2ebe8f7e61214d679a",
+      "ancestor": true
+    },
+    {
+      "pr": 2,
+      "merge_commit": "d96e250e64b72f98843ffc01150bd66fb29c0344",
+      "ancestor": true
+    },
+    {
+      "pr": 3,
+      "merge_commit": "7837a85097e2fd50c8da672a03803c319296d344",
+      "ancestor": true
+    },
+    {
+      "pr": 4,
+      "merge_commit": "6341cfb24e0a6526694efe13af60041aa5f80875",
+      "ancestor": true
+    },
+    {
+      "pr": 5,
+      "merge_commit": "e1589d8f219a4ab689348f6b4f698829ab0193dd",
+      "ancestor": true
+    },
+    {
+      "pr": 6,
+      "merge_commit": "b90fcb28b882dff7e3207f2341a6d96936d214ae",
+      "ancestor": true
+    },
+    {
+      "pr": 7,
+      "merge_commit": "3d9125e862e8ad77a7c10dcf331633ecc22f8d5e",
+      "ancestor": true
+    },
+    {
+      "pr": 8,
+      "merge_commit": "e8c690d2e55a41d4144dc3278ad9de012e64a2a0",
+      "ancestor": true
+    },
+    {
+      "pr": 9,
+      "merge_commit": "21d9b31fe26d17bd60765b9f77456e290c7bcc3e",
+      "ancestor": true
+    },
+    {
+      "pr": 10,
+      "merge_commit": "3626c99aece86b30a7f6691e4b4a89358260fc5c",
+      "ancestor": true
+    },
+    {
+      "pr": 11,
+      "merge_commit": "94281b6f493d5a1cb66ce953efa6087641454d96",
+      "ancestor": true
+    },
+    {
+      "pr": 12,
+      "merge_commit": "4951281330e69548422ea6e09d6b2418b1ea5c77",
+      "ancestor": true
+    },
+    {
+      "pr": 13,
+      "merge_commit": "eb0cece585e0b9ab4c3e26daeddb719158c04791",
+      "ancestor": true
+    },
+    {
+      "pr": 14,
+      "merge_commit": "99356d45c716f7612f6486d896aa219d51444ca2",
+      "ancestor": true
+    },
+    {
+      "pr": 15,
+      "merge_commit": "fe1dca979e92b522fa6815a3e68fe5e230760d1e",
+      "ancestor": true
+    },
+    {
+      "pr": 16,
+      "merge_commit": "63a9c86850db5927849bdb4a1e0fe7acb86ca987",
+      "ancestor": true
+    },
+    {
+      "pr": 17,
+      "merge_commit": "56314099f8f260aa582fd3750e43c63b49135bfd",
+      "ancestor": true
+    },
+    {
+      "pr": 18,
+      "merge_commit": "12dbb144497d3c35697a53debabbf218d53a0684",
+      "ancestor": true
+    },
+    {
+      "pr": 19,
+      "merge_commit": "ad5bfa3ed1e8401262db50238a1a4127a0326b62",
+      "ancestor": true
+    },
+    {
+      "pr": 20,
+      "merge_commit": "9b33892b35c787559bae4d77211b1008a0a8bae4",
+      "ancestor": true
+    },
+    {
+      "pr": 21,
+      "merge_commit": "b569830017f419b7b71e3e2067c7c0c5f7ceaeb4",
+      "ancestor": true
+    }
+  ],
+  "starting_worktree_clean": true,
+  "feature_branch": "feature/lot-transfers-returns"
+}
