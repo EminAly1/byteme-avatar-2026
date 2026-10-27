@@ -180,6 +180,7 @@ export function Field({
           type={type === "decimal" ? "text" : type}
           {...register(name)}
           autoComplete="off"
+          step={type === "datetime-local" ? "any" : undefined}
           inputMode={type === "decimal" ? "decimal" : undefined}
           aria-invalid={!!error}
           aria-describedby={error ? id + "-error" : undefined}

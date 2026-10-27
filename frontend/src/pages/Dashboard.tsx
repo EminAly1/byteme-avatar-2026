@@ -185,14 +185,21 @@ export function Dashboard() {
                     <Link
                       className="text-button"
                       to={
-                        (o.kind === "cutting" ? "/parcalama/" : "/uretim/") +
-                        o.id
+                        (o.kind === "cutting"
+                          ? "/parcalama/"
+                          : o.kind === "rework"
+                            ? "/hareketler/rework/"
+                            : "/uretim/") + o.id
                       }
                     >
                       {o.code}
                     </Link>
                     <small>
-                      {o.kind === "cutting" ? "Kuzu parçalama" : "Dış üretim"}
+                      {o.kind === "cutting"
+                        ? "Kuzu parçalama"
+                        : o.kind === "rework"
+                          ? "Yeniden işleme"
+                          : "Dış üretim"}
                     </small>
                   </td>
                   <td>

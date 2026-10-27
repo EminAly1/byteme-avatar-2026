@@ -11,6 +11,11 @@ export class ApiError extends Error {
   }
 }
 const fieldNames: Record<string, string> = {
+  source_shipment_line_id: "Kaynak sevkiyat satırı", recipient_party_id: "İkinci kademe alıcı",
+  distributed_at: "Dağıtım tarihi", reference: "İşlem referansı", evidence_note: "Bildirim açıklaması",
+  acceptance_location_id: "Karantina kabul konumu", sale_id: "Kaynak satış", sale_line_id: "Kaynak satış satırı",
+  reason: "İşlem nedeni", source_lot_id: "Kaynak lot", source_location_id: "Kaynak depo",
+  input_quantity: "Girdi miktarı", differences: "Açıklanmış farklar", output_product_ids: "Çıktı ürünleri",
   product_id: "Ürün",
   supplier_id: "Tedarikçi",
   producer_id: "Dış üretici",
@@ -51,6 +56,20 @@ const messages: Record<number, string> = {
 };
 
 const domainMessages: Record<string, string> = {
+  DOCUMENTED_QUANTITY_EXCEEDED: "İade ve ikinci kademe bildirimlerinin toplamı kaynak sevkiyatı aşıyor. Kayıtlı miktarları kontrol edin; fiziksel market stoğu varsayılmaz.",
+  DISTRIBUTION_CHRONOLOGY_CONFLICT: "Bildirim tarihi son kayıtlı dağıtım veya iadeden önce olamaz. Belge tarihini kontrol edin.",
+  DISTRIBUTION_BEFORE_SHIPMENT: "Dağıtım tarihi şirket sevkiyatından önce olamaz.",
+  DISTRIBUTION_IN_FUTURE: "Gelecekteki dağıtım kesin olay olarak kaydedilemez.",
+  SALE_ALREADY_SHIPPED: "Bu satış sevk edilmiş; iptal edilemez. Kayıtlı sevkiyata bağlı müşteri iadesini kullanın.",
+  SALE_CANCELLED: "Satış iptal edilmiş. Orijinal satış ve iptal kaydını inceleyin.",
+  SALE_LINE_NOT_SHIPPED: "Müşteri iadesi için kayıtlı bağlı sevkiyat gerekli. Sevk edilmemiş satışta iptal kullanın.",
+  QUARANTINE_RELEASE_REQUIRED: "Karantinadan çıkış için ayrı kalite onayı ve değerleme gerekir.",
+  REWORK_QUALITY_RELEASE_REQUIRED: "Karantinadaki lot yeniden işlenemez. Önce ayrı kalite onayı ve değerleme gerekir.",
+  REWORK_PRODUCED_SOURCE_REQUIRED: "Rework kaynağının kesin üretim çıktısı olması gerekli. Satın alınmış mamul etiketi tek başına yeterli değildir.",
+  REWORK_EXPIRY_EXTENSION: "Rework kaynak son tüketim tarihini uzatamaz.",
+  REWORK_EXPIRY_EVIDENCE_REQUIRED: "Kaynak SKT bilinmiyor. Yeni tarih için kalite kanıtı gerekli.",
+  REWORK_SERVICE_REFERENCE: "Pozitif fiilî işlem bedeli için belge referansı girin.",
+  OPERATION_POSTED: "Bu işlem zaten kesin kapatılmış. Mevcut operasyon ve çıktı lotlarını inceleyin.",
   LOT_BLOCKED:
     "Bu lot geri çağırma kapsamında bloke. Satış, sevk veya tüketim yapılamaz; lot kaydını inceleyin.",
   LOT_EXPIRED:

@@ -18,6 +18,7 @@ import {
   Scissors,
   ShoppingBag,
   Truck,
+  ArrowLeftRight,
   Network,
   ShieldAlert,
   Sparkles,
@@ -83,12 +84,24 @@ const Predictions = lazy(() =>
   import("./pages/Predictions").then((m) => ({ default: m.Predictions })),
 );
 
+const Movements = lazy(() =>
+  import("./pages/Movements").then((m) => ({ default: m.Movements })),
+);
+const ReworkPage = lazy(() =>
+  import("./pages/Reworks").then((m) => ({ default: m.ReworkPage })),
+);
+const Distributions = lazy(() =>
+  import("./pages/Distributions").then((m) => ({ default: m.Distributions })),
+);
+
 const primary = [
   { path: "/", label: "Genel bakış", icon: LayoutDashboard },
   { path: "/uretim", label: "Dış üretim", icon: Factory },
   { path: "/parcalama", label: "Kuzu parçalama", icon: Scissors },
   { path: "/satislar", label: "Satışlar", icon: ShoppingBag },
   { path: "/sevkiyatlar", label: "Sevkiyatlar", icon: Truck },
+  { path: "/dagitimlar", label: "İkinci kademe dağıtım", icon: Network },
+  { path: "/hareketler", label: "Stok hareket merkezi", icon: ArrowLeftRight },
   { path: "/izlenebilirlik", label: "Lot izlenebilirliği", icon: Network },
   { path: "/geri-cagirma", label: "Geri çağırma", icon: ShieldAlert },
   { path: "/yapay-zeka", label: "Yapay zekâ tahminleri", icon: Sparkles },
@@ -236,7 +249,11 @@ export function App() {
             <strong>{title}</strong>
           </div>
           <div className="topbar-right">
-            <NavLink className="topbar-search" aria-label="Lot kaydı bul" to="/izlenebilirlik">
+            <NavLink
+              className="topbar-search"
+              aria-label="Lot kaydı bul"
+              to="/izlenebilirlik"
+            >
               <Search size={16} />
               <span>Lot kaydı bul</span>
             </NavLink>
@@ -285,6 +302,10 @@ export function App() {
               <Route path="/satislar" element={<Sales />} />
               <Route path="/satislar/:id" element={<SalePage />} />
               <Route path="/sevkiyatlar" element={<Shipments />} />
+              <Route path="/dagitimlar" element={<Distributions />} />
+              <Route path="/dagitimlar/:id" element={<Distributions />} />
+              <Route path="/hareketler" element={<Movements />} />
+              <Route path="/hareketler/rework/:id" element={<ReworkPage />} />
               <Route path="/izlenebilirlik" element={<Traceability />} />
               <Route path="/geri-cagirma" element={<Recalls />} />
               <Route path="/geri-cagirma/:id" element={<RecallPage />} />
