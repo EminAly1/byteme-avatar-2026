@@ -418,6 +418,9 @@ export function SalePage() {
           </div>
           <ProfitabilityPanel saleId={s.id} />
           <div className="quick-links">
+            <Link className="button" to={"/belgeler/satis/" + s.id}>
+              Belge taslağı oluştur
+            </Link>
             <Link className="button" to={"/hareketler?islem=iade&sale=" + s.id}>
               Müşteri iadesi
             </Link>
