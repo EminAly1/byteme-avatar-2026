@@ -6,6 +6,7 @@ from fastapi.responses import JSONResponse
 
 from app.api import router
 from app.prediction_api import router as prediction_router
+from app.alert_api import router as alert_router
 from app.errors import DomainError
 from sqlalchemy.exc import SQLAlchemyError
 
@@ -52,3 +53,4 @@ async def database_error(request, exc):
 
 app.include_router(router)
 app.include_router(prediction_router)
+app.include_router(alert_router)

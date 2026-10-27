@@ -20,6 +20,7 @@ import {
   Truck,
   ArrowLeftRight,
   Network,
+  BellRing,
   ShieldAlert,
   Sparkles,
   Sprout,
@@ -94,8 +95,11 @@ const Distributions = lazy(() =>
   import("./pages/Distributions").then((m) => ({ default: m.Distributions })),
 );
 
+const Alerts = lazy(() => import('./pages/Alerts').then(m => ({ default: m.Alerts })));
+
 const primary = [
   { path: "/", label: "Genel bakış", icon: LayoutDashboard },
+  { path: "/uyarilar", label: "Akıllı uyarı merkezi", icon: BellRing },
   { path: "/uretim", label: "Dış üretim", icon: Factory },
   { path: "/parcalama", label: "Kuzu parçalama", icon: Scissors },
   { path: "/satislar", label: "Satışlar", icon: ShoppingBag },
@@ -290,6 +294,7 @@ export function App() {
           <Suspense fallback={<State loading>{null}</State>}>
             <Routes>
               <Route path="/" element={<Dashboard />} />
+              <Route path="/uyarilar" element={<Alerts />} />
               <Route path="/urunler" element={<Products />} />
               <Route path="/is-ortaklari" element={<Parties />} />
               <Route path="/depolar" element={<Locations />} />

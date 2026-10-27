@@ -70,6 +70,8 @@ const domainMessages: Record<string, string> = {
   REWORK_EXPIRY_EVIDENCE_REQUIRED: "Kaynak SKT bilinmiyor. Yeni tarih için kalite kanıtı gerekli.",
   REWORK_SERVICE_REFERENCE: "Pozitif fiilî işlem bedeli için belge referansı girin.",
   OPERATION_POSTED: "Bu işlem zaten kesin kapatılmış. Mevcut operasyon ve çıktı lotlarını inceleyin.",
+  ALERT_CURSOR_STALE: "Değerlendirme günü, eşikler veya filtre değişti. Uyarı listesini baştan yenileyin.",
+  ALERT_CURSOR_INVALID: "Uyarı sayfa işareti geçersiz. Listeyi baştan açın.",
   LOT_BLOCKED:
     "Bu lot geri çağırma kapsamında bloke. Satış, sevk veya tüketim yapılamaz; lot kaydını inceleyin.",
   LOT_EXPIRED:

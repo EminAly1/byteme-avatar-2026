@@ -2216,3 +2216,8 @@ th.numeric {
 .documented-remainder { background: var(--canvas); }
 .documented-remainder p { font-size: var(--text-xs); margin-bottom: 6px; }
 .correction-summary { border-top: 1px solid var(--border); padding-top: 18px; }
+
+.alert-dashboard-summary { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+.alert-dashboard-summary small { color: var(--muted); }
+
+.alerts-page .data-card dd > small { display: block; margin-top: 4px; }
