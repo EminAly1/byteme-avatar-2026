@@ -1,5 +1,40 @@
 # Jüri demosu — Görev 12
 
+> **28 Ekim 2026 güncellemesi:** Aşağıdaki Görev12 bölümleri tarihsel, yeniden kullanılabilir teknik komutlardır; güncel kabul [FINAL_RELEASE_READINESS.md](FINAL_RELEASE_READINESS.md), kullanıcı akışı [USER_GUIDE.md](USER_GUIDE.md), ≤15 dakikalık çekim planı [FINAL_DEMO_SCRIPT.md](FINAL_DEMO_SCRIPT.md) içindedir. Transfer, müşteri iadesi/iptali, rework, ikinci kademe, web kârlılık, uyarı ve gerçek PDF artık main'dedir. Eski “bu modül yok” ifadeleri güncel duruma uygulanmaz.
+
+## Güncel birleşik demo ekleri
+
+Yalnız yeni Compose projesi/yeni *_test şeması ve repo dışındaki özel env dosyasıyla çalışın. `tools/release_env.py run` artık loopback adreslerini miras alınan HTTP proxy'den dışlar; anahtar yerel API'ye doğrudan gider. `verify_compose.py`, container'ın kaynak Alembic head'i ile gerçek DB head'ini karşılaştırır; Görev12 head'ine sabitlenmez.
+
+```bash
+python tools/release_env.py run --env-file /tmp/avatar-final.env -- \
+  backend/.venv/bin/python tools/verify_release_demo.py --output /tmp/avatar-final-core.json
+python tools/release_env.py run --env-file /tmp/avatar-final.env -- \
+  backend/.venv/bin/python -m app.demo_transfers_returns --output /tmp/avatar-final-transfers.json
+python tools/release_env.py run --env-file /tmp/avatar-final.env -- \
+  backend/.venv/bin/python -m app.demo_rework > /tmp/avatar-final-rework.json
+python tools/release_env.py run --env-file /tmp/avatar-final.env -- \
+  backend/.venv/bin/python -m app.demo_second_tier > /tmp/avatar-final-distribution.json
+python tools/release_env.py run --env-file /tmp/avatar-final.env -- \
+  backend/.venv/bin/python -m app.demo_documents --prepare > /tmp/avatar-final-document-seed.json
+python tools/release_env.py run --env-file /tmp/avatar-final.env -- \
+  backend/.venv/bin/python -m app.demo_alerts --prepare > /tmp/avatar-final-alert-seed.json
+```
+
+Son iki komut **açık hazırlık aşamasında yazar**; analiz/PDF GET'i değildir. İlgili seed JSON'daki `stock_thresholds` değerini yalnız backend container env'ine `AVATAR_ALERT_STOCK_THRESHOLDS` olarak verin (Compose override; frontend/VITE değişkeni değil). Backend/frontend aynı network namespace'ini kullandığı için ikisini birlikte güvenli biçimde durdurup yeniden başlatın; MySQL/volume'u silmeyin. Eşiksiz ürüne düşük stok alarmı uydurulmaz. Yeni demo şemasında bütün modüller birleşince uyarı sayısı yalnız altı olmak zorunda değildir; diğer gerçek blokeli stoklar da gösterilir.
+
+```bash
+python tools/release_env.py run --env-file /tmp/avatar-final.env -- \
+  backend/.venv/bin/python -m app.demo_alerts --verify --seed-file /tmp/avatar-final-alert-seed.json
+python tools/release_env.py run --env-file /tmp/avatar-final.env -- \
+  backend/.venv/bin/python -m app.demo_documents --verify --seed-file /tmp/avatar-final-document-seed.json \
+  --output-dir /tmp/avatar-final-pdf
+```
+
+Web'de `/hareketler`, `/hareketler/rework/:id`, `/dagitimlar`, `/satislar/:id`, `/uyarilar`, `/belgeler` ve `/belgeler/satis/:id` kullanılır. Transfer 13/7, transfer anıdır; sonraki satış/iadeler final bakiyeyi değiştirir. İkinci kademe A→X12, şirket sevkiyatı85 ve tahsis edilmemiş18 ayrı anlam taşır; marketin fiziksel stoğu bilinmez. Proforma orijinal satış ve sonraki düzeltmeleri ayrı gösterir; resmî fatura değildir.
+
+Her mevcut demo aracı kendi aynı-key tekrarını kontrol eder. Tam hazırlıktan sonra yeniden çalıştırın; 30 tablonun global hash'ini de karşılaştırın. Android value but satışı gibi açık yeni işlemler hash'i doğal olarak değiştirir; önce/sonra **salt-okunur tekrar** karşılaştırmasını bu işlemler bittikten sonra alın. Android fixture yalnız ayrı test şemasında, satılmamış/blokesiz 6 kg lotla hazırlanır; mevcut 5 kg/blokeli lot resetlenmez.
+
 **25 Ekim kabulü, 26 Ekim 2026 sonlandırması; yerel KURGUSAL/SYNTHETIC veri.** Bu belge [release kanıtları](release-validation/) ile birlikte okunur. Gerçek işletme verisi, gerçek kişi iletişimi veya üretim sunucusu kullanılmaz. API anahtarı tarayıcıya, APK'ye, komut argümanına veya Git'e konmaz.
 
 ## Komutların doğrulama durumu

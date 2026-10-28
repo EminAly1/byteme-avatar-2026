@@ -2,7 +2,9 @@
 
 Gıda işletmesi için yerel prototip: alış ve lot girişi, dış üretim ve gerçek EKP, kuzu parçalama/maliyet dağıtımı, lotlu satış/sevkiyat, kesin FK izlenebilirliği/geri çağırma ve iki sentetik ML modeli. React yönetim paneli ile Kotlin Android satış uygulaması aynı FastAPI/MySQL kayıtlarını kullanır.
 
-**Güncel kabul:** [Release readiness ve GO/NO-GO](docs/RELEASE_READINESS.md) · [Jüri demo runbook'u](docs/DEMO_RUNBOOK.md). İlk kabul tabanı `12dbb144497d3c35697a53debabbf218d53a0684`; 26 Ekim sonlandırma main tabanı `ad5bfa3ed1e8401262db50238a1a4127a0326b62` (PR #1–#19; #19 yalnız opsiyonel yol haritası). Teslim tarihi **1 Kasım 2026 23:59 Europe/Istanbul** kullanıcı talimatıdır; PDF'de tarih yoktur. [Gereksinimler ve açık kapsam](docs/requirements.md).
+**28 Ekim güncel kabul:** [Final release ve üç GO/NO-GO](docs/FINAL_RELEASE_READINESS.md) · [Kullanım kılavuzu](docs/USER_GUIDE.md) · [Jüri demo runbook'u](docs/DEMO_RUNBOOK.md). Main tabanı `02a080677dee59a3940ad232d4fa716c92a84469`, PR #1–#34'ün merge geçmişi doğrulandı. [25–26 Ekim tarihsel kabulü](docs/RELEASE_READINESS.md) korunur. Teslim tarihi **1 Kasım 2026 23:59 Europe/Istanbul** kullanıcı talimatıdır; PDF'de tarih yoktur. [Gereksinimler ve açık kapsam](docs/requirements.md).
+
+Bağımsız transfer, müşteri iadesi/iptali, kg rework, kayıtlı ikinci kademe, web kârlılık, salt-okunur uyarı merkezi ve geçici proforma/satış özeti A4 PDF akışları da mevcuttur. Resmî mali belge veya internete açık üretim servisi iddiası yoktur.
 
 **Yalnız güvenilir yerel demo.** X-API-Key kullanıcı oturumu/rol sistemi değildir. İnternet üretimi, gerçek kullanıcı yetkilendirmesi ve TLS dağıtımı uygulanmadı. Bütün yayımlanan Compose portları `127.0.0.1` ile sınırlıdır. URL olarak `http://127.0.0.1:5173` kullanın; `localhost` farklı origin'dir.
 
@@ -132,6 +134,8 @@ npm --prefix frontend run test
 
 Görev 12 sonucu: **194 backend/ML** (175 backend + 19 ML), **45 frontend unit/component**, **15 gerçek Chromium E2E**, **1 gerçek eksik-model 503**; eski 181/43/14/1 kapsamları korundu. [Komut çıktıları](docs/release-validation/). E2E kurulum/eksik-model profili runbook'ta; yorum satırları önkoşulsuz tek başına test komutu sayılmaz.
 
+Görev 19 birleşik kabulü: **427 backend/ML**, **83 React unit/component**, **34 farklı Chromium senaryosu** (33 normal +1 gerçek eksik-model), Android **32 host yürütümü/16 farklı test**, **API28 4/4** ve güncel debug APK. API35 bu koşuda package/activity servis hataları nedeniyle instrumentation'a başlayamadı; eski offline riski kapatılmadı. İlk hazırlık/altyapı hataları, hedefli tekrarlar ve bütün kapsam sınırları [final raporda](docs/FINAL_RELEASE_READINESS.md) açıklanır.
+
 ## Android ve ML
 
 Android Studio'da `android/` açılır. JDK 17, Gradle wrapper 8.10.2, compile/target SDK 35, min SDK 26. [Kurulum](android/ANDROID_SETUP.md), [Room/outbox](android/README.md), [güncel cihaz sonucu](docs/RELEASE_READINESS.md).
@@ -147,4 +151,4 @@ Güncel host kabulü 16 farklı testin debug+release toplam **32** yürütümü,
 
 ## Açık teslim kapsamı
 
-Genel depo transferi, müşteri iadesi/iptali ve rework tamamlanmadı. Kârlılık API'si var; özel web kâr paneli yok. Kaydı olmayan ikinci kademe/market kalanı bilinmiyor. Kullanıcı oturumu/rol/TLS, fiziksel cihaz/Safari/Firefox kabulü, gerçek veriyle model doğruluğu ve final video/gönderim ayrı işlerdir. [P0/P1/P2 ve GO/NO-GO](docs/RELEASE_READINESS.md) bu sınırları değerlendirir; başarılı yerel demo bütün yarışma gereksinimlerinin tamamlandığı anlamına gelmez.
+Transfer, müşteri iadesi/iptali, desteklenen kg rework, web kârlılık ve kayıtlı ikinci kademe akışları uygulanıp kabul edildi. Kaydı olmayan sonraki alıcı/market fiziksel stoğu bilinmez. Kullanıcı oturumu/rol/TLS, fiziksel cihaz/Safari/Firefox, gerçek veriyle model doğruluğu, resmî e-Fatura/OCR/kalıcı belge arşivi ve final video/gönderim ayrı işlerdir. [Güncel P0/P1/P2 ve üç GO/NO-GO](docs/FINAL_RELEASE_READINESS.md) bu sınırları ayırır; yerel demo kabulü bütün yarışma tesliminin tamamlandığı anlamına gelmez.
