@@ -1,0 +1,262 @@
+{
+  "date": "2026-10-28",
+  "timezone": "Europe/Istanbul",
+  "tested_main_base": "02a080677dee59a3940ad232d4fa716c92a84469",
+  "branch": "feature/final-release-acceptance",
+  "merged_prs_verified": 34,
+  "prior_volumes_preserved": 15,
+  "backend_ml": {
+    "total": 427,
+    "backend": 408,
+    "ml": 19,
+    "failed": 0,
+    "skipped": 0
+  },
+  "react_unit": {
+    "passed": 83,
+    "failed": 0,
+    "skipped": 0
+  },
+  "chromium": {
+    "unique_passed": 34,
+    "final_failed": 0,
+    "skipped": 0,
+    "attempts": [
+      {
+        "profile": "legacy",
+        "total": 26,
+        "passed": 24,
+        "failed_or_error": 2,
+        "skipped": 0
+      },
+      {
+        "profile": "retry",
+        "total": 2,
+        "passed": 2,
+        "failed_or_error": 0,
+        "skipped": 0
+      },
+      {
+        "profile": "alerts",
+        "total": 4,
+        "passed": 4,
+        "failed_or_error": 0,
+        "skipped": 0
+      },
+      {
+        "profile": "documents",
+        "total": 3,
+        "passed": 3,
+        "failed_or_error": 0,
+        "skipped": 0
+      },
+      {
+        "profile": "missing",
+        "total": 1,
+        "passed": 1,
+        "failed_or_error": 0,
+        "skipped": 0
+      }
+    ]
+  },
+  "android": {
+    "jdk": "Temurin 17.0.17+10",
+    "gradle": "8.10.2",
+    "wrapper_official_checksum_matches": true,
+    "host_test_executions": 32,
+    "distinct_host_tests": 16,
+    "host_failed": 0,
+    "lint_issues": 0,
+    "lint_freshly_rerun": true,
+    "api28": {
+      "passed": 4,
+      "failed": 0,
+      "skipped": 0,
+      "real_backend": true,
+      "room_keystore_offline": true
+    },
+    "api28_persistence": {
+      "serial": "emulator-5554",
+      "sdk": "28",
+      "database": "avatar_final19_demo_test",
+      "real_sale_id": "4a7bad1b-8c06-4d57-b642-98b179d8e973",
+      "central_stock": "5.000000",
+      "source_lot_blocked": true,
+      "outbox_states": [
+        "CONFIRMED",
+        "NEEDS_ACTION"
+      ],
+      "offline_drafts": 1,
+      "original_server_command_verified_before_replay": true,
+      "same_sale_on_replay": true,
+      "outbox_key_body_state_survive_process_restart": true,
+      "backend_unchanged_by_replay_and_restart": true,
+      "physical_device": false
+    },
+    "api35": {
+      "instrumentation_tests_executed": 0,
+      "accepted": false,
+      "failure": "Package/activity service unavailable: broken pipe, startInstrumentation NPE; warm install retry cannot find package service",
+      "historical_offline_timeout_risk_closed": false
+    },
+    "physical_device_tested": false,
+    "apk": {
+      "path": "android/app/build/outputs/apk/debug/app-debug.apk",
+      "bytes": 17608683,
+      "sha256": "dea339c1fb9a1bcfddf61227a512c530310431d570957cda76b3695c7341b33e",
+      "package": "com.byteme.avatar",
+      "min_sdk": 26,
+      "target_sdk": 35,
+      "debug_signed": true,
+      "release_signed": false,
+      "github_release_published": false
+    }
+  },
+  "docker": {
+    "project": "avatar-final19",
+    "healthy_services": [
+      "mysql",
+      "backend",
+      "frontend"
+    ],
+    "mysql_version": "8.0.46",
+    "migration_head": "f1507a26b001",
+    "ports": "127.0.0.1:33330,8000,5173",
+    "normal_build": "failed: container DNS resolution",
+    "verified_proxy_ca_build": "passed; TLS verification enabled",
+    "reportlab": "5.1.0",
+    "font_hashes": {
+      "LICENSE.txt": "562c8f5e92af7a06339292a1bb0b9a3e9c8d5142af5d7167f2866fc50261b993",
+      "DejaVuSans.ttf": "57f73e11f51999432bf7ab22ce55b6f945d5eca1bf824404cfa9ec2e3718c84e",
+      "DejaVuSans-Bold.ttf": "a4c5bc453ca281d90ea079e596da7ae0dfeb5777497c29ec254e76d97ff6f890"
+    },
+    "model_artifacts": {
+      "production": {
+        "sha256": "b5627c724ff0adbf4db789c6cf7a0733a4986e60603125203ecff0d0d587b696",
+        "data_origin": "SYNTHETIC",
+        "model_version": "production-ridge-v1-a27a209e395c"
+      },
+      "cutting": {
+        "sha256": "8f7f7a2321e44ad6999115e820584461273d22823f118aa715220a0814477956",
+        "data_origin": "SYNTHETIC",
+        "model_version": "cutting-ridge-v1-ddd7ab8f61fd"
+      }
+    }
+  },
+  "demo_replay": {
+    "data_origin": "KURGUSAL / SYNTHETIC",
+    "database": "avatar_final19_demo_test",
+    "domain_tables": 30,
+    "before_sha256": "9b31d27b070bc3f4267c35ab29c141a6c0f340e2efffe78d3fadde5095f686f5",
+    "after_sha256": "9b31d27b070bc3f4267c35ab29c141a6c0f340e2efffe78d3fadde5095f686f5",
+    "all_existing_demo_modules_replayed": true,
+    "ledger_unchanged": true
+  },
+  "volume_persistence": {
+    "new_volume": "avatar-final19_mysql_data",
+    "domain_tables": 30,
+    "before_sha256": "9b31d27b070bc3f4267c35ab29c141a6c0f340e2efffe78d3fadde5095f686f5",
+    "after_sha256": "9b31d27b070bc3f4267c35ab29c141a6c0f340e2efffe78d3fadde5095f686f5",
+    "preserved_after_mysql_restart": true
+  },
+  "alerts": {
+    "total": 19,
+    "critical": 15,
+    "warning": 4,
+    "info": 0,
+    "by_rule": {
+      "LOT_BLOCKED_STOCK": 14,
+      "EXPIRY_PAST": 1,
+      "EXPIRY_SOON": 1,
+      "LOW_AVAILABLE_STOCK": 1,
+      "PRODUCTION_EKP_DEVIATION": 1,
+      "YIELD_DEVIATION": 1
+    }
+  },
+  "pdf_cases": [
+    {
+      "case": "active",
+      "state": "active",
+      "pages": 1,
+      "lines": 1,
+      "original_eur": "750.00",
+      "net_eur": "750.00"
+    },
+    {
+      "case": "partial",
+      "state": "partially_returned",
+      "pages": 2,
+      "lines": 1,
+      "original_eur": "625.00",
+      "net_eur": "575.00"
+    },
+    {
+      "case": "returned",
+      "state": "returned",
+      "pages": 2,
+      "lines": 1,
+      "original_eur": "750.00",
+      "net_eur": "0.00"
+    },
+    {
+      "case": "cancelled",
+      "state": "cancelled",
+      "pages": 2,
+      "lines": 1,
+      "original_eur": "15.98",
+      "net_eur": "0.00"
+    },
+    {
+      "case": "long",
+      "state": "active",
+      "pages": 8,
+      "lines": 45,
+      "original_eur": "138.60",
+      "net_eur": "138.60"
+    }
+  ],
+  "security": {
+    "known_private_values_checked": 10,
+    "apk_members_checked": 162,
+    "apk_matches": 0,
+    "host_bundle_files": 36,
+    "container_bundle": {
+      "files_scanned": 36,
+      "server_credential_present_during_build": true,
+      "credential_matches": 0
+    },
+    "git_secret_scan": {
+      "tool": "Gitleaks 8.24.3",
+      "source_candidates": 516,
+      "source_findings": 0,
+      "all_local_history_findings": 0
+    },
+    "loopback_proxy_regression": {
+      "deliberately_unreachable_inherited_proxy": true,
+      "loopback_health": 200,
+      "local_http_bypassed_proxy": true
+    }
+  },
+  "public_access": {
+    "repository": {
+      "url": "https://github.com/EminAly1/byteme-avatar-2026",
+      "status": 200,
+      "readable": true
+    },
+    "raw_readme": {
+      "url": "https://raw.githubusercontent.com/EminAly1/byteme-avatar-2026/main/README.md",
+      "status": 200,
+      "readable": true
+    }
+  },
+  "video_recorded": false,
+  "email_sent": false,
+  "acknowledgment_received": false,
+  "final_tag_created": false,
+  "main_merged_by_agent": false,
+  "decisions": {
+    "local_jury_demo": "GO — isolated loopback, API28 and synthetic prototype scope",
+    "complete_competition_submission": "NO-GO — actual video/review/tag/send/acknowledgment pending; API35 risk open",
+    "public_internet_production": "NO-GO — actual auth/RBAC/TLS and production acceptance absent"
+  }
+}

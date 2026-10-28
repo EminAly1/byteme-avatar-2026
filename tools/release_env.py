@@ -92,6 +92,11 @@ def main():
             env.update(AVATAR_MYSQL_TEST='1', AVATAR_CORE_MYSQL_TEST='1')
         env['PYTHONPATH'] = str(ROOT / 'backend')
         env['AVATAR_E2E_DATABASE'] = env['MYSQL_DATABASE']
+        # Local demo credentials must go directly to loopback, even when the
+        # cloud shell inherits an outbound HTTP proxy or lowercase no_proxy.
+        inherited = os.environ.get('no_proxy', os.environ.get('NO_PROXY', '')).split(',')
+        bypass = ','.join(dict.fromkeys(['127.0.0.1', 'localhost', '10.0.2.2', *filter(None, inherited)]))
+        env['NO_PROXY'] = env['no_proxy'] = bypass
         command = args.command[1:] if args.command[:1] == ['--'] else args.command
         if not command:
             parser.error('Çalıştırılacak komut gerekli.')

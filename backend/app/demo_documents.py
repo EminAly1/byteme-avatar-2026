@@ -33,7 +33,7 @@ def main():
     args = parser.parse_args()
     secret = os.environ.get('AVATAR_API_KEY')
     if not secret: raise SystemExit('Özel process API anahtarı gerekli; değeri gösterilmedi.')
-    base = os.environ.get('AVATAR_API_BASE_URL', 'http://127.0.0.1:8009').rstrip('/')
+    base = os.environ.get('AVATAR_API_BASE_URL', 'http://127.0.0.1:8000').rstrip('/')
     opener = urllib.request.build_opener(urllib.request.ProxyHandler({}))
 
     def call(path, body=None, label=None):
