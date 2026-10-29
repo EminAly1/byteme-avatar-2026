@@ -1,0 +1,39 @@
+/* Scoped recall workflow: the shared product theme is unchanged. */
+.recall-wizard { display: grid; gap: 1.25rem; min-width: 0; }
+.recall-steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); list-style: none; padding: 0; margin: 0; gap: .75rem; }
+.recall-steps li { display: flex; align-items: center; gap: .65rem; padding: .8rem; border-bottom: 2px solid var(--border); color: var(--muted); font-size: var(--text-sm); }
+.recall-steps li > span { display: grid; place-items: center; width: 1.8rem; height: 1.8rem; flex-shrink: 0; border-radius: 50%; background: var(--surface-muted); }
+.recall-steps [aria-current="step"] { color: var(--ink); border-color: var(--ink); }
+.recall-source { padding: 1.15rem; background: var(--surface-muted); border: 1px solid var(--border); border-radius: 14px; overflow-wrap: anywhere; }
+.recall-source > span { display: block; color: var(--muted); margin-bottom: .4rem; font-size: var(--text-sm); }
+.recall-source > strong { display: block; font-size: var(--text-lg); }
+.recall-source p { margin: .4rem 0; }
+.recall-context { padding-left: .9rem; border-left: 3px solid var(--border); color: var(--muted); }
+.recall-metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(125px, 1fr)); gap: .75rem; margin: 0; }
+.recall-metrics > div { border: 1px solid var(--border); border-radius: 12px; padding: .85rem; }
+.recall-metrics dt { font-size: var(--text-sm); color: var(--muted); }
+.recall-metrics dd { margin: .3rem 0 0; font-size: var(--text-lg); font-weight: 700; }
+.recall-metrics-compact { grid-template-columns: 1fr; gap: .2rem; }
+.recall-metrics-compact > div { display: flex; justify-content: space-between; gap: 1rem; border: 0; border-bottom: 1px solid var(--border); border-radius: 0; padding: .5rem 0; }
+.recall-metrics-compact dd { margin: 0; font-size: var(--text-base); }
+.recall-card-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+.recall-card { min-width: 0; padding: 1rem; border: 1px solid var(--border); border-radius: 14px; overflow-wrap: anywhere; }
+.recall-card h5 { font-size: var(--text-base); margin: 0 0 .6rem; }
+.recall-card small { color: var(--muted); }
+.recall-card-head, .recall-stock { display: flex; justify-content: space-between; flex-wrap: wrap; gap: .65rem; }
+.recall-stock { padding-top: .6rem; border-top: 1px solid var(--border); }
+.recall-risk { display: flex; align-items: flex-start; gap: .8rem; padding: 1rem; border: 1px solid var(--danger); background: var(--danger-soft); border-radius: 12px; color: var(--danger); }
+.recall-risk > svg { flex-shrink: 0; }
+.recall-risk p { margin: .4rem 0 0; }
+.recall-actions { display: flex; justify-content: space-between; align-items: center; gap: .8rem; flex-wrap: wrap; }
+.recall-wizard textarea { resize: vertical; min-height: 7rem; }
+.recall-wizard h3:focus { outline-offset: .3rem; }
+@media (max-width: 600px) {
+  .recall-steps { grid-template-columns: 1fr; gap: .25rem; }
+  .recall-steps li { padding: .55rem; }
+  .recall-card-grid, .recall-metrics { grid-template-columns: 1fr; }
+  .recall-actions { flex-direction: column; align-items: stretch; }
+  .recall-actions > .button { justify-content: center; width: 100%; }
+  .recall-wizard .modal .actions { grid-template-columns: 1fr; }
+  .recall-wizard .modal .actions .button { font-size: var(--text-base); min-height: 44px; }
+}

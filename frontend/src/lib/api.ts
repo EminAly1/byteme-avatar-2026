@@ -56,6 +56,8 @@ const messages: Record<number, string> = {
 };
 
 const domainMessages: Record<string, string> = {
+  RECALL_PREVIEW_STALE: "Kaynak veya etki kapsamı değişti. Güncel lot, stok ve alıcıları yeniden inceleyin; henüz yeni geri çağırma oluşturulmadı.",
+  RECALL_SOURCE_MISMATCH: "Yazılan kaynak lot kodu eşleşmiyor. Seçili kaynağı yeniden inceleyin; geri çağırma oluşturulmadı.",
   DOCUMENTED_QUANTITY_EXCEEDED: "İade ve ikinci kademe bildirimlerinin toplamı kaynak sevkiyatı aşıyor. Kayıtlı miktarları kontrol edin; fiziksel market stoğu varsayılmaz.",
   DISTRIBUTION_CHRONOLOGY_CONFLICT: "Bildirim tarihi son kayıtlı dağıtım veya iadeden önce olamaz. Belge tarihini kontrol edin.",
   DISTRIBUTION_BEFORE_SHIPMENT: "Dağıtım tarihi şirket sevkiyatından önce olamaz.",

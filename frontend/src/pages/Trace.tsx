@@ -15,7 +15,7 @@ import {
   Factory,
   Building2,
 } from "lucide-react";
-import { CommandForm, Field } from "../components/forms";
+import { RecallWizard } from "../components/RecallWizard";
 import { Badge, Section, State, Table, Empty } from "../components/ui";
 import {
   CriticalNotice,
@@ -29,10 +29,8 @@ import {
 } from "../components/workflow";
 import { useCatalog } from "../lib/data";
 import { request } from "../lib/api";
-import { loadPending } from "../lib/pending";
 import { amount, dateTime, units } from "../lib/format";
 import type { Recall, TraceLot, TraceReport } from "../lib/modules";
-import { recallSchema } from "../lib/module-validation";
 import { readHistory, remember } from "../lib/history";
 
 export function BuyerReport({ report }: { report: TraceReport }) {
@@ -435,20 +433,9 @@ export function Traceability() {
   );
 }
 export function Recalls() {
-  const data = useCatalog(),
-    navigate = useNavigate();
-  const pending = loadPending("/recalls");
-  const [lot, setLot] = useState(
-      (pending?.values.source_lot_id as string) || "",
-    ),
-    [lookup, setLookup] = useState(""),
+  const navigate = useNavigate();
+  const [lookup, setLookup] = useState(""),
     [lookupError, setLookupError] = useState("");
-  const preview = useQuery({
-    queryKey: ["trace", lot, "forward"],
-    queryFn: () => request<TraceReport>(`/lots/${lot}/trace?direction=forward`),
-    enabled: !!lot,
-    retry: false,
-  });
   return (
     <div className="stack">
       <ModuleIntro
@@ -456,88 +443,10 @@ export function Recalls() {
         description="Kaynak lotun kayıtlı etkisini inceleyin. Geri çağırma ancak açık onayınızla kesinleşir."
         icon={<ShieldAlert size={24} />}
       />
-      <Section title="Geri çağırma kaydı aç">
-        <State loading={data.loading} error={data.error}>
-          <label className="field">
-            Sorunlu kaynak lot
-            <select
-              aria-label="Sorunlu kaynak lot"
-              value={lot}
-              onChange={(e) => {
-                if (!loadPending("/recalls")) setLot(e.target.value);
-              }}
-            >
-              <option value="">Kaynak lot seçin</option>
-              {data.lots.map((l) => (
-                <option value={l.id} key={l.id}>
-                  {l.external_code} ·{" "}
-                  {data.products.find((p) => p.id === l.product_id)?.name}
-                </option>
-              ))}
-            </select>
-          </label>
-          {pending && (
-            <CriticalNotice>
-              Sonucu belirsiz recall isteği korunuyor. Kaynak değiştirilemez;
-              aynı anahtarla tekrar deneyin.
-            </CriticalNotice>
-          )}
-        </State>
-        {lot && (
-          <State loading={preview.isPending} error={preview.error}>
-            {preview.data && (
-              <>
-                <CriticalNotice>
-                  Bu kapsam mevcut izleme görünümüdür; henüz kesinleşmiş recall
-                  sonucu değildir. Nihai üyelik ve bloklar backend
-                  transaction'ında belirlenir.
-                </CriticalNotice>
-                <div className="stat-grid compact">
-                  <StatCard
-                    label="Mevcut kapsamdaki lot"
-                    value={preview.data.lots.length}
-                  />
-                  <StatCard
-                    label="Kayıtlı alıcı"
-                    value={preview.data.buyers.length}
-                  />
-                </div>
-                <CommandForm
-                  key={lot}
-                  schema={recallSchema}
-                  defaults={{ source_lot_id: lot, reason: "" }}
-                  path="/recalls"
-                  label="Geri çağırmayı gözden geçir"
-                  confirmText="KRİTİK İŞLEM: Kaynak ve backend'in bulduğu türev lotlar atomik olarak bloke edilecek. Bu prototipte blok kaldırma yolu yoktur."
-                  payload={(v) => v}
-                  summary={() => (
-                    <ReviewSummary
-                      items={[
-                        ["Kaynak lot", preview.data!.source_lot.external_code],
-                        [
-                          "Mevcut izleme kapsamı",
-                          preview.data!.lots.length + " lot (nihai değil)",
-                        ],
-                      ]}
-                    />
-                  )}
-                  onSuccess={(r) => {
-                    const record = r as Recall;
-                    remember("recalls", {
-                      id: record.id,
-                      at: record.created_at,
-                      label: record.reason,
-                    });
-                    navigate("/geri-cagirma/" + record.id);
-                  }}
-                >
-                  <Field name="reason" label="Geri çağırma nedeni" />
-                </CommandForm>
-              </>
-            )}
-          </State>
-        )}
-      </Section>
+      <RecallWizard onSuccess={(record) => {
+        remember("recalls", { id: record.id, at: record.created_at, label: record.reason });
+        navigate("/geri-cagirma/" + record.id);
+      }} />
       <Section
         title="Kayıtlı recall sonucunu aç"
         subtitle="Backend liste endpoint'i yoktur; bilinen UUID ile açılır. Aşağıdakiler yalnız bu sekmede oluşturulan referanslardır."
@@ -580,7 +489,6 @@ export function Recalls() {
           ))}
         </div>
       </Section>
-      {preview.data && <BuyerReport report={preview.data} />}
     </div>
   );
 }

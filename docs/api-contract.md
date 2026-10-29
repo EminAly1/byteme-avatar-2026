@@ -41,7 +41,8 @@ Görev 12. Normatif giriş şemaları [canlı sistemden alınan OpenAPI](release
 | GET, POST /v1/shipments | customer_id, opsiyonel sale_id; lot/location/quantity/unit ve bağlıysa sale_line_id |
 | GET /v1/shipments/{id} | Alıcı snapshot'ı, bağlı satış ve hareket FK'ları |
 | GET /v1/lots/{id}/trace?direction=forward\|backward | Kesin source/lots/context_lots/operations/edges/stocks/buyers ve ürün/birim bazlı sevk toplamı |
-| POST /v1/recalls | source_lot_id/reason; bütün türevleri atomik bloke eder |
+| GET /v1/recalls/preview?source_lot_id=UUID | Salt okunur gerçek kapsam ve preview_fingerprint (Görev 21) |
+| POST /v1/recalls | source_lot_id/reason; web için birlikte preview_fingerprint/confirmation_lot_code; gerçek türevleri atomik bloke eder |
 | GET /v1/recalls/{id} | Kesin üyelik, güncel bakiyeler, market/iletişim/sevk raporu |
 | GET /v1/predictions/models | İki modelin metadata/özellik sınırları/sentetik MAE-RMSE bilgisi |
 | POST /v1/predictions/production | İşlem öncesi kg/maliyet/ön teklif, et türü, paket ağırlığı, sentetik profil; opsiyonel operation_id/output_product_id |
@@ -74,3 +75,9 @@ Room outbox aynı key/body ile onay alır; offline yalnız taslaktır. Cihaz sto
 ## Henüz uygulanmayan yollar
 
 Genel `/transfers`, müşteri `/returns`/satış iptali, rework komutu, kullanıcı oturum/rol API'si, ikinci kademe dağıtım kayıt API'si, genel `/reports/*` ve `/operations/{id}/prediction-comparison` **yoktur**. Mevcut liste/detay/trace/prediction cevapları raporlama için kullanılır. Recall ve prediction için genel liste endpoint'i de yoktur; UI bilinen gerçek UUID'leri açar. Bu yolları taslak oldukları halde çalışan sözleşme gibi çağırmayın.
+
+## Görev 21 — İncelenmiş geri çağırma
+
+[Önizleme ve kesinleştirme sözleşmesi](../backend/RECALL_SAFETY.md): web üç aşama, zorunlu gerekçe ve elle kaynak lot kodu kullanır. Backend, lot kilitleri alındıktan sonra güncel rapor izini karşılaştırır; değişen kapsam `409 RECALL_PREVIEW_STALE`, yanlış kod `409 RECALL_SOURCE_MISMATCH` döndürür. Kesin 4xx reddinden sonra yeniden inceleme gerekir. Belirsiz sonuçta özgün key/body aynen tekrar edilir; başarılı replay yeni bir blokaj işlemi değildir.
+
+Yeni iki alan opsiyonel bir çifttir; eski demo/API komutları ve kayıtlı hash'ler korunur. Alanları göndermeyen istemciler yeni inceleme izi denetimine tabi değildir. Bu uyumluluk ve X-API-Key sınırı, kullanıcı rolü veya ikinci kişi onayı olarak sunulmaz. Yeni tablo/migration ve otomatik alıcı bildirimi yoktur. Canlı `/openapi.json` yeni giriş şemasını içerir; yukarıdaki Görev 12 statik OpenAPI bağlantısı tarihsel kanıttır.
