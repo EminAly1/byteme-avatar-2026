@@ -1,55 +1,45 @@
-# Model A — üretim verimi ve EKP
+# Model kartı — Üretim verimi ve EKP v2
 
-**Sürüm:** `production-ridge-v1-a27a209e395c`. **Kaynak:** yalnız SYNTHETIC, gerçek geçmiş sayısı 0. [JSON model](models/production.json), [CSV/manifest](data/manifest.json), [tam metrikler](evaluation/metrics.json).
+**Sürüm:** `production-ridge-v2-a21520e1f03f`. **SYNTHETIC**, gerçek tarihsel satır **0**. Her model 3.000 işlem; 1.800/600/600 ayrım. Tekrar üretim için sabit eğitim zaman damgası: 2026-10-29T00:00:00+00:00; sabit seed 20261029.
 
-## Kullanım amacı
+[JSON](models/production.json), [checksum](models/production.sha256), [manifest](data/manifest.json), [eski artefakt](evaluation/v1/production.json).
 
-Dış üretim başlamadan paket miktarı, kg/kg üretim verimi, EUR/paket EKP ve tahmini toplam bedel için karar desteği. Gerçek tüketim, hizmet faturası, stok, lot bağlantısı ve recall kararlarının yerini almaz. Tahmin edilen paket miktarı sürekli beklenen değerdir; otomatik sipariş/lot adedi veya muhasebe kaydı değildir.
+## Desteklenen işlem öncesi girdiler
 
-## Özellikler ve veri
-
-| İşlem öncesi alan | Birim / desteklenen aralık |
+| Alan | Sınır / kategori |
 | --- | --- |
-| meat_type | beef / lamb; sentetik et türleri |
-| meat_kg | 60–160 kg |
-| spice_kg | 0,8–4,2 kg |
-| casing_kg | 2–10,5 kg |
-| meat_cost_eur / spice_cost_eur / casing_cost_eur | Bilinen planlı parti payının alış bedeli; sırasıyla 0–2500 / 0–150 / 0–200 EUR |
-| planned_producer_profile | producer_a / producer_b / producer_c: **kurgusal profil**, gerçek firma kimliğinin öğrenilmiş karşılığı değildir |
-| package_weight_kg | 0,5–1,5 kg/paket |
-| estimated_service_eur | Üretim öncesi bağımsız ön teklif, 200–900 EUR; gerçekleşen paket × tarife girilmez |
+| casing_cost_eur | 0–720 EUR |
+| casing_kg | 0.1–24 kg |
+| estimated_service_eur | 0–2400 EUR |
+| meat_cost_eur | 0–6000 EUR |
+| meat_kg | 5–300 kg |
+| meat_type | beef / lamb |
+| package_weight_kg | 0.25–2 kg/package |
+| planned_producer_profile | producer_a / producer_b / producer_c |
+| spice_cost_eur | 0–480 EUR |
+| spice_kg | 0.05–12 kg |
 
-Bu sınırlar veri üretim tasarımının dış dikdörtgenidir; bütün uç kombinasyonlar eğitimde gözlenmiş değildir. Sınır içinde de dağılım dışı kombinasyon riski vardır. Özellikle maliyet/ürün oranları gerçek işletme verisiyle doğrulanmalıdır. API paket ve kg dışında birimi, EUR dışında parayı reddeder. İşleme bağlı kayıtta ürün paket ağırlığı DB ile eşleşir ve üretici UUID'si bağlamda korunur; profilin seçimi kullanıcının açık sentetik varsayımıdır.
+Baharat et miktarının %1–4’ü, kılıf %2–8’i olmalıdır. Örneğin 25 kg et için 0,25–1 kg baharat ve 0,5–2 kg kılıf desteklenir. Diğer sayısal sınırlar tasarımın dış dikdörtgenidir; bütün uç kombinasyonların gözlendiği anlamına gelmez. Planlı maliyetlerin sıfır olabilmesi muhasebe doğruluğu veya ücretsiz işletme örneklerinin ölçüldüğü iddiası değildir.
 
-600 bağımsız sentetik işlem; hayalî kronolojik tarihle 360 train, 120 validation, 120 test. Üretici/et etkileri, miktar ve maliyet varyasyonu ile bağımsız gözlenmeyen süreç gürültüsü vardır. `actual_finished_quantity`, `actual_total_cost_eur`, `actual_yield_ratio`, `actual_service_factor`, EKP ve fiili fire özellik allowlist'inde yoktur. PDF örnek sonucu eğitime katılmadı.
+Küçük/orta/büyük et partileri, iki et türü, üç kurgusal üretici profili, beş paket ağırlığı, farklı malzeme fiyatları/ön teklifler ve bağımsız gözlenmeyen gürültü kullanıldı. Model verim oranı ve hizmet çarpanı öğrenir; miktar bu verimden, yaklaşık toplam planlı malzeme + tahmini hizmetten, EKP tahmini toplam/miktardan gelir. Girdiler actual_* ve gerçekleşmiş EKP içermez. Paket miktarı sürekli beklenen değerdir; kesin üretim adedi değildir.
 
-## Yöntem
+İşleme bağlı tahminde paket mamul ve paket ağırlığı DB kaydıyla eşleşmelidir. İşlem başlamış/sevk edilmiş/kapalıysa yeni tahmin reddedilir. Tahmin stok rezervasyonu yapmaz, gerçek tüketimi veya faturayı değiştirmez.
 
-DictVectorizer + train-only StandardScaler + iki hedefli **Ridge**, alpha **10**. Alpha 0,1/1/10 validation'da seçildi; test seçime/fit'e katılmadı. Az özellikli, simülasyonda yaklaşık doğrusal etkiler için bu açıklanabilir model yeterli bulundu. RandomForest gibi daha karmaşık yöntem eklenmedi.
+## Yöntem, sonuçlar ve terfi sınırı
 
-Öğrenilen hedefler: `y = finished_kg / planned_input_kg` ve `s = actual_service_eur / estimated_service_eur`. Hizmet hedefinin gerçek değeri yalnız eğitim etiketi olarak vardır. Başlangıç varsayımı planlanan girdilerin tamamının tüketileceğidir; gerçek iade/ikame tahmin sapmasına neden olur.
+Train-only DictVectorizer + StandardScaler + Ridge, alpha **1**. Alpha yalnız validation'da seçildi; test model seçimi veya fit için kullanılmadı. Baseline train ortalama oranıdır. JSON formatı avatar-linear-json-v1, özellik şeması preprocess-v1 korunur; yeni veri/model sürümü v2’dir.
 
-- Tahmini paket = `ŷ × (et + baharat + kılıf kg) / paket_kg`.
-- Tahmini toplam = `bilinen planlı malzeme bedelleri + ön teklif × ŝ`.
-- Tahmini EKP = `tahmini toplam / tahmini paket`.
+V2 geniş sentetik validation kapısı geçti. Ancak eski sabit v1 testinde gerileme vardır; v2’nin her hedefte genel iyileşme olduğu iddia edilmez. [Değerlendirme raporu](EVALUATION_REPORT.md) aynı satırlarda v1/baseline/v2 karşılaştırmasını, eski testteki gerilemeyi ve hedef/birim bazında MAE/RMSE’yi verir. Gerçek işletme başarımı veya istatistiksel anlamlılık kanıtlanmadı.
 
-Verim [0,01;1], hizmet çarpanı [0,01;3] aralığına fiziksel/güvenlik projeksiyonu uygulanır; sonlu olmayan sonuç reddedilir. Bunlar güven aralığı değildir. Baseline yalnız training ortalama verimi/hizmet çarpanını aynı formüllerde kullanır. Böylece model yalnız sonradan bilinen gerçek EKP formülünü tekrar çalıştırmaz; hem miktar hem hizmet sapması önceden öğrenilir.
+| V2 test hedefi | Birim | n | Baseline MAE / RMSE | V2 MAE / RMSE |
+| --- | --- | --- | --- | --- |
+| Mamul miktarı | package | 600 | 4.356980 / 9.309748 | 1.899243 / 3.843486 |
+| Verim | ratio | 600 | 0.023154 / 0.027879 | 0.010307 / 0.012904 |
+| Birim EKP | EUR/package | 600 | 0.903017 / 1.240929 | 0.350307 / 0.505783 |
+| Toplam maliyet | EUR | 600 | 22.183457 / 38.596749 | 12.450015 / 22.321937 |
 
-ML hesabı kayan noktalı istatistiksel tahmindir; parasal defter değildir. API giriş/çıkışları ondalık metin, kesin gerçekleşme ve sapma hesabı Decimal'dır. Tahmin tutarları 6 hane ve EKP gösterimi 2 hane döner; bu tahminlerden kesin toplam/dağıtım üretilmez.
+## Güvenlik ve bilimsel sınırlamalar
 
-## Ayrılmış test sonucu (n=120, sentetik)
+Doğrulanmış JSON + SHA256 yüklenir; pickle/joblib çalıştırılmaz. SHA bütünlük kontrolüdür, yayıncı imzası değildir. V2’de giriş dışı alanlar açıklamalı 422, sonlu olmayan/fiziksel olarak geçersiz model çıktısı 503; sessiz girdi/çıktı kırpması yoktur. Eksik/bozuk modelde sahte fallback yoktur. Worker ilk başarılı yüklemeyi cache’ler; incelenmiş çift dağıtımından sonra yeniden başlatılmalıdır.
 
-| Hedef | Birim | Baseline MAE / RMSE | Ridge MAE / RMSE |
-| --- | --- | --- | --- |
-| Miktar | paket | 2,647265 / 3,626324 | 1,133140 / 1,577510 |
-| Verim | kg/kg | 0,017148 / 0,021050 | 0,007237 / 0,008839 |
-| EKP | EUR/paket | 0,542426 / 0,674486 | 0,183869 / 0,244472 |
-| Tahmini toplam bedel | EUR | 19,531858 / 24,919331 | 9,850957 / 12,590720 |
-
-100/2/5 kg, 970/48/58 EUR, 1 kg paket, producer_a, beef ve **kurgusal bağımsız 450 EUR ön teklif** için: **86,368585 paket**, verim **0,807183**, tahmini toplam **1517,629016 EUR**, EKP **17,571540 EUR/paket**. Referans gerçekleşme 85 paket, 1543,50 EUR ve 18,16 gösterimdir. Bu örnekte EKP mutlak sapması **0,587284 EUR/paket**, test ortalama hatasından büyüktür; 85 ve 18,16 girdi değildir.
-
-## Sınırlamalar ve sürümleme
-
-Gerçek veri ile dış doğrulama, kalibre belirsizlik, çoklu mamul/yan ürün/iade özellikleri, üretici kimliklerinin gerçek geçmişte öğrenilmesi ve fiyat rejimi değişim takibi yoktur. Beklenen çıktı tek paket ürünüdür; gerçekleşme farklı/çok ürünlü ise karşılaştırma null ve gerekçeli döner. Recipe/ürün konfigürasyonu veya öğrenme yöntemi değişirse şema/release sürümü artırılmalıdır. `ridge-v1` sabit eğitim reçetesidir; veri SHA-256 kısaltması sürümdedir, tam hash metadata'dadır. Aynı seed, veri, pinli ortam ve sabit eğitim zamanı aynı artifact'i üretir.
-
-Tahmin kaydı model sürümü/zamanı/özellikleri/sonucu saklar. Yeni model geldiğinde önceki sonuç yeniden hesaplanmaz. Eğitim komutu ve testler [README](README.md), gerçek API [INTEGRATION](INTEGRATION.md) belgesindedir.
+Gerçek veri, kalibre güven aralıkları, dış doğrulama, gerçek üretici geçmişi ve drift izlemesi yoktur. Kesin para/stok/recall motorları modelden bağımsızdır. Eski tahmin sonucu/sürümü DB snapshot’ında saklıdır; yeni model veya model dosyasının yokluğu geçmişi yeniden hesaplatmaz. [Entegrasyon ve geri dönüş](INTEGRATION.md).

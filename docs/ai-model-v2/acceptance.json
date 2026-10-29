@@ -1,0 +1,170 @@
+{
+  "date": "2026-10-29",
+  "timezone": "Europe/Istanbul",
+  "branch": "feature/ai-model-v2-prediction-ux",
+  "main_base": "d4206d1ba52c6d92c55294000ff74883222b4d75",
+  "pr37_merged": true,
+  "dataset": {
+    "previous_per_model": 600,
+    "new_per_model": 3000,
+    "total_synthetic": 6000,
+    "real_history": 0,
+    "seed": 20261029,
+    "version": "synthetic-v2",
+    "splits": {
+      "train": 1800,
+      "validation": 600,
+      "test": 600
+    }
+  },
+  "models": {
+    "production": {
+      "version": "production-ridge-v2-a21520e1f03f",
+      "json_sha256": "9485fff3fd111d98d7479e97deac0127f709b54fba7665c52fee6e119aca467f",
+      "dataset_hash": "a21520e1f03f418f41eea452f3d4d75eca9dde71e2b63d251518f34189929669",
+      "alpha": 1.0
+    },
+    "cutting": {
+      "version": "cutting-ridge-v2-d4f63323f8a6",
+      "json_sha256": "689cb4edbb963fae4c32fdf2c28bca309d27f4a8e4d8759eb3e0ab7636c86550",
+      "dataset_hash": "d4f63323f8a642ef310d6eb83c1742f5e748666f58ff74e2a37f6d4b7324e934",
+      "alpha": 0.1
+    }
+  },
+  "tests": {
+    "backend_passed": 143,
+    "ml_passed": 44,
+    "pytest_total": 187,
+    "react_passed": 102,
+    "chromium_unique_passed": 6,
+    "failed": 0,
+    "skipped": 0,
+    "pytest_per_module": {
+      "tests.test_predictions_mysql": 30,
+      "tests.test_prediction_v2_mysql": 21,
+      "tests.test_alerts_mysql": 28,
+      "tests.test_core_mysql": 20,
+      "tests.test_cuttings_mysql": 30,
+      "tests.test_recall_review_mysql": 14,
+      "ml.tests.test_model_v2": 25,
+      "ml.tests.test_models": 19
+    },
+    "chromium_scenarios": [
+      "ai-model-v2.spec.ts::metadata örneğiyle 25 kg; küçük/100/büyük üretim; geçersiz giriş alan bazında reddedilir, mobil/desktop",
+      "ai-model-v2.spec.ts::gerçek beş ürün reçetesiyle 25/küçük/büyük kesim; parça, toplam ve fark görünür",
+      "ai-model-v2.spec.ts::tahmin gerçek commit sonrası yanıt kaybı/reload aynı key/body; kayıt sürümü ve sonuç sabit",
+      "integration-v2.spec.ts::üretim ML UI: gerçek forecast UUID → kapanış sonrası 85 paket ve Decimal sapma",
+      "integration-v2.spec.ts::kesim ML UI: beş gerçek ürün eşlemesi ve 25 kg tahmin/gerçek/sapma",
+      "model.spec.ts::gerçek eksik-model backend 503: hata görünür, sahte tahmin/metrik yok"
+    ],
+    "typecheck_and_build": true,
+    "accessibility_checks": 7,
+    "accessibility_violations": 0,
+    "viewports": [
+      390,
+      768,
+      1440
+    ]
+  },
+  "docker": {
+    "image_id": "sha256:a5ad8a8b0edcd18c76c81fd43098371d19adf0cd9b108a11467133f8bc26d329",
+    "uid": 1000,
+    "json_and_checksums_verified": true,
+    "ready_http": 200,
+    "prediction_post_statuses": [
+      201,
+      201
+    ],
+    "model_versions": [
+      "production-ridge-v2-a21520e1f03f",
+      "cutting-ridge-v2-d4f63323f8a6"
+    ],
+    "network": "Shared isolated MySQL container namespace; no published acceptance API port",
+    "normal_build": "failed: environment DNS",
+    "proxy_ca_build": "passed; TLS verification retained"
+  },
+  "isolation": {
+    "mysql_schemas": [
+      "avatar_task22_core_test",
+      "avatar_task22_web_test"
+    ],
+    "unchanged_operational_tables": 28,
+    "only_allowed_changed_tables": [
+      "prediction_records",
+      "idempotency_requests"
+    ],
+    "all_other_demo_data_preserved": true,
+    "new_migration": false
+  },
+  "v1_compatibility": {
+    "25kg_old_status": 422,
+    "25kg_new_status": 201,
+    "old_fields_rejected": [
+      "meat_kg",
+      "spice_kg",
+      "casing_kg",
+      "estimated_service_eur"
+    ],
+    "saved_v1_read_after_v2_unchanged": true,
+    "replay_survives_model_removal": true
+  },
+  "scientific_decision": {
+    "test_used_for_selection": false,
+    "acceptance_gate": "validation only: normalized RMSE below training-mean baseline",
+    "v2_common_test_counts": {
+      "production": 66,
+      "cutting": 199
+    },
+    "frozen_v1_test_count_per_model": 120,
+    "regressions_reported": [
+      "Old fixed benchmark: v2 errors are worse",
+      "V2 common production total-cost RMSE: 15.223476 -> 15.576864 EUR"
+    ],
+    "real_world_accuracy_claim": false,
+    "general_accuracy_promotion": false,
+    "scope": "Wider synthetic-v2 local prototype only; v1 artifacts retained"
+  },
+  "initial_failures_resolved": [
+    "Frontend test had an unsupported Testing Library exact option; typecheck fixed without changing assertions.",
+    "Normal Docker build could not resolve package DNS; existing proxy/CA build succeeded with TLS.",
+    "Docker acceptance script initially missed /app on sys.path; test harness corrected, no application import path change."
+  ],
+  "not_retested": [
+    "Full unrelated backend suite",
+    "Android",
+    "Document/PDF center",
+    "Public internet deployment",
+    "Real-world model accuracy"
+  ],
+  "raw_evidence_directory": "/tmp/avatar-task22",
+  "evidence_sha256": {
+    "backend-ml-final.xml": "98f07372c033bd4bc565ec8ad748162ad9d051742c6e1b78595f7e3312034e72",
+    "backend-ml-final.txt": "f6ff1178559885210a7e23d6f4fc2bcdd395ee9eabe0b84624b17df13560ac5c",
+    "ml-final.xml": "ce9272af4b6ebf793f73cf893a5345dc1a4715179048c80e6be93c35492f04e8",
+    "react-final.txt": "edf0629ab747bd7cb2217b6712a8ab9bd146b041ff7b8fd3b0464a4837424968",
+    "frontend-build-final.txt": "faaad0070abb5b75d0ccd726ec91b2891a5957668a262c39f9b005125d837afe",
+    "chromium-final.xml": "5bafde6319d058bf01b8961e222327e504306c4ab85822ff24b23f4315c648be",
+    "chromium-legacy.xml": "a9a6e9bb7d8a03641a4c449a335be62e058e72e758e136369f34f8a2cf3118c0",
+    "chromium-missing.xml": "dc750659bf0963a90ea66f58033c8c6581a7d20d9aa6728e32d37db5f4c3c788",
+    "docker-acceptance.json": "8637cf9445ad866454c713482e95b50e2a3b053dddd03098a05c496132708adc",
+    "domain-live.json": "9162622aad4e1e68c9e9ff057e190e2f1f9375184b227fb3470180d0a4ed9ebd",
+    "operational-isolation.json": "1ba47600aa428bc297261ded9904662954eceee87102b39f7c74fc9d722a78ea",
+    "alembic-check.txt": "43d345b67ace77ab8c4cbf575a3baddf66e8623cf7d1e0b78e602b1d641ecf50",
+    "training-final.txt": "a49d2cab61c72b3f79f4f812b3157970cce45d3a4c5529f76183b90b0b0416fd"
+  },
+  "security": {
+    "actual_private_values_checked": 5,
+    "matches": 0,
+    "gitleaks_candidate_findings": 0,
+    "gitleaks_history_findings": 0,
+    "frontend_built_with_actual_runtime_key_in_environment": true
+  },
+  "runtime_cleanup": {
+    "test_servers_stopped": true,
+    "original_demo_apps_restored_http_statuses": [
+      200,
+      200
+    ],
+    "test_schemas_preserved": true
+  }
+}

@@ -6,7 +6,7 @@ from app import models as m
 from app.commands import canonical
 from app.config import get_settings
 from app.errors import DomainError
-from app.ml_runtime import FEATURES, PARTS, LIMITATIONS, ModelUnavailable, load_model
+from app.ml_runtime import FEATURES, PARTS, LIMITATIONS, ModelUnavailable, PredictionOutOfDomain, load_model
 from app.services import get
 
 Q=Decimal('.000001')
@@ -27,7 +27,8 @@ def model(kind):
 
 def models_info():
     return {'models':[{**model(kind).document['metadata'],'kind':kind,
-        'feature_schema':model(kind).document['feature_schema'],'prediction_limitations':LIMITATIONS}
+        'feature_schema':model(kind).document['feature_schema'],
+        'input_constraints':model(kind).document.get('input_constraints', []),'prediction_limitations':LIMITATIONS}
         for kind in ('production','cutting')]}
 
 
@@ -71,6 +72,8 @@ def create_prediction(db, request, kind):
     try: values=artifact.predict(numeric)
     except ModelUnavailable:
         raise DomainError('MODEL_UNAVAILABLE','Model sonlu tahmin üretemedi',503) from None
+    except PredictionOutOfDomain as error:
+        raise DomainError('PREDICTION_OUT_OF_DOMAIN', str(error), 422, details={'fields': error.fields}) from None
     except ValueError:
         raise DomainError('PREDICTION_OUT_OF_DOMAIN','Girdiler belgelenmiş sentetik eğitim aralığı dışında',422) from None
     result={k:decimal_text(v) for k,v in values.items()}

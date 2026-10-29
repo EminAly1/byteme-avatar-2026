@@ -1,0 +1,220 @@
+{
+  "artifact_format": "avatar-linear-json-v1",
+  "coef": [
+    [
+      0.0003916428972182442,
+      0.0015911329162406989,
+      -0.000827940527031546,
+      0.00029886737191418583,
+      0.004255651858705054,
+      -0.002863939816047316,
+      0.00286393981604737,
+      0.00014537646389819168,
+      0.008320878533301877,
+      -0.011415627994561858,
+      0.0033818242177770285,
+      -0.0006570871179373272,
+      3.690033025864416e-05
+    ],
+    [
+      -0.0012565369895939375,
+      -0.0018593340369115541,
+      0.0017087018267704687,
+      -0.0015554806364459716,
+      0.009304651572544911,
+      0.00032053105112049996,
+      -0.00032053105112055667,
+      -0.0009707021306821268,
+      -0.02171127655671801,
+      0.02443518177641469,
+      -0.0035212090502657343,
+      0.0024429592557516913,
+      -0.00025179717950697623
+    ]
+  ],
+  "feature_names": [
+    "casing_cost_eur",
+    "casing_kg",
+    "estimated_service_eur",
+    "meat_cost_eur",
+    "meat_kg",
+    "meat_type=beef",
+    "meat_type=lamb",
+    "package_weight_kg",
+    "planned_producer_profile=producer_a",
+    "planned_producer_profile=producer_b",
+    "planned_producer_profile=producer_c",
+    "spice_cost_eur",
+    "spice_kg"
+  ],
+  "feature_schema": {
+    "casing_cost_eur": {
+      "maximum": 200,
+      "minimum": 0
+    },
+    "casing_kg": {
+      "maximum": 10.5,
+      "minimum": 2
+    },
+    "estimated_service_eur": {
+      "maximum": 900,
+      "minimum": 200
+    },
+    "meat_cost_eur": {
+      "maximum": 2500,
+      "minimum": 0
+    },
+    "meat_kg": {
+      "maximum": 160,
+      "minimum": 60
+    },
+    "meat_type": {
+      "categories": [
+        "beef",
+        "lamb"
+      ]
+    },
+    "package_weight_kg": {
+      "maximum": 1.5,
+      "minimum": 0.5
+    },
+    "planned_producer_profile": {
+      "categories": [
+        "producer_a",
+        "producer_b",
+        "producer_c"
+      ]
+    },
+    "spice_cost_eur": {
+      "maximum": 150,
+      "minimum": 0
+    },
+    "spice_kg": {
+      "maximum": 4.2,
+      "minimum": 0.8
+    }
+  },
+  "intercept": [
+    0.7965192860497221,
+    1.0314958742608331
+  ],
+  "kind": "production",
+  "mean": [
+    67.81996471075554,
+    5.449140213363332,
+    502.9683776728493,
+    1205.06882482891,
+    110.37520502796309,
+    0.4861111111111111,
+    0.5138888888888888,
+    1.0069444444444444,
+    0.2972222222222222,
+    0.34444444444444444,
+    0.35833333333333334,
+    50.57503173111617,
+    2.2063691079755534
+  ],
+  "metadata": {
+    "data_origin": "SYNTHETIC",
+    "dataset_hash": "a27a209e395c81f5753f386707713b4b2113e54df5451dd57f9c75021566c800",
+    "dataset_version": "synthetic-v1",
+    "feature_schema_version": "preprocess-v1",
+    "metrics": {
+      "baseline_test": {
+        "predicted_ekp_eur_per_unit": {
+          "mae": 0.5424262898119216,
+          "n": 120,
+          "rmse": 0.6744862215330902,
+          "unit": "EUR/package"
+        },
+        "predicted_finished_quantity": {
+          "mae": 2.647265379918527,
+          "n": 120,
+          "rmse": 3.626324092845254,
+          "unit": "package"
+        },
+        "predicted_total_cost_eur": {
+          "mae": 19.53185818600968,
+          "n": 120,
+          "rmse": 24.91933124443501,
+          "unit": "EUR"
+        },
+        "predicted_yield_ratio": {
+          "mae": 0.01714786731587964,
+          "n": 120,
+          "rmse": 0.02104985384192211,
+          "unit": "ratio"
+        }
+      },
+      "ridge_test": {
+        "predicted_ekp_eur_per_unit": {
+          "mae": 0.1838693733156547,
+          "n": 120,
+          "rmse": 0.24447248864544754,
+          "unit": "EUR/package"
+        },
+        "predicted_finished_quantity": {
+          "mae": 1.1331402848014684,
+          "n": 120,
+          "rmse": 1.5775096960982236,
+          "unit": "package"
+        },
+        "predicted_total_cost_eur": {
+          "mae": 9.85095655313427,
+          "n": 120,
+          "rmse": 12.590720051816096,
+          "unit": "EUR"
+        },
+        "predicted_yield_ratio": {
+          "mae": 0.007236933494860583,
+          "n": 120,
+          "rmse": 0.008839173970446637,
+          "unit": "ratio"
+        }
+      },
+      "splits": {
+        "test": 120,
+        "train": 360,
+        "validation": 120
+      }
+    },
+    "model_version": "production-ridge-v1-a27a209e395c",
+    "trained_at": "2026-10-25T08:18:55.209085+00:00",
+    "training_configuration": {
+      "algorithm": "Ridge",
+      "alpha": 10.0,
+      "alpha_grid": [
+        0.1,
+        1,
+        10
+      ],
+      "fit": "train only; no refit after selection",
+      "numpy": "2.2.6",
+      "pandas": "2.2.3",
+      "projection": "production ratios bounded; cutting nonnegative then radial projection to simplex sum<=1",
+      "python": "3.12.14",
+      "seed": 202609,
+      "sklearn": "1.6.1",
+      "split": "chronological 60/20/20",
+      "targets": [
+        "yield_ratio",
+        "service_factor"
+      ]
+    }
+  },
+  "scale": [
+    22.92677614189777,
+    1.62415036330981,
+    142.66852942762782,
+    361.09851990808295,
+    27.97133033971598,
+    0.49980706154018295,
+    0.49980706154018295,
+    0.40562927412193867,
+    0.45703519868770026,
+    0.4751867728965133,
+    0.4795107460271942,
+    17.343125686107705,
+    0.6875423405843909
+  ]
+}

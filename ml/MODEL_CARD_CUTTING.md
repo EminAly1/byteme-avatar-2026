@@ -1,50 +1,40 @@
-# Model B — kuzu parçalama verimi
+# Model kartı — Kuzu parçalama v2
 
-**Sürüm:** `cutting-ridge-v1-ddd7ab8f61fd`. **Kaynak:** yalnız SYNTHETIC; 600 satır (360/120/120), gerçek tarihsel kesim 0. [JSON model](models/cutting.json), [manifest](data/manifest.json), [değerlendirme](evaluation/metrics.json).
+**Sürüm:** `cutting-ridge-v2-d4f63323f8a6`. **SYNTHETIC**, gerçek tarihsel satır **0**. Her model 3.000 işlem; 1.800/600/600 ayrım. Tekrar üretim için sabit eğitim zaman damgası: 2026-10-29T00:00:00+00:00; sabit seed 20261029.
 
-## Amaç, özellikler ve ürün eşlemesi
+[JSON](models/cutting.json), [checksum](models/cutting.sha256), [manifest](data/manifest.json), [eski artefakt](evaluation/v1/cutting.json).
 
-Parçalama başlamadan Kuzu, 18–40 kg giriş ağırlığı ve `five_parts_v1` şekli için but, omuz, sırt, kaburga, kıyma kg'larını tahmin eder. API ayrıca gerçek `recipe_version_id`, beş ayrı parça ürün UUID'si ve isteğe bağlı kesim `operation_id` ister; reçete türünü/sürümünü, üyelikleri, kg mamul türlerini ve müsaitliği DB'de doğrular. Tahmin kaydı gerçek sürüm, code, adlar ve caller tarafından ilan edilmiş parça→ürün eşlemesini korur; isimlerden kendiliğinden ürün/lot ilişkisi uydurmaz. Slot eşlemesinin anlamsal doğruluğunu işletme seçer/onaylar.
+## Desteklenen işlem öncesi girdiler
 
-Tür ve reçete şekli eğitimde sabittir; öğrenilen ana etki **işlem öncesi giriş ağırlığıdır**. Reçete UUID/sürümü eğitimde bir tarihsel özellikmiş gibi kullanılmaz. Dağıtım anahtarının quantity/value seçimi muhasebe politikasıdır; kesim ağırlığına kanıtsız etki atfedilmez. Beşten farklı çıktı veya yan ürün içeren reçeteler bu model için reddedilir. Kuzu dışındaki türlere genelleme iddiası yoktur.
+| Alan | Sınır / kategori |
+| --- | --- |
+| input_weight_kg | 5–80 kg |
+| recipe_shape | five_parts_v1 |
+| species | Kuzu |
 
-PDF yalnız toplam 22 kg'yi ve giriş 25 kg'yi belirtir. **6/4/4/5/3 kg demodaki kurgusal tartımlardır.** Eğitim generator'ündeki oran profilleri, ağırlık eğimleri ve gürültü de mühendislik varsayımıdır; ölçülmüş geçmiş değildir. Eğitimde çeşitlenen giriş ağırlıkları/oran profilleri ve bağımsız gözlenmeyen kesim gürültüsü kullanılır. Gerçek parça ağırlıkları ve fiili fark yalnız hedef/değerlendirmedir.
+Kuzu ve five_parts_v1 dışında eğitim yoktur. Giriş ağırlığı küçük/orta/büyük segmentlerde 5–80 kg; beş pozitif oran ve bağımsız parça gürültüsü vardır. Giriş = parça toplamı + pozitif açıklanması gereken fark. Reçete UUID’si ve parça ürünleri gerçek DB kaydıyla doğrulanır; model adlardan otomatik ürün/lot ilişkisi uydurmaz.
 
-## Algoritma ve fiziksel sınırlar
+Beş farklı kg mamulün tamamı seçili kullanılabilir Kuzu reçetesinin üyeleri olmalıdır. Anlamsal slot eşlemesini kullanıcı seçer; reçete sürümüne gözlenmemiş bir fiziksel etki atfedilmez. Fark fire/yan ürün/ölçüm sınıfı değildir. Kesin kapanış mevcut tartım ve açıklama kurallarını kullanır.
 
-Train-only DictVectorizer + StandardScaler + beş hedefli **Ridge**, alpha **0,1** (0,1/1/10 validation seçimi). Baseline training'deki sabit ortalama parça oranlarını kullanır. Az gözlenebilir özellikli sentetik süreç için açıklanabilir doğrusal yaklaşım seçildi; ilave karmaşık model eklenmedi.
+## Yöntem, sonuçlar ve terfi sınırı
 
-Her hedef `parça_kg / giriş_kg` oranıdır. Negatif oranlar sıfırlanır; oranların toplamı 1'den büyükse hepsi toplamlarına bölünür. Ağırlıkla çarpıldıktan sonra API parça kg'larını 6 ondalıkta aşağı yuvarlar; toplam ve farkı Decimal ile bu yayımlanmış parçalardan türetir. Böylece **yayımlanmış parçalar toplamı ≤ giriş kg**, toplam+fark=giriş kg kalır. Sıfır/negatif/NaN/sonsuz girdi reddedilir; sonlu olmayan model sonucu 503 olur. Projeksiyon güven aralığı veya doğru tahmin garantisi değildir.
+Train-only DictVectorizer + StandardScaler + Ridge, alpha **0.1**. Alpha yalnız validation'da seçildi; test model seçimi veya fit için kullanılmadı. Baseline train ortalama oranıdır. JSON formatı avatar-linear-json-v1, özellik şeması preprocess-v1 korunur; yeni veri/model sürümü v2’dir.
 
-`predicted_difference_kg` giriş eksi tahmini parça toplamıdır. Bunun fire, yan ürün veya ölçüm farkı olduğu model tarafından sınıflandırılmaz. Gerçek kapanış her zamanki kesin miktar ve açıklamayı ister; tahmin hiçbir stok/lot/maliyet kaydı oluşturmaz.
+V2 geniş sentetik validation kapısı geçti. Ancak eski sabit v1 testinde gerileme vardır; v2’nin her hedefte genel iyileşme olduğu iddia edilmez. [Değerlendirme raporu](EVALUATION_REPORT.md) aynı satırlarda v1/baseline/v2 karşılaştırmasını, eski testteki gerilemeyi ve hedef/birim bazında MAE/RMSE’yi verir. Gerçek işletme başarımı veya istatistiksel anlamlılık kanıtlanmadı.
 
-## Test hatası (n=120, sentetik)
+| V2 test hedefi | Birim | n | Baseline MAE / RMSE | V2 MAE / RMSE |
+| --- | --- | --- | --- | --- |
+| But | kg | 600 | 0.270001 / 0.434086 | 0.129030 / 0.190670 |
+| Omuz | kg | 600 | 0.149168 / 0.231549 | 0.130913 / 0.194764 |
+| Sırt | kg | 600 | 0.197052 / 0.307690 | 0.128628 / 0.188049 |
+| Kaburga | kg | 600 | 0.181591 / 0.279620 | 0.134647 / 0.200164 |
+| Kıyma | kg | 600 | 0.167165 / 0.258174 | 0.137021 / 0.199011 |
+| Parça toplamı | kg | 600 | 0.443031 / 0.692119 | 0.285940 / 0.434307 |
+| Açıklanması gereken fark | kg | 600 | 0.443031 / 0.692119 | 0.285940 / 0.434307 |
+| Verim | ratio | 600 | 0.011987 / 0.014820 | 0.008536 / 0.010819 |
 
-| Hedef | Birim | Baseline MAE / RMSE | Ridge MAE / RMSE |
-| --- | --- | --- | --- |
-| But | kg | 0,155579 / 0,187893 | 0,086635 / 0,108347 |
-| Omuz | kg | 0,105016 / 0,127399 | 0,100124 / 0,121375 |
-| Sırt | kg | 0,123697 / 0,157380 | 0,102090 / 0,127824 |
-| Kaburga | kg | 0,089872 / 0,114425 | 0,084369 / 0,107190 |
-| Kıyma | kg | 0,106808 / 0,137902 | 0,098550 / 0,128122 |
-| Toplam | kg | 0,254808 / 0,333909 | 0,210162 / 0,265058 |
-| Açıklanması beklenen fark | kg | 0,254808 / 0,333909 | 0,210162 / 0,265058 |
-| Verim | kg/kg | 0,009108 / 0,011433 | 0,007436 / 0,009053 |
+## Güvenlik ve bilimsel sınırlamalar
 
-Omuz/kaburga/kıyma iyileşmeleri küçüktür; gözlenmeyen süreç farkları tek ağırlık özelliğinden öğrenilemez. Yalnız bu sentetik ayrımda tüm hedefler baseline'dan iyi çıktı; istatistiksel anlamlılık, gerçek işletme başarımı veya yeni reçete performansı gösterilmedi.
+Doğrulanmış JSON + SHA256 yüklenir; pickle/joblib çalıştırılmaz. SHA bütünlük kontrolüdür, yayıncı imzası değildir. V2’de giriş dışı alanlar açıklamalı 422, sonlu olmayan/fiziksel olarak geçersiz model çıktısı 503; sessiz girdi/çıktı kırpması yoktur. Eksik/bozuk modelde sahte fallback yoktur. Worker ilk başarılı yüklemeyi cache’ler; incelenmiş çift dağıtımından sonra yeniden başlatılmalıdır.
 
-## 25 kg demo
-
-| Parça | Tahmin kg | Gerçek ledger'a girilen **kurgusal demo** kg |
-| --- | --- | --- |
-| But | 5,875229 | 6 |
-| Omuz | 4,025129 | 4 |
-| Sırt | 3,950854 | 4 |
-| Kaburga | 4,878152 | 5 |
-| Kıyma | 3,077829 | 3 |
-| Toplam | 21,807193 | 22 |
-| Açıklanması gereken fark | 3,192807 | 3 (kurgusal fire sınıfı) |
-
-Tahmini toplam verim **0,872288**; kurgusal gerçekleşme **0,88**. Giriş 25 kg ve alış bedeli 287,50 EUR mevcut Decimal motorunda kalır. Kesim modeli fiyat/maliyet tahmin etmez; para dağıtımı mevcut deterministik backend'dedir.
-
-Gerçek ölçümler, hayvan yaşı/cinsi/kondisyonu, operatör, anatomik sınırlar ve yan ürün özellikleri yoktur. Yeni gerçek veri sürümü ayrı değerlendirilmeden eğitim başarı iddiası kurulamaz. İzlenebilirlik/recall sonuçlarına modelden hiçbir bağımlılık eklenmedi. Kullanım ve sürümleme [README](README.md), kayıt/gerçek/sapma [INTEGRATION](INTEGRATION.md) içindedir.
+Gerçek veri, kalibre güven aralıkları, dış doğrulama, gerçek üretici geçmişi ve drift izlemesi yoktur. Kesin para/stok/recall motorları modelden bağımsızdır. Eski tahmin sonucu/sürümü DB snapshot’ında saklıdır; yeni model veya model dosyasının yokluğu geçmişi yeniden hesaplatmaz. [Entegrasyon ve geri dönüş](INTEGRATION.md).

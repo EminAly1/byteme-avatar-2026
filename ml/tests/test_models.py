@@ -31,18 +31,18 @@ def test_synthetic_seed_source_physics_and_nontrivial_targets(tmp_path):
 def test_chronological_disjoint_split_train_only_preprocessing_baseline_and_metadata(kind):
     report=json.loads((ROOT/'ml/evaluation/metrics.json').read_text())[kind]
     sets=[set(report['splits'][k]['record_ids']) for k in ('train','validation','test')]
-    assert [len(x) for x in sets]==[360,120,120]
+    assert [len(x) for x in sets]==[1800,600,600]
     assert not (sets[0]&sets[1] or sets[0]&sets[2] or sets[1]&sets[2])
     assert report['splits']['train']['last_date']<report['splits']['validation']['first_date']<report['splits']['test']['first_date']
-    assert report['test_used_for_selection'] is False and report['preprocessing_fit_rows']==360
+    assert report['test_used_for_selection'] is False and report['preprocessing_fit_rows']==1800
     doc=json.loads((ROOT/f'ml/models/{kind}.json').read_text())
     assert all(not n.startswith('actual_') for n in doc['feature_names'])
     import pandas as pd
-    frame=pd.read_csv(ROOT/f'ml/data/{kind}.csv').iloc[:360]
+    frame=pd.read_csv(ROOT/f'ml/data/{kind}.csv').iloc[:1800]
     vec=DictVectorizer(sparse=False); scaler=StandardScaler().fit(vec.fit_transform(records(frame,kind)))
     assert np.allclose(scaler.mean_,doc['mean'])
     assert doc['metadata']['feature_schema_version']=='preprocess-v1'
-    assert doc['metadata']['metrics']['splits']=={'train':360,'validation':120,'test':120}
+    assert doc['metadata']['metrics']['splits']=={'train':1800,'validation':600,'test':600}
     assert doc['metadata']['dataset_hash']==hashlib.sha256((ROOT/f'ml/data/{kind}.csv').read_bytes()).hexdigest()
     # Weak targets are retained in the report; aggregate comparison is not a cross-unit metric.
     target='predicted_finished_quantity' if kind=='production' else 'predicted_leg_kg'

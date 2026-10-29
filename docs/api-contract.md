@@ -81,3 +81,11 @@ Genel `/transfers`, müşteri `/returns`/satış iptali, rework komutu, kullanı
 [Önizleme ve kesinleştirme sözleşmesi](../backend/RECALL_SAFETY.md): web üç aşama, zorunlu gerekçe ve elle kaynak lot kodu kullanır. Backend, lot kilitleri alındıktan sonra güncel rapor izini karşılaştırır; değişen kapsam `409 RECALL_PREVIEW_STALE`, yanlış kod `409 RECALL_SOURCE_MISMATCH` döndürür. Kesin 4xx reddinden sonra yeniden inceleme gerekir. Belirsiz sonuçta özgün key/body aynen tekrar edilir; başarılı replay yeni bir blokaj işlemi değildir.
 
 Yeni iki alan opsiyonel bir çifttir; eski demo/API komutları ve kayıtlı hash'ler korunur. Alanları göndermeyen istemciler yeni inceleme izi denetimine tabi değildir. Bu uyumluluk ve X-API-Key sınırı, kullanıcı rolü veya ikinci kişi onayı olarak sunulmaz. Yeni tablo/migration ve otomatik alıcı bildirimi yoktur. Canlı `/openapi.json` yeni giriş şemasını içerir; yukarıdaki Görev 12 statik OpenAPI bağlantısı tarihsel kanıttır.
+
+## Görev 22 — AI v2 aralıkları ve hata alanları
+
+İki model 3.000'er SYNTHETIC kayıtla yeniden eğitildi; gerçek tarihsel veri 0. Aktif modelin `/v1/predictions/models` cevabı `feature_schema`, `input_constraints`, `example_inputs` ve sürüm/metrikleri verir. Web sayısal sınırları ve örnekleri buradan alır. Üretim et girdisi 5–300 kg; kesim 5–80 kg; baharat etin %1–4’ü, kılıf %2–8’i; paket 0,25–2 kg. [Tam aralık/örnekler](../ml/INTEGRATION.md).
+
+Sınır dışı istekte 422 `PREDICTION_OUT_OF_DOMAIN`, Türkçe açıklama ve `error.details.fields[]` içinde field/minimum/maximum/unit/message döner. Fiziksel olarak geçersiz v2 model çıkarımı veya bozuk/eksik artefakt 503; sessiz kırpma/fallback yoktur. JSON formatı, checksum, feature allowlist, transport şeması ve eski key/body replay korunur. Model aralıkları idempotency replay'den sonra uygulanır. GET eski tahmin sonucunu yeni modelle hesaplamaz; işlem öncesi tahmin/gerçek ürün-reçete kuralları değişmedi.
+
+V2 genel doğruluk terfisi değildir: eski sabit benchmark'ta gerileme açıkça [değerlendirme raporunda](../ml/EVALUATION_REPORT.md) gösterilir. [Kabul ve test kapsamı](AI_MODEL_V2_ACCEPTANCE.md).
