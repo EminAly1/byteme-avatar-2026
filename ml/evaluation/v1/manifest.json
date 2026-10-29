@@ -1,0 +1,14 @@
+{
+  "dataset_version": "synthetic-v1",
+  "data_origin": "SYNTHETIC",
+  "seed": 202609,
+  "count_per_model": 600,
+  "generator": "ml/data/generate.py",
+  "dataset_hashes": {
+    "production": "a27a209e395c81f5753f386707713b4b2113e54df5451dd57f9c75021566c800",
+    "cutting": "ddd7ab8f61fd22be62953a9e36d2b83fa221aab6bb5319cd3e308a1be472d701"
+  },
+  "method": "Fictional pre-process features plus independent unobserved yield/service noise; chronological dates are synthetic.",
+  "real_history_rows": 0,
+  "historical_pdf_reference_used_for_training": false
+}

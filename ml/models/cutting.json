@@ -2,27 +2,27 @@
   "artifact_format": "avatar-linear-json-v1",
   "coef": [
     [
-      0.00500918476625883,
+      0.007551876058266725,
       0.0,
       0.0
     ],
     [
-      -0.0012091942993474926,
+      -0.0026501742718408592,
       0.0,
       0.0
     ],
     [
-      0.0032554773553622554,
+      0.004820810714867397,
       0.0,
       0.0
     ],
     [
-      0.0026337969269849557,
+      0.0034412152440818473,
       0.0,
       0.0
     ],
     [
-      -0.0019768922582740016,
+      -0.0032078144576837128,
       0.0,
       0.0
     ]
@@ -34,8 +34,9 @@
   ],
   "feature_schema": {
     "input_weight_kg": {
-      "maximum": 40,
-      "minimum": 18
+      "maximum": 80,
+      "minimum": 5,
+      "unit": "kg"
     },
     "recipe_shape": {
       "categories": [
@@ -48,149 +49,155 @@
       ]
     }
   },
+  "input_constraints": [],
   "intercept": [
-    0.23849595533826365,
-    0.16016346992386626,
-    0.16030025841944984,
-    0.1969594325593886,
-    0.12173710736475217
+    0.23813939987047228,
+    0.16003093985713665,
+    0.15961844349832163,
+    0.1963530007951556,
+    0.1217495456719501
   ],
   "kind": "cutting",
   "mean": [
-    29.451562262263607,
+    33.673034535337045,
     1.0,
     1.0
   ],
   "metadata": {
     "data_origin": "SYNTHETIC",
-    "dataset_hash": "ddd7ab8f61fd22be62953a9e36d2b83fa221aab6bb5319cd3e308a1be472d701",
-    "dataset_version": "synthetic-v1",
+    "dataset_hash": "d4f63323f8a642ef310d6eb83c1742f5e748666f58ff74e2a37f6d4b7324e934",
+    "dataset_version": "synthetic-v2",
+    "example_inputs": {
+      "input_weight_kg": "25",
+      "species": "Kuzu"
+    },
     "feature_schema_version": "preprocess-v1",
     "metrics": {
       "baseline_test": {
         "predicted_back_kg": {
-          "mae": 0.12369699257829651,
-          "n": 120,
-          "rmse": 0.15738042395238452,
+          "mae": 0.19705166424212553,
+          "n": 600,
+          "rmse": 0.307689586106375,
           "unit": "kg"
         },
         "predicted_difference_kg": {
-          "mae": 0.25480773204873186,
-          "n": 120,
-          "rmse": 0.3339090549711056,
+          "mae": 0.44303101438476955,
+          "n": 600,
+          "rmse": 0.692119491602319,
           "unit": "kg"
         },
         "predicted_leg_kg": {
-          "mae": 0.1555791063060329,
-          "n": 120,
-          "rmse": 0.18789282715354527,
+          "mae": 0.27000135674415293,
+          "n": 600,
+          "rmse": 0.43408550090172787,
           "unit": "kg"
         },
         "predicted_mince_kg": {
-          "mae": 0.10680804306113768,
-          "n": 120,
-          "rmse": 0.13790158944555228,
+          "mae": 0.16716469971708828,
+          "n": 600,
+          "rmse": 0.2581735852414816,
           "unit": "kg"
         },
         "predicted_rib_kg": {
-          "mae": 0.08987151402551392,
-          "n": 120,
-          "rmse": 0.11442520989548265,
+          "mae": 0.1815906775825285,
+          "n": 600,
+          "rmse": 0.2796200855539508,
           "unit": "kg"
         },
         "predicted_shoulder_kg": {
-          "mae": 0.10501573942489878,
-          "n": 120,
-          "rmse": 0.12739855784053405,
+          "mae": 0.14916776897880885,
+          "n": 600,
+          "rmse": 0.2315485427973453,
           "unit": "kg"
         },
         "predicted_total_weight_kg": {
-          "mae": 0.25480773204873186,
-          "n": 120,
-          "rmse": 0.3339090549711056,
+          "mae": 0.44303101438476955,
+          "n": 600,
+          "rmse": 0.692119491602319,
           "unit": "kg"
         },
         "predicted_yield_ratio": {
-          "mae": 0.009107701358079019,
-          "n": 120,
-          "rmse": 0.011432849665733272,
+          "mae": 0.011986514277792161,
+          "n": 600,
+          "rmse": 0.014819828053952282,
           "unit": "ratio"
         }
       },
       "ridge_test": {
         "predicted_back_kg": {
-          "mae": 0.10209001000035907,
-          "n": 120,
-          "rmse": 0.1278244839842538,
+          "mae": 0.1286279500663565,
+          "n": 600,
+          "rmse": 0.1880491019673051,
           "unit": "kg"
         },
         "predicted_difference_kg": {
-          "mae": 0.21016155506714715,
-          "n": 120,
-          "rmse": 0.2650582371400339,
+          "mae": 0.2859404202037892,
+          "n": 600,
+          "rmse": 0.43430720051932,
           "unit": "kg"
         },
         "predicted_leg_kg": {
-          "mae": 0.08663537335663114,
-          "n": 120,
-          "rmse": 0.10834671230698671,
+          "mae": 0.1290300511872679,
+          "n": 600,
+          "rmse": 0.19067048089365546,
           "unit": "kg"
         },
         "predicted_mince_kg": {
-          "mae": 0.09854999040629644,
-          "n": 120,
-          "rmse": 0.12812168121229123,
+          "mae": 0.13702107938889796,
+          "n": 600,
+          "rmse": 0.1990114456670437,
           "unit": "kg"
         },
         "predicted_rib_kg": {
-          "mae": 0.08436943810272789,
-          "n": 120,
-          "rmse": 0.10719029306651638,
+          "mae": 0.13464701485256783,
+          "n": 600,
+          "rmse": 0.20016383939477145,
           "unit": "kg"
         },
         "predicted_shoulder_kg": {
-          "mae": 0.10012382718867482,
-          "n": 120,
-          "rmse": 0.12137540555431023,
+          "mae": 0.1309127861416463,
+          "n": 600,
+          "rmse": 0.19476423389854464,
           "unit": "kg"
         },
         "predicted_total_weight_kg": {
-          "mae": 0.21016155506714715,
-          "n": 120,
-          "rmse": 0.2650582371400339,
+          "mae": 0.2859404202037892,
+          "n": 600,
+          "rmse": 0.43430720051932,
           "unit": "kg"
         },
         "predicted_yield_ratio": {
-          "mae": 0.00743638346949424,
-          "n": 120,
-          "rmse": 0.009053058477815087,
+          "mae": 0.00853581676748445,
+          "n": 600,
+          "rmse": 0.010819108597291644,
           "unit": "ratio"
         }
       },
       "splits": {
-        "test": 120,
-        "train": 360,
-        "validation": 120
+        "test": 600,
+        "train": 1800,
+        "validation": 600
       }
     },
-    "model_version": "cutting-ridge-v1-ddd7ab8f61fd",
-    "trained_at": "2026-10-25T08:18:55.209085+00:00",
+    "model_version": "cutting-ridge-v2-d4f63323f8a6",
+    "prediction_policy": "reject_invalid_physics_v2",
+    "trained_at": "2026-10-29T00:00:00+00:00",
     "training_configuration": {
       "algorithm": "Ridge",
       "alpha": 0.1,
       "alpha_grid": [
         0.1,
-        1,
-        10
+        1.0,
+        10.0
       ],
       "fit": "train only; no refit after selection",
       "numpy": "2.2.6",
       "pandas": "2.2.3",
-      "projection": "production ratios bounded; cutting nonnegative then radial projection to simplex sum<=1",
+      "projection": "v2 inference rejects physically invalid raw outputs; no silent clipping",
       "python": "3.12.14",
-      "seed": 202609,
+      "seed": 20261029,
       "sklearn": "1.6.1",
-      "split": "chronological 60/20/20",
+      "split": "chronological 60/20/20; independent synthetic records; no shared process across splits",
       "targets": [
         "leg_ratio",
         "shoulder_ratio",
@@ -201,7 +208,7 @@
     }
   },
   "scale": [
-    6.3952185643016985,
+    21.647024642008603,
     1.0,
     1.0
   ]

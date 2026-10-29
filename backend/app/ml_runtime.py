@@ -24,6 +24,21 @@ class ModelUnavailable(ValueError):
     pass
 
 
+LABELS = {
+    'meat_kg': 'Planlanan et', 'spice_kg': 'Planlanan baharat', 'casing_kg': 'Planlanan kılıf',
+    'meat_cost_eur': 'Bilinen et maliyeti', 'spice_cost_eur': 'Bilinen baharat maliyeti',
+    'casing_cost_eur': 'Bilinen kılıf maliyeti', 'package_weight_kg': 'Paket ağırlığı',
+    'estimated_service_eur': 'Hizmet ön teklifi', 'input_weight_kg': 'Kesim giriş ağırlığı',
+    'meat_type': 'Et türü', 'planned_producer_profile': 'Sentetik üretici profili',
+}
+
+
+class PredictionOutOfDomain(ValueError):
+    def __init__(self, fields):
+        self.fields = fields
+        super().__init__('; '.join(row['message'] for row in fields))
+
+
 def finite(values):
     if not all(isinstance(x,Real) and not isinstance(x,bool) and math.isfinite(x) for x in values):
         raise ModelUnavailable('Non-finite model value')
@@ -67,7 +82,21 @@ class PortableModel:
                 raise ValueError('Training timestamp must have timezone')
             for required in ('dataset_version','training_configuration','metrics'):
                 if not meta[required]: raise ValueError('Missing metadata')
+            policy = meta.get('prediction_policy')
+            if policy not in (None, 'reject_invalid_physics_v2') or (meta['dataset_version'] == 'synthetic-v2' and policy is None):
+                raise ValueError('Unsupported prediction policy')
             if set(schema) != set(FEATURES[kind]): raise ValueError('Feature mismatch')
+            if len(document.get('input_constraints', [])) > 16:
+                raise ValueError('Too many input constraints')
+            for constraint in document.get('input_constraints', []):
+                if (constraint['type'] != 'ratio' or constraint['field'] not in schema
+                    or constraint['relative_to'] not in schema
+                    or any('minimum' not in schema[k] for k in (constraint['field'], constraint['relative_to']))
+                    or schema[constraint['relative_to']]['minimum'] <= 0):
+                    raise ValueError('Invalid input constraint')
+                finite([constraint['minimum'], constraint['maximum']])
+                if not 0 < constraint['minimum'] <= constraint['maximum'] <= 1:
+                    raise ValueError('Invalid ratio range')
             expected_names=[]
             for name,spec in schema.items():
                 if not isinstance(spec,dict):raise ValueError('Invalid feature schema')
@@ -98,13 +127,29 @@ class PortableModel:
     def predict(self, features):
         doc=self.document
         if set(features)!=set(FEATURES[self.kind]): raise ValueError('Feature schema mismatch')
+        problems = []
         for name, spec in doc['feature_schema'].items():
             val=features[name]
+            label = LABELS.get(name, name)
             if 'categories' in spec:
-                if val not in spec['categories']: raise ValueError('Unsupported category: '+name)
+                if val not in spec['categories']:
+                    problems.append({'field': name, 'categories': spec['categories'],
+                        'message': label + ': desteklenen değerlerden birini seçin.'})
             else:
-                if not math.isfinite(float(val)) or not spec['minimum'] <= val <= spec['maximum']:
-                    raise ValueError('Outside training domain: '+name)
+                if (not isinstance(val, Real) or isinstance(val, bool) or not math.isfinite(float(val))
+                    or not spec['minimum'] <= val <= spec['maximum']):
+                    lo, hi = spec['minimum'], spec['maximum']
+                    problems.append({'field': name, 'minimum': lo, 'maximum': hi, 'unit': spec.get('unit', ''),
+                        'message': f'{label}: {lo:g}–{hi:g} {spec.get("unit", "")} sentetik model aralığında sonlu bir değer girin.'})
+        if not problems:
+            for c in doc.get('input_constraints', []):
+                lo, hi = features[c['relative_to']]*c['minimum'], features[c['relative_to']]*c['maximum']
+                if not lo-1e-9 <= features[c['field']] <= hi+1e-9:
+                    problems.append({'field': c['field'], 'minimum': lo, 'maximum': hi, 'unit': 'kg',
+                        'relative_to': c['relative_to'],
+                        'message': f'{LABELS[c["field"]]}: seçili et miktarı için {lo:g}–{hi:g} kg destekleniyor.'})
+        if problems:
+            raise PredictionOutOfDomain(problems)
         vector=[]
         for name in doc['feature_names']:
             if '=' in name:
@@ -112,6 +157,11 @@ class PortableModel:
             else: vector.append(float(features[name]))
         z=[(v-m)/s for v,m,s in zip(vector,doc['mean'],doc['scale'])]
         raw=[sum(c*x for c,x in zip(coef,z))+b for coef,b in zip(doc['coef'],doc['intercept'])]
+        if doc['metadata'].get('prediction_policy') == 'reject_invalid_physics_v2':
+            finite(raw)
+            valid = (0 < raw[0] <= 1 and 0 < raw[1] <= 3) if self.kind == 'production' else (all(x > 0 for x in raw) and sum(raw) <= 1)
+            if not valid:
+                raise ModelUnavailable('Model violated physical prediction bounds; no silent clipping')
         return outputs(self.kind,features,raw)
 
 

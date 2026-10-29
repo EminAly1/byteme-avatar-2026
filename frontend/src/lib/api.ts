@@ -6,6 +6,7 @@ export class ApiError extends Error {
     public code: string,
     message: string,
     public uncertain = false,
+    public fieldErrors: Array<{ field: string; message: string }> = [],
   ) {
     super(message);
   }
@@ -115,6 +116,9 @@ export async function request<T>(
   }
   const body = await response.json().catch(() => null);
   if (!response.ok) {
+    const fieldErrors = Array.isArray(body?.error?.details?.fields)
+      ? body.error.details.fields.filter((x: { field?: unknown; message?: unknown }) => typeof x.field === "string" && typeof x.message === "string")
+      : [];
     const details = Array.isArray(body?.detail)
       ? body.detail
           .map((x: { loc?: Array<string | number> }) =>
@@ -132,8 +136,9 @@ export async function request<T>(
     throw new ApiError(
       response.status,
       body?.error?.code || "HTTP_ERROR",
-      `${domainMessages[body?.error?.code] || (messages[response.status] || "İstek tamamlanamadı.") + (body?.error?.message ? " " + body.error.message : "")}${details ? " Alanlar: " + details : ""}`,
+      `${fieldErrors.length ? body.error.message : domainMessages[body?.error?.code] || (messages[response.status] || "İstek tamamlanamadı.") + (body?.error?.message ? " " + body.error.message : "")}${details ? " Alanlar: " + details : ""}`,
       response.status >= 500,
+      fieldErrors,
     );
   }
   if (body === null)

@@ -26,7 +26,7 @@ flowchart LR
 | backend/ | REST, Alembic, transaction/satır kilidi/idempotency, Decimal maliyet, satış/sevkiyat, cutting, trace/recall, tahmin/gerçekleşme, salt-okunur kârlılık |
 | frontend/ | Türkçe responsive premium panel; alış, üretim, kesim, satış/sevkiyat, lot, recall ve AI; anahtar yalnız Node proxy'sinde |
 | android/ | Kotlin/Compose/Room/Retrofit; lot satışı, offline taslak, değişmez key/body outbox, gerçek server onayı/çatışma, runtime Keystore |
-| ml/ | 600'er SYNTHETIC kayıt, iki Ridge modeli, baseline/MAE/RMSE/model kartları; API çıkarımı standart Python JSON ile |
+| ml/ | 3.000'er SYNTHETIC kayıt, iki Ridge v2 modeli, baseline/MAE/RMSE/model kartları; API çıkarımı standart Python JSON ile |
 | database/, tests/ | Migration/defter/yarış testleri ve tarihsel doğrulama raporları |
 | docs/, tools/ | Kaynak PDF, güncel model/API, release kanıtları ve tekrar üretme araçları |
 
@@ -147,7 +147,7 @@ cd android
 
 Güncel host kabulü 16 farklı testin debug+release toplam **32** yürütümü, 0 hata/skip; lint 0 issue ve debug APK hazır. API 28 dört cihaz testini geçti. API 35 sıcak tekrarı üç geçti/bir offline timeout verdi; tam API 35 kabulü yoktur. Fiziksel telefon ve HTTPS üzerinden cihaz bağlantısı test edilmedi. API 28/API 35'in güncel sonucu release raporundadır; eski Android VALIDATION.md tarihsel rapordur. API anahtarı APK/BuildConfig'e gömülmez; runtime bağlantı ekranı/özel test fixture'ı ve Keystore kullanılır.
 
-İki ML modeli 600'er **SYNTHETIC**, gerçek tarihsel kayıt **0**. [Yöntem ve MAE/RMSE](ml/EVALUATION_REPORT.md), [model kartları](ml/README.md), [güncel tekrar üretim kanıtı](docs/release-validation/ml-reproducibility.json). Yeni eğitimi çalışan modelin üstüne yazmadan ayrı dizinde yapın; runbook'ta test edilen komut vardır. Tahmin doğruluğu gerçek işletme başarımı olarak sunulmaz.
+İki ML modeli 3.000'er **SYNTHETIC** kayıtla v2 olarak eğitildi; gerçek tarihsel kayıt **0**. Üretim 5–300 kg, kuzu kesim 5–80 kg destekler. Eski sabit testte gerileme vardır; genel gerçek doğruluk artışı iddiası yoktur. [V2 kabulü](docs/AI_MODEL_V2_ACCEPTANCE.md), [aynı popülasyonda MAE/RMSE karşılaştırmaları](ml/EVALUATION_REPORT.md), [model kartları ve tekrar üretim](ml/README.md). [Eski tekrar üretim kanıtı](docs/release-validation/ml-reproducibility.json) v1 içindir. Yeni eğitimi çalışan modelin üstüne yazmadan ayrı dizinde yapın; runbook'ta test edilen komut vardır. Tahmin doğruluğu gerçek işletme başarımı olarak sunulmaz.
 
 ## Açık teslim kapsamı
 

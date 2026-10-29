@@ -14,6 +14,7 @@ import {
   stock,
   prefix,
 } from "./fixtures";
+import { displayDecimal } from "../../src/lib/presentation";
 import type {
   Cutting,
   Recipe,
@@ -487,8 +488,8 @@ test("üretim ML UI: gerçek forecast UUID → kapanış sonrası 85 paket ve De
   await page.getByRole("button", { name: "Yenile", exact: true }).click();
   const row = page
     .getByRole("row")
-    .filter({ hasText: "Mamul miktarı" })
-    .filter({ hasText: "86," });
+    .filter({ hasText: "Mamul miktarı" });
+  await expect(row.getByRole("cell", { name: displayDecimal(prediction.predicted_finished_quantity!) + " paket", exact: true })).toBeVisible();
   await expect(
     row.getByRole("cell", { name: "85 paket", exact: true }),
   ).toBeVisible();

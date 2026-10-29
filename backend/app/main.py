@@ -43,7 +43,7 @@ def readiness() -> dict[str, str]:
 
 @app.exception_handler(DomainError)
 async def domain_error(request, exc):
-    return JSONResponse(status_code=exc.status, content={"error": {"code": exc.code, "message": exc.message, "details": {}}})
+    return JSONResponse(status_code=exc.status, content={"error": {"code": exc.code, "message": exc.message, "details": exc.details}})
 
 
 @app.exception_handler(SQLAlchemyError)

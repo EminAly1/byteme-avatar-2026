@@ -190,6 +190,9 @@ export interface ModelInfo {
   data_origin: string;
   dataset_version: string;
   feature_schema_version: string;
+  feature_schema: Record<string, { minimum?: number; maximum?: number; unit?: string; categories?: string[] }>;
+  input_constraints?: Array<{ type: "ratio"; field: string; relative_to: string; minimum: number; maximum: number }>;
+  example_inputs?: Record<string, string>;
   prediction_limitations: string[];
   metrics: {
     baseline_test: Record<string, Metric>;

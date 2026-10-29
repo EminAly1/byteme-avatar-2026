@@ -7,6 +7,7 @@ import {
   type DefaultValues,
   type FieldValues,
   type Resolver,
+  type Path,
 } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { z } from "zod";
@@ -58,6 +59,11 @@ export function CommandForm<T extends FieldValues>({
       onSuccess?.(data);
     },
     onError: (error) => {
+      if (error instanceof ApiError) {
+        for (const field of error.fieldErrors) {
+          form.setError(field.field as Path<T>, { type: "server", message: field.message });
+        }
+      }
       const unknown = error instanceof ApiError && error.uncertain;
       setUncertain(unknown);
       if (!unknown) {
@@ -149,12 +155,14 @@ export function Field({
   type = "text",
   children,
   hint,
+  placeholder,
 }: {
   name: string;
   label: string;
   type?: string;
   children?: ReactNode;
   hint?: string;
+  placeholder?: string;
 }) {
   const {
     register,
@@ -180,13 +188,14 @@ export function Field({
           type={type === "decimal" ? "text" : type}
           {...register(name)}
           autoComplete="off"
+          placeholder={placeholder}
           step={type === "datetime-local" ? "any" : undefined}
           inputMode={type === "decimal" ? "decimal" : undefined}
           aria-invalid={!!error}
-          aria-describedby={error ? id + "-error" : undefined}
+          aria-describedby={[hint && id + "-hint", error && id + "-error"].filter(Boolean).join(" ") || undefined}
         />
       )}
-      {hint && <small>{hint}</small>}
+      {hint && <small id={id + "-hint"}>{hint}</small>}
       {error && (
         <small id={id + "-error"} className="field-error">
           {error}

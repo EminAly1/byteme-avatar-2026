@@ -1,57 +1,42 @@
-# Zorunlu ML — üretim ve kuzu parçalama
+# Zorunlu AI — üretim/EKP ve kuzu parçalama v2
 
-İki Ridge regresyonu gerçekten eğitildi, kronolojik ayrı testte değerlendirildi ve mevcut FastAPI/MySQL uygulamasından çağrıldı. **Verinin tamamı SYNTHETIC**; gerçek işletme başarımı henüz ölçülmedi. Bu katman yalnız karar desteğidir.
+İki Ridge modeli yeniden eğitildi. **Her model 3.000, toplam 6.000 SYNTHETIC kayıt; gerçek tarihsel satır 0.** Bu modeller karar desteğidir; kesin stok, satış, maliyet veya lot ilişkisi oluşturmaz.
 
-Görev 09 başlangıcı `4951281` (main, PR #1–#12 normal merge geçmişte mevcut). GitHub REST/GraphQL durum sorguları 403 verdi; Git geçmişi doğrudan incelendi. `AGENTS.md`, üç sayfalık PDF, varsayımlar, checklist, backend/kesim sözleşmeleri okundu. Bu görevin sahipliği `ml/`, `backend/`, `tests/`; Android, React ve ortak checklist değiştirilmedi.
+## Tekrar üretme
 
-## Kurulum ve tekrar üretme
-
-Depo kökünde Python **3.12**:
+Repo kökünde Python 3.12 ve pinli bağımlılıklar:
 
 ```bash
 python3.12 -m venv backend/.venv
 backend/.venv/bin/python -m pip install -r backend/requirements-dev.txt -r ml/requirements.txt
-backend/.venv/bin/python -m ml.training.train
+backend/.venv/bin/python -m ml.training.train \
+  --seed 20261029 --count 3000 --trained-at 2026-10-29T00:00:00+00:00
 backend/.venv/bin/python -m ml.scripts.predict_examples
 backend/.venv/bin/python -m pytest ml/tests -q
 ```
 
-`train`, seed **202609** ile CSV/manifest dosyalarını tekrar üretir; train/validation/test=**360/120/120**, her model için **600**, toplam **1.200** sentetik kayıt. İstenirse `--data`, `--models`, `--evaluation` ile ayrı çıktı dizinleri ve tam artifact byte tekrar üretimi için `--trained-at` sabit UTC zaman damgası verilir. Mevcut modele yazma offline bir dağıtım adımıdır; çalışan API'nin modelini değiştirmek için incelenmiş artifact çiftlerini atomik yerleştirin ve API sürecini yeniden başlatın. API hiçbir istekte eğitim yapmaz.
+Eğitim offline çalışır; API istekleri eğitim yapmaz. `--data`, `--models`, `--evaluation` ayrı çıktı dizinleri alır. Varsayılanlar depodaki v2 dosyalarını yeniler; çalışan worker'ın cache'i kendiliğinden yenilenmez. Sabit veri/seed/ortam/zaman aynı JSON ve SHA256 dosyalarını üretir. Gerçek özel veri repo dışında veya ignored `ml/artifacts/` altında tutulmalı; bu sentetik veri havuzuna eklenmemelidir.
 
-Yalnız eğitim pandas/NumPy/scikit-learn gerektirir. API çıkarımı standart Python ile JSON katsayılarını kullanır; sklearn veya pickle/joblib yüklemez. İki model toplam yaklaşık **10 KB** JSON'dur. Büyük/özel veri `ml/private/` veya ignored `ml/artifacts/` altında tutulmalıdır; gerçek veriyi bu sentetik havuza eklemek v1 kapsamında değildir.
+API çıkarımı sklearn/pandas gerektirmez: sınırlı boyutlu, doğrulanmış JSON katsayıları standart Python ile yüklenir. Dockerfile güncel iki JSON/sha256 çiftini imaja kopyalar; Compose `AVATAR_ML_MODEL_DIR=/app/ml/models` ayarlar. Ayrıntılar [INTEGRATION](INTEGRATION.md).
 
-## Veri ve yöntem
+## Kapsam, veri ve seçim
 
-Depoda tarihsel ölçüm veri seti yoktur: tek PDF örneği ile kurgusal demo/test kayıtları istatistiksel geçmiş kabul edilmedi. Dış bir işletme veritabanı erişilmedi/örneklenmedi. [Üretici](data/generate.py), [manifest ve SHA-256](data/manifest.json), [üretim CSV](data/production.csv), [kesim CSV](data/cutting.csv) kaynak ve üretim yöntemini açıklar. Tarihler dahi sentetiktir; kronolojik ayrım gerçek mevsimsellik kanıtı değildir. PDF'nin 85 paket/18,16 EUR ve kurgusal 6/4/4/5/3 kg kesim örneği eğitim satırı olarak kullanılmadı.
+- Üretim: **5–300 kg et**, iki et türü, üç **kurgusal** üretici profili, **0,25–2 kg/paket**, farklı malzeme fiyatları ve hizmet ön teklifleri. Baharat etin %1–4’ü; kılıf %2–8’i. [Tam sınırlar ve model kartı](MODEL_CARD_PRODUCTION.md).
+- Kesim: **5–80 kg**, yalnız Kuzu ve beş pozitif parça; toplam giriş miktarını aşmaz. [Model kartı](MODEL_CARD_CUTTING.md).
+- Her model 1.800 train / 600 validation / 600 test. Tarihler, profiller ve süreç etkileri kurgusaldır; aynı işlem farklı splitlere bölünmez. [Manifest](data/manifest.json), [üretici](data/generate.py), [eğitim](training/train.py).
+- Ön işleme yalnız train'e fit edilir. Alpha 0,1/1/10 yalnız validation'da seçilir; test seçime veya fit'e katılmaz. Üretim alpha=1, kesim alpha=0,1. Kabul kapısı validation'da train-mean baseline'dan düşük normalize RMSE'dir.
 
-Her satır bağımsız bir kurgusal işlem grubudur; aynı işlem train/test'e bölünmez. Özellikler allowlist ile seçilir, `actual_*` hedefleri girdi olamaz. DictVectorizer ve StandardScaler yalnız ilk 360 satıra fit edilir. Ridge alpha=0.1/1/10 seçimi sonraki 120 validation satırında yapılır; son 120 test satırı seçimde kullanılmaz. Validation sonrasında yeniden fit yapılmaz. Referans yöntem training'deki ortalama verim/hizmet sapması veya parça oranıdır. Test metrikleri üretimde kullanılan fiziksel kısıtlamadan sonra hesaplanır; JSON çıkarımının sklearn çıktısıyla eşitliği eğitimde test edilir.
+**V2 her hedefte iyileşme değildir.** Eski sabit v1 testinde gerileme vardır; yeni ortak kapsamda da üretim toplam maliyet RMSE'si biraz kötüdür. V2 genişletilmiş sentetik prototip için etkinleştirildi; genel gerçek doğruluk artışı veya üretim terfisi onaylanmadı. Aynı satırlarda üç yöntem ve farklı test popülasyonları [değerlendirme raporunda](EVALUATION_REPORT.md) ayrı gösterilir. Test sonucunu iyileştirmek için simülatör/hedef/alpha yeniden ayarlanmadı.
 
-A: işlem öncesi kg, bilinen alış maliyetleri, sentetik üretici profili, et türü, paket ağırlığı ve ön tekliften **üretim verimi ve hizmet bedeli çarpanı** öğrenilir. Beklenen paket sayısı öğrenilmiş verimden; EKP ise bilinen malzeme + tahmini hizmet toplamının tahmini paket sayısına bölümünden gelir. Muhasebeleşmiş toplam/çıktı/firenin girdiye sızması yoktur.
+## Tahmin ekranı ve güvenli kullanım
 
-B: Kuzu, giriş kg ve beş parçalı reçete şekliyle **beş parça oranı** öğrenilir. Tür/şekil bu veri setinde sabittir; diğer türler/reçete şekilleri için başarı iddiası yoktur. Gerçek `recipe_version_id` ve parça ürün UUID eşlemesi API'de doğrulanıp kayda alınır; sürümün kendisine eğitimde ölçülmemiş etki atfedilmez. Sonuçlar negatif olmayan ve toplamı giriş kg'yi aşmayan alana projekte edilir. Açıklanması beklenen fark matematiksel kalandır; otomatik fire sınıfı değildir.
+`/yapay-zeka` üretim/EKP ve kuzu parçalama formlarını içerir. Aralık/yardım metni/alan doğrulaması ve sayısal örnekler `/v1/predictions/models` metadata'sından gelir. Örnek düğmeleri gerçek ürün/reçete UUID'si uydurmaz; kesimde kullanıcı beş gerçek ürünü seçer. İşleme bağlı tahmin yalnız başlamadan kaydedilir. Model sonucu, tarihi, sürümü, SYNTHETIC etiketi ve kesin gerçekleşme/sapma ayrı gösterilir.
 
-## Kullanım ve kanıt
+Kayıtlı tahmin GET'i mevcut modeli çağırmaz. Yeni model veya dosyasının yokluğu eski sonucu değiştirmez. Aynı scope/key/body orijinal cevabı döndürür; belirsiz yanıtta yeni key üretilmez. Sınır dışı/fiziksel olarak olanaksız girişler reddedilir. V2 fiziksel olarak geçersiz ham çıkarımı sessizce kırpıp güvenilir tahmin diye yayımlamaz.
 
-- [Üretim model kartı](MODEL_CARD_PRODUCTION.md)
-- [Parçalama model kartı](MODEL_CARD_CUTTING.md)
-- [Ayrı test metrikleri ve zayıf sonuçlar](EVALUATION_REPORT.md)
-- [FastAPI, kayıt/sapma, Docker mount ve gerçek demo](INTEGRATION.md)
-- [Makine okunur metrikler](evaluation/metrics.json), [gerçek HTTP demo sonuçları](reports/demo.json)
-- [Test çıktısı](reports/full-tests.txt), [doğrulama özeti](reports/validation.json)
+- [Model v2 kabulü ve test kanıtları](../docs/AI_MODEL_V2_ACCEPTANCE.md)
+- [Makine okunur metrikler / ayrık ID'ler](evaluation/metrics.json)
+- [Korunan v1 artefaktları / 600 satırlık eski manifest / 120+120 sabit test](evaluation/v1/)
+- [Tarihsel Görev 09 testleri](reports/full-tests.txt) ve [eski demo](reports/demo.json): v1 kanıtıdır; v2 sonucu olarak kullanılmaz.
 
-API: `POST /v1/predictions/production`, `POST /v1/predictions/cutting`, `GET /v1/predictions/models`, `GET /v1/predictions/{id}`. Mevcut X-API-Key ve UUID Idempotency-Key sözleşmeleri korunur. İlk üç POST/GET akışı gerçek HTTP ile denendi. Backend migration head: `dc9109a1f001`; yeni tek tablo `prediction_records`. Ledger, lot ve recall algoritmaları değiştirilmedi.
-
-**Sonuç:** başlangıçtaki 131 test geçti; ek 31 backend/MySQL testi ve 19 model testiyle **181 geçti, 0 başarısız, 0 atlanan**. Gerçek HTTP demo ayrı `avatar_ml_demo_test`, yıkıcı testler `avatar_ml_core_test`/`avatar_migration_test` kullandı. Test verileri işletme verilerinden ayrıdır. Üretim UI entegrasyonu, gerçek veriyle eğitim ve kalibre belirsizlik aralıkları henüz yoktur.
-
-## Entegrasyon sorumlusuna checklist devri
-
-| Görev | Bu branch'teki gerçek kapsam | Önerilen durum |
-| --- | --- | --- |
-| ML-01 | A eğitimi, tahmin, API ve 85 paket gerçekleşmeyle sapma kanıtı | Tamamlandı — sentetik prototip |
-| ML-02 | B eğitimi, fiziksel sınırlar, reçete UUID eşlemesi ve gerçekleşmeyle sapma | Tamamlandı — Kuzu/beş parça sentetik prototipi |
-| ML-03 | SYNTHETIC veri/seed/hash/manifest; gerçek geçmiş 0 | Tamamlandı — gerçek veri edinimi ayrıca gerekli |
-| ML-04 | Baseline, kronolojik ayrı test, hedef başına MAE/RMSE ve sürüm | Tamamlandı — sentetik değerlendirme |
-| ML-05 | Değişmez kayıt, gerçek/sapma API'si tamam; React karşılaştırma ekranı geliştirilmedi | Devam ediyor |
-| ML-06 | Operasyonel kayıt ayrımı, recall engeli, eski model sürümü ve 131 regresyon testi | Tamamlandı — test edilen prototip kapsamı |
-
-Ortak `docs/PROJECT_CHECKLIST.md` değiştirilmedi. Bu durumlar main birleşimi veya tüm yarışma tesliminin tamamlandığı anlamına gelmez.
+Ortak checklist, Android, belge merkezi/PDF, geri çağırma kodu ve genel tema bu görevde değiştirilmedi. Gerçek işletme verisi, kalibre belirsizlik ve dış doğrulama hâlâ gereklidir.

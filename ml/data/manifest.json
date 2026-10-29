@@ -1,14 +1,149 @@
 {
-  "dataset_version": "synthetic-v1",
+  "dataset_version": "synthetic-v2",
   "data_origin": "SYNTHETIC",
-  "seed": 202609,
-  "count_per_model": 600,
+  "seed": 20261029,
+  "count_per_model": 3000,
   "generator": "ml/data/generate.py",
   "dataset_hashes": {
-    "production": "a27a209e395c81f5753f386707713b4b2113e54df5451dd57f9c75021566c800",
-    "cutting": "ddd7ab8f61fd22be62953a9e36d2b83fa221aab6bb5319cd3e308a1be472d701"
+    "production": "a21520e1f03f418f41eea452f3d4d75eca9dde71e2b63d251518f34189929669",
+    "cutting": "d4f63323f8a642ef310d6eb83c1742f5e748666f58ff74e2a37f6d4b7324e934"
   },
-  "method": "Fictional pre-process features plus independent unobserved yield/service noise; chronological dates are synthetic.",
+  "feature_schema": {
+    "production": {
+      "meat_type": {
+        "categories": [
+          "beef",
+          "lamb"
+        ]
+      },
+      "planned_producer_profile": {
+        "categories": [
+          "producer_a",
+          "producer_b",
+          "producer_c"
+        ]
+      },
+      "meat_kg": {
+        "minimum": 5,
+        "maximum": 300,
+        "unit": "kg"
+      },
+      "spice_kg": {
+        "minimum": 0.05,
+        "maximum": 12,
+        "unit": "kg"
+      },
+      "casing_kg": {
+        "minimum": 0.1,
+        "maximum": 24,
+        "unit": "kg"
+      },
+      "meat_cost_eur": {
+        "minimum": 0,
+        "maximum": 6000,
+        "unit": "EUR"
+      },
+      "spice_cost_eur": {
+        "minimum": 0,
+        "maximum": 480,
+        "unit": "EUR"
+      },
+      "casing_cost_eur": {
+        "minimum": 0,
+        "maximum": 720,
+        "unit": "EUR"
+      },
+      "package_weight_kg": {
+        "minimum": 0.25,
+        "maximum": 2,
+        "unit": "kg/package"
+      },
+      "estimated_service_eur": {
+        "minimum": 0,
+        "maximum": 2400,
+        "unit": "EUR"
+      }
+    },
+    "cutting": {
+      "species": {
+        "categories": [
+          "Kuzu"
+        ]
+      },
+      "recipe_shape": {
+        "categories": [
+          "five_parts_v1"
+        ]
+      },
+      "input_weight_kg": {
+        "minimum": 5,
+        "maximum": 80,
+        "unit": "kg"
+      }
+    }
+  },
+  "input_constraints": {
+    "production": [
+      {
+        "type": "ratio",
+        "field": "spice_kg",
+        "relative_to": "meat_kg",
+        "minimum": 0.01,
+        "maximum": 0.04
+      },
+      {
+        "type": "ratio",
+        "field": "casing_kg",
+        "relative_to": "meat_kg",
+        "minimum": 0.02,
+        "maximum": 0.08
+      }
+    ],
+    "cutting": []
+  },
+  "observed_ranges": {
+    "production": {
+      "meat_kg": {
+        "minimum": 5.0,
+        "maximum": 300.0
+      },
+      "spice_kg": {
+        "minimum": 0.05,
+        "maximum": 12.0
+      },
+      "casing_kg": {
+        "minimum": 0.1,
+        "maximum": 24.0
+      },
+      "meat_cost_eur": {
+        "minimum": 36.496331528725804,
+        "maximum": 5824.444365326689
+      },
+      "spice_cost_eur": {
+        "minimum": 0.7255734694247125,
+        "maximum": 452.7800979355288
+      },
+      "casing_cost_eur": {
+        "minimum": 0.6925486625337745,
+        "maximum": 696.7666067158613
+      },
+      "package_weight_kg": {
+        "minimum": 0.25,
+        "maximum": 2.0
+      },
+      "estimated_service_eur": {
+        "minimum": 11.828267644074957,
+        "maximum": 2340.952892195418
+      }
+    },
+    "cutting": {
+      "input_weight_kg": {
+        "minimum": 5.0,
+        "maximum": 80.0
+      }
+    }
+  },
+  "method": "Balanced small/medium/large independent processes; conditional ingredient quantities, varied costs/profiles/package sizes, independent yield/service/part noise. Dates are fictional.",
   "real_history_rows": 0,
   "historical_pdf_reference_used_for_training": false
 }

@@ -58,6 +58,7 @@ export function NumberInput(props: {
   name: string;
   label: string;
   hint?: string;
+  placeholder?: string;
 }) {
   return <Field {...props} type="decimal" />;
 }

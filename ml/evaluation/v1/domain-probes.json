@@ -1,0 +1,17 @@
+{
+  "5": {
+    "accepted": false,
+    "error": "Outside training domain: casing_kg"
+  },
+  "25": {
+    "accepted": false,
+    "error": "Outside training domain: casing_kg"
+  },
+  "100": {
+    "accepted": true
+  },
+  "300": {
+    "accepted": false,
+    "error": "Outside training domain: casing_kg"
+  }
+}

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { useFormContext } from "react-hook-form";
 import { Sparkles, FlaskConical } from "lucide-react";
@@ -34,6 +34,7 @@ import {
 } from "../lib/module-payloads";
 import { readHistory, remember } from "../lib/history";
 import type { z } from "zod";
+import { modelHint, predictionSchemaForModel } from "../lib/prediction-domain";
 
 const warning =
   "Bu model sentetik verilerle eğitilmiştir. Gerçek işletme verileriyle doğruluğu henüz kanıtlanmamıştır.";
@@ -55,15 +56,25 @@ export const predictionLabels: Record<string, { label: string; unit: string }> =
 function ProductionFields({
   data,
   operations,
+  model,
 }: {
   data: ReturnType<typeof useCatalog>;
   operations: Operation[];
+  model: ModelInfo;
 }) {
-  const { watch } =
+  const { watch, setValue } =
     useFormContext<z.infer<typeof productionPredictionSchema>>();
   const operation = watch("operation_id");
   return (
     <>
+      <div className="actions">
+        <button type="button" className="button" disabled={!model.example_inputs} onClick={() => {
+          for (const [key, value] of Object.entries(model.example_inputs || {})) {
+            setValue(key as keyof z.infer<typeof productionPredictionSchema>, value, { shouldValidate: true, shouldDirty: true });
+          }
+        }}>Geçerli üretim örneğini doldur</button>
+        <span className="caption">Sayısal plan örneği; gerçek stok veya sonuç değildir.</span>
+      </div>
       <div className="form-grid">
         <Field name="meat_type" label="Et türü">
           <option value="beef">Sığır (beef)</option>
@@ -76,25 +87,28 @@ function ProductionFields({
         </Field>
       </div>
       <div className="form-grid cols-3">
-        <NumberInput name="meat_kg" label="Planlanan et (kg)" />
-        <NumberInput name="spice_kg" label="Planlanan baharat (kg)" />
-        <NumberInput name="casing_kg" label="Planlanan kılıf (kg)" />
-        <NumberInput name="meat_cost_eur" label="Bilinen et maliyeti (EUR)" />
+        <NumberInput hint={modelHint(model, "meat_kg")} placeholder={model.example_inputs?.meat_kg} name="meat_kg" label="Planlanan et (kg)" />
+        <NumberInput hint={modelHint(model, "spice_kg")} placeholder={model.example_inputs?.spice_kg} name="spice_kg" label="Planlanan baharat (kg)" />
+        <NumberInput hint={modelHint(model, "casing_kg")} placeholder={model.example_inputs?.casing_kg} name="casing_kg" label="Planlanan kılıf (kg)" />
+        <NumberInput hint={modelHint(model, "meat_cost_eur")} placeholder={model.example_inputs?.meat_cost_eur} name="meat_cost_eur" label="Bilinen et maliyeti (EUR)" />
         <NumberInput
           name="spice_cost_eur"
+          hint={modelHint(model, "spice_cost_eur")} placeholder={model.example_inputs?.spice_cost_eur}
           label="Bilinen baharat maliyeti (EUR)"
         />
         <NumberInput
           name="casing_cost_eur"
+          hint={modelHint(model, "casing_cost_eur")} placeholder={model.example_inputs?.casing_cost_eur}
           label="Bilinen kılıf maliyeti (EUR)"
         />
       </div>
       <div className="form-grid">
-        <NumberInput name="package_weight_kg" label="Paket ağırlığı (kg)" />
+        <NumberInput hint={modelHint(model, "package_weight_kg")} placeholder={model.example_inputs?.package_weight_kg} name="package_weight_kg" label="Paket ağırlığı (kg)" />
         <NumberInput
           name="estimated_service_eur"
           label="Hizmet ön teklifi (EUR)"
-          hint="İşlem öncesi bağımsız teklif; gerçekleşen paket × tarife girilmez."
+          placeholder={model.example_inputs?.estimated_service_eur}
+          hint={modelHint(model, "estimated_service_eur") + " İşlem öncesi bağımsız teklif; fiilî sonuç girilmez."}
         />
         <Field name="operation_id" label="Üretim operasyon referansı">
           <Options
@@ -122,11 +136,8 @@ function ProductionFields({
           />
         </Field>
       </div>
-      <p className="caption">
-        Model aralığı: et 60–160 kg, baharat 0,8–4,2 kg, kılıf 2–10,5 kg, paket
-        0,5–1,5 kg, ön teklif 200–900 EUR. Girdiler muhasebeleşmiş sonuç
-        değildir.
-      </p>
+      {!data.products.some(p => p.type === "finished" && p.base_unit === "package") && <p className="notice">İlişkisiz üretim tahmini için ürün gerekmez. İşlemle karşılaştırmak için <Link to="/urunler">Ürünler</Link> sayfasında paket ağırlığı tanımlı mamul oluşturun ve başlamamış üretim taslağını seçin.</p>}
+      <p className="caption">Aralıklar seçili modelin metadata’sından gelir. Operasyon bağlantısı isteğe bağlıdır; başlamış işleme yeni tahmin kaydedilemez.</p>
     </>
   );
 }
@@ -134,10 +145,12 @@ function CuttingFields({
   data,
   operations,
   recipes,
+  model,
 }: {
   data: ReturnType<typeof useCatalog>;
   operations: Operation[];
   recipes: Recipe[];
+  model: ModelInfo;
 }) {
   const { watch, setValue } =
       useFormContext<z.infer<typeof cuttingPredictionSchema>>(),
@@ -163,17 +176,20 @@ function CuttingFields({
     }
   }, [recipeId, setValue]);
   const selected = recipe.data;
+  const eligibleRecipes = recipes.filter(r => r.available && r.species === "Kuzu" && r.lines.length === 5 && r.lines.every(line => data.products.some(p => p.id === line.product_id && p.type === "finished" && p.base_unit === "kg")));
   return (
     <>
+      <div className="actions">
+        <button type="button" className="button" disabled={!model.example_inputs} onClick={() => {
+          setValue("input_weight_kg", model.example_inputs?.input_weight_kg || "", { shouldValidate: true, shouldDirty: true });
+        }}>Geçerli kesim örneğini doldur</button>
+        <span className="caption">Sayısal örnek; reçeteyi ve beş gerçek ürün eşlemesini ayrıca seçin.</span>
+      </div>
+      {!eligibleRecipes.length && <p className="notice">Tahmin için kullanılabilir Kuzu reçetesi ve beş farklı kg mamul gerekir. <Link to="/parcalama">Parçalama sayfasında reçete oluşturun</Link>; parça ürünlerini <Link to="/urunler">Ürünler</Link> sayfasında tanımlayın.</p>}
       <div className="form-grid">
         <Field name="recipe_version_id" label="Tahmin reçete sürümü">
           <Options
-            items={recipes
-              .filter(
-                (r) =>
-                  r.available && r.species === "Kuzu" && r.lines.length === 5,
-              )
-              .map((r) => ({ id: r.id, name: r.code + " · v" + r.version }))}
+            items={eligibleRecipes.map((r) => ({ id: r.id, name: r.code + " · v" + r.version }))}
           />
         </Field>
         <Field name="species" label="Tahmin hayvan türü">
@@ -182,7 +198,7 @@ function CuttingFields({
         <NumberInput
           name="input_weight_kg"
           label="Tahmin giriş ağırlığı (kg)"
-          hint="Desteklenen sentetik aralık 18–40 kg."
+          hint={modelHint(model, "input_weight_kg")} placeholder={model.example_inputs?.input_weight_kg}
         />
         <Field name="operation_id" label="Kesim operasyon referansı">
           <Options
@@ -272,6 +288,7 @@ export function PredictionResult({
             <Badge tone="amber">{p.data_origin}</Badge>
             <span>{warning}</span>
           </div>
+          <p className="caption">Kayıtlı model sürümü: <code>{p.model_version}</code></p>
           <div className="stat-grid">
             {fields.map((k) => (
               <StatCard
@@ -290,6 +307,9 @@ export function PredictionResult({
               />
             ))}
           </div>
+          {p.kind === "cutting" && <div className="stat-grid">
+            {Object.entries(partNames).map(([key, name]) => <StatCard key={key} label={"Tahmini " + name.toLocaleLowerCase("tr")} value={predictionValue("predicted_" + key + "_kg", p[("predicted_" + key + "_kg") as keyof Prediction] as string)} />)}
+          </div>}
           {p.actual_unavailable_reason && (
             <p className="money-note">{p.actual_unavailable_reason}</p>
           )}
@@ -342,9 +362,6 @@ export function PredictionResult({
             <summary>Model bilgisi, teknik referans ve tam hassasiyet</summary>
             <div className="stack">
               <RecordId id={p.id} label="Tahmin kaydı" />
-              <p className="caption">
-                Model sürümü: <code>{p.model_version}</code>
-              </p>
               <h3>Model sınırlamaları ve kullanılan girdiler</h3>
               <ul>
                 {p.prediction_limitations.map((l, i) => (
@@ -404,6 +421,7 @@ export function Predictions() {
     setHistory(readHistory("predictions"));
     setParams({ prediction: p.id });
   };
+  const activeModel = models.data?.models.find(m => m.kind === tab);
   const info = models.data?.models.find(
     (m) => m.kind === (result.data?.kind || tab),
   );
@@ -462,9 +480,9 @@ export function Predictions() {
               data.error || operations.error || recipes.error || models.error
             }
           >
-            {tab === "production" ? (
+            {!activeModel?.feature_schema ? <p className="notice">Model sınırları alınamadı; bağlantıyı yenileyin. Tahmin formu hazır değil.</p> : tab === "production" ? (
               <CommandForm
-                schema={productionPredictionSchema}
+                schema={predictionSchemaForModel(productionPredictionSchema, activeModel)}
                 defaults={{
                   operation_id: "",
                   output_product_id: "",
@@ -487,12 +505,13 @@ export function Predictions() {
               >
                 <ProductionFields
                   data={data}
+                  model={activeModel}
                   operations={operations.data || []}
                 />
               </CommandForm>
             ) : (
               <CommandForm
-                schema={cuttingPredictionSchema}
+                schema={predictionSchemaForModel(cuttingPredictionSchema, activeModel)}
                 defaults={{
                   operation_id: "",
                   recipe_version_id: "",
@@ -514,6 +533,7 @@ export function Predictions() {
               >
                 <CuttingFields
                   data={data}
+                  model={activeModel}
                   operations={operations.data || []}
                   recipes={recipes.data || []}
                 />
@@ -579,6 +599,7 @@ export function Predictions() {
       {info && (
         <details className="technical-details">
           <summary>Model değerlendirmesi · sentetik test metrikleri</summary>
+          {result.data && result.data.model_version !== info.model_version && <p className="notice">Kayıtlı tahmin {result.data.model_version} sürümüne aittir. Aşağıdaki değerlendirme güncel {info.model_version} modelinindir; eski tahmin yeniden hesaplanmadı.</p>}
           <Section
             title="Sentetik test metrikleri"
             subtitle={`${info.model_version} · Gerçek işletme doğruluğu değildir; eğitim/validation/test: ${info.metrics.splits.train}/${info.metrics.splits.validation}/${info.metrics.splits.test}`}

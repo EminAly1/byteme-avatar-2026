@@ -1,4 +1,9 @@
-"""Explicit pre-process inputs; actual_* fields are forbidden."""
+"""Pre-process transport inputs; actual_* fields are forbidden.
+
+Active model ranges/ratios are enforced from its verified JSON inside the
+command service, after idempotency replay. Static transport limits must not
+reject saved v1 commands merely because a different model is now deployed.
+"""
 from typing import Literal
 from uuid import UUID
 from pydantic import model_validator
