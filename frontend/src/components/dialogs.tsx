@@ -35,17 +35,24 @@ export function ConfirmDialog({
   children,
   onCancel,
   onConfirm,
+  confirmLabel = "Onayla ve kaydet",
+  confirmDisabled = false,
+  danger = false,
 }: {
   title?: string;
   children: ReactNode;
   onCancel: () => void;
   onConfirm: () => void;
+  confirmLabel?: string;
+  confirmDisabled?: boolean;
+  danger?: boolean;
 }) {
-  const ref = useRef<HTMLDialogElement>(null),
+  const ref = useRef<HTMLDialogElement>(null), cancel = useRef<HTMLButtonElement>(null),
     id = useId();
   useEffect(() => {
     const dialog = ref.current;
     dialog?.showModal();
+    cancel.current?.focus();
     return () => {
       if (dialog?.open && dialog.isConnected) dialog.close();
     };
@@ -66,6 +73,7 @@ export function ConfirmDialog({
       {children}
       <div className="actions">
         <button
+          ref={cancel}
           type="button"
           autoFocus
           className="button"
@@ -78,13 +86,14 @@ export function ConfirmDialog({
         </button>
         <button
           type="button"
-          className="button primary"
+          className={"button " + (danger ? "danger" : "primary")}
+          disabled={confirmDisabled}
           onClick={() => {
             ref.current?.close();
             onConfirm();
           }}
         >
-          Onayla ve kaydet
+          {confirmLabel}
         </button>
       </div>
     </dialog>

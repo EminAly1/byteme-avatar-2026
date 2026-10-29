@@ -1,4 +1,5 @@
 import type { SecondTier } from './operational-types';
+import type { components } from './openapi';
 import type {
   Entity,
   Input,
@@ -154,6 +155,14 @@ export interface TraceReport {
     unallocated_documented_quantities?: Array<{ source_shipment_line_id: string; lot_id: string; product_id: string; unit: Unit; quantity: string; physical_stock: false }>;
   }>;
 }
+export interface RecallPreview {
+  preview_fingerprint: string;
+  report: TraceReport;
+}
+export type RecallReviewCommand = components["schemas"]["RecallCreate"] & {
+  preview_fingerprint: string;
+  confirmation_lot_code: string;
+};
 export interface Recall extends Entity {
   source_lot_id: string;
   reason: string;

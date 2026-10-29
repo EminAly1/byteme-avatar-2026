@@ -205,6 +205,19 @@ class RecallCreate(Schema):
     reason: str = Field(min_length=1, max_length=500)
 
 
+class RecallReviewedCreate(RecallCreate):
+    # Optional as a pair for existing demo/Android/API callers. The web wizard
+    # always supplies both; neither field represents a user role or permission.
+    preview_fingerprint: str | None = Field(default=None, pattern=r'^recall-v1:[0-9a-f]{64}$')
+    confirmation_lot_code: Code | None = None
+
+    @model_validator(mode='after')
+    def review_pair(self):
+        if (self.preview_fingerprint is None) != (self.confirmation_lot_code is None):
+            raise ValueError('Önizleme izi ve kaynak lot kodu birlikte gönderilmelidir')
+        return self
+
+
 class RecipeLineCreate(Schema):
     product_id: UUID
     reference_eur_per_kg: Annotated[Money, Field(gt=0)] | None = None

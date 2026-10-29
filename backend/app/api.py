@@ -269,8 +269,16 @@ def lot_trace(lot_id: UUID, db: DB, direction: Literal['forward', 'backward'] = 
 
 
 @router.post('/recalls', status_code=201)
-def recall_create(body: s.RecallCreate, key: Key):
+def recall_create(body: s.RecallReviewedCreate, key: Key):
+    if body.preview_fingerprint is None:
+        # Preserve the exact historical canonical body/hash for saved commands.
+        body = s.RecallCreate(source_lot_id=body.source_lot_id, reason=body.reason)
     return write('recalls', key, body, recalls.create_recall)
+
+
+@router.get('/recalls/preview')
+def recall_preview(source_lot_id: UUID, db: DB):
+    return recalls.preview(db, source_lot_id)
 
 
 @router.get('/recalls/{recall_id}')

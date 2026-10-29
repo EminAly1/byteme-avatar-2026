@@ -1,0 +1,112 @@
+{
+  "date": "2026-10-29",
+  "timezone": "Europe/Istanbul",
+  "branch": "feature/recall-safety-ux-v2",
+  "main_base": "2918075a43e84a6440364ccdd6bbb5a5e12b8e2b",
+  "mysql": {
+    "version": "8.0.46",
+    "alembic_head": "f1507a26b001",
+    "domain_tables": 30,
+    "schemas": [
+      "avatar_task21_core_test",
+      "avatar_task21_web_test"
+    ],
+    "existing_demo_data_written": false,
+    "new_migration": false
+  },
+  "backend": {
+    "passed": 254,
+    "failed": 0,
+    "skipped": 0,
+    "new_review_tests": 14,
+    "per_module": {
+      "tests.test_recall_review_mysql": 14,
+      "tests.test_trace_recall_mysql": 23,
+      "tests.test_second_tier_mysql": 42,
+      "tests.test_reworks_mysql": 52,
+      "tests.test_cuttings_mysql": 30,
+      "tests.test_transfers_returns_mysql": 56,
+      "tests.test_sales_shipments_mysql": 37
+    }
+  },
+  "react": {
+    "passed": 89,
+    "failed": 0,
+    "skipped": 0,
+    "new_review_tests": 6
+  },
+  "frontend_typecheck": true,
+  "frontend_build": true,
+  "chromium": {
+    "unique_passed": 7,
+    "failed_at_acceptance": 0,
+    "skipped": 0,
+    "scenarios": [
+      "dashboard.spec.ts::tablet ve mobil yerleşim; recall onay verilmeden işlem başlatmaz",
+      "integration-v2.spec.ts::gerçek ileri/geri izleme ve ET recall → Market A/B/C 30/25/30; onay şart",
+      "recall-safety.spec.ts::üç aşama, 390/768/1440, gerçek türev ve ikinci kademe; yanlış kod yazmaz, atomik blokaj satışı reddeder",
+      "recall-safety.spec.ts::inceleme sonrası gerçek satış kapsamı değiştirir; backend reddeder ve yeni inceleme gerekir",
+      "recall-safety.spec.ts::gerçek commit sonrası kayıp yanıt ve reload; aynı key/body ile aynı recall döner",
+      "release-hardening.spec.ts::alış UI → gerçek lot kaydında SKT roundtrip ve stok uygunluğu",
+      "integration-v2.spec.ts::gerçek commit sonrası kayıp cevap: reload ve aynı UUID/gövde ile retry tek satış üretir"
+    ]
+  },
+  "accessibility": {
+    "scoped_to": ".recall-wizard",
+    "viewports": [
+      390,
+      768,
+      1440
+    ],
+    "stages": 3,
+    "checks": 9,
+    "violations": 0,
+    "manual_visual_review": true
+  },
+  "earlier_failures_resolved": [
+    "Chromium: existing Compose port 5173 reservation; stopped only old application containers, preserved MySQL and data.",
+    "Chromium: exact accessible reason label and initial modal focus; fixed code without removing assertions.",
+    "React: duplicate preview refresh after rejection; query invalidation deduplicates the refresh."
+  ],
+  "security": {
+    "gitleaks_candidate_findings": 0,
+    "actual_secret_values_checked": 4,
+    "actual_secret_matches": 0,
+    "credentials_committed": false
+  },
+  "not_retested": [
+    "Complete backend/ML suite outside the selected regression modules",
+    "Android",
+    "ML training",
+    "Public internet deployment"
+  ],
+  "limitations": [
+    "Shared X-API-Key has no user roles or two-person authorization.",
+    "Legacy API callers may omit the optional review pair; review fingerprint is not an authorization token.",
+    "No automatic unblocking or recipient notification. External physical inventory remains unknown."
+  ],
+  "raw_evidence_directory": "/tmp/avatar-task21",
+  "raw_evidence_sha256": {
+    "backend.xml": "e400e8a984d069a4867fe95e546f04a5e4e0b0607d5bb6246151f31f668b0780",
+    "backend.txt": "4c378e51af6a4f508af435ddd4cb42e6835db5e4afceb60e1d484113985eb879",
+    "react-snapshot.txt": "eb76cd6ba9f89b260278a1737526d9b14c656b2d89622451a4180b595a631aff",
+    "build-snapshot.txt": "5f0155a3dcdd31430fb68f23177850181fa064a66aa663cf1cf381d0cd47e182",
+    "chromium-legacy.xml": "336e040bc41077ee765e83d94ff97d39f1a5471b0a852eb3a7c6c95674b7ca69",
+    "chromium-accepted.xml": "b12a07f17124d5c4f20cdf652940761a4c68205eb42d85b199ee3c2a12d5e7fa",
+    "chromium-snapshot.xml": "5acba59cf6f36db25582418868bfb1a778e43d9f8925a28b5a048f03556c7769",
+    "alembic-check.txt": "43d345b67ace77ab8c4cbf575a3baddf66e8623cf7d1e0b78e602b1d641ecf50"
+  },
+  "screenshots_sha256": {
+    "impact-1440.png": "71600af6d9bc8e2f4fa559d4d80eda8dba89de59580bacd71c6926eb5bcd90a1",
+    "confirm-390.png": "6fd8188b1bf303e77311e3ce36fc955bffc0190edff0c1ff9de90132a8f63c70"
+  },
+  "runtime_cleanup": {
+    "test_servers_stopped": true,
+    "original_compose_applications_restored": true,
+    "original_ready_and_frontend_http_status": [
+      200,
+      200
+    ],
+    "test_schemas_preserved": true
+  }
+}

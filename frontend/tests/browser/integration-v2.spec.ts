@@ -304,6 +304,7 @@ test("gerçek ileri/geri izleme ve ET recall → Market A/B/C 30/25/30; onay şa
   page.on("request", (r) => {
     if (r.method() === "POST" && r.url().endsWith("/recalls")) calls++;
   });
+  await page.getByRole("button", { name: "Gerekçe ve riske ilerle", exact: true }).click();
   await page
     .getByLabel("Geri çağırma nedeni", { exact: true })
     .fill("KURGUSAL E2E kalite kontrolü");
@@ -323,7 +324,9 @@ test("gerçek ileri/geri izleme ve ET recall → Market A/B/C 30/25/30; onay şa
   const response = page.waitForResponse(
     (r) => r.request().method() === "POST" && r.url().endsWith("/recalls"),
   );
-  await confirm(page, "Geri çağırmayı gözden geçir");
+  await page.getByRole("button", { name: "Geri çağırmayı gözden geçir", exact: true }).click();
+  await page.getByLabel("Kaynak lot kodunu elle yazın").fill(root.external_code);
+  await page.getByRole("button", { name: "Geri çağırmayı kesinleştir ve lotları bloke et", exact: true }).click();
   const recall = (await (await response).json()) as Recall;
   await expect(page).toHaveURL("/geri-cagirma/" + recall.id);
   await expect(page.getByText("GERİ ÇAĞIRMA AKTİF")).toBeVisible();
