@@ -46,7 +46,7 @@ Aynı satır/hedeflerde üç yöntem karşılaştırılır. Üretim n=66; kesim 
 | cutting / Açıklanması gereken fark | kg | 199 | 0.267374 / 0.343107 | 0.283204 / 0.365322 | 0.251176 / 0.325603 |
 | cutting / Verim | ratio | 199 | 0.009215 / 0.011791 | 0.009539 / 0.011996 | 0.008571 / 0.010998 |
 
-Üretimde ortak kümedeki **toplam maliyet RMSE'si v1'e göre geriledi** (15,223476 → 15,576864 EUR). Diğer ortak hedeflerde bu koşumda v2 daha iyi olsa da 66 satır ve tek sentetik seed istatistiksel üstünlük kanıtı değildir. Ayrı n=120 v1 hatasıyla n=600 geniş v2 hatasını doğrudan kıyaslamak doğru değildir.
+Üretimde ortak kümede **üç metrik geriledi**: EKP MAE **0,386846 → 0,390752 EUR/paket**, toplam maliyet MAE **11,350841 → 11,613796 EUR** ve toplam maliyet RMSE **15,223476 → 15,576864 EUR**. EKP RMSE düşmesine rağmen MAE artmıştır; bir metriğin iyileşmesi genel iyileşme sayılmaz. Diğer ortak metriklerde bu koşumda v2 daha iyi olsa da 66 satır ve tek sentetik seed istatistiksel üstünlük kanıtı değildir. Ayrı n=120 v1 hatasıyla n=600 geniş v2 hatasını doğrudan kıyaslamak doğru değildir.
 
 ## Değişmeyen v1 testindeki gerileme — aynı 120 satır
 

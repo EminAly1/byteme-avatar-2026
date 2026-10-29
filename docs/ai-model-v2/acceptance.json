@@ -118,6 +118,8 @@
     "frozen_v1_test_count_per_model": 120,
     "regressions_reported": [
       "Old fixed benchmark: v2 errors are worse",
+      "V2 common production EKP MAE: 0.386846 -> 0.390752 EUR/package",
+      "V2 common production total-cost MAE: 11.350841 -> 11.613796 EUR",
       "V2 common production total-cost RMSE: 15.223476 -> 15.576864 EUR"
     ],
     "real_world_accuracy_claim": false,

@@ -34,7 +34,7 @@ Aşağıdaki satırlarda **aynı v2 ortak test örnekleri** kullanılır. Üreti
 | Birim EKP | EUR/paket | 0.961562 / 1.181889 | 0.386846 / 0.556740 | 0.390752 / 0.528683 |
 | Parça toplamı | kg | 0.267374 / 0.343107 | 0.283204 / 0.365322 | 0.251176 / 0.325603 |
 
-**V2 her hedefte iyileşme değildir.** Ortak üretim toplam maliyet RMSE'si **15,223476 → 15,576864 EUR** ile geriledi. Değişmeyen eski 120 satırlık testte de v2 hataları arttı: örneğin üretim EKP RMSE **0,244472 → 0,348483 EUR/paket**, kesim toplam RMSE **0,265058 → 0,318115 kg**. Eski n=120 ile geniş v2 n=600 sonuçlarını doğrudan kıyaslayıp iyileşme ilan edilmedi.
+**V2 her hedefte iyileşme değildir.** Ortak üretim EKP MAE **0,386846 → 0,390752 EUR/paket**, toplam maliyet MAE **11,350841 → 11,613796 EUR** ve toplam maliyet RMSE **15,223476 → 15,576864 EUR** ile geriledi. EKP RMSE düşerken MAE yükseldi; tek metriğe bakılarak genel iyileşme çıkarılmadı. Değişmeyen eski 120 satırlık testte de v2 hataları arttı: örneğin üretim EKP RMSE **0,244472 → 0,348483 EUR/paket**, kesim toplam RMSE **0,265058 → 0,318115 kg**. Eski n=120 ile geniş v2 n=600 sonuçlarını doğrudan kıyaslayıp iyileşme ilan edilmedi.
 
 V2 genişletilmiş SYNTHETIC v2 süreci için prototipte etkin; **genel gerçek doğruluk terfisi onaylanmadı**. Simülatör varsayımları değiştiğinden gerçek başarım çıkarılamaz. Test sonucuna göre simülatör/hedef/alpha ayarı yapılmadı. V1 dosyaları geri dönüş için korunur. [Bütün hedefler, baseline ve üç ayrı popülasyonun tam MAE/RMSE tabloları](../ml/EVALUATION_REPORT.md), [üretim kartı](../ml/MODEL_CARD_PRODUCTION.md), [kesim kartı](../ml/MODEL_CARD_CUTTING.md).
 
