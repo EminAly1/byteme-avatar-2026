@@ -7,7 +7,7 @@ import {
 } from "react";
 import { X } from "lucide-react";
 // Keep Tab navigation inside the modal instead of visiting browser chrome at the boundary.
-function containDialogFocus(event: KeyboardEvent<HTMLDialogElement>) {
+export function containDialogFocus(event: KeyboardEvent<HTMLDialogElement>) {
   if (event.key !== "Tab") return;
   const candidates = Array.from(
     event.currentTarget.querySelectorAll<HTMLElement>(

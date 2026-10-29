@@ -116,6 +116,7 @@ export function Stocks() {
           <Table
             headers={["Ürün / Lot", "Konum", "Stok", "Kullanılabilir", "Durum"]}
             empty={!filtered.length}
+            emptyMessage="Bu filtrede stok bulunmuyor. Filtreleri kontrol edin; ilk lot girişi için Alış ve lot girişi sayfasını kullanın."
           >
             {filtered.map((x) => {
               const p = data.products.find((p) => p.id === x.product_id),
@@ -170,6 +171,7 @@ export function Stocks() {
           <Table
             headers={["Tarih", "Hareket", "Lot", "Konum", "Miktar"]}
             empty={!history.length}
+            emptyMessage="Bu filtrede stok hareketi yok. Alış, transfer veya üretim kaydı oluştuğunda hareketleri burada görebilirsiniz."
           >
             {[...history]
               .sort((a, b) => b.created_at.localeCompare(a.created_at))

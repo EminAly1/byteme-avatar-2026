@@ -20,7 +20,7 @@ export function PageHeader({
   return (
     <div className="page-heading">
       <div>
-        <p className="eyebrow">BYTEME / OPERASYON MERKEZİ</p>
+        <p className="eyebrow">AVATAR / OPERASYON MERKEZİ</p>
         <h1>{title}</h1>
         {description && <p className="page-description">{description}</p>}
       </div>

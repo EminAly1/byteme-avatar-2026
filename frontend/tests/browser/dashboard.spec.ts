@@ -282,6 +282,7 @@ test("tablet ve mobil yerleşim; recall onay verilmeden işlem başlatmaz", asyn
   });
   await page.setViewportSize({ width: 390, height: 844 });
   await page.getByRole("button", { name: "Menüyü aç", exact: true }).click();
+  await page.locator('.sidebar').getByRole('button',{name:'İzlenebilirlik ve Güvenlik',exact:true}).click();
   await page.getByRole("link", { name: "Geri çağırma", exact: true }).click();
   await expect(
     page.getByLabel("Sorunlu kaynak lot", { exact: true }),

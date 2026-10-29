@@ -54,7 +54,10 @@ export function ErrorBox({ error }: { error: unknown }) {
 export function LoadingSkeleton() {
   return (
     <div className="loading-state" role="status">
-      <span>Kayıtlar yükleniyor…</span>
+      <div className="avatar-loading">
+        <img src="/avatar-icon.svg" width="44" height="44" alt="" />
+        <span>Kayıtlar yükleniyor…</span>
+      </div>
       <div className="skeleton-group" aria-hidden="true">
         <i />
         <i />
@@ -85,14 +88,16 @@ export function Section({
   subtitle,
   children,
   action,
+  id,
 }: {
+  id?: string;
   title: string;
   subtitle?: string;
   children: ReactNode;
   action?: ReactNode;
 }) {
   return (
-    <section className="panel">
+    <section className="panel" id={id}>
       <div className="section-head">
         <div>
           <h2>{title}</h2>
@@ -107,10 +112,14 @@ export function Section({
 type Cell = ReactElement<{ children?: ReactNode; className?: string }>;
 function flatten(
   children: ReactNode,
+  prefix = "",
 ): ReactElement<{ children?: ReactNode }>[] {
   return Children.toArray(children).flatMap((child) => {
     if (!isValidElement<{ children?: ReactNode }>(child)) return [];
-    return child.type === Fragment ? flatten(child.props.children) : [child];
+    const key = prefix + "/" + child.key;
+    return child.type === Fragment
+      ? flatten(child.props.children, key)
+      : [cloneElement(child, { key })];
   });
 }
 const numeric = (header: string) =>
@@ -121,13 +130,15 @@ export function Table({
   headers,
   children,
   empty = false,
+  emptyMessage,
 }: {
   headers: string[];
   children: ReactNode;
   empty?: boolean;
+  emptyMessage?: ReactNode;
 }) {
   const mobile = useMediaQuery("(max-width: 600px)");
-  if (empty) return <Empty />;
+  if (empty) return <Empty>{emptyMessage}</Empty>;
   const rows = flatten(children);
   if (mobile)
     return (

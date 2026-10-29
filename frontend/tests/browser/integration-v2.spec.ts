@@ -612,7 +612,7 @@ test("beş viewport: gerçek modüller, mobil satış ve drawer klavye erişimi;
       await page.keyboard.press('Shift+Tab');
       await expect(page.locator('.sidebar .brand')).toBeFocused();
       await page.keyboard.press('Shift+Tab');
-      await expect(page.getByRole('link',{name:'Stoklar',exact:true})).toBeFocused();
+      await expect(page.locator('.sidebar').getByRole('button',{name:'Belgeler',exact:true})).toBeFocused();
       await page.keyboard.press('Tab');
       await expect(page.locator('.sidebar .brand')).toBeFocused();
       await page.keyboard.press("Escape");
