@@ -72,3 +72,14 @@ it("mobil kart aynı satırın ürününü, miktarını ve gerçek maliyetini sa
     vi.unstubAllGlobals();
   }
 });
+
+it('iç içe fragment satır ve hücrelerinin üst anahtarlarını korur; React yinelenen anahtar hatası üretmez',()=>{
+  const consoleError=vi.spyOn(console,'error').mockImplementation(()=>{});
+  try {
+    render(<Table headers={['Kaynak','Tutar']}><><><tr><><td>Satış</td></><><td>750,00 €</td></></tr></><><tr><><td>İade</td></><><td>50,00 €</td></></tr></></></Table>);
+    expect(screen.getAllByRole('row')).toHaveLength(3);
+    expect(screen.getByRole('cell',{name:'Satış'})).toBeVisible();
+    expect(screen.getByRole('cell',{name:'50,00 €'})).toBeVisible();
+    expect(consoleError).not.toHaveBeenCalled();
+  } finally {consoleError.mockRestore();}
+});

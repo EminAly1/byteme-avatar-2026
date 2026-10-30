@@ -44,6 +44,7 @@ export function Operations() {
               "İşlem",
             ]}
             empty={!operations.data?.length}
+            emptyMessage="Henüz üretim emri yok. Dış üretici tanımladıktan sonra Dış üretim emri oluştur alanını kullanın."
           >
             {[
               ...(operations.data || []).filter(
@@ -76,7 +77,7 @@ export function Operations() {
               ))}
           </Table>
         </Section>
-        <Section title="Dış üretim emri oluştur">
+        <Section id="create-record" title="Dış üretim emri oluştur">
           <CommandForm<z.infer<typeof operationSchema>>
             schema={operationSchema}
             defaults={{ code: "", producer_id: "" }}

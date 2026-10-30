@@ -117,7 +117,7 @@ export function Receipts() {
       error={data.error || receipts.error}
     >
       <div className="stack">
-        <Section
+        <Section id="create-record"
           title="Alış ve lot girişi"
           subtitle="Bir alıştaki her satır için ayrı lot ve stok girişi oluşturulur."
         >
@@ -153,6 +153,7 @@ export function Receipts() {
           <Table
             headers={["Referans", "Tedarikçi", "Depo", "Tarih", "İşlem"]}
             empty={!receipts.data?.length}
+            emptyMessage="Henüz alış yok. Üstte tedarikçi, depo ve lot satırlarını seçerek ilk alışı kaydedin."
           >
             {receipts.data?.map((x) => (
               <tr key={x.id}>

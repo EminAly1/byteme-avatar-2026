@@ -8,23 +8,6 @@ import {
 } from "react-router-dom";
 import { useIsFetching, useQueryClient } from "@tanstack/react-query";
 import {
-  LayoutDashboard,
-  Boxes,
-  Building2,
-  Warehouse,
-  ClipboardList,
-  Layers3,
-  Factory,
-  Scissors,
-  ShoppingBag,
-  Truck,
-  ArrowLeftRight,
-  Network,
-  BellRing,
-  FileText,
-  ShieldAlert,
-  Sparkles,
-  Sprout,
   RefreshCw,
   Menu,
   ChevronRight,
@@ -32,6 +15,8 @@ import {
   X,
   Search,
 } from "lucide-react";
+import { navigation, matchesEntry } from "./lib/navigation";
+import { useMediaQuery } from "./hooks/useMediaQuery";
 import { PageHeader } from "./components/presentation";
 import { State } from "./components/ui";
 const Products = lazy(() =>
@@ -96,31 +81,16 @@ const Distributions = lazy(() =>
   import("./pages/Distributions").then((m) => ({ default: m.Distributions })),
 );
 
-const Alerts = lazy(() => import('./pages/Alerts').then(m => ({ default: m.Alerts })));
-const Documents = lazy(() => import('./pages/Documents').then(m => ({ default: m.Documents })));
-const SaleDocument = lazy(() => import('./pages/Documents').then(m => ({ default: m.SaleDocument })));
+const Alerts = lazy(() =>
+  import("./pages/Alerts").then((m) => ({ default: m.Alerts })),
+);
+const Documents = lazy(() =>
+  import("./pages/Documents").then((m) => ({ default: m.Documents })),
+);
+const SaleDocument = lazy(() =>
+  import("./pages/Documents").then((m) => ({ default: m.SaleDocument })),
+);
 
-const primary = [
-  { path: "/", label: "Genel bakış", icon: LayoutDashboard },
-  { path: "/uyarilar", label: "Akıllı uyarı merkezi", icon: BellRing },
-  { path: "/uretim", label: "Dış üretim", icon: Factory },
-  { path: "/parcalama", label: "Kuzu parçalama", icon: Scissors },
-  { path: "/satislar", label: "Satışlar", icon: ShoppingBag },
-  { path: "/belgeler", label: "Belge merkezi", icon: FileText },
-  { path: "/sevkiyatlar", label: "Sevkiyatlar", icon: Truck },
-  { path: "/dagitimlar", label: "İkinci kademe dağıtım", icon: Network },
-  { path: "/hareketler", label: "Stok hareket merkezi", icon: ArrowLeftRight },
-  { path: "/izlenebilirlik", label: "Lot izlenebilirliği", icon: Network },
-  { path: "/geri-cagirma", label: "Geri çağırma", icon: ShieldAlert },
-  { path: "/yapay-zeka", label: "Yapay zekâ tahminleri", icon: Sparkles },
-];
-const master = [
-  { path: "/urunler", label: "Ürünler", icon: Boxes },
-  { path: "/is-ortaklari", label: "İş ortakları", icon: Building2 },
-  { path: "/depolar", label: "Depolar", icon: Warehouse },
-  { path: "/alislar", label: "Alış ve lot girişi", icon: ClipboardList },
-  { path: "/stoklar", label: "Stoklar", icon: Layers3 },
-];
 export function App() {
   const [menu, setMenu] = useState(false),
     location = useLocation(),
@@ -128,11 +98,22 @@ export function App() {
     fetching = useIsFetching(),
     sidebar = useRef<HTMLElement>(null),
     trigger = useRef<HTMLButtonElement>(null);
-  const module = [...primary, ...master].find((x) =>
-    x.path === "/"
-      ? location.pathname === "/"
-      : location.pathname.startsWith(x.path),
+  const compact = useMediaQuery("(max-width: 1100px)");
+  const module = navigation
+    .flatMap((g) => g.items)
+    .find((x) => matchesEntry(x.path, location.pathname, location.search));
+  const activeGroup = navigation.find((g) =>
+    g.items.some((x) => x === module),
+  )?.label;
+  const [openGroups, setOpenGroups] = useState<string[]>(
+    activeGroup ? [activeGroup] : [],
   );
+  useEffect(() => {
+    if (activeGroup)
+      setOpenGroups((groups) =>
+        groups.includes(activeGroup) ? groups : [...groups, activeGroup],
+      );
+  }, [activeGroup]);
   const title = module?.label || "Sayfa bulunamadı";
   const detail = location.pathname.split("/").filter(Boolean).length > 1;
   useEffect(() => {
@@ -155,21 +136,6 @@ export function App() {
     window.addEventListener("resize", close);
     return () => window.removeEventListener("resize", close);
   }, []);
-  function nav(items: typeof primary) {
-    return items.map((x) => (
-      <NavLink
-        end={x.path === "/"}
-        className={({ isActive }) => "nav-item " + (isActive ? "active" : "")}
-        to={x.path}
-        key={x.path}
-        onClick={() => setMenu(false)}
-      >
-        <x.icon size={18} />
-        <span>{x.label}</span>
-        {location.pathname === x.path && <ChevronRight size={14} />}
-      </NavLink>
-    ));
-  }
   return (
     <div className="app-layout">
       <a className="skip-link" href="#main-content">
@@ -177,14 +143,22 @@ export function App() {
       </a>
       <aside
         ref={sidebar}
+        inert={compact && !menu}
+        aria-hidden={compact && !menu}
         className={"sidebar " + (menu ? "open" : "")}
         aria-label="Yönetim menüsü"
         onKeyDown={(e) => {
           if (!menu) return;
           if (e.key === "Escape") setMenu(false);
           if (e.key === "Tab") {
-            const nodes =
-              sidebar.current?.querySelectorAll<HTMLElement>("a,button");
+            const nodes = Array.from(
+              sidebar.current?.querySelectorAll<HTMLElement>("a,button") || [],
+            ).filter(
+              (el) =>
+                el.getClientRects().length > 0 &&
+                el.checkVisibility() &&
+                !el.hasAttribute("disabled"),
+            );
             if (!nodes?.length) return;
             const first = nodes[0],
               last = nodes[nodes.length - 1];
@@ -201,10 +175,10 @@ export function App() {
         <div className="brand-row">
           <NavLink to="/" className="brand" onClick={() => setMenu(false)}>
             <span className="brand-icon">
-              <Sprout size={24} />
+              <img src="/avatar-icon.svg" width="44" height="44" alt="" />
             </span>
             <div>
-              ByteMe<small>ÜRETİM VE STOK YÖNETİMİ</small>
+              AVATAR<small>ÜRETİM VE STOK YÖNETİMİ</small>
             </div>
           </NavLink>
           <button
@@ -220,15 +194,58 @@ export function App() {
           <span>Çalışma alanı</span>
         </div>
         <nav>
-          <p className="nav-heading">OPERASYONLAR</p>
-          {nav(primary)}
-          <p className="nav-heading future-heading">KAYIT YÖNETİMİ</p>
-          {nav(master)}
+          {navigation.map((group, i) => (
+            <section className="nav-group" key={group.label}>
+              <button
+                className="nav-group-toggle"
+                aria-expanded={openGroups.includes(group.label)}
+                aria-controls={"nav-group-" + i}
+                onClick={() =>
+                  setOpenGroups((groups) =>
+                    groups.includes(group.label)
+                      ? groups.filter((g) => g !== group.label)
+                      : [...groups, group.label],
+                  )
+                }
+              >
+                <span>{group.label}</span>
+                <ChevronRight
+                  size={16}
+                  className={openGroups.includes(group.label) ? "expanded" : ""}
+                />
+              </button>
+              <div
+                id={"nav-group-" + i}
+                hidden={!openGroups.includes(group.label)}
+              >
+                {group.items.map((x) => {
+                  const active = matchesEntry(
+                    x.path,
+                    location.pathname,
+                    location.search,
+                  );
+                  return (
+                    <NavLink
+                      to={x.path}
+                      key={x.path}
+                      className={"nav-item " + (active ? "active" : "")}
+                      aria-current={active ? "page" : false}
+                      onClick={() => setMenu(false)}
+                    >
+                      <x.icon size={18} />
+                      <span>{x.label}</span>
+                      {active && <ChevronRight size={14} />}
+                    </NavLink>
+                  );
+                })}
+              </div>
+            </section>
+          ))}
         </nav>
         <div className="sidebar-footer">
           <LockKeyhole size={17} />
           <div>
-            Yerel çalışma alanı<small>ByteMe · AVATAR 2026</small>
+            Yerel çalışma alanı<small>AVATAR · AVATAR 2026</small>
           </div>
         </div>
       </aside>
@@ -274,25 +291,38 @@ export function App() {
         <main id="main-content" tabIndex={-1}>
           <PageHeader
             title={
-              detail
-                ? ({ Satışlar: "Satış", "Dış üretim": "Üretim emri" }[title] ||
-                    title) + " ayrıntısı"
-                : title
+              location.pathname.startsWith("/belgeler/satis/")
+                ? location.pathname.endsWith("/duzenle")
+                  ? "Taslak düzenle"
+                  : "Belge görüntüle"
+                : detail
+                  ? ({ Satışlar: "Satış", "Dış üretim": "Üretim emri" }[
+                      title
+                    ] || title) + " ayrıntısı"
+                  : title
             }
-            description={
-              location.pathname === "/"
-                ? "Üretim, stok ve dağıtım kayıtlarını tek yerden yönetin."
-                : undefined
-            }
+            description={module?.description}
             action={
-              <button
-                className="button refresh"
-                onClick={() => void client.invalidateQueries()}
-                disabled={!!fetching}
-              >
-                <RefreshCw size={16} className={fetching ? "spin" : ""} />
-                Yenile
-              </button>
+              <div className="page-actions">
+                {detail && module && (
+                  <NavLink className="text-button" to={module.path}>
+                    Listeye dön
+                  </NavLink>
+                )}
+                {!detail && module && "action" in module && (
+                  <a className="button primary" href="#create-record">
+                    {module.action}
+                  </a>
+                )}
+                <button
+                  className="button refresh"
+                  onClick={() => void client.invalidateQueries()}
+                  disabled={!!fetching}
+                >
+                  <RefreshCw size={16} className={fetching ? "spin" : ""} />
+                  Yenile
+                </button>
+              </div>
             }
           />
           <Suspense fallback={<State loading>{null}</State>}>
@@ -300,7 +330,7 @@ export function App() {
               <Route path="/" element={<Dashboard />} />
               <Route path="/uyarilar" element={<Alerts />} />
               <Route path="/belgeler" element={<Documents />} />
-              <Route path="/belgeler/satis/:id" element={<SaleDocument />} />
+              <Route path="/belgeler/satis/:id/*" element={<SaleDocument />} />
               <Route path="/urunler" element={<Products />} />
               <Route path="/is-ortaklari" element={<Parties />} />
               <Route path="/depolar" element={<Locations />} />
@@ -348,7 +378,7 @@ export function App() {
             </Routes>
           </Suspense>
           <footer className="page-footer">
-            <span>ByteMe · AVATAR 2026</span>
+            <span>AVATAR · AVATAR 2026</span>
             <span>Kayıtlı lotlar. Gerçek maliyetler.</span>
           </footer>
         </main>

@@ -1,0 +1,119 @@
+{
+  "screens": 155,
+  "widths": [
+    360,
+    390,
+    768,
+    1024,
+    1440
+  ],
+  "route_count": 31,
+  "console_errors": 0,
+  "page_errors": 0,
+  "root_overflows": 0,
+  "small_measured_actions": 0,
+  "axe_route_scans": 62,
+  "axe_violations": 0,
+  "react_tests": 103,
+  "documents": {
+    "data_origin": "KURGUSAL / SYNTHETIC",
+    "database": "avatar_task23_documents_test",
+    "documents": [
+      {
+        "case": "active",
+        "state": "active",
+        "pages": 1,
+        "lines": 1,
+        "original_eur": "750.00",
+        "net_eur": "750.00"
+      },
+      {
+        "case": "partial",
+        "state": "partially_returned",
+        "pages": 2,
+        "lines": 1,
+        "original_eur": "625.00",
+        "net_eur": "575.00"
+      },
+      {
+        "case": "returned",
+        "state": "returned",
+        "pages": 2,
+        "lines": 1,
+        "original_eur": "750.00",
+        "net_eur": "0.00"
+      },
+      {
+        "case": "cancelled",
+        "state": "cancelled",
+        "pages": 2,
+        "lines": 1,
+        "original_eur": "15.98",
+        "net_eur": "0.00"
+      },
+      {
+        "case": "long",
+        "state": "active",
+        "pages": 8,
+        "lines": 45,
+        "original_eur": "138.60",
+        "net_eur": "138.60"
+      }
+    ],
+    "domain_tables": 30,
+    "before_sha256": "85197f8d2d31f5aafc07bf66d9ed5f20c316452ce657c14782d93648feba447f",
+    "after_sha256": "85197f8d2d31f5aafc07bf66d9ed5f20c316452ce657c14782d93648feba447f",
+    "ledger_unchanged": true
+  },
+  "alerts": {
+    "data_origin": "KURGUSAL / SYNTHETIC",
+    "database": "avatar_task23_alerts_test",
+    "alert_count": 6,
+    "rules": [
+      "EXPIRY_PAST",
+      "EXPIRY_SOON",
+      "LOT_BLOCKED_STOCK",
+      "LOW_AVAILABLE_STOCK",
+      "PRODUCTION_EKP_DEVIATION",
+      "YIELD_DEVIATION"
+    ],
+    "counts": {
+      "total": 6,
+      "critical": 2,
+      "warning": 4,
+      "info": 0,
+      "by_rule": {
+        "EXPIRY_PAST": 1,
+        "LOT_BLOCKED_STOCK": 1,
+        "EXPIRY_SOON": 1,
+        "LOW_AVAILABLE_STOCK": 1,
+        "PRODUCTION_EKP_DEVIATION": 1,
+        "YIELD_DEVIATION": 1
+      }
+    },
+    "stable_ids": true,
+    "domain_tables": 30,
+    "before_sha256": "3f9d62cbf0cb6a97cb4313cae75ec0551d1655ed927fbc7378389e1f2eabe9a4",
+    "after_sha256": "3f9d62cbf0cb6a97cb4313cae75ec0551d1655ed927fbc7378389e1f2eabe9a4",
+    "ledger_unchanged": true
+  },
+  "browser_ledger_hashes_unchanged": {
+    "documents": true,
+    "alerts": true
+  },
+  "chromium_unique_scenarios_verified": 47,
+  "chromium_groups": {
+    "business": {
+      "unique": 32,
+      "last_full_run_passed": 31,
+      "last_full_run_failed": 1,
+      "failed_ai_retest_passed": 1
+    },
+    "documents": 3,
+    "alerts": 4,
+    "missing_model": 1,
+    "final_ux": 7
+  },
+  "empty_routes_checked": 20,
+  "old_redirects_checked": 5
+}

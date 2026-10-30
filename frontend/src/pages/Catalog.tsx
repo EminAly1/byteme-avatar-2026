@@ -120,6 +120,7 @@ export function Products() {
         <Table
           headers={["SKU", "Ürün", "Tür", "Stok birimi", "Paket dönüşümü"]}
           empty={!products.length}
+            emptyMessage="Aramanıza uygun ürün yok. Filtreleri değiştirin veya Yeni ürün ile ilk kartı oluşturun."
         >
           {products.map((x) => (
             <tr key={x.id}>
@@ -185,6 +186,7 @@ export function Parties() {
           <Table
             headers={["Firma", "Roller", "İletişim"]}
             empty={!data.parties.length}
+            emptyMessage="Henüz iş ortağı yok. Firma oluştur alanından tedarikçi, müşteri veya üretici ekleyin."
           >
             {data.parties.map((x) => (
               <tr key={x.id}>
@@ -201,7 +203,7 @@ export function Parties() {
             ))}
           </Table>
         </Section>
-        <Section title="Firma oluştur">
+        <Section id="create-record" title="Firma oluştur">
           <CommandForm<z.infer<typeof partySchema>>
             schema={partySchema}
             defaults={{ name: "", roles: ["supplier"], contact: "" }}
@@ -251,6 +253,7 @@ export function Locations() {
           <Table
             headers={["Konum", "Tür", "Dış üretici"]}
             empty={!data.locations.length}
+            emptyMessage="Henüz konum yok. Konum oluştur alanından kendi deponuzu veya dış üretici deposunu ekleyin."
           >
             {data.locations.map((x) => (
               <tr key={x.id}>
@@ -267,7 +270,7 @@ export function Locations() {
             ))}
           </Table>
         </Section>
-        <Section title="Konum oluştur">
+        <Section id="create-record" title="Konum oluştur">
           <CommandForm<z.infer<typeof locationSchema>>
             schema={locationSchema}
             defaults={{ name: "", kind: "warehouse", party_id: "" }}
