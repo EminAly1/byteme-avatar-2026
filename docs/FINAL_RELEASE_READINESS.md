@@ -6,13 +6,13 @@
 
 ## Kaynak ve GitHub durumu
 
-- Başlangıç/güncel `origin/main`: **`f2a0a156d769793b16f17d5de09c5a0393f69aae`**,
+- Paketleme çalışmasının başlangıç `origin/main` tabanı: **`f2a0a156d769793b16f17d5de09c5a0393f69aae`**,
   PR #42 merge commit'i; Görev 21/#37, 22/#38, 23/#40, 24/#41, 25/#42 ataları doğrulandı.
-- Branch **`feature/final-delivery-packaging`**. Android/web/backend/ML aynı checkout;
+- Paketleme çalışma branch'i **`feature/final-delivery-packaging`**. Android/web/backend/ML aynı checkout;
   backend/frontend/ML iş kodları ve eski kanıtlar değiştirilmedi.
 - Paketleme kod commit'i **`3f2c5db4d02b93ed3e9f3ba21e15fd8e6245fb6b`**, GitHub'a push edildi.
   Son doküman commit'i için branch başını kullanın; APK'nin kodu bu commit'tir.
-- Main'e merge yapılmadı. Son PR inceleme/check/policy ve paketleme birleşimi ekip adımıdır.
+- **31 Ekim birleşim güncellemesi:** [PR #43](https://github.com/EminAly1/byteme-avatar-2026/pull/43) `main` dalına alındı; merge **`81155d2c1b4bf1a200e11c37b9f223c5ec14afce`**. Birleşim sonrası GitHub check/policy ve fiziksel cihaz kabulü hâlâ bekliyor.
 - `v0.1.0-preview.2` uzak etiketi boştu; gerçek APK ile `gh release create` denendi.
   Releases API kontrolünde **Forbidden**: Release/tag/asset oluşmadı; gerçek indirme URL'si yok.
   Yerel APK ve manuel yayın adımları [INDIRME](INDIRME.md) içinde.
@@ -65,7 +65,7 @@ Native PDF çizimi, SAF/paylaşma, canlı uyarı/stok/satış ve veri koruma cih
 | Yerel web/backend/ML ve APK paketleme | **GO — belirtilen kısa kapı kapsamında** | 31 Ekim testleri yukarıda; bütün eski suite yeniden kabulü iddia edilmez |
 | Güncel Android canlı gösterim | **Doğrulama gerekiyor** | Güvenli yeni Preview kurulum/bağlantı; stok/uyarı/satış/offline ve native PDF provası |
 | Herkese açık APK dağıtımı | **NO-GO** | Release API Forbidden; yetkili ekip gerçek asset yayımlayıp indirme/hash'i doğrulamalı |
-| Eksiksiz yarışma teslimi | **NO-GO** | Paketleme PR/main incelemesi, cihaz provası, gerçek ≤15dk video/link, gönderim/alındı yok |
+| Eksiksiz yarışma teslimi | **NO-GO** | Fiziksel cihaz provası, gerçek ≤15dk video/link, gönderim/alındı yok |
 | İnternete açık üretim | **NO-GO** | Kullanıcı oturumu/RBAC/TLS, operasyon ve gerçek veriyle ML kabulü yok |
 
 ML toplam **6.000 SYNTHETIC (3.000/model), 0 gerçek tarihsel kayıt**. V2 bazı ortak
@@ -78,10 +78,7 @@ metriklerde ve eski sabit testte geriledi; genel doğruluk artışı kabul edilm
 
 İnceleme kapsamı: ayrı Android Preview varyantı ve son teslim belgeleri; yeni iş
 özelliği/şema değişikliği yok. APK/anahtar/özel env/raw log kaynak commit'ine alınmaz.
-Kısa kapı başarılı; yeni main birleşimi ve GitHub check/policy doğrulaması yapılmadı.
-Main hedefli `gh pr create` denendi; GraphQL isteği **Forbidden** olduğu için
-PR oluşturulamadı. Yetkili ekip [manuel PR compare](https://github.com/EminAly1/byteme-avatar-2026/compare/main...feature/final-delivery-packaging?expand=1).
-Force push/main merge yok. Aşağıdaki rapor **28 Ekim tarihsel kanıtıdır**; sayaçları
+Kısa kapı başarılı; [PR #43](https://github.com/EminAly1/byteme-avatar-2026/pull/43) GitHub bağlantısıyla açılıp `main` dalına normal merge edildi. İlk Codex PR denemesi GraphQL **Forbidden** almıştı; bu sorun sonradan çözüldü. **Birleşim sonrası tam CI, cihaz ve GitHub check/policy kabulü yeniden yapılmadı.** Aşağıdaki rapor **28 Ekim tarihsel kanıtıdır**; sayaçları
 31 Ekim testleriyle toplanmaz ve yeni APK cihaz kabulü olarak kullanılamaz.
 
 ---
