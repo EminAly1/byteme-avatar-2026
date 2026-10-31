@@ -119,10 +119,10 @@ export function RecallWizard({ onSuccess }: { onSuccess: (record: Recall) => voi
       {pending ? <div className="stack">
         <Risk />
         <h3>{busy ? "Kesinleştiriliyor…" : "İşlemin sonucu henüz doğrulanamadı"}</h3>
-        <p role="status">{busy ? "Backend yanıtı bekleniyor. Aynı işlem tekrar başlatılamaz." : "İstek kaydedilmiş olabilir. Kaynak ve gerekçe korunuyor; aynı anahtar ve içerikle sonucu güvenle sorgulayın."}</p>
+        <p role="status">{busy ? "Sunucu yanıtı bekleniyor. Aynı işlem tekrar başlatılamaz." : "İstek kaydedilmiş olabilir. Kaynak ve gerekçe korunuyor; aynı anahtar ve içerikle sonucu güvenle sorgulayın."}</p>
         <p><strong>Kaynak: {String(pending.values.source_code || catalog.lots.find(l => l.id === lot)?.external_code || "Kaydedilmiş kaynak lot")}</strong></p>
         <p>Gerekçe: {String((pending.command.body as { reason: string }).reason)}</p>
-        {pending.values.lot_count != null && <p>Onay anındaki özet: {String(pending.values.lot_count)} lot · {String(pending.values.location_count)} konum · {String(pending.values.buyer_count)} ilk kademe ve {String(pending.values.second_tier_count)} ikinci kademe alıcı. Güncel sonuç backend yanıtıyla doğrulanır.</p>}
+        {pending.values.lot_count != null && <p>Onay anındaki özet: {String(pending.values.lot_count)} lot · {String(pending.values.location_count)} konum · {String(pending.values.buyer_count)} ilk kademe ve {String(pending.values.second_tier_count)} ikinci kademe alıcı. Güncel sonuç sunucu yanıtıyla doğrulanır.</p>}
         <button type="button" className="button danger" disabled={busy} onClick={() => void transmit(pending.command)}>
           {busy ? "Yanıt bekleniyor…" : "Aynı işlemi tekrar dene"}
         </button>
@@ -142,7 +142,7 @@ export function RecallWizard({ onSuccess }: { onSuccess: (record: Recall) => voi
           {!lot ? <Empty>Etki analizini başlatmak için bir kaynak lot seçin.</Empty> : <>
             <State loading={preview.isPending || preview.isFetching} error={preview.error}>
               {report && <>
-                <p className="recall-context">Bu kapsam mevcut izleme görünümüdür; henüz kesinleşmiş recall sonucu değildir. Bu aşama kayıt veya stok değişikliği oluşturmaz.</p>
+                <p className="recall-context">Bu kapsam mevcut izleme görünümüdür; henüz kesinleşmiş geri çağırma sonucu değildir. Bu aşama kayıt veya stok değişikliği oluşturmaz.</p>
                 <div className="recall-source"><span>Seçili kaynak</span><strong>{code}</strong><p>{report.source_lot.product.name}</p><Badge tone={report.source_lot.blocked ? "danger" : ""}>{report.source_lot.blocked ? "Zaten bloke" : "Bloke değil"}</Badge></div>
                 {report.lots.some(l => l.blocked) && <div className="notice warning">Kapsamda zaten bloke lot var. Yeni bir kayıt blokları kaldırmaz; önce mevcut geri çağırma kayıtlarını inceleyin.</div>}
                 <ImpactSummary report={report} />
@@ -183,7 +183,7 @@ export function RecallWizard({ onSuccess }: { onSuccess: (record: Recall) => voi
           <p>Kesinleştirme, gerçek lot ilişkilerine bağlı geri çağırma üyeliğini kaydeder ve etkilenen lotları atomik olarak bloke eder. Geçmiş satış/sevkiyat silinmez; stok miktarı ve maliyet defteri değiştirilmez.</p>
           <form onSubmit={e => { e.preventDefault(); if (validReason && ready) { setTypedCode(""); setStep(3); setShowConfirm(true); } }}>
             <label className="field" htmlFor="recall-reason">Geri çağırma nedeni <span>(zorunlu)</span>
-              <textarea id="recall-reason" aria-label="Geri çağırma nedeni" value={reason} onChange={e => setReason(e.target.value)} maxLength={500} required rows={4} aria-describedby="recall-reason-help" />
+              <textarea id="recall-reason" aria-label="Geri çağırma nedeni" placeholder="Örn: Soğuk zincir kaydında uygunsuzluk bildirimi" value={reason} onChange={e => setReason(e.target.value)} maxLength={500} required rows={4} aria-describedby="recall-reason-help" />
             </label>
             <p id="recall-reason-help" className="caption">Gıda güvenliği riskini ve kaynağı açıklayın. En fazla 500 karakter.</p>
             <div className="recall-actions">
@@ -205,7 +205,7 @@ export function RecallWizard({ onSuccess }: { onSuccess: (record: Recall) => voi
         <p>İkinci kademe alıcılar: {[...new Set(report.second_tier_distributions.map(r => r.recipient_name))].join(", ") || "Belgelenmemiş"}</p>
         <p>Gerekçe: {reason.trim()}</p>
         <label className="field" htmlFor="recall-confirm-code">Kaynak lot kodunu elle yazın
-          <input id="recall-confirm-code" value={typedCode} onChange={e => setTypedCode(e.target.value)} autoComplete="off" spellCheck={false} maxLength={100} aria-describedby="recall-code-help" aria-invalid={!!typedCode && typedCode !== code} />
+          <input id="recall-confirm-code" placeholder={"Örn: " + code} value={typedCode} onChange={e => setTypedCode(e.target.value)} autoComplete="off" spellCheck={false} maxLength={100} aria-describedby="recall-code-help" aria-invalid={!!typedCode && typedCode !== code} />
         </label>
         <p id="recall-code-help">Tam olarak <strong>{code}</strong> yazın. {typedCode && typedCode !== code ? "Lot kodu eşleşmiyor." : ""}</p>
       </ConfirmDialog>}

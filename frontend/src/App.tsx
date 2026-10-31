@@ -190,7 +190,7 @@ export function App() {
           </button>
         </div>
         <div className="workspace-label">
-          <span className="workspace-dot" /> AVATAR 2026{" "}
+          <span className="workspace-dot" /> AVATAR{" "}
           <span>Çalışma alanı</span>
         </div>
         <nav>
@@ -245,7 +245,7 @@ export function App() {
         <div className="sidebar-footer">
           <LockKeyhole size={17} />
           <div>
-            Yerel çalışma alanı<small>AVATAR · AVATAR 2026</small>
+            Yerel çalışma alanı<small>AVATAR</small>
           </div>
         </div>
       </aside>
@@ -378,7 +378,7 @@ export function App() {
             </Routes>
           </Suspense>
           <footer className="page-footer">
-            <span>AVATAR · AVATAR 2026</span>
+            <span>AVATAR</span>
             <span>Kayıtlı lotlar. Gerçek maliyetler.</span>
           </footer>
         </main>

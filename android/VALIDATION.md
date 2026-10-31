@@ -65,6 +65,6 @@ Uygulama tek satırlı lot satışı oluşturur; çok satırlı backend geçmiş
 
 ## APK ve entegrasyon devri
 
-APK: `android/app/build/outputs/apk/debug/app-debug.apk` (bu çalışma alanında tam yol `/workspace/byteme-avatar-2026/android/app/build/outputs/apk/debug/app-debug.apk`). Kurulum: `adb install -r <APK yolu>`. APK/build çıktıları Git’e eklenmez; checksum ve boyut sonuç JSON’undadır. Linux/Zorin yönergeleri: [ANDROID_SETUP.md](ANDROID_SETUP.md).
+APK: `android/app/build/outputs/apk/debug/app-debug.apk` (bu çalışma alanında tam yol `/workspace/byteme-avatar-2026/android/app/build/outputs/apk/debug/app-debug.apk`). Kurulum: `adb install -r <APK yolu>`. APK/build çıktıları Git’e eklenmez; checksum ve boyut sonuç JSON’undadır. Linux kurulum yönergeleri: [ANDROID_SETUP.md](ANDROID_SETUP.md).
 
 Ortak docs/PROJECT_CHECKLIST.md değiştirilmedi. Entegrasyon sorumlusu **AND-01…AND-06 ve KUZ-05** için API 28’de bu dar prototip kabul kanıtlarını kullanabilir: Kotlin build, Room/Retrofit, kalıcı outbox/safe retry, gerçek lot satışı/StockMovement, recall reddi ve kesim parçasının cihazdan satışı. API 35/fiziksel cihaz doğrulaması, üretim yetkilendirmesi ve bütün yarışmanın birleşik teslimi ayrı kalır. Backend/frontend/ML kaynaklarına veya henüz tamamlanmamış ajan işlerine müdahale edilmedi.

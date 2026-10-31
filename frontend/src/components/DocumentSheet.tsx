@@ -212,12 +212,12 @@ export function DocumentSheet({
           ),
       )}
       <details className="document-technical">
-        <summary>Teknik kaynak kayıtları</summary>
+        <summary>Teknik ayrıntılar · kaynak kayıtları</summary>
         <p className="document-id">Kaynak satış: {s.sale_id}</p>
-        <p className="document-id">Müşteri UUID: {s.customer.id}</p>
+        <p className="document-id">Müşteri kayıt kimliği: {s.customer.id}</p>
         {s.lines.map((l) => (
           <p className="document-id" key={l.id}>
-            {l.lot_code} · Lot UUID: {l.lot_id}
+            {l.lot_code} · Lot kayıt kimliği: {l.lot_id}
           </p>
         ))}
         {s.shipments.map((sh) => (

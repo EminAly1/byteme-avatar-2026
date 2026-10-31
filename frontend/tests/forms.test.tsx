@@ -31,8 +31,12 @@ it("geçersiz formda istek göndermez; onay iptal edilebilir", async () => {
   vi.stubGlobal("fetch", fetch);
   renderForm();
   const user = userEvent.setup();
+  expect(screen.getByLabelText("Ürün adı")).toHaveValue("");
+  expect(screen.getByLabelText("Ürün adı")).toHaveAttribute("placeholder", "Örn: Dana eti");
   await user.click(screen.getByRole("button", { name: "Kaydet" }));
   expect(await screen.findByText("Ad gerekli.")).toBeVisible();
+  expect(screen.getByLabelText("Ürün adı")).toHaveAttribute("aria-invalid", "true");
+  expect(screen.getByLabelText("Ürün adı")).toHaveAccessibleDescription("Ad gerekli.");
   expect(fetch).not.toHaveBeenCalled();
   await user.type(screen.getByLabelText("Ürün adı"), "Et");
   await user.click(screen.getByRole("button", { name: "Kaydet" }));
@@ -63,7 +67,7 @@ it("belirsiz sonucu sekme içinde korur ve yeniden mount sonrası aynı anahtar�
   await user.click(
     screen.getByRole("button", { name: "Aynı işlemi tekrar dene" }),
   );
-  await screen.findByText("Kayıt backend tarafından onaylandı.");
+  await screen.findByText("Kayıt sunucu tarafından onaylandı.");
   expect(fetch.mock.calls[0][1].headers["Idempotency-Key"]).toBe(
     fetch.mock.calls[1][1].headers["Idempotency-Key"],
   );
