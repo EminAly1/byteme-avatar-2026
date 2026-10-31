@@ -5,6 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.byteme.avatar.AppGraph
 import com.byteme.avatar.BuildConfig
 import com.byteme.avatar.data.*
+import kotlinx.coroutines.Job
+import com.byteme.avatar.network.probeConnection
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -13,7 +15,7 @@ import retrofit2.HttpException
 
  data class Catalog(val products: List<CachedProduct> = emptyList(),val lots: List<CachedLot> = emptyList(),val stocks: List<StockRow> = emptyList(),val customers: List<CachedCustomer> = emptyList(),val metadata: SyncMetadata? = null)
  data class LocalSales(val drafts: List<SaleDraft> = emptyList(),val outbox: List<SaleOutbox> = emptyList(),val sales: List<ConfirmedSaleSnapshot> = emptyList())
- data class OperationStatus(val busy: Boolean = false,val message: String = "",val apiConnected: Boolean? = null)
+ data class OperationStatus(val busy: Boolean = false,val message: String = "",val apiConnected: Boolean? = null,val connectionChecking: Boolean = false)
  data class ScreenState(val catalog: Catalog = Catalog(),val local: LocalSales = LocalSales(),val status: OperationStatus = OperationStatus(),val network: Boolean = false,val endpoint: String = "",val initialized: Boolean = false)
 
 class SalesViewModel(val graph: AppGraph): ViewModel() {
@@ -23,6 +25,8 @@ class SalesViewModel(val graph: AppGraph): ViewModel() {
     fun refreshAlerts(filter: String? = alerts.value.filter, more: Boolean = false) =
         viewModelScope.launch { alertsRepository.refresh(filter, more) }
     private val status = MutableStateFlow(OperationStatus())
+    private var connectionJob: Job? = null
+    private var connectionRevision = 0
     private val endpoint = MutableStateFlow(graph.settings.base())
     val documents = graph.documents.state
     fun generateDocumentPdf() = viewModelScope.launch { graph.documents.generatePdf() }
@@ -40,7 +44,7 @@ class SalesViewModel(val graph: AppGraph): ViewModel() {
         viewModelScope.launch {
             repo.recover()
             graph.network.connected.collect {
-                if (!it) { alertsRepository.invalidate(); graph.documents.invalidate() }
+                if (!it) { resetConnection(); alertsRepository.invalidate(); graph.documents.invalidate() }
                 if (it && graph.settings.base().isNotBlank()) {
                     refreshAlerts()
                     viewModelScope.launch { sync() }
@@ -50,20 +54,41 @@ class SalesViewModel(val graph: AppGraph): ViewModel() {
     }
     fun hasSavedApiKey(): Boolean = graph.settings.key().isNotBlank()
     fun configure(base: String,key: String,onSaved: () -> Unit = {}) = action {
+        resetConnection()
         withContext(Dispatchers.IO) { graph.settings.save(base,key,BuildConfig.DEBUG) }
         onSaved()
         endpoint.value = graph.settings.base(); graph.documents.invalidate(clear = true); alertsRepository.invalidate(clear = true); refreshAlerts(); sync()
     }
+    // The check is independent of refresh/sync: no outbox send or Room write.
+    fun checkConnection() {
+        if (connectionJob?.isActive == true) return
+        val revision = ++connectionRevision
+        connectionJob = viewModelScope.launch {
+            status.value = status.value.copy(connectionChecking=true,apiConnected=null,message="Sunucu bağlantısı kontrol ediliyor…")
+            try {
+                val result = probeConnection(graph.settings)
+                if (revision == connectionRevision) status.value = status.value.copy(
+                    apiConnected=result.connected,message=result.message)
+            } finally {
+                if (revision == connectionRevision) status.value = status.value.copy(connectionChecking=false)
+            }
+        }
+    }
+    private fun resetConnection() {
+        connectionRevision++
+        connectionJob?.cancel()
+        status.value = status.value.copy(apiConnected=null,connectionChecking=false)
+    }
     fun refresh() = action { refreshAlerts(); sync() }
     private suspend fun sync() {
-        status.value = OperationStatus(busy=true,message="Merkezî kayıtlar okunuyor…",apiConnected=status.value.apiConnected)
+        status.value = OperationStatus(busy=true,message="Merkezî kayıtlar okunuyor…",apiConnected=status.value.apiConnected,connectionChecking=status.value.connectionChecking)
         try {
             // Send only explicitly approved outbox rows; DRAFT rows never sync.
             repo.drain(); repo.refresh()
-            status.value = OperationStatus(message="Sunucu kayıtları güncellendi.",apiConnected=true)
+            status.value = OperationStatus(message="Sunucu kayıtları güncellendi.",apiConnected=true,connectionChecking=status.value.connectionChecking)
         } catch (e: Exception) {
             if (e is kotlinx.coroutines.CancellationException) throw e
-            status.value = OperationStatus(message=if(e is HttpException) errorText(e.code(),"HTTP_${e.code()}") else "API’ye ulaşılamadı. Son önbellek korunuyor; kesin satış varsayılmadı.",apiConnected=false)
+            status.value = OperationStatus(message=if(e is HttpException) errorText(e.code(),"HTTP_${e.code()}") else "API’ye ulaşılamadı. Son önbellek korunuyor; kesin satış varsayılmadı.",apiConnected=false,connectionChecking=status.value.connectionChecking)
         }
     }
     fun save(stock: StockRow,customer: String,quantity: String,price: String) = action {

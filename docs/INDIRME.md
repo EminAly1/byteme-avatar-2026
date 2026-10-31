@@ -13,7 +13,7 @@ yerel paylaşım varsa gerçek QR gösterir.
 ### Tek kullanımlık yerel paylaşım
 
 1. Repo kökünde `./android/gradlew -p android assemblePreview` çalıştırın.
-   Görev28 Android kodunu değiştirmedi; burada güncel build UP-TO-DATE doğrulandı.
+   Görev29B bağlantı rehberini içeren Preview APK yeniden derlendi; güncel hash aşağıdadır.
 2. `sha256sum android/app/build/outputs/apk/preview/app-preview.apk` ile hash'i
    kontrol edin. Bu ortamın kabul edilmiş hash'i aşağıdadır; farklı makine/debug
    imzası farklı hash üretir. APK'nin kaynağını ve build'ini doğrulayın.
@@ -96,9 +96,9 @@ Kaynak kod: [güncel `main`](https://github.com/EminAly1/byteme-avatar-2026/tree
 
 Hazır dosyalar bu çalışma ortamında korunur:
 
-- APK: `/workspace/artifacts/AVATAR-Preview-final-ui-polish.apk`
-- Hash dosyası: `/workspace/artifacts/AVATAR-Preview-final-ui-polish.apk.sha256`
-- SHA256: `1d9a671d80d55c9ad6bcb4fe0ce5712463a256dc781756d7bed22092a68320e1`
+- APK: `/workspace/artifacts/AVATAR-Preview-connection-guide.apk`
+- Hash dosyası: `/workspace/artifacts/AVATAR-Preview-connection-guide.apk.sha256`
+- SHA256: `0affc5b5ba72650ec33fe96fa23c5fdec87cc83134cb8f9c1b75065a911cfd3e`
 - Paket: `com.byteme.avatar.preview`; görünen ad **AVATAR Preview**.
 - Sürüm: **0.1.0-preview.2**, versionCode **1**, minSdk **26**, targetSdk **35**.
 - Sertifika SHA256: `b9fbe028ac6c63fc1f873fbe446a0693be3f6260d57807f89d75ad6ef0418f9f`.
@@ -150,6 +150,12 @@ anahtar/parolaları Git'e, videoya veya APK'ye koymayın. Güvenli durdurma:
 
 ## 3. Telefonu aynı sisteme bağla
 
+Android Ana Sayfa → **Bağlantı yardımı**, USB/kablosuz ADB adımlarını gösterir.
+İlk açılışta **Sunucuya bağlan** ile ayarları kaydedin, ardından **Bağlantıyı kontrol et**
+ile gerçek API isteğinin sonucunu görün: Bağlı değil / Bağlanıyor / Bağlandı / Hata.
+QR ile APK indirmek otomatik sunucu eşleştirmesi değildir.
+[Görev29B APK ve kabul sonucu](ANDROID_CONNECTION_GUIDE_ACCEPTANCE.md).
+
 Bilgisayarda backend çalışırken yetkilendirilmiş USB hata ayıklama bağlantısı kurun:
 
 ```bash
@@ -189,8 +195,8 @@ internete açmayın. Kablosuz bağlantı bu teslimde denenmedi.
 ## 5. Ekip için manuel Release yükleme
 
 1. Paketleme [PR #43](https://github.com/EminAly1/byteme-avatar-2026/pull/43) `main` dalına alındı. APK kod commit'i ve hash/sertifikasını doğrulayın;
-   güncel APK Android kaynakları PR #45 tabanı `a7c80bc` ile aynıdır; Görev28
-   yalnız web/backend/araç değiştirir. Eski Görev26 APK hash'ini kullanmayın.
+   güncel APK için [Görev29B kabulündeki](ANDROID_CONNECTION_GUIDE_ACCEPTANCE.md)
+   Android kaynaklarını ve yeni SHA256'yı kullanın. Eski APK hash'ini kullanmayın.
 2. Yetkili ekip hesabıyla GitHub deposu → **Releases → Draft a new release**.
    `v0.1.0-preview.2` etiketinin boşta olduğunu tekrar kontrol edin; varsa mevcut
    etiketi oynatmadan yeni etiket seçin. İncelenmiş kaynak commit'ini hedefleyin.

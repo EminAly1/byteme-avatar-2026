@@ -58,6 +58,7 @@ private fun unit(value: String) = when(value) { "package" -> "paket"; "unit" -> 
         val review by vm.review.collectAsStateWithLifecycle()
         var route by rememberSaveable { mutableStateOf("home") }
         var settings by rememberSaveable { mutableStateOf(false) }
+        var connectionHelp by rememberSaveable { mutableStateOf(false) }
         val focus = LocalFocusManager.current
         val keyboard = LocalSoftwareKeyboardController.current
         fun navigate(target: String) { focus.clearFocus(); keyboard?.hide(); route = target }
@@ -83,10 +84,11 @@ private fun unit(value: String) = when(value) { "package" -> "paket"; "unit" -> 
                 modifier=Modifier.testTag("nav-$id"))
         } } }) { padding ->
             LazyColumn(Modifier.fillMaxSize().padding(padding).testTag("main-list"),state=listState,contentPadding=PaddingValues(16.dp),verticalArrangement=Arrangement.spacedBy(16.dp)) {
-                item { ConnectionCard(state) }
+                item { ConnectionCard(state,
+                    onConnect={focus.clearFocus();keyboard?.hide();settings=true},
+                    onHelp={focus.clearFocus();keyboard?.hide();connectionHelp=true},onCheck={vm.checkConnection()}) }
                 if (state.status.message.isNotEmpty()) item { Text(state.status.message,style=MaterialTheme.typography.bodyMedium,modifier=Modifier.testTag("message")) }
                 if(state.status.busy) item { LinearProgressIndicator(Modifier.fillMaxWidth()); Spacer(Modifier.height(8.dp)); repeat(2) { Box(Modifier.fillMaxWidth().height(28.dp).padding(vertical=3.dp).background(MaterialTheme.colorScheme.surfaceVariant,RoundedCornerShape(8.dp))) } }
-                if(state.endpoint.isBlank()) item { Empty("Satışa güvenli bağlantıyla başlayın","Yerel demo sunucunuzu ve API anahtarını ayarlayın."); Button(onClick={settings=true}) {Text("Bağlantıyı ayarla")} }
                 when(route) {
                     "home" -> {
                         item { Text("Operasyon özeti",style=MaterialTheme.typography.headlineSmall,fontWeight=FontWeight.Bold) }
@@ -146,8 +148,11 @@ private fun unit(value: String) = when(value) { "package" -> "paket"; "unit" -> 
         if(settings) {
             val hasSavedKey = remember(state.endpoint) { vm.hasSavedApiKey() }
             SettingsDialog(state.endpoint,hasSavedKey,onDismiss={settings=false},
-                onSave={base,key->vm.configure(base,key,onSaved={settings=false})})
+                onSave={base,key->vm.configure(base,key,onSaved={settings=false})},
+                onHelp={connectionHelp=true})
         }
+        if(connectionHelp) ConnectionHelpDialog(onDismiss={connectionHelp=false},
+            onConnect={connectionHelp=false;settings=true})
         review?.let { draft ->
             val stock = state.catalog.stocks.find { draft.endpoint==state.endpoint && it.lotId==draft.lotId && it.locationId==draft.locationId }
             AlertDialog(onDismissRequest={vm.review.value=null},title={Text("Satış onayı")},text={Column(Modifier.verticalScroll(rememberScrollState()),verticalArrangement=Arrangement.spacedBy(8.dp)) {
@@ -161,9 +166,16 @@ private fun unit(value: String) = when(value) { "package" -> "paket"; "unit" -> 
     }
 }
 
-@Composable private fun ConnectionCard(state: ScreenState) {
-    Surface(shape=RoundedCornerShape(16.dp),color=MaterialTheme.colorScheme.primaryContainer) { Column(Modifier.fillMaxWidth().padding(16.dp),verticalArrangement=Arrangement.spacedBy(4.dp)) {
-        Text(if(!state.network) "Ağ yok · çevrimdışı katalog" else if(state.status.busy) "Sunucu kontrol ediliyor…" else when(state.status.apiConnected) {true->"Sunucu bağlantısı doğrulandı";false->"Sunucu erişimi doğrulanamadı";else->"Ağ var · sunucu bekleniyor"},fontWeight=FontWeight.SemiBold)
+@Composable internal fun ConnectionCard(state: ScreenState,onConnect: () -> Unit,onHelp: () -> Unit,onCheck: () -> Unit) {
+    val phase = connectionPhase(state.endpoint,state.status)
+    Surface(shape=RoundedCornerShape(16.dp),color=MaterialTheme.colorScheme.primaryContainer) { Column(Modifier.fillMaxWidth().padding(16.dp),verticalArrangement=Arrangement.spacedBy(8.dp)) {
+        Text(phase.label,fontWeight=FontWeight.SemiBold,modifier=Modifier.testTag("connection-status"))
+        if(state.endpoint.isBlank()) Text("Satışa güvenli bağlantıyla başlayın. Önce sunucu adresini ve API anahtarını ayarlayın.")
+        else Text("Durum son API kontrolünün sonucudur. Yeniden doğrulamak için bağlantıyı kontrol edin.",style=MaterialTheme.typography.bodySmall)
+        if(!state.network) Text("Cihaz ağı çevrimdışı. Yerel taslaklar korunur; ADB tünelini ayrıca kontrol edebilirsiniz.",style=MaterialTheme.typography.bodySmall)
+        if(state.endpoint.isBlank()) Button(onClick=onConnect,modifier=Modifier.fillMaxWidth().heightIn(min=48.dp)) {Text("Sunucuya bağlan")}
+        else Button(onClick=onCheck,enabled=phase!=ConnectionPhase.CONNECTING,modifier=Modifier.fillMaxWidth().heightIn(min=48.dp).testTag("check-connection")) {Text("Bağlantıyı kontrol et")}
+        OutlinedButton(onClick=onHelp,modifier=Modifier.fillMaxWidth().heightIn(min=48.dp).testTag("connection-help-entry")) {Text("Bağlantı yardımı")}
         Text(state.catalog.metadata?.let { "Önbellek: ${moment(it.syncedAt)}${if(it.stale) " · satış sonrası yenileme gerekli" else ""}" } ?: "Katalog henüz senkronize edilmedi",style=MaterialTheme.typography.bodySmall)
         Text("Gösterilen stok son okumadır; satışta sunucu yeniden kontrol eder.",style=MaterialTheme.typography.labelSmall)
     } }
@@ -227,7 +239,7 @@ private fun unit(value: String) = when(value) { "package" -> "paket"; "unit" -> 
         sale?.lines?.forEach {line -> Text("${line.quantity} ${unit(line.unit)} · ${line.unit_price} EUR/${unit(line.unit)}"); Text("Lot: ${line.lot_id}\nSatır: ${line.id}\nStok hareketi: ${line.stock_movement_id}",style=MaterialTheme.typography.bodySmall) }
     } }
 }
-@Composable internal fun SettingsDialog(base: String,hasSavedKey: Boolean,onDismiss: ()->Unit,onSave: (String,String)->Unit) {
+@Composable internal fun SettingsDialog(base: String,hasSavedKey: Boolean,onDismiss: ()->Unit,onSave: (String,String)->Unit,onHelp: () -> Unit = {}) {
     var address by rememberSaveable(base) {mutableStateOf(base)}
     var key by remember {mutableStateOf("")}
     var submitted by rememberSaveable {mutableStateOf(false)}
@@ -247,7 +259,8 @@ private fun unit(value: String) = when(value) { "package" -> "paket"; "unit" -> 
             isError=errors.key!=null,supportingText={Text(errors.key ?: if(hasSavedKey) "Keystore ile şifrelenir. Aynı sunucuda boş bırakmak kayıtlı anahtarı korur." else "Sunucu anahtarını girin; Keystore ile şifrelenir.")},
             visualTransformation=PasswordVisualTransformation(),singleLine=true,
             keyboardOptions=KeyboardOptions(keyboardType=KeyboardType.Password,imeAction=ImeAction.Done),keyboardActions=KeyboardActions(onDone={submit()}),modifier=Modifier.fillMaxWidth().testTag("server-key"))
-        Text("Android 11+ kablosuz ADB eşleştirmesinden sonra adb reverse tcp:8000 tcp:8000 kullanabilirsiniz. 127.0.0.1 ancak doğru tünelle bilgisayara ulaşır.",style=MaterialTheme.typography.bodySmall)
+        Text("QR ile APK indirmek sunucuya otomatik eşleştirme yapmaz. Fiziksel telefon için USB veya kablosuz ADB reverse gerekir.",style=MaterialTheme.typography.bodySmall)
+        OutlinedButton(onClick=onHelp,modifier=Modifier.fillMaxWidth().heightIn(min=48.dp)) {Text("Bağlantı yardımı")}
         Text("HTTP yalnız yerel debug içindir. Sunucu değişince bekleyen işlemler yeni sunucuya otomatik gönderilmez.",style=MaterialTheme.typography.bodySmall)
     }},confirmButton={TextButton(onClick={submit()},modifier=Modifier.heightIn(min=48.dp).testTag("save-connection")) {Text("Güvenli kaydet ve bağlan")}},dismissButton={TextButton(onClick=onDismiss,modifier=Modifier.heightIn(min=48.dp)) {Text("Vazgeç")}})
 }
