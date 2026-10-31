@@ -14,6 +14,7 @@ import {
   LockKeyhole,
   X,
   Search,
+  Smartphone,
 } from "lucide-react";
 import { navigation, matchesEntry } from "./lib/navigation";
 import { useMediaQuery } from "./hooks/useMediaQuery";
@@ -91,7 +92,10 @@ const SaleDocument = lazy(() =>
   import("./pages/Documents").then((m) => ({ default: m.SaleDocument })),
 );
 
+const ApkDownloadDialog = lazy(() => import("./features/apk-download/ApkDownloadDialog"));
+
 export function App() {
+  const [apkOpen, setApkOpen] = useState(false);
   const [menu, setMenu] = useState(false),
     location = useLocation(),
     client = useQueryClient(),
@@ -274,6 +278,10 @@ export function App() {
             <strong>{title}</strong>
           </div>
           <div className="topbar-right">
+            <button id="apk-download-trigger" className="button primary apk-download-trigger" type="button"
+              aria-haspopup="dialog" onClick={() => setApkOpen(true)}>
+              <Smartphone size={18} aria-hidden="true" />Android Uygulamasını İndir
+            </button>
             <NavLink
               className="topbar-search"
               aria-label="Lot kaydı bul"
@@ -383,6 +391,7 @@ export function App() {
           </footer>
         </main>
       </div>
+      {apkOpen && <Suspense fallback={null}><ApkDownloadDialog onClose={() => setApkOpen(false)} /></Suspense>}
     </div>
   );
 }

@@ -9,7 +9,11 @@ Gıda işletmesi için yerel prototip: alış ve lot girişi, dış üretim ve g
 GitHub Release gerekmez. `tools/share_apk.py` yalnız doğrulanmış güncel APK'yi,
 seçtiğiniz yerel adreste, rastgele token ve varsayılan 180 sn/tek indirme (üst sınır 600 sn) ile paylaşır.
 Kullanıcı başlatmadıkça LAN servisi açılmaz; API/MySQL/web portları loopback'te kalır.
-Herkese açık gerçek indirme URL'si henüz yok; geçici adresi araç terminalde üretir.
+Web panelinin üstündeki **Android Uygulamasını İndir** düğmesi aktif paylaşımın
+yerel QR kodunu, süresini ve APK hash'ini gösterir. Token terminale/loga yazılmaz;
+paylaşım yoksa QR gösterilmez. Linux Docker kurulumunda yalnız özel Unix soketini
+bağlayan isteğe bağlı override gerekir; [başlatma adımları](docs/INDIRME.md#web-panelinden-qr-ile-indirme).
+[Kabul ve test kanıtları](docs/APK_QR_DOWNLOAD_ACCEPTANCE.md).
 
 ## Hızlı İndir ve Kur
 

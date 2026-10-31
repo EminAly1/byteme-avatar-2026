@@ -9,9 +9,7 @@ import json
 from pathlib import Path
 import re
 import secrets
-import shutil
-import socket
-import subprocess
+import signal
 import threading
 import time
 from urllib.parse import urlsplit
@@ -19,6 +17,10 @@ import zipfile
 
 ROOT=Path(__file__).resolve().parents[1]
 BUILD=ROOT/'android/app/build/outputs/apk/preview'
+
+def lan_ipv4(value):
+    ip=ipaddress.ip_address(value)
+    return ip.version == 4 and not ip.is_loopback and any(ip in ipaddress.ip_network(net) for net in ('10.0.0.0/8','172.16.0.0/12','192.168.0.0/16'))
 
 
 def load_preview(apk, expected_sha, build_dir=BUILD):
@@ -43,11 +45,23 @@ def load_preview(apk, expected_sha, build_dir=BUILD):
 
 
 class ApkServer(HTTPServer):
-    def __init__(self,address,payload,ttl):
+    def __init__(self,address,payload,ttl,version=None):
         if not 0<ttl<=600:raise ValueError('Paylaşım süresi0–600 saniye arasında olmalı.')
         self.payload=payload;self.digest=hashlib.sha256(payload).hexdigest()
         self.token=secrets.token_urlsafe(32);self.deadline=time.monotonic()+ttl;self.used=False;self.denied=0
+        self.version=version;self.expires_at=(time.time()+ttl)*1000;self.serving=False;self.state_lock=threading.Lock()
         super().__init__(address,ApkHandler)
+    def web_status(self):
+        with self.state_lock:
+            if self.used:return {'state':'used'}
+            if time.monotonic()>=self.deadline:return {'state':'expired'}
+            if not self.serving:return {'state':'inactive'}
+            host,port=self.server_address
+            if not lan_ipv4(host):return {'state':'local_only'}
+            if not self.version:return {'state':'unavailable'}
+            return {'state':'active','url':f'http://{host}:{port}/download/{self.token}',
+                    'expiresAt':self.expires_at,'version':self.version,'bytes':len(self.payload),'sha256':self.digest}
+
     def get_request(self):
         connection,address=super().get_request();connection.settimeout(2);return connection,address
     def stop(self):threading.Thread(target=self.shutdown,daemon=True).start()
@@ -81,7 +95,8 @@ class ApkHandler(BaseHTTPRequestHandler):
         if self.ready():self.send_apk_headers()
     def do_GET(self):
         if not self.ready():return
-        self.server.used=True
+        with self.server.state_lock:
+            self.server.used=True
         try:
             self.send_apk_headers()
             for offset in range(0,len(self.server.payload),65536):
@@ -95,8 +110,11 @@ class ApkHandler(BaseHTTPRequestHandler):
 
 def serve(server):
     timer=threading.Timer(max(0,server.deadline-time.monotonic()),server.stop);timer.daemon=True;timer.start()
+    server.serving=True
     try:server.serve_forever(poll_interval=.1)
-    finally:timer.cancel();server.server_close()
+    finally:
+        server.serving=False
+        timer.cancel();server.server_close()
 
 
 def main():
@@ -104,7 +122,12 @@ def main():
     p.add_argument('--apk',type=Path,default=BUILD/'app-preview.apk');p.add_argument('--sha256',required=True)
     p.add_argument('--bind',default='127.0.0.1');p.add_argument('--allow-lan',action='store_true')
     p.add_argument('--port',type=int,default=8765);p.add_argument('--ttl',type=int,default=180)
+    p.add_argument('--status-socket',type=Path,help='Kaynak deposu dışındaki özel Unix durum soketi')
     a=p.parse_args()
+    try:
+        from tools.apk_status_bridge import StatusBridge, default_socket
+    except ModuleNotFoundError:
+        from apk_status_bridge import StatusBridge, default_socket
     try:
         address=ipaddress.ip_address(a.bind)
         if address.version!=4 or address.is_unspecified or address.is_multicast or not(address.is_loopback or any(address in ipaddress.ip_network(net) for net in ('10.0.0.0/8','172.16.0.0/12','192.168.0.0/16'))):
@@ -112,15 +135,20 @@ def main():
         if not address.is_loopback and not a.allow_lan:raise ValueError('LAN için --allow-lan açık onayı gerekir.')
         if not 1<=a.port<=65535:raise ValueError('Geçerli port girin.')
         payload,digest,item=load_preview(a.apk,a.sha256)
-        server=ApkServer((str(address),a.port),payload,a.ttl)
+        server=ApkServer((str(address),a.port),payload,a.ttl,item["versionName"])
+        try:bridge=StatusBridge(a.status_socket or default_socket(),server)
+        except (OSError,ValueError):
+            server.server_close();raise
     except (OSError,ValueError,KeyError,zipfile.BadZipFile) as exc:p.exit(2,str(exc)+'\n')
     print(f'AVATAR Preview {item["versionName"]} · {len(payload)} byte\nSHA256: {digest}')
     print('HTTP şifrelenmez: yalnız güvenilir yerel Wi-Fi. URL gizlidir; API anahtarı paylaşılmaz.')
-    url=f'http://{address}:{server.server_port}/download/{server.token}'
-    print(f'Telefonda açın: {url}\nBir GET indirmesi veya en çok{a.ttl} saniye; sonra otomatik kapanır.',flush=True)
-    if shutil.which('qrencode'):subprocess.run(['qrencode','-t','UTF8',url],check=False)
+    print('Web panelinde Android Uygulamasını İndir düğmesini açın. Token terminale veya erişim loguna yazılmaz.',flush=True)
+    print(f'Bir GET indirmesi veya en çok {a.ttl} saniye; sonra otomatik kapanır.',flush=True)
+    def terminate(*_):raise KeyboardInterrupt
+    signal.signal(signal.SIGTERM,terminate)
     try:serve(server)
     except KeyboardInterrupt:server.server_close()
+    finally:bridge.close()
 
 
 if __name__=='__main__':main()

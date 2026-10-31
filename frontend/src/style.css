@@ -2280,3 +2280,53 @@ form > fieldset { display:flex;flex-direction:column;gap:20px;min-width:0 }
 .prediction-parts progress { width:100%;height:12px;accent-color:var(--brand) }
 @media(max-width:600px){.ai-input-card{padding:16px}.ai-data-note{padding:16px}.model-tabs button{font-size:var(--text-sm)}}
 p.notice { display:block;line-height:1.7 }
+
+/* Temporary APK handoff: existing AVATAR modal, no persistent capability storage. */
+.apk-download-trigger { white-space: nowrap; min-height: 44px; }
+.detail-drawer.apk-download-dialog { inset: 0; margin: auto; width: min(760px, calc(100vw - 32px)); height: auto; max-height: calc(100dvh - 32px); overscroll-behavior: contain; border-radius: var(--radius-lg, 16px); padding: 24px; }
+.apk-download-dialog .section-head h2 { font-size: 1.2rem; }
+.apk-brand { display: flex; align-items: center; gap: 14px; margin: 18px 0; }
+.apk-brand h3 { margin: 0 0 4px; font-size: 1.15rem; }
+.apk-brand p, .apk-help, .apk-qr-panel p { margin: 0; color: var(--muted); font-size: .85rem; line-height: 1.6; }
+.apk-network { display: flex; align-items: flex-start; gap: 10px; background: var(--surface-muted); border-radius: 12px; padding: 14px; font-size: .9rem; }
+.apk-network svg { flex-shrink: 0; }
+.apk-share-grid { display: grid; grid-template-columns: 272px minmax(0, 1fr); gap: 22px; align-items: center; margin: 18px 0; }
+.apk-qr-panel { text-align: center; }
+.apk-qr { display: block; max-width: 100%; height: auto; margin: auto; border: 1px solid #dce3ed; border-radius: 8px; }
+.apk-metadata { min-width: 0; }
+.apk-metadata dl { margin: 14px 0 0; }
+.apk-metadata dl > div { margin: 10px 0; }
+.apk-metadata dt { color: var(--muted); font-size: .8rem; }
+.apk-metadata dd { margin: 4px 0 0; font-weight: 600; }
+.apk-metadata small { display: block; font-weight: 400; }
+.apk-status { display: inline-flex; align-items: center; gap: 8px; font-size: .85rem; border-radius: 24px; padding: 6px 10px; background: var(--success-soft); color: var(--success); }
+.apk-hash { font-family: ui-monospace, monospace; overflow-wrap: anywhere; font-size: .8rem; line-height: 1.7; }
+.apk-url-label { display: grid; gap: 8px; font-weight: 600; font-size: .85rem; }
+.apk-share-url { width: 100%; min-width: 0; font-size: .8rem; }
+.apk-url-label + .apk-help { margin: 8px 0 12px; }
+.apk-empty { padding: 20px; text-align: center; border: 1px dashed var(--border, #ccd5df); border-radius: 14px; margin: 18px 0; }
+.apk-empty p:first-of-type { font-weight: 600; }
+.apk-empty p:last-of-type { font-size: .85rem; color: var(--muted); }
+.apk-footer-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin: 18px 0; }
+.apk-start-help { border-top: 1px solid var(--border, #dce3ed); padding-top: 16px; }
+.apk-start-help h3 { margin: 0; font-size: .95rem; }
+.apk-start-help ol { padding-left: 22px; font-size: .85rem; line-height: 1.7; }
+.apk-start-help pre { white-space: pre-wrap; overflow-wrap: anywhere; background: var(--nav); color: var(--nav-text); border-radius: 10px; padding: 14px; font-size: .75rem; line-height: 1.7; }
+.apk-safety { font-size: .8rem; line-height: 1.7; color: var(--muted); margin: 18px 0 0; }
+@media (max-width: 600px) {
+  .topbar { height: auto; min-height: 60px; flex-wrap: wrap; gap: 8px; padding: 8px 12px; }
+  .topbar-right { display: contents; }
+  .topbar .breadcrumb { flex: 1; min-width: 0; }
+  .topbar .apk-download-trigger { order: 3; width: 100%; justify-content: center; }
+  .detail-drawer.apk-download-dialog { width: calc(100vw - 16px); max-height: calc(100dvh - 16px); padding: 16px; }
+  .apk-download-dialog .section-head h2 { font-size: 1rem; }
+  .apk-share-grid { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+  .apk-metadata dl { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .apk-metadata dl > div { margin: 0; }
+  .apk-metadata dl > div:last-child { grid-column: 1 / -1; }
+}
+
+.apk-download-dialog > .section-head { top: -24px; }
+@media (max-width: 600px) { .apk-download-dialog > .section-head { top: -16px; } }
+.apk-empty > svg { margin: 0 auto; }
+.apk-start-help ol { list-style: decimal; }
