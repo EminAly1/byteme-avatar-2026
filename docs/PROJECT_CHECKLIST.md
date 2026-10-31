@@ -7,9 +7,7 @@
 ## 31 Ekim — Görev 26 son paketleme durumu
 
 Bu bölüm güncel durumu belirtir; yukarıdaki tarihli raporlar ve aşağıdaki eski test
-sayıları tarihsel kanıttır. Güncel main **f2a0a156d769793b16f17d5de09c5a0393f69aae**:
-Görev 21–25, PR #37/#38/#40/#41/#42 birleşmiştir. Paketleme ayrı
-`feature/final-delivery-packaging` branch'inde; main'e kendimiz merge yapmadık.
+sayıları tarihsel kanıttır. **31 Ekim birleşimi:** Görev 21–26, PR #37/#38/#40/#41/#42 ve [PR #43](https://github.com/EminAly1/byteme-avatar-2026/pull/43) `main` dalında. Paketleme merge'i **`81155d2c1b4bf1a200e11c37b9f223c5ec14afce`**; merge sonrası tam CI/cihaz kabulü henüz yapılmadı.
 [Son kabul](FINAL_RELEASE_READINESS.md), [JSON](final-delivery/acceptance.json),
 [İndir ve kur](INDIRME.md).
 
@@ -21,7 +19,7 @@ Görev 21–25, PR #37/#38/#40/#41/#42 birleşmiştir. Paketleme ayrı
 | REL26-04 | Preview fiziksel/API28 açılış, uyarı, satış/offline ve PDF/SAF/paylaşma | Doğrulama gerekiyor | Hazır cihaz yok; eski API28 kanıtı yeni APK'ye taşınmaz. API35 **NO ACCEPTANCE / 0 test** |
 | REL26-05 | Gerçek Release/APK yayın alanı | Doğrulama gerekiyor | Releases API **Forbidden**; tag/asset/download URL yok. Yerel APK/hash ve manuel adımlar INDIRME'de |
 | REL26-06 | Linux kullanıcı/indirme/video/taslak belgeleri | Tamamlandı | README,INDIRME,USER_GUIDE,DEMO_RUNBOOK,14:30 FINAL_DEMO_SCRIPT ve gönderilmemiş taslak güncellendi |
-| REL26-07 | Final PR/main incelemesi ve son GitHub check/policy | Devam ediyor | Push/uzak SHA doğrulandı; PR açma GraphQL Forbidden. Main'e merge edilmedi; manuel compare son kabulde |
+| REL26-07 | Final PR/main incelemesi ve son GitHub check/policy | Kısmen tamamlandı | [PR #43](https://github.com/EminAly1/byteme-avatar-2026/pull/43) `main`'e normal merge edildi (`81155d2`); son GitHub check/policy ve birleşim sonrası CI doğrulaması bekliyor |
 | REL26-08 | Video/link, gerçek e-posta ve alındı | Başlanmadı | Video çekilmedi/yüklenmedi; gönderim/alındı yok. Son tarih 1 Kasım 2026, 23:59 Türkiye |
 
 **Güncel GO:** kısa kapı kapsamındaki yerel web/backend/ML ve APK paketleme.
@@ -170,7 +168,7 @@ OCR/fatura okuma ve anomali uyarıları PDF’de **isteğe bağlıdır**; iki zo
 | TST-03 | Temiz npm kurulumu, typecheck, build ve frontend unit/component | Tamamlandı | [Görev 16 raporu](../frontend/OPERATIONS_INTEGRATION_REPORT.md): `npm ci`, typecheck, build ve **65 unit passed** (45 önceki+20 yeni) gerçek Codex çalışma ortamında. Main'de son birleşik CI ayrıca TST-06 altında. |
 | TST-04 | Gerçek FastAPI/MySQL/Vite/Chromium ile alış–üretim–stok ve demo | Tamamlandı | [Görev 12](release-validation/frontend-e2e.txt) önceki 15 Chromium+ayrı 503; [Görev 16](../frontend/OPERATIONS_INTEGRATION_REPORT.md) farklı kaynak sürümünde **14 hedefli gerçek Chromium** (11 yeni+3 mevcut) operasyon/UI akışı, görünüm/erişilebilirlik kontrolü; bütün eski E2E tek koşuda tekrarlanmadı (TST-06). |
 | TST-05 | Parçalama, Kotlin satış/sync, recall yarışları ve iki ML modelinin değerlendirmesi | Tamamlandı | [Kesim/recall](../database/cutting-validation.md), [API 28 Android cihazı](../android/VALIDATION.md) ve [iki sentetik ML modeli](../ml/EVALUATION_REPORT.md) ayrı kabul testlerinde doğrulandı. **Tümünün yeni main'de tek koşuda testi, API 35 ve gerçek veri hâlâ TST-06/final doğrulama kapsamı.** |
-| TST-06 | GitHub main merge sonrası kontroller ve PR check/policy doğrulaması | Devam ediyor | 31 Ekim PR42 tabanında kısa kapı geçti (REL26); paketleme main birleşimi ve GitHub check/policy erişimi bekler. Tarihsel tam-suite: [PR #35](https://github.com/EminAly1/byteme-avatar-2026/pull/35) main'e birleşen Task19 kabulü: güncel birleşik PR #1–#34 kaynak tabanında **427 backend/ML, 83 unit, 34 ayrı Chromium, API28 4/4**; local Compose/DB/PDF GO. **PR #35 merge sonrası yeni main smoke/GitHub check/policy kontrolü, API35 (0 instrumentation), fiziksel cihaz kabulü açık.** |
+| TST-06 | GitHub main merge sonrası kontroller ve PR check/policy doğrulaması | Devam ediyor | 31 Ekim PR42 tabanında kısa kapı geçti (REL26); PR #43 paketleme `main` birleşimi tamamlandı, GitHub check/policy ve birleşim sonrası kabul bekliyor. Tarihsel tam-suite: [PR #35](https://github.com/EminAly1/byteme-avatar-2026/pull/35) main'e birleşen Task19 kabulü: güncel birleşik PR #1–#34 kaynak tabanında **427 backend/ML, 83 unit, 34 ayrı Chromium, API28 4/4**; local Compose/DB/PDF GO. **PR #35 merge sonrası yeni main smoke/GitHub check/policy kontrolü, API35 (0 instrumentation), fiziksel cihaz kabulü açık.** |
 
 ## 9. Dokümantasyon ve demo
 
@@ -194,7 +192,7 @@ OCR/fatura okuma ve anomali uyarıları PDF’de **isteğe bağlıdır**; iki zo
 
 ## Bir sonraki kritik iş
 
-Teslim için **Preview cihaz provası → yetkili Release/APK yayını → paketleme PR/main
+Teslim için **Preview cihaz provası → yetkili Release/APK yayını → son main
 incelemesi → 14:30 video/oturumsuz erişim → ekip gönderimi/alındı**. Lotlu satış,
 parçalama ve kontrollü recall zaten mevcuttur; yeniden geliştirme açılmaz.
 Backend'in sonraki üretim önceliği gerçek oturum/roller/RBAC ve TLS/operasyon
