@@ -1,0 +1,93 @@
+{
+  "date": "2026-10-31",
+  "timezone": "Europe/Istanbul",
+  "branch": "feature/android-release-minimal",
+  "base": "d68ff7854dd68583f9d5fecdc4bda942eeda11fa",
+  "test_suites": [
+    {
+      "suite": "com.byteme.avatar.AlertsRepositoryTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "cases": [
+        "repeatedCursorKeepsPreviousRecordsAndMarksStale",
+        "endpointChangeRejectsLateOldServerResponse",
+        "authForbiddenAndUnavailableDoNotEraseLastEvaluation",
+        "protectedGetPreservesServerCountsIdsAndExactEvidence"
+      ]
+    },
+    {
+      "suite": "com.byteme.avatar.ComposeSmokeTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "cases": [
+        "cachedStockSaleFormAndOfflineDraftSummaryRenderOnSmallScreen"
+      ]
+    },
+    {
+      "suite": "com.byteme.avatar.PresentationTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "cases": [
+        "blockedExpiredAndEmptyStockCannotBeSelectedForSale",
+        "exactDecimalsNeverHideNonzeroMicroStock",
+        "sevenStatesClearlySeparateDraftFromConfirmedSale"
+      ]
+    },
+    {
+      "suite": "com.byteme.avatar.SalesRepositoryTest",
+      "tests": 15,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "cases": [
+        "successWithWrongLotIsUncertainAndNotConfirmed",
+        "cleartextIsLimitedToDebugLoopbackAndReleaseRequiresHttps",
+        "insufficientStockRequiresNewReview",
+        "changingServerCannotSendPreviouslyApprovedSaleToNewServer",
+        "unauthorizedRequiresExplicitApproval",
+        "roomCatalogAndDraftAreStoredWithoutCentralStockChange",
+        "enqueueSameDraftCannotGenerateSecondKey",
+        "keyAndFrozenBodySurviveDatabaseCloseReopen",
+        "ambiguousDisconnectResendsIdenticalBodyAndKeyAfterRecovery",
+        "mismatchedCustomerLotLocationAndUnitAreRejected",
+        "successfulServerResponseConfirmsInRoomWithoutPredictingStock",
+        "catalogPaginationReadsAllPagesAndPreservesSnapshotOnCycle",
+        "recalledLotIsConflictAndNeverBlindlyRetried",
+        "invalidRequestIsNotRetriedAutomatically",
+        "serverUnavailableKeepsSameKeyRetryable"
+      ]
+    }
+  ],
+  "total_tests": 23,
+  "failures": 0,
+  "skipped": 0,
+  "lint_issues": 0,
+  "apk_sha256": "2ffaca1d8931902a61ce6556806be1f96aa899f5578c69817ed74210a025320a",
+  "package": "com.byteme.avatar",
+  "label": "AVATAR",
+  "api28_device_smoke": "NOT RUN: no ready emulator",
+  "api35": "NO ACCEPTANCE / 0 test; not started",
+  "live_backend_android_integration": "NOT RUN in minimal gate; alert HTTP contract tested with MockWebServer",
+  "preserved_files": [
+    "android/app/src/main/java/com/byteme/avatar/data/SalesRepository.kt",
+    "android/app/src/main/java/com/byteme/avatar/data/LocalDatabase.kt",
+    "android/app/src/main/java/com/byteme/avatar/security/SecureSettings.kt",
+    "android/app/build.gradle.kts",
+    "android/app/schemas/com.byteme.avatar.data.LocalDatabase/1.json",
+    "android/app/src/debug/res/xml/debug_network_security.xml",
+    "android/app/src/main/res/drawable/ic_avatar_foreground.xml",
+    "android/app/src/main/res/mipmap-anydpi/ic_launcher.xml",
+    "android/app/src/main/res/values/colors.xml",
+    "android/app/src/main/res/values/styles.xml",
+    "android/app/src/main/res/xml/data_extraction_rules.xml"
+  ],
+  "room_device_data_cleared": false,
+  "signing_certificate_matches_old_apk": false,
+  "signing_note": "Existing-device upgrade requires original signing key; no uninstall/pm clear performed."
+}
