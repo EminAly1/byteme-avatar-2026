@@ -14,9 +14,7 @@ eski uygulamayı kaldırmayın veya verisini temizlemeyin. Room verileri otomati
 
 **31 Ekim güncel kabul:** [Son testler ve GO/NO-GO](docs/FINAL_RELEASE_READINESS.md) ·
 [Kullanım](docs/USER_GUIDE.md) · [Demo runbook](docs/DEMO_RUNBOOK.md).
-Güncel main tabanı **`f2a0a156d769793b16f17d5de09c5a0393f69aae`**;
-Görev21–25 / PR #37, #38, #40, #41, #42 bu geçmiştedir.
-Paketleme `feature/final-delivery-packaging` branch'indedir; main'e birleştirilmedi.
+**31 Ekim birleşim güncellemesi:** Görev 21–26 [PR #43](https://github.com/EminAly1/byteme-avatar-2026/pull/43) ile `main` dalına alındı (merge `81155d2c1b4bf1a200e11c37b9f223c5ec14afce`). APK'nin kod commit'i `3f2c5db4d02b93ed3e9f3ba21e15fd8e6245fb6b`'dir. Birleşim sonrası tam CI/cihaz kabulü henüz yapılmadı.
 Web typecheck/build; MySQL8 migration/health/ready; iki model checksum/tahmin;
 8 hedefli recall/PDF testi; Android **31/31** host, debug/preview lint ve build geçti.
 Fiziksel cihaz/API28 bu sürümde denenmedi; **API35: NO ACCEPTANCE / 0 test**.
