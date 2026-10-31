@@ -1,8 +1,28 @@
-# ByteMe — AVATAR 2026
+# AVATAR 2026 — ByteMe
 
 Gıda işletmesi için yerel prototip: alış ve lot girişi, dış üretim ve gerçek EKP, kuzu parçalama/maliyet dağıtımı, lotlu satış/sevkiyat, kesin FK izlenebilirliği/geri çağırma ve iki sentetik ML modeli. React yönetim paneli ile Kotlin Android satış uygulaması aynı FastAPI/MySQL kayıtlarını kullanır.
 
-**28 Ekim güncel kabul:** [Final release ve üç GO/NO-GO](docs/FINAL_RELEASE_READINESS.md) · [Kullanım kılavuzu](docs/USER_GUIDE.md) · [Jüri demo runbook'u](docs/DEMO_RUNBOOK.md). Main tabanı `02a080677dee59a3940ad232d4fa716c92a84469`, PR #1–#34'ün merge geçmişi doğrulandı. [25–26 Ekim tarihsel kabulü](docs/RELEASE_READINESS.md) korunur. Teslim tarihi **1 Kasım 2026 23:59 Europe/Istanbul** kullanıcı talimatıdır; PDF'de tarih yoktur. [Gereksinimler ve açık kapsam](docs/requirements.md).
+## Hızlı İndir ve Kur
+
+[**Android APK ve Linux kurulum adımları →**](docs/INDIRME.md)
+
+AVATAR Preview **0.1.0-preview.2** APK hazır. Release API erişimi `Forbidden`
+olduğundan **yayımlanmış APK indirme bağlantısı yoktur**; yerel dosya, SHA256 ve
+manuel yükleme adımları [indirme belgesindedir](docs/INDIRME.md).
+Ayrı `com.byteme.avatar.preview` paketi eski uygulamanın üzerine yazmaz;
+eski uygulamayı kaldırmayın veya verisini temizlemeyin. Room verileri otomatik taşınmaz.
+
+**31 Ekim güncel kabul:** [Son testler ve GO/NO-GO](docs/FINAL_RELEASE_READINESS.md) ·
+[Kullanım](docs/USER_GUIDE.md) · [Demo runbook](docs/DEMO_RUNBOOK.md).
+Güncel main tabanı **`f2a0a156d769793b16f17d5de09c5a0393f69aae`**;
+Görev21–25 / PR #37, #38, #40, #41, #42 bu geçmiştedir.
+Paketleme `feature/final-delivery-packaging` branch'indedir; main'e birleştirilmedi.
+Web typecheck/build; MySQL8 migration/health/ready; iki model checksum/tahmin;
+8 hedefli recall/PDF testi; Android **31/31** host, debug/preview lint ve build geçti.
+Fiziksel cihaz/API28 bu sürümde denenmedi; **API35: NO ACCEPTANCE / 0 test**.
+28 Ekim tam-suite sayıları aşağıda tarihsel olarak korunur; bugün tekrar koşulmadı.
+Teslim **1 Kasım 2026 23:59 Türkiye saati**, kullanıcı talimatıdır; PDF'de tarih yoktur.
+[Gereksinimler ve açık kapsam](docs/requirements.md).
 
 Bağımsız transfer, müşteri iadesi/iptali, kg rework, kayıtlı ikinci kademe, web kârlılık, salt-okunur uyarı merkezi ve geçici proforma/satış özeti A4 PDF akışları da mevcuttur. Resmî mali belge veya internete açık üretim servisi iddiası yoktur.
 
@@ -134,18 +154,26 @@ npm --prefix frontend run test
 
 Görev 12 sonucu: **194 backend/ML** (175 backend + 19 ML), **45 frontend unit/component**, **15 gerçek Chromium E2E**, **1 gerçek eksik-model 503**; eski 181/43/14/1 kapsamları korundu. [Komut çıktıları](docs/release-validation/). E2E kurulum/eksik-model profili runbook'ta; yorum satırları önkoşulsuz tek başına test komutu sayılmaz.
 
-Görev 19 birleşik kabulü: **427 backend/ML**, **83 React unit/component**, **34 farklı Chromium senaryosu** (33 normal +1 gerçek eksik-model), Android **32 host yürütümü/16 farklı test**, **API28 4/4** ve güncel debug APK. API35 bu koşuda package/activity servis hataları nedeniyle instrumentation'a başlayamadı; eski offline riski kapatılmadı. İlk hazırlık/altyapı hataları, hedefli tekrarlar ve bütün kapsam sınırları [final raporda](docs/FINAL_RELEASE_READINESS.md) açıklanır.
+**Tarihsel 28 Ekim / Görev19 birleşik kabulü (bu teslimde tekrar koşulmadı):** **427 backend/ML**, **83 React unit/component**, **34 farklı Chromium senaryosu** (33 normal +1 gerçek eksik-model), Android **32 host yürütümü/16 farklı test**, **API28 4/4** ve güncel debug APK. API35 bu koşuda package/activity servis hataları nedeniyle instrumentation'a başlayamadı; eski offline riski kapatılmadı. İlk hazırlık/altyapı hataları, hedefli tekrarlar ve bütün kapsam sınırları [final raporda](docs/FINAL_RELEASE_READINESS.md) açıklanır.
 
 ## Android ve ML
 
-Android Studio'da `android/` açılır. JDK 17, Gradle wrapper 8.10.2, compile/target SDK 35, min SDK 26. [Kurulum](android/ANDROID_SETUP.md), [Room/outbox](android/README.md), [güncel cihaz sonucu](docs/RELEASE_READINESS.md).
+Android Studio'da `android/` açılır. JDK 17, Gradle wrapper 8.10.2, compile/target SDK 35, min SDK 26. [Kurulum](android/ANDROID_SETUP.md), [Room/outbox](android/README.md), [güncel kabul ve cihaz sınırı](docs/FINAL_RELEASE_READINESS.md).
 
 ```bash
 cd android
-./gradlew test lintDebug assembleDebug assembleDebugAndroidTest
+./gradlew testDebugUnitTest lintDebug assembleDebug lintPreview assemblePreview
 ```
 
-Güncel host kabulü 16 farklı testin debug+release toplam **32** yürütümü, 0 hata/skip; lint 0 issue ve debug APK hazır. API 28 dört cihaz testini geçti. API 35 sıcak tekrarı üç geçti/bir offline timeout verdi; tam API 35 kabulü yoktur. Fiziksel telefon ve HTTPS üzerinden cihaz bağlantısı test edilmedi. API 28/API 35'in güncel sonucu release raporundadır; eski Android VALIDATION.md tarihsel rapordur. API anahtarı APK/BuildConfig'e gömülmez; runtime bağlantı ekranı/özel test fixture'ı ve Keystore kullanılır.
+31 Ekim host kabulü **31 farklı debug testi**, 0 hata/skip; debug ve preview lint
+**0 issue**, iki APK build başarılı. Preview: `com.byteme.avatar.preview`,
+**AVATAR Preview**, `0.1.0-preview.2` (code1), minSdk26/target35; geliştirme imzalıdır.
+[APK/hash ve güvenli kurulum](docs/INDIRME.md). Beş sekme, gerçek uyarılar,
+BigDecimal stok gösterimi ve Android belge/PDF akışı main'deki Görev24–25'ten gelir.
+Bu sürümde API28/fiziksel telefon testi yapılmadı; **API35: NO ACCEPTANCE / 0 test**.
+28 Ekim API28 4/4 ve 32/16 host sonuçları tarihsel kanıttır. API anahtarı APK'ye
+gömülmez; runtime bağlantı ekranında Keystore ile korunur. Eski imza anahtarı
+bulunamadığından eski uygulamaya upgrade denenmedi; ayrı Preview eski Room/outbox'ı taşımaz.
 
 İki ML modeli 3.000'er **SYNTHETIC** kayıtla v2 olarak eğitildi; gerçek tarihsel kayıt **0**. Üretim 5–300 kg, kuzu kesim 5–80 kg destekler. Eski sabit testte gerileme vardır; genel gerçek doğruluk artışı iddiası yoktur. [V2 kabulü](docs/AI_MODEL_V2_ACCEPTANCE.md), [aynı popülasyonda MAE/RMSE karşılaştırmaları](ml/EVALUATION_REPORT.md), [model kartları ve tekrar üretim](ml/README.md). [Eski tekrar üretim kanıtı](docs/release-validation/ml-reproducibility.json) v1 içindir. Yeni eğitimi çalışan modelin üstüne yazmadan ayrı dizinde yapın; runbook'ta test edilen komut vardır. Tahmin doğruluğu gerçek işletme başarımı olarak sunulmaz.
 

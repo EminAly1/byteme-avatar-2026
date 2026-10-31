@@ -1,6 +1,6 @@
-# ByteMe AVATAR 2026 — Kullanım kılavuzu
+# AVATAR — Kullanım kılavuzu · ByteMe
 
-28 Ekim 2026. Üretim, lotlu stok, satış ve geri çağırma prototipi. MySQL kesin kayıt; React işlem ekranı, Android Room ise cache/taslak/outbox'tır. Bütün örnekler **KURGUSAL / SYNTHETIC**. Ürün adı/markası yeniden belirlenmedi.
+31 Ekim 2026. [İndirme ve kısa Linux kurulumu](INDIRME.md). Üretim, lotlu stok, satış ve geri çağırma prototipi. MySQL kesin kayıt; React işlem ekranı, Android Room ise cache/taslak/outbox'tır. Bütün örnekler **KURGUSAL / SYNTHETIC**. Ürün **AVATAR**, ekip **ByteMe**; ayrı demo APK adı **AVATAR Preview**.
 
 ## Yerel web kurulumu
 
@@ -40,18 +40,50 @@ Tam kurgusal hazırlık [DEMO_RUNBOOK](DEMO_RUNBOOK.md) içindedir. Test DB'leri
 
 ## Android kurulumu ve bağlantısı
 
-[ANDROID_SETUP.md](../android/ANDROID_SETUP.md) sabit sürümleri içerir: JDK17, Gradle wrapper8.10.2, SDK/build-tools35; minSdk26/targetSdk35.
+[İndir/kur ve imza güvenliği](INDIRME.md), [Linux geliştirme kurulumu](../android/ANDROID_SETUP.md).
+JDK17, Gradle wrapper8.10.2, SDK35; minSdk26. Kaynaktan Preview APK:
 
 ```bash
-./android/gradlew -p android test lintDebug assembleDebug
-adb install -r android/app/build/outputs/apk/debug/app-debug.apk
+./android/gradlew -p android testDebugUnitTest lintDebug assembleDebug lintPreview assemblePreview
+adb install android/app/build/outputs/apk/preview/app-preview.apk
+adb reverse tcp:8000 tcp:8000
 ```
 
-Debug APK geliştirme imzalıdır; güvenli release signing anahtarı sağlanmadı. Farklı debug sertifikası kurulumu reddederse bekleyen outbox'ı çözmeden uygulamayı kaldırmayın veya `pm clear` yapmayın.
+Yeni **AVATAR Preview** paketi `com.byteme.avatar.preview` eski uygulamadan ayrıdır.
+Eski uygulamanın Room/outbox verisi ve Keystore ayarları taşınmaz; eski uygulamayı
+kaldırmayın/verisini silmeyin. Yeni paketin cihaz kurulumu henüz doğrulanmadı.
+Mevcut debug paketi `com.byteme.avatar` korunur; farklı sertifikayla yükseltilmez.
 
-Bağlantı ayarlarında emülatör için **http://10.0.2.2:8000/** ve özel API anahtarını girin. USB cihazda `adb reverse tcp:8000 tcp:8000`, uygulamada http://127.0.0.1:8000/ kullanılır. Anahtar Keystore ile şifrelenir; Retrofit loguna veya komut argümanına yazılmaz. HTTPS/release kullanıcı-rol dağıtımı bu prototipte yoktur.
+Ayarlar üst çubuktadır. USB veya eşleştirilmiş kablosuz ADB'de sunucu
+**http://127.0.0.1:8000/**, emülatörde **http://10.0.2.2:8000/**; aynı özel API
+anahtarını ekrana güvenli biçimde girin. Anahtar Keystore ile şifrelenir;
+Retrofit loguna/komut argümanına yazılmaz. Doğrudan LAN HTTP yerine ADB reverse
+kullanın. [Kablosuz ADB](https://developer.android.com/tools/adb#wireless-android11-command-line)
+cihazda ayrıca doğrulanmalıdır.
 
-Stok listesinden lotu seçin → müşteri, miktar, fiyat → özeti inceleyin → kesin satış onayı. Başarı, backend satış/satır/hareket UUID'leri ve yenilenmiş bakiye ile doğrulanır. Offline işlem **taslaktır**; kesin stok/satış değildir. Belirsiz cevapta aynı outbox anahtarıyla devam edin. Recall sonrası eski cache'ten satış `LOT_BLOCKED/NEEDS_ACTION` olur. Yeniden açma Room/outbox'ı korur; uygulama kapalıyken arka plan gönderimi iddiası yoktur.
+Beş alt sekme **Ana Sayfa / Stok / Satış / Bekleyenler / Uyarılar** korunur.
+Stoklar kayıtlı ve kullanılabilir miktarı ayırır; `20.500000 → 20,5`,
+`0.000001 → 0,000001`; gerçek değer değişmez. Blokeli/SKT geçmiş lot satılamaz.
+Müşteri/lot/miktar/fiyat → özeti incele → kesin onay. Sekme değişiminde form korunur.
+Başarı backend satış/satır/hareket UUID'leri ve yenilenmiş bakiye ile doğrulanır.
+Offline kayıt **taslaktır**, kesin satış değildir; belirsiz cevapta aynı outbox
+key/body ile devam edin. Recall `LOT_BLOCKED/NEEDS_ACTION` üretir.
+
+Ana Sayfa kritik uyarı kartı ve **Uyarılar**, gerçek `/v1/alerts/summary` ve
+`/v1/alerts` yanıtlarını kullanır. Kritik/Uyarı/Bilgi, lot/kaynak ve önerilen işlem
+ayrıdır. Bağlantı hatası anlaşılır gösterilir; uyarı hatası satış sync'ini durdurmaz.
+Uygulama içi uyarıdır; push/Firebase veya kapalı uygulamada bildirim iddiası yoktur.
+
+**Belgeler** Ana Sayfa ve onaylı satış geçmişinden açılır; altıncı sekme eklenmez.
+Onaylı satış seç → Proforma/Satış Özeti → salt-okunur ayrıntı → gerekirse ayrı
+**Geçici notları düzenle** ekranı → **PDF önizle**. Kaynak müşteri, miktar, fiyat
+ve lot kilitlidir. PDF backend'den gelir; MIME/imza/boyut kontrolünden sonra
+PdfRenderer yalnız istenen sayfayı açar. **Kaydet** sistem dosya seçicisini,
+**Paylaş** desteklenen cihazda dar kapsamlı content URI'yi kullanır. Genel
+saklama izni yoktur. PDF409'da kaynak yenilenir. Proforma resmî e-Fatura değildir.
+31 host testi ve PDF sözleşmesi geçmiştir; native çizim/SAF/paylaşım **cihazda
+kabul edilmedi**. API28/fiziksel cihaz bu sürümde denenmedi;
+**API35: NO ACCEPTANCE / 0 test**. [Görev25 kanıtı](ANDROID_DOCUMENTS_ACCEPTANCE.md).
 
 ## İlk kartlar, alış ve lot
 
@@ -86,15 +118,15 @@ Rework için mevcut kesin üretilmiş kg mamul kaynağını seçin → taslak �
 
 `/dagitimlar`: gerçek şirket sevkiyat satırı → kayıtlı ikinci kademe alıcı → miktar, olay tarihi, referans ve kanıt açıklaması. Örnekte Market A→Dağıtıcı X **12 paket**. Şirket sevkiyatı **85** kalır; A'nın tahsis edilmemiş **18 paketi fiziksel stok değildir**. Üçüncü kademe veya son tüketici verisi uydurulmaz.
 
-`/izlenebilirlik`: lotu ve ileri/geri yönü seçin. Alış, girdiler, üretim/parçalama/rework, satış/sevkiyat ve kayıtlı sonraki alıcılar gerçek FK ile izlenir. `/geri-cagirma`: kaynak lotu ve nedeni seçin, etkilenen kayıtları inceleyip onaylayın. Türevler atomik bloke olur; yeni satış reddedilir. Blok kaldırma/QA serbest bırakma bu sürümde yoktur.
+`/izlenebilirlik`: lotu ve ileri/geri yönü seçin. Alış, girdiler, üretim/parçalama/rework, satış/sevkiyat ve kayıtlı sonraki alıcılar gerçek FK ile izlenir. `/geri-cagirma`: kaynak lotu ve zorunlu nedeni seçin → salt-okunur **Etkiyi önizle** → lot kodunu doğrulayarak kesin onay. Etki değişmişse409 ile yeniden inceleme gerekir; önizleme blok koymaz. Türevler atomik bloke olur; yeni satış reddedilir. Blok kaldırma/QA serbest bırakma bu sürümde yoktur.
 
 ## ML, uyarı ve belge
 
-`/yapay-zeka`: üretim/EKP ve kuzu/beş parça modelleri. İşlemle karşılaştırmak için tahmin **işlem başlamadan** kayıtlı operasyon UUID'sine bağlanmalıdır. İki model SYNTHETIC veriyle eğitildi; gerçek işletme doğruluğu kanıtlanmadı. Kesin maliyet/lot ilişkileri ML'den gelmez.
+`/yapay-zeka`: üretim/EKP ve kuzu/beş parça modelleri. İşlemle karşılaştırmak için tahmin **işlem başlamadan** kayıtlı operasyon UUID'sine bağlanmalıdır. İki model toplam **6.000 SYNTHETIC kayıtla (3.000/model)**, **0 gerçek tarihsel veriyle** eğitildi; bazı v1/v2 metriklerinde gerileme vardır ([karşılaştırma](../ml/EVALUATION_REPORT.md)); gerçek işletme doğruluğu kanıtlanmadı. Kesin maliyet/lot ilişkileri ML'den gelmez.
 
 `/uyarilar`: güncel SKT/blokaj, açık ürün-birim eşiğine göre düşük stok ve uygun kayıtlı tahmin–gerçekleşme sapmaları. Filtre, detay ve kaynak bağlantısı kullanın. Demo eşikleri işletme standardı değildir. Uyarılar stok/recall/maliyet yazmaz; kalıcı bildirim geçmişi yoktur.
 
-`/belgeler` veya satış detayında **Belge taslağı oluştur**: proforma/satış özeti seçin; başlık, not, satıcı beyanı, belge tarihi, vade/teslim açıklamasını düzenleyin. Kesin müşteri, satış tarihi, fiyat, miktar ve lot kilitlidir. İade/iptal ve orijinal/düzeltilmiş tutarlar ayrı gösterilir. **PDF indir** gerçek Türkçe A4 dosya indirir; **Yazdır** ayrı tarayıcı işlevidir. Taslak React state'inde geçicidir; sunucuda saklanmaz. Resmî e-Fatura/e-Arşiv, KDV hesabı veya ödeme talebi iddiası yoktur. Demo belgesinde **Kurgusal demo** işaretini seçin.
+`/belgeler` veya satış detayında **Belge taslağı oluştur**: proforma/satış özeti seçin; başlık, not, satıcı beyanı, belge tarihi, vade/teslim açıklamasını düzenleyin. Kesin müşteri, satış tarihi, fiyat, miktar ve lot kilitlidir. İade/iptal ve orijinal/düzeltilmiş tutarlar ayrı gösterilir. **PDF önizleme** sunucunun gerçek Türkçe A4 belgesini açar; **PDF indir** aynı belgeyi kaydeder; **Yazdır** ayrı tarayıcı işlevidir. Taslak React state'inde geçicidir; sunucuda saklanmaz. Resmî e-Fatura/e-Arşiv, KDV hesabı veya ödeme talebi iddiası yoktur. Demo belgesinde **Kurgusal demo** işaretini seçin.
 
 ## Sık karşılaşılan durumlar
 

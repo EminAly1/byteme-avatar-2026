@@ -1,0 +1,149 @@
+{
+  "source_baseline": "f2a0a156d769793b16f17d5de09c5a0393f69aae",
+  "packaging_code_commit": "3f2c5db4d02b93ed3e9f3ba21e15fd8e6245fb6b",
+  "date": "2026-10-31",
+  "web": {
+    "typecheck": "passed",
+    "production_build": "passed",
+    "unit_e2e": "not rerun"
+  },
+  "health": {
+    "/health": {
+      "status": 200,
+      "body": {
+        "status": "ok"
+      }
+    },
+    "/health/ready": {
+      "status": 200,
+      "body": {
+        "status": "ok",
+        "database": "ok"
+      }
+    },
+    "database": "avatar_final26_test"
+  },
+  "mysql": {
+    "version": "8.0.46",
+    "migration_head": "f1507a26b001",
+    "database": "avatar_final26_core_test",
+    "alembic_check": "no differences"
+  },
+  "pdf": {
+    "transport": "FastAPI TestClient -> real MySQL -> ReportLab",
+    "mime": "application/pdf",
+    "signature": "%PDF-",
+    "bytes": 49016,
+    "pages": 2,
+    "sha256": "0bfc9f2419ccc55f008b44a2852807febc6f6612427d597dae882003f3d57b09",
+    "ledger_unchanged": true,
+    "domain_tables": 30
+  },
+  "models": {
+    "production": {
+      "sha256": "9485fff3fd111d98d7479e97deac0127f709b54fba7665c52fee6e119aca467f",
+      "version": "production-ridge-v2-a21520e1f03f",
+      "prediction": {
+        "predicted_finished_quantity": 85.86621877357699,
+        "predicted_yield_ratio": 0.8024880259212803,
+        "predicted_ekp_eur_per_unit": 17.689377611083017,
+        "predicted_total_cost_eur": 1518.919967921669
+      },
+      "origin": "SYNTHETIC"
+    },
+    "cutting": {
+      "sha256": "689cb4edbb963fae4c32fdf2c28bca309d27f4a8e4d8759eb3e0ab7636c86550",
+      "version": "cutting-ridge-v2-d4f63323f8a6",
+      "prediction": {
+        "predicted_leg_kg": 5.877842174083966,
+        "predicted_shoulder_kg": 4.027318776165998,
+        "predicted_back_kg": 3.9421737841105537,
+        "predicted_rib_kg": 4.87435633521087,
+        "predicted_mince_kg": 3.0758694842985266,
+        "predicted_total_weight_kg": 21.797560553869914,
+        "predicted_difference_kg": 3.202439446130086,
+        "predicted_yield_ratio": 0.8719024221547965
+      },
+      "origin": "SYNTHETIC"
+    }
+  },
+  "android": {
+    "tests": 31,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "debug_build": "passed; assembleDebug UP-TO-DATE, unchanged debug APK",
+    "preview_build": "passed",
+    "debug_lint_issues": 0,
+    "preview_lint_issues": 0,
+    "api28": "not run",
+    "api35": "NO ACCEPTANCE / 0 test",
+    "physical": "not run; no ready device"
+  },
+  "targeted_backend": {
+    "passed": 8,
+    "failed": 0,
+    "skipped": 0,
+    "selection": [
+      "recall stable read-only preview",
+      "wrong source rejected",
+      "stale stock rejected then fresh confirm blocks sale",
+      "concurrent idempotent replay",
+      "atomic failure rollback",
+      "PDF read-only 30 tables",
+      "real Turkish PDF",
+      "stale PDF source409"
+    ],
+    "test_nodes": [
+      "tests/test_recall_review_mysql.py::test_preview_is_stable_and_changes_no_table",
+      "tests/test_recall_review_mysql.py::test_wrong_source_code_or_switched_source_never_blocks",
+      "tests/test_recall_review_mysql.py::test_changed_stock_requires_fresh_review_same_uncommitted_key_can_be_used",
+      "tests/test_recall_review_mysql.py::test_reviewed_replay_survives_changed_block_state_and_concurrent_same_key",
+      "tests/test_recall_review_mysql.py::test_reviewed_atomic_failure_rolls_back_every_block_and_key",
+      "tests/test_document_drafts_mysql.py::test_read_only_repeated_get_pdf_all_30_tables_and_no_write_sql",
+      "tests/test_document_drafts_mysql.py::test_turkish_real_pdf_safe_filename_and_escaped_markup",
+      "tests/test_document_drafts_mysql.py::test_source_changed_between_preview_and_download_returns_409"
+    ]
+  },
+  "apk": {
+    "file": "AVATAR-Preview-v0.1.0-preview.2.apk",
+    "sha256": "bd530439c53cdd1675f91f038aa9d0036b3ae02162dca8544d531f7337d856cf",
+    "bytes": 17002344,
+    "application_id": "com.byteme.avatar.preview",
+    "label": "AVATAR Preview",
+    "version_name": "0.1.0-preview.2",
+    "version_code": 1,
+    "min_sdk": 26,
+    "target_sdk": 35,
+    "certificate_sha256": "b9fbe028ac6c63fc1f873fbe446a0693be3f6260d57807f89d75ad6ef0418f9f",
+    "signing": "debug; separate package, no upgrade attempted",
+    "private_file_secret_scan": "no embedded private env/key/fixture or current secret matches"
+  },
+  "branch": "feature/final-delivery-packaging",
+  "release": {
+    "requested_tag": "v0.1.0-preview.2",
+    "status": "Forbidden checking Releases API; no release/tag/asset created",
+    "download_url": null
+  },
+  "submission": {
+    "video": "not recorded/uploaded",
+    "email": "not sent",
+    "receipt": "not confirmed",
+    "deadline": "2026-11-01T23:59:00+03:00"
+  },
+  "source_history": {
+    "21": "d4206d1ba52c6d92c55294000ff74883222b4d75",
+    "22": "f5b46fe4a9bcad653e0974af8779a2f8f3d47da6",
+    "23": "d68ff7854dd68583f9d5fecdc4bda942eeda11fa",
+    "24": "4ace29821e19c4139922849d2061941f4669a0a3",
+    "25": "f2a0a156d769793b16f17d5de09c5a0393f69aae"
+  },
+  "security": {
+    "gitleaks_code_range": "origin/main..3f2c5db: no leaks",
+    "gitleaks_staged_diff": "no leaks",
+    "current_private_secrets_in_tracked_source_and_web_build": "0 matches",
+    "diff_check": "passed",
+    "apk_private_files_and_current_secret_scan": "passed",
+    "keystores_env_logs_apks_committed": false
+  }
+}

@@ -1,4 +1,92 @@
-# Final release kabulü — Görev 19
+# AVATAR — Son teslim ve paketleme kabulü
+
+**31 Ekim 2026 · ByteMe.** Son teslim: **1 Kasım 2026 23:59 Türkiye saati**.
+[İndir/kur](INDIRME.md) · [Kullanım](USER_GUIDE.md) · [14:30 video](FINAL_DEMO_SCRIPT.md)
+· [Makinece okunabilir kısa kabul](final-delivery/acceptance.json).
+
+## Kaynak ve GitHub durumu
+
+- Başlangıç/güncel `origin/main`: **`f2a0a156d769793b16f17d5de09c5a0393f69aae`**,
+  PR #42 merge commit'i; Görev 21/#37, 22/#38, 23/#40, 24/#41, 25/#42 ataları doğrulandı.
+- Branch **`feature/final-delivery-packaging`**. Android/web/backend/ML aynı checkout;
+  backend/frontend/ML iş kodları ve eski kanıtlar değiştirilmedi.
+- Paketleme kod commit'i **`3f2c5db4d02b93ed3e9f3ba21e15fd8e6245fb6b`**, GitHub'a push edildi.
+  Son doküman commit'i için branch başını kullanın; APK'nin kodu bu commit'tir.
+- Main'e merge yapılmadı. Son PR inceleme/check/policy ve paketleme birleşimi ekip adımıdır.
+- `v0.1.0-preview.2` uzak etiketi boştu; gerçek APK ile `gh release create` denendi.
+  Releases API kontrolünde **Forbidden**: Release/tag/asset oluşmadı; gerçek indirme URL'si yok.
+  Yerel APK ve manuel yayın adımları [INDIRME](INDIRME.md) içinde.
+
+## Bu sürümde yeniden yapılan minimum kabul
+
+| Kontrol | Sonuç | Gerçek kapsam |
+| --- | --- | --- |
+| React | typecheck + production build başarılı | Mevcut node_modules; npm ci/unit/Chromium ve responsive matris yeniden koşulmadı |
+| MySQL/FastAPI | MySQL 8.0.46; HTTP `/health` 200 ve `/health/ready` 200 | Yeni `avatar-final26-mysql`, yalnız 127.0.0.1:33426; kaynak API 127.0.0.1:8026, ready şeması `avatar_final26_test` |
+| Alembic | upgrade head + check başarılı, fark yok | `f1507a26b001`; ayrı `avatar_final26_core_test` fixture migration'ı da aynı head'e geldi |
+| Kontrollü recall | **5 passed** | Salt-okunur stabil önizleme; yanlış kaynak reddi; stale etki409→yeniden onay→LOT_BLOCKED; eşzamanlı aynı-key replay; hata sonrası tam rollback |
+| PDF/MySQL | **3 passed**, toplam backend **8/8**,0 failure/error/skip | Gerçek API handler/TestClient→InnoDB→ReportLab; Türkçe PDF, 30 tablo değişmezliği, değişen kaynak409. Bir Starlette dependency deprecation uyarısı var |
+| PDF dosyası | application/pdf, `%PDF-`, **2 sayfa/49.016 byte**, pypdf strict açıldı | Ayrı gerçek üretim; öncesi/sonrası30 domain tablo hash'i eşit; cihaz PdfRenderer testi değildir |
+| ML | İki JSON+SHA256 doğrulama/yükleme; birer tahmin başarılı | Üretim 85,866219 paket/tahmini EKP 17,689378; kesim 21,797561 kg toplam. Gerçek 85 paket/EKP 18,16 ile karıştırılmaz |
+| Android host | **31/31**,0 failure/error/skip | `testDebugUnitTest` yeniden çalıştı; test silme/skip/assertion gevşetme yok |
+| Android lint/build | debug + preview **0 lint issue**, assembleDebug ve assemblePreview başarılı | Debug APK değişmediği için assembleDebug UP-TO-DATE; yeni Preview gerçekten derlendi. Compile SDK35 cihaz kabulü değildir |
+| Cihaz | **API28/fiziksel: yapılmadı; API35: NO ACCEPTANCE / 0 test** | Hazır cihaz/ADB yok; emülatör kurulmadı/API35 başlatılmadı. Eski API28 4/4 bu APK'nin kabulü değildir |
+| Güvenlik | diff check, Gitleaks ve özel dosya/değer taraması | APK/özel env/Keystore/raw log Git dışında; Preview APK'de özel key/env/fixture ve güncel sır eşleşmesi yok |
+
+PDF SHA256: `0bfc9f2419ccc55f008b44a2852807febc6f6612427d597dae882003f3d57b09`.
+Yalnız yeni `*_test` şemaları kullanıldı; pytest demo şemasından ayrıldı. Eski
+kullanıcı DB/volume'ları silinmedi. Docker backend/frontend image'ları ve tüm eski
+suiteler bu görevde yeniden build/test edilmedi; önceki sonuçlar aşağıda tarihleriyle korunur.
+
+## Android imza güvenliği — B seçildi
+
+Mevcut özel araç dizininde yalnız yeni debug keystore bulundu; özgün eski
+sertifikaya karşılık gelen anahtar mevcut değil. Eski APK sertifika SHA256'sı
+`21506045a6ba21558ddbd67d3bd5b65133c0d992189377e9ed833ce60a8e62de`,
+mevcut anahtarın sertifikası
+`b9fbe028ac6c63fc1f873fbe446a0693be3f6260d57807f89d75ad6ef0418f9f`.
+
+**AVATAR Preview**, `com.byteme.avatar.preview`, **0.1.0-preview.2/code1**,
+minSdk26/target35; **17.002.344 byte**, debug imzalı ve debuggable demo varyantıdır.
+APK: `/workspace/artifacts/AVATAR-Preview-v0.1.0-preview.2.apk`.
+SHA256: **`bd530439c53cdd1675f91f038aa9d0036b3ae02162dca8544d531f7337d856cf`**.
+
+Namespace/Activity/ikon ve standart `com.byteme.avatar` debug paketi korunur.
+Preview farklı paket/UID ve FileProvider authority ile ayrı veri alanına kurulacak
+şekilde paketlendi; **telefonda kurulum denenmedi**. Eski uygulama uninstall,
+pm clear, veri silme veya zorla overwrite yapılmadı. Eski Room/outbox/Keystore
+Preview'a otomatik taşınmaz. Frozen key/body, şema ve satış mantığı değiştirilmedi.
+Native PDF çizimi, SAF/paylaşma, canlı uyarı/stok/satış ve veri koruma cihaz provası bekler.
+
+## Karar ve kalan insan adımları
+
+| Alan | Karar | Kalan |
+| --- | --- | --- |
+| Yerel web/backend/ML ve APK paketleme | **GO — belirtilen kısa kapı kapsamında** | 31 Ekim testleri yukarıda; bütün eski suite yeniden kabulü iddia edilmez |
+| Güncel Android canlı gösterim | **Doğrulama gerekiyor** | Güvenli yeni Preview kurulum/bağlantı; stok/uyarı/satış/offline ve native PDF provası |
+| Herkese açık APK dağıtımı | **NO-GO** | Release API Forbidden; yetkili ekip gerçek asset yayımlayıp indirme/hash'i doğrulamalı |
+| Eksiksiz yarışma teslimi | **NO-GO** | Paketleme PR/main incelemesi, cihaz provası, gerçek ≤15dk video/link, gönderim/alındı yok |
+| İnternete açık üretim | **NO-GO** | Kullanıcı oturumu/RBAC/TLS, operasyon ve gerçek veriyle ML kabulü yok |
+
+ML toplam **6.000 SYNTHETIC (3.000/model), 0 gerçek tarihsel kayıt**. V2 bazı ortak
+metriklerde ve eski sabit testte geriledi; genel doğruluk artışı kabul edilmedi
+([değerlendirme](../ml/EVALUATION_REPORT.md)). Proforma resmî e-Fatura/e-Arşiv değildir.
+**Video çekilmedi/yüklenmedi; e-posta gönderilmedi; alındı teyidi yok.**
+[14:30 plan](FINAL_DEMO_SCRIPT.md), [gönderilmemiş taslak](SUBMISSION_EMAIL_DRAFT.md).
+
+## Main temizliği için son PR raporu
+
+İnceleme kapsamı: ayrı Android Preview varyantı ve son teslim belgeleri; yeni iş
+özelliği/şema değişikliği yok. APK/anahtar/özel env/raw log kaynak commit'ine alınmaz.
+Kısa kapı başarılı; yeni main birleşimi ve GitHub check/policy doğrulaması yapılmadı.
+Main hedefli PR denenecek; erişim engelinde
+[manuel PR compare](https://github.com/EminAly1/byteme-avatar-2026/compare/main...feature/final-delivery-packaging?expand=1).
+Force push/main merge yok. Aşağıdaki rapor **28 Ekim tarihsel kanıtıdır**; sayaçları
+31 Ekim testleriyle toplanmaz ve yeni APK cihaz kabulü olarak kullanılamaz.
+
+---
+
+## Tarihsel rapor — 28 Ekim / Görev19
 
 **28 Ekim 2026, Europe/Istanbul.** Test edilen main tabanı **`02a080677dee59a3940ad232d4fa716c92a84469`**. PR #1–#34'ün 34 normal merge commit'i bu tabanın atasıdır. Çalışma dalı `feature/final-release-acceptance`; main'e merge veya erken final tag yapılmadı. [Makinece okunabilir kabul özeti](final-release/acceptance.json).
 
