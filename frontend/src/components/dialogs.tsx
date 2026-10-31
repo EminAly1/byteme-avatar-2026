@@ -109,12 +109,20 @@ export function DetailDrawer({
   onClose: () => void;
 }) {
   const ref = useRef<HTMLDialogElement>(null),
+    opener = useRef(document.activeElement),
     id = useId();
   useEffect(() => {
     const el = ref.current;
     el?.showModal();
+    el?.querySelector<HTMLButtonElement>("button")?.focus();
     return () => {
       if (el?.open && el.isConnected) el.close();
+      requestAnimationFrame(() => {
+        const previous = opener.current;
+        const target = previous instanceof HTMLElement && !previous.isConnected && previous.id
+          ? document.getElementById(previous.id) : previous;
+        if (target instanceof HTMLElement && target.isConnected) target.focus();
+      });
     };
   }, []);
   return (

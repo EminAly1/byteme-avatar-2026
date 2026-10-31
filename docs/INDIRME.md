@@ -3,17 +3,59 @@
 **ByteMe · 31 Ekim 2026 · Önizleme 0.1.0-preview.2.** Linux üzerinde yerel demo;
 Android 8.0 / API26 ve üzeri için geliştirme imzalı APK.
 
+## Android uygulamasını indir
+
+**GitHub Release zorunlu değildir.** Güncel APK'yı bilgisayardan aynı güvenilir
+Wi-Fi'daki telefona tek kullanımlık linkle aktarabilirsiniz. Şu anda herkese açık
+APK URL'si yoktur; çalışmayan indirme butonu sunulmaz.
+
+### Tek kullanımlık yerel paylaşım
+
+1. Repo kökünde `./android/gradlew -p android assemblePreview` çalıştırın.
+   Görev28 Android kodunu değiştirmedi; burada güncel build UP-TO-DATE doğrulandı.
+2. `sha256sum android/app/build/outputs/apk/preview/app-preview.apk` ile hash'i
+   kontrol edin. Bu ortamın kabul edilmiş hash'i aşağıdadır; farklı makine/debug
+   imzası farklı hash üretir. APK'nin kaynağını ve build'ini doğrulayın.
+3. Bilgisayarın Wi-Fi IPv4 adresi ve doğruladığınız hash ile başlatın:
+
+```bash
+# IP ve hash alanlarını kendi doğruladığınız değerlerle değiştirin.
+python3 tools/share_apk.py --sha256 DOGRULANMIS_64_HANELI_SHA256 \
+  --bind 192.168.1.10 --allow-lan --ttl 180
+```
+
+Araç APK boyutu/hash/sürüm ve telefonda açılacak **gerçek geçici URL'yi** yazdırır.
+`qrencode` kuruluysa terminal QR'ı da gösterilir; bu ortamda QR aracı bulunmadığından
+QR çıktısı test edilmedi. Telefonda terminaldeki URL'yi açıp dosyayı indirin.
+Hash'i eşleştirin ve APK'yı açın. Yalnız gerekli dosya uygulamasına kurulum izni verin.
+
+- Link güçlü rastgele token içerir; bir GET indirmesi veya süre sonunda servis
+  kendiliğinden kapanır. Başarısız/yarım indirmede aracı yeniden başlatın.
+- `--allow-lan` olmadan varsayılan 127.0.0.1; belirsiz 0.0.0.0 veya genel IP kabul
+  edilmez. Varsayılan adres yalnız bu bilgisayarda açılır; telefon için yukarıdaki
+  açık Wi-Fi IP/--allow-lan komutunu kullanın. Araç yalnız bu APK'yı sunar; klasör listesi/proje/env/API/DB erişimi yoktur.
+- HTTP şifrelenmez; yalnız güvenilir yerel Wi-Fi'da kısa aktarım içindir. URL'yi
+  herkese açık paylaşmayın. API anahtarı/cihaz eşleştirme kodu bu linkte bulunmaz.
+- Telefonla aynı Wi-Fi ve bilgisayarın seçilen portuna erişim gerekir. Ana uygulama
+  portlarını LAN'a açmayın. Gerçek Wi-Fi/telefon aktarımı bu bulutta denenmedi;
+  kabul, gerçek APK baytlarının loopback üzerinden aynı hash'le aktarılmasıdır.
+- Araç seçilen APK hash'ini hem verdiğiniz hash'le hem güncel Preview build/metadata
+  ile karşılaştırır; eski APK ve yanlış paket paylaşımını reddeder.
+
+[Wi-Fi bağlantı kodu için güvenlik planı](SECURE_DEVICE_PAIRING_PLAN.md) ayrı
+gelecek görevdir; bu indirme aracı otomatik sunucu eşleştirmesi yapmaz.
+
 ## 1. Android uygulaması
 
 **Bu teslim oturumunda Release yayımlanamadı:** GitHub Releases API `Forbidden`
-döndürdü. Henüz doğrulanmış herkese açık APK indirme URL'si yoktur.
+döndürdü. Henüz doğrulanmış herkese açık APK indirme URL'si yoktur; yukarıdaki yerel aktarım Release gerektirmez.
 Kaynak kod: [güncel `main`](https://github.com/EminAly1/byteme-avatar-2026/tree/main). Paketleme [PR #43](https://github.com/EminAly1/byteme-avatar-2026/pull/43) ile birleşti; herkese açık APK Release/asset hâlâ yok.
 
 Hazır dosyalar bu çalışma ortamında korunur:
 
-- APK: `/workspace/artifacts/AVATAR-Preview-v0.1.0-preview.2.apk`
-- Hash dosyası: `/workspace/artifacts/AVATAR-Preview-v0.1.0-preview.2.apk.sha256`
-- SHA256: `bd530439c53cdd1675f91f038aa9d0036b3ae02162dca8544d531f7337d856cf`
+- APK: `/workspace/artifacts/AVATAR-Preview-final-ui-polish.apk`
+- Hash dosyası: `/workspace/artifacts/AVATAR-Preview-final-ui-polish.apk.sha256`
+- SHA256: `1d9a671d80d55c9ad6bcb4fe0ce5712463a256dc781756d7bed22092a68320e1`
 - Paket: `com.byteme.avatar.preview`; görünen ad **AVATAR Preview**.
 - Sürüm: **0.1.0-preview.2**, versionCode **1**, minSdk **26**, targetSdk **35**.
 - Sertifika SHA256: `b9fbe028ac6c63fc1f873fbe446a0693be3f6260d57807f89d75ad6ef0418f9f`.
@@ -104,7 +146,8 @@ internete açmayın. Kablosuz bağlantı bu teslimde denenmedi.
 ## 5. Ekip için manuel Release yükleme
 
 1. Paketleme [PR #43](https://github.com/EminAly1/byteme-avatar-2026/pull/43) `main` dalına alındı. APK kod commit'i ve hash/sertifikasını doğrulayın;
-   bu APK'nin kod commit'i `3f2c5db4d02b93ed3e9f3ba21e15fd8e6245fb6b`'dir.
+   güncel APK Android kaynakları PR #45 tabanı `a7c80bc` ile aynıdır; Görev28
+   yalnız web/backend/araç değiştirir. Eski Görev26 APK hash'ini kullanmayın.
 2. Yetkili ekip hesabıyla GitHub deposu → **Releases → Draft a new release**.
    `v0.1.0-preview.2` etiketinin boşta olduğunu tekrar kontrol edin; varsa mevcut
    etiketi oynatmadan yeni etiket seçin. İncelenmiş kaynak commit'ini hedefleyin.

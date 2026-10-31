@@ -4,6 +4,9 @@ import { useQuery } from "@tanstack/react-query";
 import { useFieldArray, useFormContext } from "react-hook-form";
 import type { z } from "zod";
 import { Plus, Scissors, Trash2 } from "lucide-react";
+import { RecordActions } from "../components/record-actions";
+import { DetailDrawer } from "../components/dialogs";
+import { PartProductDialog } from "../components/catalog-product";
 import { CommandForm, Field, Options, ArrayError } from "../components/forms";
 import { Badge, Section, State, Table } from "../components/ui";
 import {
@@ -35,10 +38,13 @@ import {
 import { balance } from "../lib/quantity";
 
 type Catalog = ReturnType<typeof useCatalog>;
-function RecipeFields({ data }: { data: Catalog }) {
+function RecipeFields({ data, onCreateProduct }: { data: Catalog; onCreateProduct: () => void }) {
   const { control, watch } = useFormContext<z.infer<typeof recipeSchema>>();
   const { fields, append, remove } = useFieldArray({ control, name: "lines" });
   const method = watch("allocation_method");
+  const selectedLines = watch("lines");
+  const parts = data.products.filter(p => p.type !== "raw" && p.base_unit === "kg");
+  const sources = data.products.filter(p => p.type === "raw" && p.base_unit === "kg");
   return (
     <>
       <div className="form-grid cols-3">
@@ -56,6 +62,11 @@ function RecipeFields({ data }: { data: Catalog }) {
           <option value="quantity">Miktar ağırlıklı (quantity)</option>
           <option value="value">Değer ağırlıklı (value)</option>
         </Field>
+      </div>
+      {!sources.length && <div className="notice"><p>Kaynak ürün bulunamadı. Hammadde türünde, kg birimli bütün kuzu ürünü gerekir. <Link to="/urunler">Ürün kataloğunu aç</Link></p></div>}
+      <div className="selection-help">
+        {!parts.length && <div role="status"><strong>Uygun parça ürünü bulunamadı</strong><p>Mamul veya Yan ürün türünde, stok birimi kg olan gerçek ürün kartları gerekir.</p></div>}
+        <button type="button" className="button" onClick={onCreateProduct}><Plus size={16}/>Parça ürünü oluştur</button>
       </div>
       <p className="caption">
         Referans EUR/kg dağıtım anahtarıdır; satış fiyatı değildir. Yeni sürüm
@@ -80,11 +91,8 @@ function RecipeFields({ data }: { data: Catalog }) {
               name={`lines.${i}.product_id`}
               label={`Parça ürünü ${i + 1}`}
             >
-              <Options
-                items={data.products.filter(
-                  (p) => p.type !== "raw" && p.base_unit === "kg",
-                )}
-              />
+              <option value="">Parça ürünü seçin</option>
+              {parts.map(p => <option key={p.id} value={p.id} disabled={selectedLines.some((line, index) => index !== i && line.product_id === p.id)}>{p.name} · {p.sku} (kg)</option>)}
             </Field>
             <NumberInput
               name={`lines.${i}.reference_eur_per_kg`}
@@ -115,6 +123,8 @@ export function Cuttings() {
     recipes = useRecords<Recipe>("/recipes"),
     cuttings = useRecords<Operation>("/cuttings"),
     navigate = useNavigate();
+  const [viewRecipe, setViewRecipe] = useState<Recipe | null>(null);
+  const [creatingProduct, setCreatingProduct] = useState(false);
   const [showRecipe, setShowRecipe] = useState(false),
     [availability, setAvailability] = useState<Recipe | null>(null);
   return (
@@ -141,7 +151,7 @@ export function Cuttings() {
           title="Kesim kayıtları"
           subtitle="Miktar ve değer karşılaştırması ayrı kaynak lotlar gerektirir; aynı kuzuyu iki kez tüketmeyin."
         >
-          <Table
+          <Table readonlyReason="Kesin kayıt korunur. Düzeltme yalnız desteklenen iade, iptal veya yeni işlemle yapılır."
             headers={["Kesim", "Durum", "Dağıtım", "Gerçek maliyet", "Ayrıntı"]}
             empty={!cuttings.data?.length}
           >
@@ -243,9 +253,7 @@ export function Cuttings() {
                       {r.available ? "Kullanıma açık" : "Kullanıma kapalı"}
                     </Badge>
                   </div>
-                  <button className="button" onClick={() => setAvailability(r)}>
-                    Kullanılabilirlik
-                  </button>
+                  <RecordActions onView={() => setViewRecipe(r)} readonlyReason="Sürüm geçmişi korunur; tanım değişikliği için yeni reçete sürümü oluşturun."><button className="button" onClick={() => setAvailability(r)}>Kullanılabilirlik</button></RecordActions>
                 </article>
               ))}
             </div>
@@ -289,11 +297,14 @@ export function Cuttings() {
               label="Reçeteyi kaydet"
               confirmText="Yeni reçete sürümü kaydedilecek. Fiilî parça ağırlıkları kesim sırasında girilir."
               payload={recipePayload}
+              onSuccess={() => setShowRecipe(false)}
             >
-              <RecipeFields data={data} />
+              <RecipeFields data={data} onCreateProduct={() => setCreatingProduct(true)} />
             </CommandForm>
           </Section>
         )}
+        {viewRecipe && <DetailDrawer title="Reçete ayrıntıları" onClose={() => setViewRecipe(null)}><dl className="record-facts"><div><dt>Reçete / sürüm</dt><dd>{viewRecipe.code} · v{viewRecipe.version}</dd></div><div><dt>Kaynak ürün</dt><dd>{data.products.find(p => p.id === viewRecipe.input_product_id)?.name || viewRecipe.input_product_id}</dd></div><div><dt>Hayvan türü</dt><dd>{viewRecipe.species}</dd></div><div><dt>Dağıtım</dt><dd>{viewRecipe.allocation_method === "value" ? "Değer ağırlıklı" : "Miktar ağırlıklı"}</dd></div></dl><Table headers={["Parça ürünü","Referans EUR/kg"]}>{viewRecipe.lines.map(line=><tr key={line.product_id}><td>{data.products.find(p=>p.id===line.product_id)?.name || line.product_id}</td><td>{line.reference_eur_per_kg ? eur(line.reference_eur_per_kg) : "Tanımlanmadı"}</td></tr>)}</Table><RecordId id={viewRecipe.id}/></DetailDrawer>}
+        {creatingProduct && <PartProductDialog onClose={() => setCreatingProduct(false)} />}
       </div>
     </State>
   );
@@ -539,7 +550,7 @@ export function CuttingPage() {
                 title="Parça lotları ve maliyetler"
                 subtitle="Fiilî ölçüler ve kesin backend dağıtımı. Referans değer satış fiyatı değildir."
               >
-                <Table
+                <Table readonlyReason="Kesin kayıt korunur. Düzeltme yalnız desteklenen iade, iptal veya yeni işlemle yapılır."
                   headers={[
                     "Ürün / lot",
                     "Fiilî kg",
@@ -570,7 +581,7 @@ export function CuttingPage() {
                 </Table>
               </Section>
               <Section title="Kaynak lot bağlantıları">
-                <Table
+                <Table readonlyReason="Kesin kayıt korunur. Düzeltme yalnız desteklenen iade, iptal veya yeni işlemle yapılır."
                   headers={["Kaynak lot", "Parça lotu", "Atfedilen giriş kg"]}
                 >
                   {c.lot_links.map((l) => (

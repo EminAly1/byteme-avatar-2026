@@ -84,3 +84,14 @@ it('satır dizisinin kök doğrulama hatasını görünür gösterir',async()=>{
   await userEvent.setup().click(screen.getByRole('button',{name:'Alışı gönder'}))
   expect(await screen.findByText('Aynı lot tekrarlanamaz.')).toBeVisible()
 })
+
+it("PATCH belirsiz yanıtta method/key/body korur; DELETE ve eski POST alanına taşınmaz", async () => {
+  const {loadPending}=await import('../src/lib/pending');
+  const path='/products/00000000-0000-4000-8000-000000000028';
+  const fetch=vi.fn().mockRejectedValueOnce(new TypeError('offline')).mockResolvedValueOnce(Response.json({id:'ok'}));vi.stubGlobal('fetch',fetch);
+  const mount=()=>render(<QueryClientProvider client={new QueryClient()}><CommandForm schema={schema} defaults={{name:''}} path={path} method="PATCH" label="Düzenle" confirmText="Ad güncellenecek." payload={v=>v}><Field name="name" label="Ad"/></CommandForm></QueryClientProvider>);
+  const first=mount(),user=userEvent.setup();await user.type(screen.getByLabelText('Ad'),'TEST güncel');await user.click(screen.getByRole('button',{name:'Düzenle'}));await user.click(await screen.findByRole('button',{name:'Onayla ve kaydet'}));await screen.findByRole('button',{name:'Aynı işlemi tekrar dene'});
+  expect(loadPending(path,'PATCH')).not.toBeNull();expect(loadPending(path,'DELETE')).toBeNull();expect(loadPending(path)).toBeNull();first.unmount();mount();
+  await user.click(screen.getByRole('button',{name:'Aynı işlemi tekrar dene'}));await screen.findByText('Kayıt sunucu tarafından onaylandı.');
+  expect(fetch.mock.calls[0][1].method).toBe('PATCH');expect(fetch.mock.calls[1][1]).toMatchObject({method:'PATCH',body:fetch.mock.calls[0][1].body,headers:{'Idempotency-Key':fetch.mock.calls[0][1].headers['Idempotency-Key']}});
+});

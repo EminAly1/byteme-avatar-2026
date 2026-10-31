@@ -308,7 +308,7 @@ export function TraceReportView({
         </details>
       </Section>
       <Section title="Kayıtlı konum bakiyeleri">
-        <Table
+        <Table readonlyReason="Kesin kayıt korunur. Düzeltme yalnız desteklenen iade, iptal veya yeni işlemle yapılır."
           headers={["Lot", "Konum", "Bakiye", "Kullanılabilir", "Durum"]}
           empty={!report.stocks.length}
         >

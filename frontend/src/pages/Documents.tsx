@@ -121,7 +121,9 @@ function DocumentCard({ sale }: { sale: Sale }) {
           <Eye size={16} />
           {busy === "preview" ? "Hazırlanıyor…" : "Önizle"}
         </button>
+        <button className="button" disabled title="Belge kesin satıştan üretilir; kaynak satış veya mali geçmiş bu ekrandan silinemez.">Sil</button>
       </div>
+      <p className="caption">Düzenleme yalnız geçici belge notlarını etkiler; kesin satış ve geçmiş silinmez.</p>
       {error ? <ErrorBox error={error} /> : null}
       {preview && q.data && (
         <PdfPreview

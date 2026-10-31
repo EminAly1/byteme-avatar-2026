@@ -191,7 +191,7 @@ export function Distributions() {
               ))}
             </select>
           </label>
-          <Table
+          <Table readonlyReason="Kesin kayıt korunur. Düzeltme yalnız desteklenen iade, iptal veya yeni işlemle yapılır."
             headers={[
               "Referans / kaynak",
               "Kayıtlı alıcı",

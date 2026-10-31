@@ -89,3 +89,22 @@ Yeni iki alan opsiyonel bir çifttir; eski demo/API komutları ve kayıtlı hash
 Sınır dışı istekte 422 `PREDICTION_OUT_OF_DOMAIN`, Türkçe açıklama ve `error.details.fields[]` içinde field/minimum/maximum/unit/message döner. Fiziksel olarak geçersiz v2 model çıkarımı veya bozuk/eksik artefakt 503; sessiz kırpma/fallback yoktur. JSON formatı, checksum, feature allowlist, transport şeması ve eski key/body replay korunur. Model aralıkları idempotency replay'den sonra uygulanır. GET eski tahmin sonucunu yeni modelle hesaplamaz; işlem öncesi tahmin/gerçek ürün-reçete kuralları değişmedi.
 
 V2 genel doğruluk terfisi değildir: eski sabit benchmark'ta gerileme açıkça [değerlendirme raporunda](../ml/EVALUATION_REPORT.md) gösterilir. [Kabul ve test kapsamı](AI_MODEL_V2_ACCEPTANCE.md).
+
+## Görev28 — Güvenli ana kayıt işlemleri
+
+`GET /v1/{products|parties|locations}/{id}` gerçek kartı okur.
+`PATCH` ürün/depo için yalnız zorunlu `name`; firma için `name` ve/veya nullable
+`contact` kabul eder. Ek alanlar422; tür, stok birimi, paket dönüşümü, SKU, rol ve
+konum ilişkisi bu sürümde kilitlidir. `DELETE` yalnız referanssız kartı kaldırır;
+başarılı yanıt200 `{id, deleted:true}`, FK veya iş JSON referansı409 `MASTER_IN_USE`.
+Arşivleme/defter silme API'si yoktur. X-API-Key ve yazmada UUID Idempotency-Key
+zorunludur; PATCH/DELETE ayrı scope ve aynı-key/body replay kullanır.
+
+Silme ebeveyn satırını kilitler; InnoDB FK denetimi ve JSON taslak referans
+taraması transaction içindedir. JSON'a ürün referansı yazan rework taslağı ve
+üretim tahmini de ebeveyn kilidi tutar. İsim/iletişim güncel ana kart bilgisidir;
+tarihsel fatura adresi/düzenlenmiş kesin mali kayıt değildir.
+
+`GET /v1/receipts/{id}` ek olarak `supplier_name`, `location_name`, backend Decimal
+`total_cost`; her satırda `product_name`, `sku`, `unit`, `lot_code` döndürür.
+Bu alanlar salt-okunur görünüm içindir; stok/hareket oluşturmaz.

@@ -202,7 +202,7 @@ function LinesTable({
   shipment?: boolean;
 }) {
   return (
-    <Table
+    <Table readonlyReason="Kesin kayıt korunur. Düzeltme yalnız desteklenen iade, iptal veya yeni işlemle yapılır."
       headers={[
         "Ürün / lot",
         "Konum",
@@ -331,7 +331,7 @@ export function Sales() {
                 </select>
               </label>
             </FilterBar>
-            <Table
+            <Table readonlyReason="Kesin kayıt korunur. Düzeltme yalnız desteklenen iade, iptal veya yeni işlemle yapılır."
               headers={[
                 "Tarih / satış",
                 "Müşteri",
@@ -601,7 +601,7 @@ export function Shipments() {
               </select>
             </label>
           </FilterBar>
-          <Table
+          <Table readonlyReason="Kesin kayıt korunur. Düzeltme yalnız desteklenen iade, iptal veya yeni işlemle yapılır."
             headers={[
               "Tarih",
               "Market / alıcı",

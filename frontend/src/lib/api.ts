@@ -57,6 +57,7 @@ const messages: Record<number, string> = {
 };
 
 const domainMessages: Record<string, string> = {
+  MASTER_IN_USE: "Bu kayıt iş kayıtlarında veya başka bir kartta kullanılıyor. Geçmişi korumak için silinemez.",
   RECALL_PREVIEW_STALE: "Kaynak veya etki kapsamı değişti. Güncel lot, stok ve alıcıları yeniden inceleyin; henüz yeni geri çağırma oluşturulmadı.",
   RECALL_SOURCE_MISMATCH: "Yazılan kaynak lot kodu eşleşmiyor. Seçili kaynağı yeniden inceleyin; geri çağırma oluşturulmadı.",
   DOCUMENTED_QUANTITY_EXCEEDED: "İade ve ikinci kademe bildirimlerinin toplamı kaynak sevkiyatı aşıyor. Kayıtlı miktarları kontrol edin; fiziksel market stoğu varsayılmaz.",
@@ -181,15 +182,17 @@ export interface Command {
   path: string;
   key: string;
   body: unknown;
+  method?: "POST" | "PATCH" | "DELETE";
 }
-export const newCommand = (path: string, body: unknown): Command => ({
+export const newCommand = (path: string, body: unknown, method: "POST" | "PATCH" | "DELETE" = "POST"): Command => ({
   path,
   body,
   key: crypto.randomUUID(),
+  ...(method === "POST" ? {} : {method}),
 });
 export function send<T>(command: Command) {
   return request<T>(command.path, {
-    method: "POST",
+    method: command.method || "POST",
     headers: { "Idempotency-Key": command.key },
     body: JSON.stringify(command.body),
   });

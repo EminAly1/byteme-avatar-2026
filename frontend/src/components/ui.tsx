@@ -8,6 +8,7 @@ import {
 } from "react";
 import { AlertCircle, Check, PackageOpen } from "lucide-react";
 import { ApiError } from "../lib/api";
+import { ReadOnlyRowActions } from "./record-actions";
 import { useMediaQuery } from "../hooks/useMediaQuery";
 export function Badge({
   children,
@@ -131,20 +132,30 @@ export function Table({
   children,
   empty = false,
   emptyMessage,
+  readonlyReason,
 }: {
   headers: string[];
   children: ReactNode;
   empty?: boolean;
   emptyMessage?: ReactNode;
+  readonlyReason?: string;
 }) {
   const mobile = useMediaQuery("(max-width: 600px)");
   if (empty) return <Empty>{emptyMessage}</Empty>;
-  const rows = flatten(children);
+  const hasActions = /^(İşlem|İşlemler|Ayrıntı|İncele)$/.test(headers.at(-1) || "");
+  const headings = readonlyReason ? [...headers.slice(0, hasActions ? -1 : headers.length), "İşlemler"] : headers;
+  const rows = flatten(children).map(row => {
+    if (!readonlyReason) return row;
+    const cells = flatten(row.props.children) as Cell[];
+    const values = hasActions ? cells.slice(0,-1) : cells;
+    const actions = <td key="record-actions"><ReadOnlyRowActions reason={readonlyReason} facts={values.map((cell,i)=>[headers[i],cell.props.children])}>{hasActions ? cells.at(-1)?.props.children : null}</ReadOnlyRowActions></td>;
+    return cloneElement(row, {}, [...values,actions]);
+  });
   if (mobile)
     return (
       <div
         className="data-cards"
-        aria-label={headers.join(", ") + " kayıtları"}
+        aria-label={headings.join(", ") + " kayıtları"}
       >
         {rows.map((row, index) => {
           const cells = flatten(row.props.children) as Cell[];
@@ -155,9 +166,9 @@ export function Table({
                 {cells.slice(1).map((cell, i) => (
                   <div
                     key={i}
-                    className={numeric(headers[i + 1] || "") ? "numeric" : ""}
+                    className={numeric(headings[i + 1] || "") ? "numeric" : ""}
                   >
-                    <dt>{headers[i + 1]}</dt>
+                    <dt>{headings[i + 1]}</dt>
                     <dd>{cell.props.children}</dd>
                   </div>
                 ))}
@@ -172,12 +183,12 @@ export function Table({
       className="table-scroll"
       tabIndex={0}
       role="region"
-      aria-label={headers.join(", ") + " tablosu"}
+      aria-label={headings.join(", ") + " tablosu"}
     >
       <table>
         <thead>
           <tr>
-            {headers.map((h) => (
+            {headings.map((h) => (
               <th key={h} className={numeric(h) ? "numeric" : ""}>
                 {h}
               </th>
@@ -194,7 +205,7 @@ export function Table({
                   key: cell.key ?? i,
                   className:
                     ((cell.props as { className?: string }).className || "") +
-                    (numeric(headers[i] || "") ? " numeric" : ""),
+                    (numeric(headings[i] || "") ? " numeric" : ""),
                 }),
               ),
             ),

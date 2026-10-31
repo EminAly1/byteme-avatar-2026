@@ -97,7 +97,7 @@ it("eski tahmin sürümü görünür kalır; güncel model metrikleri eski kayda
   mockApi(); mount("/yapay-zeka?prediction=" + record.id); const user = userEvent.setup();
   expect(await screen.findByText(record.model_version, { exact: true })).toBeVisible();
   expect(screen.getByText("Henüz gerçekleşmedi")).toBeVisible();
-  await user.click(screen.getByText("Model değerlendirmesi · sentetik test metrikleri", { exact: true }));
+  await user.click(screen.getByText("Model ve teknik ayrıntılar · sentetik test metrikleri", { exact: true }));
   expect(screen.getByText(/eski tahmin yeniden hesaplanmadı/)).toBeVisible();
 });
 

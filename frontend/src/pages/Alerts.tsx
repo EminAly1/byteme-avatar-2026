@@ -60,7 +60,7 @@ export function Alerts() {
       </CriticalNotice>}
       <Section title="Güncel uyarı listesi" subtitle="Uyarı otomatik blokaj, satış, stok veya maliyet kaydı oluşturmaz.">
         {!query.data.items.length ? <Empty>Bu filtrede güncel uyarı yok. İlgili kayıt veya eşik bulunmadan uyarı oluşturulmaz.</Empty> :
-          <Table headers={['Öncelik / kural','Kaynak ve açıklama','Gözlenen / eşik','İncele']}>
+          <Table readonlyReason="Uyarı sunucuda hesaplanır; bu kaydı düzenleme veya silme desteklenmez." headers={['Öncelik / kural','Kaynak ve açıklama','Gözlenen / eşik','İncele']}>
             {query.data.items.map(alert=><tr key={alert.id}>
               <td><AlertPriority alert={alert}/><small>{alertRules[alert.rule_code]}</small></td>
               <td><strong>{alert.source_label}</strong><p>{alert.title}</p><small>{dateTime(alert.evaluated_at)}</small><small>{alert.predicted_value!=null?'Tahmin–gerçekleşme karşılaştırması · sentetik model':'Mevcut kayıtlı stok'}</small></td>

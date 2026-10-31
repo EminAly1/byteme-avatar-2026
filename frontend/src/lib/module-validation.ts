@@ -33,6 +33,8 @@ export const recipeSchema = z
         message: "Her parça ürünü bir kez seçilmelidir.",
       });
     v.lines.forEach((l, i) => {
+      if (v.lines.some((other, index) => index !== i && other.product_id === l.product_id))
+        ctx.addIssue({ code: "custom", path: ["lines", i, "product_id"], message: "Bu ürün başka bir parça satırında seçili; farklı ürün seçin." });
       if (
         (v.allocation_method === "value" || l.reference_eur_per_kg) &&
         (!money.safeParse(l.reference_eur_per_kg).success ||
