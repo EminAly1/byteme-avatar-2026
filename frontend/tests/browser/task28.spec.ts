@@ -66,3 +66,40 @@ test('P0: gerçek kg parça ürünleri oluşturulur ve aynı reçetede farklı �
   await expect(page.locator('.record-card').filter({hasText:code})).toBeVisible();
   mkdirSync(artifact,{recursive:true});await page.screenshot({path:join(artifact,'recipe.png'),fullPage:true,animations:'disabled'});
 });
+
+test('P1: ürün firma depo gerçek Görüntüle/PATCH/DELETE ve bağlı silme reddi',async({page,request})=>{
+  const code=prefix();await page.setViewportSize({width:1440,height:1000});
+  for(const [kind,route,label,body] of [
+    ['products','/urunler','Ürün',{sku:code,name:code+' ürün',type:'raw',base_unit:'kg'}],
+    ['parties','/is-ortaklari','Firma',{name:code+' firma',roles:['supplier']}],
+    ['locations','/depolar','Depo',{name:code+' depo'}],
+  ] as const) {
+    const record=await api<{id:string;name:string}>(request,'/'+kind,body);
+    await page.goto(route);const row=page.locator('tbody tr').filter({hasText:record.name});
+    await row.getByRole('button',{name:'Görüntüle',exact:true}).click();await expect(page.getByRole('dialog',{name:label+' ayrıntıları'})).toContainText(record.name);await page.getByRole('button',{name:'Ayrıntıyı kapat'}).click();
+    await row.getByRole('button',{name:'Düzenle',exact:true}).click();const editor=page.getByRole('dialog',{name:label+' düzenle'});
+    await editor.getByLabel('Ad',{exact:true}).fill(record.name+' güncel');
+    await editor.getByRole('button',{name:'Değişikliği gözden geçir',exact:true}).click();
+    const changed=page.waitForResponse(r=>r.url().endsWith('/'+kind+'/'+record.id)&&r.request().method()==='PATCH');await page.getByRole('button',{name:'Onayla ve kaydet',exact:true}).click();expect((await changed).status()).toBe(200);
+    const updated=page.locator('tbody tr').filter({hasText:record.name+' güncel'});await expect(updated).toBeVisible();await updated.getByRole('button',{name:'Sil',exact:true}).click();
+    await page.getByRole('button',{name:'Silmeyi gözden geçir',exact:true}).click();
+    const deleted=page.waitForResponse(r=>r.url().endsWith('/'+kind+'/'+record.id)&&r.request().method()==='DELETE');await page.getByRole('button',{name:'Onayla ve sil',exact:true}).click();expect((await deleted).status()).toBe(200);await expect(updated).toHaveCount(0);
+  }
+  const product=await api<Product>(request,'/products',{sku:code+'-bound',name:code+' bağlı',type:'raw',base_unit:'kg'});
+  const supplier=await api<Party>(request,'/parties',{name:code+' s',roles:['supplier']});const location=await api<Location>(request,'/locations',{name:code+' l'});
+  await api(request,'/receipts',{supplier_id:supplier.id,location_id:location.id,lines:[{product_id:product.id,external_lot_code:code,quantity:'1',total_cost:'1'}]});
+  await page.goto('/urunler');await page.locator('tbody tr').filter({hasText:product.name}).getByRole('button',{name:'Sil',exact:true}).click();await page.getByRole('button',{name:'Silmeyi gözden geçir',exact:true}).click();await page.getByRole('button',{name:'Onayla ve sil',exact:true}).click();await expect(page.getByRole('alert')).toContainText('Geçmişi korumak için silinemez');
+});
+
+test('P1: modern AI V2 gerçek üretim ve beş parça tahmini, üç ekran genişliği',async({page,request})=>{
+  const code=prefix();const raw=await api<Product>(request,'/products',{sku:code,name:code+' kuzu',type:'raw',base_unit:'kg'});
+  const parts:Product[]=[];for(const [i,name]of['But','Kol','Sırt','Kaburga','Kıyma'].entries())parts.push(await api<Product>(request,'/products',{sku:code+'-P'+i,name:'TEST '+name,type:'finished',base_unit:'kg'}));
+  const recipe=await api<{id:string}>(request,'/recipes',{code,version:1,species:'Kuzu',input_product_id:raw.id,allocation_method:'quantity',lines:parts.map(p=>({product_id:p.id}))});
+  await page.goto('/yapay-zeka');await page.getByRole('button',{name:'Geçerli üretim örneğini doldur',exact:true}).click();mkdirSync(artifact,{recursive:true});
+  for(const width of[390,768,1440]){await page.setViewportSize({width,height:1100});expect(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1)).toBe(false);await page.screenshot({path:join(artifact,`ai-form-${width}.png`),fullPage:true,animations:'disabled'});}
+  await page.getByRole('button',{name:'Üretim tahminini gözden geçir',exact:true}).click();const production=page.waitForResponse(r=>r.url().endsWith('/predictions/production')&&r.request().method()==='POST');await page.getByRole('button',{name:'Onayla ve kaydet',exact:true}).click();const p=await(await production).json();expect(p.model_version).toContain('-ridge-v2-');await expect(page.getByRole('heading',{name:'Üretim tahmin sonucu',exact:true})).toBeVisible();await page.screenshot({path:join(artifact,'ai-production-result-1440.png'),fullPage:true,animations:'disabled'});
+  await page.getByText('Yeni tahmin oluştur',{exact:true}).click();await page.getByRole('button',{name:'Kuzu parçalama',exact:true}).click();await page.getByLabel('Tahmin reçete sürümü',{exact:true}).selectOption(recipe.id);await page.getByRole('button',{name:'Geçerli kesim örneğini doldur',exact:true}).click();
+  for(const [i,name]of['But','Omuz','Sırt','Kaburga','Kıyma'].entries())await page.getByLabel(name+' ürün eşlemesi',{exact:true}).selectOption(parts[i].id);
+  await page.getByRole('button',{name:'Kesim tahminini gözden geçir',exact:true}).click();const cutting=page.waitForResponse(r=>r.url().endsWith('/predictions/cutting')&&r.request().method()==='POST');await page.getByRole('button',{name:'Onayla ve kaydet',exact:true}).click();const c=await(await cutting).json();expect(c.model_version).toContain('-ridge-v2-');await expect(page.getByLabel('Tahmini parça ağırlıkları',{exact:true})).toBeVisible();
+  await page.setViewportSize({width:768,height:1100});await page.screenshot({path:join(artifact,'ai-cutting-result-768.png'),fullPage:true,animations:'disabled'});await expect(page.getByText('Henüz gerçekleşmedi',{exact:true}).first()).toBeVisible();
+});

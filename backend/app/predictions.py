@@ -49,7 +49,7 @@ def create_prediction(db, request, kind):
     context={}
     if kind=='production':
         if request.output_product_id:
-            product=get(db,m.Product,request.output_product_id)
+            product=get(db,m.Product,request.output_product_id,lock=True)
             if product.type!='finished' or product.base_unit!='package' or product.package_weight_kg!=request.package_weight_kg:
                 raise DomainError('PREDICTION_PRODUCT_MISMATCH','Paket ürünü ve ağırlığı eşleşmelidir',422)
             context['output_product_id']=product.id

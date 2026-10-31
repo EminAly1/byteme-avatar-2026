@@ -69,7 +69,9 @@ def detail(db, op):
 
 def create(db, request):
     eligible_source(db, request)
-    for identifier in request.output_product_ids:
+    for identifier in sorted(request.output_product_ids, key=str):
+        # The plan stores IDs in JSON, so hold the parent until its commit.
+        services.get(db, m.Product, identifier, lock=True)
         output_product(db, identifier)
     op = m.Operation(code=request.code, kind='rework', allocation_method='quantity',
                      allocation_snapshot={'schema_version': 1, 'type': 'rework_plan',

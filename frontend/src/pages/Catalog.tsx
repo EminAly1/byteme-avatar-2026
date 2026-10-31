@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { RecordActions } from "../components/record-actions";
+import { MasterRecordDialog, type MasterSelection } from "../components/master-record";
 import { ProductFields } from "../components/catalog-product";
 import { useFormContext } from "react-hook-form";
 import type { z } from "zod";
@@ -22,6 +24,7 @@ import { CommandForm, Field, Options } from "../components/forms";
 import { Badge, Section, State, Table } from "../components/ui";
 
 export function Products() {
+  const [selection, setSelection] = useState<MasterSelection | null>(null);
   const data = useCatalog(),
     [search, setSearch] = useState(""),
     [type, setType] = useState(""),
@@ -88,7 +91,7 @@ export function Products() {
           </label>
         </div>
         <Table
-          headers={["SKU", "Ürün", "Tür", "Stok birimi", "Paket dönüşümü"]}
+          headers={["SKU", "Ürün", "Tür", "Stok birimi", "Paket dönüşümü", "İşlemler"]}
           empty={!products.length}
             emptyMessage="Aramanıza uygun ürün yok. Filtreleri değiştirin veya Yeni ürün ile ilk kartı oluşturun."
         >
@@ -107,6 +110,7 @@ export function Products() {
                   ? amount(x.package_weight_kg) + " kg / paket"
                   : "—"}
               </td>
+              <td><RecordActions onView={() => setSelection({id:x.id,mode:"view"})} onEdit={() => setSelection({id:x.id,mode:"edit"})} onDelete={() => setSelection({id:x.id,mode:"delete"})}/></td>
             </tr>
           ))}
         </Table>
@@ -115,6 +119,7 @@ export function Products() {
           uygulanır.
         </p>
       </Section>
+    {selection && <MasterRecordDialog kind="products" selection={selection} onClose={() => setSelection(null)}/>}
     </State>
   );
 }
@@ -145,6 +150,7 @@ function PartyFields() {
   );
 }
 export function Parties() {
+  const [selection, setSelection] = useState<MasterSelection | null>(null);
   const data = useCatalog();
   return (
     <State loading={data.loading} error={data.error}>
@@ -154,7 +160,7 @@ export function Parties() {
           subtitle="Tedarikçi ve dış üreticiler tek bir firma kartında tutulur."
         >
           <Table
-            headers={["Firma", "Roller", "İletişim"]}
+            headers={["Firma", "Roller", "İletişim", "İşlemler"]}
             empty={!data.parties.length}
             emptyMessage="Henüz iş ortağı yok. Firma oluştur alanından tedarikçi, müşteri veya üretici ekleyin."
           >
@@ -169,7 +175,8 @@ export function Parties() {
                   </div>
                 </td>
                 <td>{x.contact || "—"}</td>
-              </tr>
+                <td><RecordActions onView={() => setSelection({id:x.id,mode:"view"})} onEdit={() => setSelection({id:x.id,mode:"edit"})} onDelete={() => setSelection({id:x.id,mode:"delete"})}/></td>
+            </tr>
             ))}
           </Table>
         </Section>
@@ -186,6 +193,7 @@ export function Parties() {
           </CommandForm>
         </Section>
       </div>
+    {selection && <MasterRecordDialog kind="parties" selection={selection} onClose={() => setSelection(null)}/>}
     </State>
   );
 }
@@ -212,6 +220,7 @@ function LocationFields({ data }: { data: ReturnType<typeof useCatalog> }) {
   );
 }
 export function Locations() {
+  const [selection, setSelection] = useState<MasterSelection | null>(null);
   const data = useCatalog();
   return (
     <State loading={data.loading} error={data.error}>
@@ -221,7 +230,7 @@ export function Locations() {
           subtitle="Karantina stoğu kullanılabilir stok sayılmaz."
         >
           <Table
-            headers={["Konum", "Tür", "Dış üretici"]}
+            headers={["Konum", "Tür", "Dış üretici", "İşlemler"]}
             empty={!data.locations.length}
             emptyMessage="Henüz konum yok. Konum oluştur alanından kendi deponuzu veya dış üretici deposunu ekleyin."
           >
@@ -236,7 +245,8 @@ export function Locations() {
                 <td>
                   {data.parties.find((p) => p.id === x.party_id)?.name || "—"}
                 </td>
-              </tr>
+                <td><RecordActions onView={() => setSelection({id:x.id,mode:"view"})} onEdit={() => setSelection({id:x.id,mode:"edit"})} onDelete={() => setSelection({id:x.id,mode:"delete"})}/></td>
+            </tr>
             ))}
           </Table>
         </Section>
@@ -253,6 +263,7 @@ export function Locations() {
           </CommandForm>
         </Section>
       </div>
+    {selection && <MasterRecordDialog kind="locations" selection={selection} onClose={() => setSelection(null)}/>}
     </State>
   );
 }

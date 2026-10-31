@@ -360,3 +360,53 @@ def recipe_list(db: DB, limit: Limit = 50, cursor: UUID | None = None):
         query = query.where(m.RecipeVersion.id > str(cursor))
     rows = db.scalars(query).all()
     return {'items': [cuttings.recipe_detail(db, x) for x in rows[:limit]], 'next_cursor': rows[limit-1].id if len(rows) > limit else None}
+
+
+# Only descriptive master fields are editable. All writes keep execute()'s
+# transaction, bounded deadlock retry and method-specific idempotency scope.
+from app import master_data
+
+
+@router.get('/products/{record_id}')
+def product_get(record_id: UUID, db: DB):
+    return services.entity(services.get(db, m.Product, record_id))
+
+
+@router.patch('/products/{record_id}')
+def product_update(record_id: UUID, body: s.MasterNameUpdate, key: Key):
+    return write(f'products:{record_id}:patch', key, body, lambda db, p: master_data.update(db, m.Product, record_id, p), 200)
+
+
+@router.delete('/products/{record_id}')
+def product_delete(record_id: UUID, key: Key, body: s.MasterDelete = s.MasterDelete()):
+    return write(f'products:{record_id}:delete', key, body, lambda db, _: master_data.delete(db, m.Product, record_id), 200)
+
+
+@router.get('/parties/{record_id}')
+def party_get(record_id: UUID, db: DB):
+    return services.entity(services.get(db, m.Party, record_id))
+
+
+@router.patch('/parties/{record_id}')
+def party_update(record_id: UUID, body: s.PartyUpdate, key: Key):
+    return write(f'parties:{record_id}:patch', key, body, lambda db, p: master_data.update(db, m.Party, record_id, p), 200)
+
+
+@router.delete('/parties/{record_id}')
+def party_delete(record_id: UUID, key: Key, body: s.MasterDelete = s.MasterDelete()):
+    return write(f'parties:{record_id}:delete', key, body, lambda db, _: master_data.delete(db, m.Party, record_id), 200)
+
+
+@router.get('/locations/{record_id}')
+def location_get(record_id: UUID, db: DB):
+    return services.entity(services.get(db, m.Location, record_id))
+
+
+@router.patch('/locations/{record_id}')
+def location_update(record_id: UUID, body: s.MasterNameUpdate, key: Key):
+    return write(f'locations:{record_id}:patch', key, body, lambda db, p: master_data.update(db, m.Location, record_id, p), 200)
+
+
+@router.delete('/locations/{record_id}')
+def location_delete(record_id: UUID, key: Key, body: s.MasterDelete = s.MasterDelete()):
+    return write(f'locations:{record_id}:delete', key, body, lambda db, _: master_data.delete(db, m.Location, record_id), 200)

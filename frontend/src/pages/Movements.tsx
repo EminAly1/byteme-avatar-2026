@@ -46,7 +46,7 @@ import { Reworks } from "./Reworks";
 type Catalog = ReturnType<typeof useCatalog>;
 function StockRows({ stocks, data }: { stocks: Stock[]; data: Catalog }) {
   return (
-    <Table
+    <Table readonlyReason="Kesin kayıt korunur. Düzeltme yalnız desteklenen iade, iptal veya yeni işlemle yapılır."
       headers={["Lot / konum", "Kayıtlı stok", "Kullanılabilir", "Durum"]}
       empty={!stocks.length}
     >
@@ -257,7 +257,7 @@ function Transfers({ data, stocks }: { data: Catalog; stocks: Stock[] }) {
       )}
       <Section title="Transfer geçmişi">
         <State loading={records.isPending} error={records.error}>
-          <Table
+          <Table readonlyReason="Kesin kayıt korunur. Düzeltme yalnız desteklenen iade, iptal veya yeni işlemle yapılır."
             headers={["Referans / tarih", "Lot", "Kaynak → hedef", "Miktar"]}
             empty={!records.data?.length}
           >
@@ -540,7 +540,7 @@ function Returns({
         )}
         <Section title="İade geçmişi">
           <State loading={returns.isPending} error={returns.error}>
-            <Table
+            <Table readonlyReason="Kesin kayıt korunur. Düzeltme yalnız desteklenen iade, iptal veya yeni işlemle yapılır."
               headers={["Kayıt", "Gelir düzeltmesi", "Kabul", "Ayrıntı"]}
               empty={!returns.data?.length}
             >

@@ -27,6 +27,8 @@ interface Props<T extends FieldValues> {
   onSuccess?: (result: unknown) => void;
   children: ReactNode;
   summary?: (body: unknown) => ReactNode;
+  method?: "POST" | "PATCH" | "DELETE";
+  danger?: boolean;
 }
 export function CommandForm<T extends FieldValues>({
   schema,
@@ -38,8 +40,10 @@ export function CommandForm<T extends FieldValues>({
   onSuccess,
   children,
   summary,
+  method = "POST",
+  danger = false,
 }: Props<T>) {
-  const [restored] = useState(() => loadPending(path));
+  const [restored] = useState(() => loadPending(path, method));
   const form = useForm<T>({
     resolver: zodResolver(schema as never) as Resolver<T>,
     defaultValues: (restored?.values as DefaultValues<T>) || defaults,
@@ -52,7 +56,7 @@ export function CommandForm<T extends FieldValues>({
     mutationFn: () => send(attempt.current!),
     retry: false,
     onSuccess: (data) => {
-      clearPending(path);
+      clearPending(path, method);
       attempt.current = null;
       setUncertain(false);
       void client.invalidateQueries();
@@ -68,7 +72,7 @@ export function CommandForm<T extends FieldValues>({
       const unknown = error instanceof ApiError && error.uncertain;
       setUncertain(unknown);
       if (!unknown) {
-        clearPending(path);
+        clearPending(path, method);
         attempt.current = null;
       }
     },
@@ -84,7 +88,7 @@ export function CommandForm<T extends FieldValues>({
     return () => window.removeEventListener("beforeunload", warn);
   }, [locked]);
   function confirm() {
-    attempt.current = newCommand(path, review);
+    attempt.current = newCommand(path, review, method);
     savePending({ command: attempt.current, values: form.getValues() });
     setReview(null);
     mutation.mutate();
@@ -121,7 +125,7 @@ export function CommandForm<T extends FieldValues>({
         ) : (
           <button
             type="submit"
-            className="button primary"
+            className={"button " + (danger ? "danger" : "primary")}
             disabled={mutation.isPending}
           >
             {mutation.isPending ? "Kaydediliyor…" : label}
@@ -129,7 +133,7 @@ export function CommandForm<T extends FieldValues>({
         )}
       </form>
       {review !== null && (
-        <ConfirmDialog onCancel={() => setReview(null)} onConfirm={confirm}>
+        <ConfirmDialog danger={danger} confirmLabel={danger ? "Onayla ve sil" : "Onayla ve kaydet"} onCancel={() => setReview(null)} onConfirm={confirm}>
           <p>{confirmText}</p>
           {summary?.(review)}
           <p>

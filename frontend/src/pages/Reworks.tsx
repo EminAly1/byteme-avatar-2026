@@ -86,7 +86,7 @@ export function Reworks() {
             steps={["Taslak", "Fiilî çıktı ve hizmet", "Kesin kapanış"]}
             current={0}
           />
-          <Table
+          <Table readonlyReason="Kesin kayıt korunur. Düzeltme yalnız desteklenen iade, iptal veya yeni işlemle yapılır."
             headers={["Rework", "Durum", "Kesin maliyet", "Ayrıntı"]}
             empty={!records.data?.length}
           >
@@ -469,7 +469,7 @@ export function ReworkPage() {
                   hizmet: {eur(record.total_service_cost)} · Toplam:{" "}
                   <strong>{eur(record.total_cost)}</strong>
                 </p>
-                <Table
+                <Table readonlyReason="Kesin kayıt korunur. Düzeltme yalnız desteklenen iade, iptal veya yeni işlemle yapılır."
                   headers={["Yeni lot", "Miktar", "Kesin lot maliyeti", "SKT"]}
                   empty={!record.outputs.length}
                 >

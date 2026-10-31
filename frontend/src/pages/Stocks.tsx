@@ -113,7 +113,7 @@ export function Stocks() {
           </button>
         </div>
         {tab === "stocks" ? (
-          <Table
+          <Table readonlyReason="Kesin kayıt korunur. Düzeltme yalnız desteklenen iade, iptal veya yeni işlemle yapılır."
             headers={["Ürün / Lot", "Konum", "Stok", "Kullanılabilir", "Durum"]}
             empty={!filtered.length}
             emptyMessage="Bu filtrede stok bulunmuyor. Filtreleri kontrol edin; ilk lot girişi için Alış ve lot girişi sayfasını kullanın."
@@ -168,7 +168,7 @@ export function Stocks() {
             })}
           </Table>
         ) : (
-          <Table
+          <Table readonlyReason="Kesin kayıt korunur. Düzeltme yalnız desteklenen iade, iptal veya yeni işlemle yapılır."
             headers={["Tarih", "Hareket", "Lot", "Konum", "Miktar"]}
             empty={!history.length}
             emptyMessage="Bu filtrede stok hareketi yok. Alış, transfer veya üretim kaydı oluştuğunda hareketleri burada görebilirsiniz."

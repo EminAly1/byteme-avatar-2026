@@ -75,22 +75,23 @@ function ProductionFields({
         }}>Geçerli üretim örneğini doldur</button>
         <span className="caption">Sayısal plan örneği; gerçek stok veya sonuç değildir.</span>
       </div>
-      <div className="form-grid">
+      <fieldset className="form-section ai-input-card"><legend>Üretim planı</legend>      <div className="form-grid">
         <Field name="meat_type" label="Et türü">
-          <option value="beef">Sığır (beef)</option>
-          <option value="lamb">Kuzu (lamb)</option>
+          <option value="beef">Sığır</option>
+          <option value="lamb">Kuzu</option>
         </Field>
         <Field name="planned_producer_profile" label="Sentetik üretici profili">
-          <option value="producer_a">producer_a · kurgusal profil A</option>
-          <option value="producer_b">producer_b · kurgusal profil B</option>
-          <option value="producer_c">producer_c · kurgusal profil C</option>
+          <option value="producer_a">Kurgusal profil A</option>
+          <option value="producer_b">Kurgusal profil B</option>
+          <option value="producer_c">Kurgusal profil C</option>
         </Field>
       </div>
-      <div className="form-grid cols-3">
-        <NumberInput hint={modelHint(model, "meat_kg")} placeholder={model.example_inputs?.meat_kg} name="meat_kg" label="Planlanan et (kg)" />
+      </fieldset>
+      <fieldset className="form-section ai-input-card"><legend>Malzeme miktarları</legend><div className="form-grid cols-3">        <NumberInput hint={modelHint(model, "meat_kg")} placeholder={model.example_inputs?.meat_kg} name="meat_kg" label="Planlanan et (kg)" />
         <NumberInput hint={modelHint(model, "spice_kg")} placeholder={model.example_inputs?.spice_kg} name="spice_kg" label="Planlanan baharat (kg)" />
         <NumberInput hint={modelHint(model, "casing_kg")} placeholder={model.example_inputs?.casing_kg} name="casing_kg" label="Planlanan kılıf (kg)" />
-        <NumberInput hint={modelHint(model, "meat_cost_eur")} placeholder={model.example_inputs?.meat_cost_eur} name="meat_cost_eur" label="Bilinen et maliyeti (EUR)" />
+</div></fieldset>
+      <fieldset className="form-section ai-input-card"><legend>Maliyetler · EUR</legend><div className="form-grid">        <NumberInput hint={modelHint(model, "meat_cost_eur")} placeholder={model.example_inputs?.meat_cost_eur} name="meat_cost_eur" label="Bilinen et maliyeti (EUR)" />
         <NumberInput
           name="spice_cost_eur"
           hint={modelHint(model, "spice_cost_eur")} placeholder={model.example_inputs?.spice_cost_eur}
@@ -101,31 +102,20 @@ function ProductionFields({
           hint={modelHint(model, "casing_cost_eur")} placeholder={model.example_inputs?.casing_cost_eur}
           label="Bilinen kılıf maliyeti (EUR)"
         />
-      </div>
-      <div className="form-grid">
-        <NumberInput hint={modelHint(model, "package_weight_kg")} placeholder={model.example_inputs?.package_weight_kg} name="package_weight_kg" label="Paket ağırlığı (kg)" />
         <NumberInput
           name="estimated_service_eur"
           label="Hizmet ön teklifi (EUR)"
           placeholder={model.example_inputs?.estimated_service_eur}
           hint={modelHint(model, "estimated_service_eur") + " İşlem öncesi bağımsız teklif; fiilî sonuç girilmez."}
         />
-        <Field name="operation_id" label="Üretim operasyon referansı">
-          <Options
-            items={operations
-              .filter(
-                (o) => o.kind === "external_production" && o.status === "draft",
-              )
-              .map((o) => ({ id: o.id, name: o.code }))}
-            placeholder="İlişkisiz tahmin (isteğe bağlı)"
-          />
-        </Field>
+</div></fieldset>
+      <fieldset className="form-section ai-input-card"><legend>Paket bilgileri</legend><div className="form-grid">        <NumberInput hint={modelHint(model, "package_weight_kg")} placeholder={model.example_inputs?.package_weight_kg} name="package_weight_kg" label="Paket ağırlığı (kg)" />
         <Field
           name="output_product_id"
           label="Tahminin paket ürünü"
           hint={
             operation
-              ? "Bağlı işlem için zorunlu; paket ağırlığı DB ile eşleşir."
+              ? "Bağlı işlem için zorunlu; paket ağırlığı kayıtlı ürünle eşleşir."
               : "İsteğe bağlı; referans girilmezse gerçekleşme eşleşmez."
           }
         >
@@ -135,7 +125,18 @@ function ProductionFields({
             )}
           />
         </Field>
-      </div>
+</div></fieldset>
+      <fieldset className="form-section ai-input-card"><legend>İsteğe bağlı işlem bağlantısı</legend><div className="form-grid">        <Field name="operation_id" label="Üretim operasyon referansı">
+          <Options
+            items={operations
+              .filter(
+                (o) => o.kind === "external_production" && o.status === "draft",
+              )
+              .map((o) => ({ id: o.id, name: o.code }))}
+            placeholder="İlişkisiz tahmin (isteğe bağlı)"
+          />
+        </Field>
+</div></fieldset>
       {!data.products.some(p => p.type === "finished" && p.base_unit === "package") && <p className="notice">İlişkisiz üretim tahmini için ürün gerekmez. İşlemle karşılaştırmak için <Link to="/urunler">Ürünler</Link> sayfasında paket ağırlığı tanımlı mamul oluşturun ve başlamamış üretim taslağını seçin.</p>}
       <p className="caption">Aralıklar seçili modelin metadata’sından gelir. Operasyon bağlantısı isteğe bağlıdır; başlamış işleme yeni tahmin kaydedilemez.</p>
     </>
@@ -186,6 +187,7 @@ function CuttingFields({
         <span className="caption">Sayısal örnek; reçeteyi ve beş gerçek ürün eşlemesini ayrıca seçin.</span>
       </div>
       {!eligibleRecipes.length && <p className="notice">Tahmin için kullanılabilir Kuzu reçetesi ve beş farklı kg mamul gerekir. <Link to="/parcalama">Parçalama sayfasında reçete oluşturun</Link>; parça ürünlerini <Link to="/urunler">Ürünler</Link> sayfasında tanımlayın.</p>}
+      <fieldset className="form-section ai-input-card"><legend>Kuzu parçalama planı</legend>
       <div className="form-grid">
         <Field name="recipe_version_id" label="Tahmin reçete sürümü">
           <Options
@@ -214,6 +216,7 @@ function CuttingFields({
           />
         </Field>
       </div>
+      </fieldset>
       {recipeId && (
         <State loading={recipe.isPending} error={recipe.error}>
           <h3>Reçete parçası → gerçek ürün eşlemesi</h3>
@@ -307,8 +310,8 @@ export function PredictionResult({
               />
             ))}
           </div>
-          {p.kind === "cutting" && <div className="stat-grid">
-            {Object.entries(partNames).map(([key, name]) => <StatCard key={key} label={"Tahmini " + name.toLocaleLowerCase("tr")} value={predictionValue("predicted_" + key + "_kg", p[("predicted_" + key + "_kg") as keyof Prediction] as string)} />)}
+          {p.kind === "cutting" && <div className="prediction-parts" aria-label="Tahmini parça ağırlıkları">
+            {Object.entries(partNames).map(([key, name]) => <div key={key}><div><span>{"Tahmini "+name.toLocaleLowerCase("tr")}</span><strong>{predictionValue("predicted_" + key + "_kg", p[("predicted_" + key + "_kg") as keyof Prediction] as string)}</strong></div><progress aria-label={name+" tahmini ağırlık"} max={Number(p.predicted_total_weight_kg)} value={Number(p[("predicted_" + key + "_kg") as keyof Prediction])}/></div>)}
           </div>}
           {p.actual_unavailable_reason && (
             <p className="money-note">{p.actual_unavailable_reason}</p>
@@ -437,15 +440,7 @@ export function Predictions() {
           {result.data && <PredictionResult prediction={result.data} />}
         </State>
       )}
-      {!selected && (
-        <div className="science-notice">
-          <FlaskConical size={22} />
-          <div>
-            <strong>Sentetik eğitim verisi</strong>
-            <p>{warning}</p>
-          </div>
-        </div>
-      )}
+      <aside className="ai-data-note"><FlaskConical size={20}/><p><strong>6.000 SYNTHETIC kayıt</strong> · 3.000/model, gerçek tarihsel veri 0. Bazı EKP hata ölçümleri ve eski sabit test metrikleri geriledi; gerçek veri başarımı onaylanmadı. Tahmin kesin kayıt değildir.</p></aside>
       <details
         key={selected || "new"}
         open={!selected}
@@ -455,15 +450,15 @@ export function Predictions() {
           {selected ? "Yeni tahmin oluştur" : "Tahmin oluşturma"}
         </summary>
         <Section title="Yeni tahmin">
-          <div className="tabs" role="group" aria-label="Tahmin modeli">
+          <div className="tabs model-tabs" role="group" aria-label="Tahmin modeli">
             <button
-              className={tab === "production" ? "active" : ""}
+              aria-pressed={tab === "production"} className={tab === "production" ? "active" : ""}
               onClick={() => setTab("production")}
             >
               Üretim verimi ve EKP
             </button>
             <button
-              className={tab === "cutting" ? "active" : ""}
+              aria-pressed={tab === "cutting"} className={tab === "cutting" ? "active" : ""}
               onClick={() => setTab("cutting")}
             >
               Kuzu parçalama
@@ -603,7 +598,7 @@ export function Predictions() {
       </details>
       {info && (
         <details className="technical-details">
-          <summary>Model değerlendirmesi · sentetik test metrikleri</summary>
+          <summary>Model ve teknik ayrıntılar · sentetik test metrikleri</summary>
           {result.data && result.data.model_version !== info.model_version && <p className="notice">Kayıtlı tahmin {result.data.model_version} sürümüne aittir. Aşağıdaki değerlendirme güncel {info.model_version} modelinindir; eski tahmin yeniden hesaplanmadı.</p>}
           <Section
             title="Sentetik test metrikleri"

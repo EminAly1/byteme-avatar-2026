@@ -367,3 +367,23 @@ class SecondTierCreate(Schema):
     distributed_at: AwareDatetime
     reference: Code
     evidence_note: Reason
+
+
+class MasterNameUpdate(Schema):
+    """Identifiers, stock units/types/conversions and location ownership stay locked."""
+    name: Name
+
+
+class PartyUpdate(Schema):
+    name: Name | None = None
+    contact: Annotated[str, Field(max_length=300)] | None = None
+
+    @model_validator(mode='after')
+    def nonempty_patch(self):
+        if not self.model_fields_set or ('name' in self.model_fields_set and self.name is None):
+            raise ValueError('En az bir alan girin; firma adı boş bırakılamaz.')
+        return self
+
+
+class MasterDelete(Schema):
+    pass

@@ -35,7 +35,7 @@ export function Operations() {
           title="Üretim emirleri"
           subtitle="Emir oluşturma, hammadde sevki ve fiilî kapanış ayrı adımlardır."
         >
-          <Table
+          <Table readonlyReason="Kesin kayıt korunur. Düzeltme yalnız desteklenen iade, iptal veya yeni işlemle yapılır."
             headers={[
               "Emir",
               "Dış üretici",
@@ -483,7 +483,7 @@ export function OperationPage() {
                     : undefined
                 }
               >
-                <Table
+                <Table readonlyReason="Kesin kayıt korunur. Düzeltme yalnız desteklenen iade, iptal veya yeni işlemle yapılır."
                   headers={[
                     "Mamul lotu",
                     "Miktar",
@@ -518,7 +518,7 @@ export function OperationPage() {
                 title="Kayıtlı kaynak lot bağlantıları"
                 subtitle="Bu emrin kesin girdi–çıktı kayıtları; tam ileri/geri izleme modülü değildir."
               >
-                <Table
+                <Table readonlyReason="Kesin kayıt korunur. Düzeltme yalnız desteklenen iade, iptal veya yeni işlemle yapılır."
                   headers={[
                     "Kaynak lot",
                     "Mamul lot",
@@ -585,7 +585,7 @@ export function OperationPage() {
                 </CommandForm>
               </Section>
               <Section title="Bu emre kaydedilen sevkler">
-                <Table
+                <Table readonlyReason="Kesin kayıt korunur. Düzeltme yalnız desteklenen iade, iptal veya yeni işlemle yapılır."
                   headers={["Lot", "Üretici konumu", "Sevk miktarı", "Tarih"]}
                   empty={!dispatched.length}
                 >
