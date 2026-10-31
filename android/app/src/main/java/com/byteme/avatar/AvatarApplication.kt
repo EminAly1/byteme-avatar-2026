@@ -16,7 +16,8 @@ class NetworkMonitor(context: Context) {
     init {
         manager.registerDefaultNetworkCallback(object: ConnectivityManager.NetworkCallback() {
             override fun onAvailable(network: Network) { connected.value = true }
-            override fun onLost(network: Network) { connected.value = manager.activeNetwork != null }
+            // Default callback has lost its last network; activeNetwork can still be stale here.
+            override fun onLost(network: Network) { connected.value = false }
         })
     }
 }

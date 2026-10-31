@@ -64,7 +64,9 @@ class BackendDemoTest {
             // A read-only verifier must not reuse a connection left idle during
             // software-emulated UI steps. Keep POST retry behavior unchanged.
             assertEquals("5.000000",allPages {api(base,key).stocks(it)}.single {it.lot_id==lot && it.location_id==location}.quantity)
-            compose.onNodeWithText("Satışlar",useUnmergedTree=true).performClick()
+            compose.onNodeWithTag("nav-home").performClick()
+            compose.onNodeWithTag("main-list").performScrollToNode(hasTestTag("sales-history"))
+            compose.onNodeWithTag("sales-history").performClick()
             compose.onNodeWithTag("main-list").performScrollToNode(hasTestTag("confirmed-${confirmed.id}"))
             File(app.filesDir,"demo-confirmed.png").outputStream().use {InstrumentationRegistry.getInstrumentation().uiAutomation.takeScreenshot().compress(Bitmap.CompressFormat.PNG,100,it)}
             // Keep SQLite's previous unblocked snapshot. Recall on the real backend
@@ -82,7 +84,7 @@ class BackendDemoTest {
             scenario.recreate()
             assertEquals(row.key,repo.dao.outbox(row.key)?.key)
             assertEquals(confirmed.id,repo.dao.snapshot(confirmed.id)?.id)
-            compose.onNodeWithText("Bekleyen",useUnmergedTree=true).performClick()
+            compose.onNodeWithTag("nav-pending").performClick()
             compose.onNodeWithTag("main-list").performScrollToNode(hasTestTag("draft-state-${rejectedDraft.id}"))
             File(app.filesDir,"demo-blocked.png").outputStream().use {InstrumentationRegistry.getInstrumentation().uiAutomation.takeScreenshot().compress(Bitmap.CompressFormat.PNG,100,it)}
         }
