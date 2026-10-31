@@ -7,7 +7,7 @@ Android 8.0 / API26 ve üzeri için geliştirme imzalı APK.
 
 **Bu teslim oturumunda Release yayımlanamadı:** GitHub Releases API `Forbidden`
 döndürdü. Henüz doğrulanmış herkese açık APK indirme URL'si yoktur.
-Kaynak kod branch'i: [final-delivery-packaging](https://github.com/EminAly1/byteme-avatar-2026/tree/feature/final-delivery-packaging).
+Kaynak kod: [güncel `main`](https://github.com/EminAly1/byteme-avatar-2026/tree/main). Paketleme [PR #43](https://github.com/EminAly1/byteme-avatar-2026/pull/43) ile birleşti; herkese açık APK Release/asset hâlâ yok.
 
 Hazır dosyalar bu çalışma ortamında korunur:
 
@@ -103,7 +103,7 @@ internete açmayın. Kablosuz bağlantı bu teslimde denenmedi.
 
 ## 5. Ekip için manuel Release yükleme
 
-1. Paketleme PR'ını inceleyin. Kaynak commit'i ve APK hash/sertifikasını doğrulayın;
+1. Paketleme [PR #43](https://github.com/EminAly1/byteme-avatar-2026/pull/43) `main` dalına alındı. APK kod commit'i ve hash/sertifikasını doğrulayın;
    bu APK'nin kod commit'i `3f2c5db4d02b93ed3e9f3ba21e15fd8e6245fb6b`'dir.
 2. Yetkili ekip hesabıyla GitHub deposu → **Releases → Draft a new release**.
    `v0.1.0-preview.2` etiketinin boşta olduğunu tekrar kontrol edin; varsa mevcut
@@ -117,5 +117,5 @@ internete açmayın. Kablosuz bağlantı bu teslimde denenmedi.
    README'ye ve e-posta taslağına ekleyin.
 
 Bu oturumda Release/tag oluşturulmadı; video çekilmedi/yüklenmedi, e-posta
-gönderilmedi. Son insan adımları: cihaz provası, PR/main incelemesi, gerçek indirme
+gönderilmedi. Son insan adımları: cihaz provası, gerçek indirme
 alanı, ≤15 dakika video ve **1 Kasım 2026 23:59 Türkiye saati** öncesi gönderim/alındı.
