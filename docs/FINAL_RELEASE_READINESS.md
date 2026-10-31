@@ -79,8 +79,8 @@ metriklerde ve eski sabit testte geriledi; genel doğruluk artışı kabul edilm
 İnceleme kapsamı: ayrı Android Preview varyantı ve son teslim belgeleri; yeni iş
 özelliği/şema değişikliği yok. APK/anahtar/özel env/raw log kaynak commit'ine alınmaz.
 Kısa kapı başarılı; yeni main birleşimi ve GitHub check/policy doğrulaması yapılmadı.
-Main hedefli PR denenecek; erişim engelinde
-[manuel PR compare](https://github.com/EminAly1/byteme-avatar-2026/compare/main...feature/final-delivery-packaging?expand=1).
+Main hedefli `gh pr create` denendi; GraphQL isteği **Forbidden** olduğu için
+PR oluşturulamadı. Yetkili ekip [manuel PR compare](https://github.com/EminAly1/byteme-avatar-2026/compare/main...feature/final-delivery-packaging?expand=1).
 Force push/main merge yok. Aşağıdaki rapor **28 Ekim tarihsel kanıtıdır**; sayaçları
 31 Ekim testleriyle toplanmaz ve yeni APK cihaz kabulü olarak kullanılamaz.
 

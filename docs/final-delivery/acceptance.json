@@ -145,5 +145,11 @@
     "diff_check": "passed",
     "apk_private_files_and_current_secret_scan": "passed",
     "keystores_env_logs_apks_committed": false
+  },
+  "github": {
+    "push": "verified at checkpoint 05432f8d9f9ecf2a529ff083bbe2c906ca2f38c2; final status is branch HEAD",
+    "pr_attempt": "GraphQL Forbidden; PR not created",
+    "compare_url": "https://github.com/EminAly1/byteme-avatar-2026/compare/main...feature/final-delivery-packaging?expand=1",
+    "main_merged": false
   }
 }

@@ -21,7 +21,7 @@ Görev 21–25, PR #37/#38/#40/#41/#42 birleşmiştir. Paketleme ayrı
 | REL26-04 | Preview fiziksel/API28 açılış, uyarı, satış/offline ve PDF/SAF/paylaşma | Doğrulama gerekiyor | Hazır cihaz yok; eski API28 kanıtı yeni APK'ye taşınmaz. API35 **NO ACCEPTANCE / 0 test** |
 | REL26-05 | Gerçek Release/APK yayın alanı | Doğrulama gerekiyor | Releases API **Forbidden**; tag/asset/download URL yok. Yerel APK/hash ve manuel adımlar INDIRME'de |
 | REL26-06 | Linux kullanıcı/indirme/video/taslak belgeleri | Tamamlandı | README,INDIRME,USER_GUIDE,DEMO_RUNBOOK,14:30 FINAL_DEMO_SCRIPT ve gönderilmemiş taslak güncellendi |
-| REL26-07 | Final PR/main incelemesi ve son GitHub check/policy | Devam ediyor | Paketleme branch'i; main'e merge edilmedi. PR/compare son kabulde |
+| REL26-07 | Final PR/main incelemesi ve son GitHub check/policy | Devam ediyor | Push/uzak SHA doğrulandı; PR açma GraphQL Forbidden. Main'e merge edilmedi; manuel compare son kabulde |
 | REL26-08 | Video/link, gerçek e-posta ve alındı | Başlanmadı | Video çekilmedi/yüklenmedi; gönderim/alındı yok. Son tarih 1 Kasım 2026, 23:59 Türkiye |
 
 **Güncel GO:** kısa kapı kapsamındaki yerel web/backend/ML ve APK paketleme.
