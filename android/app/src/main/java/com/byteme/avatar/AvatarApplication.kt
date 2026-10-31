@@ -25,6 +25,7 @@ class AppGraph(context: Context) {
     val settings = SecureSettings(context)
     val database = LocalDatabase.open(context)
     val repository = SalesRepository(database,settings)
+    val documents = com.byteme.avatar.data.DocumentsRepository(settings,context.cacheDir.resolve("document-pdfs"))
     val network = NetworkMonitor(context)
 }
 class AvatarApplication: Application() { val graph by lazy { AppGraph(this) } }

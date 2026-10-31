@@ -48,6 +48,7 @@ private fun unit(value: String) = when(value) { "package" -> "paket"; "unit" -> 
         else lightColorScheme(primary=Color(0xFF006C57),primaryContainer=Color(0xFFD1F3EA),onPrimaryContainer=Color(0xFF063D33),secondary=Color(0xFF345E83),secondaryContainer=Color(0xFFDDEAF6),onSecondaryContainer=Color(0xFF152E45),surface=Color(0xFFF8FAFC),background=Color(0xFFF0F4F7),surfaceVariant=Color(0xFFE4ECF0),onSurfaceVariant=Color(0xFF40525B),surfaceContainer=Color(0xFFF4F8FB),surfaceContainerHighest=Color(0xFFE4ECF0),surfaceContainerHigh=Color(0xFFEBF1F5),surfaceContainerLow=Color(0xFFF4F8FB))
     MaterialTheme(colorScheme=colors) {
         val state by vm.state.collectAsStateWithLifecycle()
+        val documents by vm.documents.collectAsStateWithLifecycle()
         val alerts by vm.alerts.collectAsStateWithLifecycle()
         var saleInput by rememberSaveable(state.endpoint, stateSaver = SaleInput.Saver) { mutableStateOf(SaleInput()) }
         if (!state.initialized) { AvatarOpening(); return@MaterialTheme }
@@ -71,7 +72,7 @@ private fun unit(value: String) = when(value) { "package" -> "paket"; "unit" -> 
             IconButton(onClick={vm.refresh()},enabled=!state.status.busy,modifier=Modifier.size(48.dp)) { Icon(Icons.Outlined.Refresh,"Sunucudan yenile") }
             IconButton(onClick={focus.clearFocus();keyboard?.hide();settings=true},modifier=Modifier.size(48.dp)) { Icon(Icons.Outlined.Settings,"Bağlantı ayarları") }
         }) },bottomBar={ NavigationBar { tabs.forEachIndexed { index,(id,label) ->
-            NavigationBarItem(selected=route==id || (id=="sale" && route=="sales"),onClick={navigate(id)},
+            NavigationBarItem(selected=route==id || (id=="sale" && route=="sales") || (id=="home" && route.startsWith("document")),onClick={navigate(id)},
                 label={Text(label,modifier=Modifier.requiredWidth((LocalConfiguration.current.screenWidthDp/5-4).dp),
                     style=MaterialTheme.typography.labelSmall.copy(letterSpacing=0.sp),maxLines=1,overflow=TextOverflow.Ellipsis,
                     textAlign=androidx.compose.ui.text.style.TextAlign.Center)},
@@ -91,9 +92,10 @@ private fun unit(value: String) = when(value) { "package" -> "paket"; "unit" -> 
                         val warnings = state.catalog.stocks.count { it.blocked || it.lotBlocked || expired(it) }
                         if(warnings>0) item { Notice("$warnings stok kaydında bloke / SKT uyarısı var.",true) }
                         item { Button(onClick={newSale()},enabled=state.catalog.stocks.any(::saleable),modifier=Modifier.fillMaxWidth().heightIn(min=56.dp)) { Icon(Icons.Outlined.Add,null); Text("Yeni satış") } }
+                        item { OutlinedButton(onClick={navigate("documents")},modifier=Modifier.fillMaxWidth().heightIn(min=48.dp).testTag("documents-entry")) {Text("Belgeler · proforma ve satış özeti")} }
                         item { Text("Son onaylanan satışlar",style=MaterialTheme.typography.titleMedium) }
                         if(state.local.sales.isEmpty()) item { Empty("Henüz satış kaydı yok","Yalnız sunucudan alınmış onaylı satışlar burada görünür.") }
-                        items(state.local.sales.take(3),key={it.id}) { SaleCard(it,vm) }
+                        items(state.local.sales.take(3),key={it.id}) { SaleCard(it,vm) {id->vm.loadDocument(id);navigate("documents")} }
                         item { OutlinedButton(onClick={navigate("sales")},modifier=Modifier.fillMaxWidth().heightIn(min=48.dp).testTag("sales-history")) {Text("Onaylı satış geçmişi")} }
                     }
                     "stocks" -> {
@@ -102,11 +104,13 @@ private fun unit(value: String) = when(value) { "package" -> "paket"; "unit" -> 
                         items(state.catalog.stocks,key={it.lotId+it.locationId}) { row -> StockCard(row) {newSale(row)} }
                     }
                     "sale" -> item { SaleForm(state,saleInput,{saleInput=it},vm) }
+                    "documents" -> documentsScreen(state.local.sales,documents,{vm.loadDocument(it)},{vm.documentKind(it)},{navigate("document-edit")})
+                    "document-edit" -> item { DocumentEditor(documents,{vm.documentDraft(it);navigate("documents")},{navigate("documents")}) }
                     "alerts" -> alertsScreen(alerts,state.network,{vm.refreshAlerts(it)},{vm.refreshAlerts(more=true)})
                     "sales" -> {
                         item { Text("Onaylı satış geçmişi",style=MaterialTheme.typography.headlineSmall) }
                         if(state.local.sales.isEmpty()) item { Empty("Satış bulunamadı","Yenileyerek kayıtlı sunucu satışlarını okuyabilirsiniz.") }
-                        items(state.local.sales,key={it.id}) { SaleCard(it,vm) }
+                        items(state.local.sales,key={it.id}) { SaleCard(it,vm) {id->vm.loadDocument(id);navigate("documents")} }
                     }
                     "pending" -> {
                         item { Text("Taslaklar ve gönderimler",style=MaterialTheme.typography.headlineSmall) }
@@ -199,11 +203,12 @@ private fun unit(value: String) = when(value) { "package" -> "paket"; "unit" -> 
         ExposedDropdownMenu(expanded,onDismissRequest={expanded=false}) {items.forEach {(id,name)->DropdownMenuItem(text={Text(name)},onClick={onSelect(id);expanded=false},modifier=Modifier.testTag("option-$id"))}}
     }
 }
-@Composable private fun SaleCard(row: ConfirmedSaleSnapshot,vm: SalesViewModel) {
+@Composable private fun SaleCard(row: ConfirmedSaleSnapshot,vm: SalesViewModel,onDocument: (String)->Unit) {
     val sale=runCatching { Wire.decodeFromString<Sale>(row.json) }.getOrNull()
     Card(Modifier.fillMaxWidth().testTag("confirmed-${row.id}")) {Column(Modifier.padding(16.dp),verticalArrangement=Arrangement.spacedBy(6.dp)) {
         Text("SUNUCU ONAYLI",color=MaterialTheme.colorScheme.primary,style=MaterialTheme.typography.labelLarge)
         Text("${row.totalAmount} EUR",style=MaterialTheme.typography.titleLarge)
+        OutlinedButton(onClick={onDocument(row.id)},modifier=Modifier.heightIn(min=48.dp).testTag("document-open-${row.id}")) {Text("Satış belgesini aç")}
         Text("Satış ID: ${row.id}",style=MaterialTheme.typography.bodySmall);Text(row.soldAt,style=MaterialTheme.typography.labelSmall)
         if(sale==null) TextButton(onClick={vm.detail(row.id)}) {Text("Satır ve hareket ayrıntısını yükle")}
         sale?.lines?.forEach {line -> Text("${line.quantity} ${unit(line.unit)} · ${line.unit_price} EUR/${unit(line.unit)}"); Text("Lot: ${line.lot_id}\nSatır: ${line.id}\nStok hareketi: ${line.stock_movement_id}",style=MaterialTheme.typography.bodySmall) }

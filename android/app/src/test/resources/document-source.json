@@ -1,0 +1,9 @@
+{
+ "sale_id":"10000000-0000-4000-8000-000000000001","sold_at":"2026-10-31T06:00:00+00:00","currency":"EUR",
+ "customer":{"id":"10000000-0000-4000-8000-000000000002","name":"KURGUSAL İğde Şarküteri","contact":"KURGUSAL contact@example.invalid"},
+ "customer_basis":"current_party_record_not_historical_billing_snapshot","original_total_eur":"25.00",
+ "state":"active","state_label":"Aktif satış","return_credit_eur":"0.00","cancellation_credit_eur":"0.00","net_after_adjustments_eur":"25.00",
+ "payment_status":"not_recorded","cash_refund_status":"not_recorded","tax_information":"not_recorded",
+ "lines":[{"id":"10000000-0000-4000-8000-000000000003","line_no":1,"product_id":"10000000-0000-4000-8000-000000000004","product_name":"KURGUSAL But","sku":"BUT-TEST","lot_id":"10000000-0000-4000-8000-000000000005","lot_code":"KURGUSAL-LOT","quantity":"1.000000","unit":"kg","unit_price_eur":"25.00","total_eur":"25.00"}],
+ "shipments":[],"corrections":[],"source_fingerprint":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+}

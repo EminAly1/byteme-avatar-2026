@@ -25,6 +25,7 @@ val Wire = Json { ignoreUnknownKeys = true; encodeDefaults = true }
 @Serializable data class Sale(val id: String, val customer_id: String, val sold_at: String, val currency: String, val total_amount: String, val lines: List<SaleLine>)
 
 interface AvatarApi {
+    @GET("v1/document-drafts/sales/{id}") suspend fun documentSource(@Path("id") id: String): DocumentSource
     @GET("v1/alerts/summary") suspend fun alertSummary(): AlertSummary
     @GET("v1/alerts") suspend fun alerts(@Query("severity") severity: String? = null,
         @Query("cursor") cursor: String? = null, @Query("limit") limit: Int = 50): AlertPage
