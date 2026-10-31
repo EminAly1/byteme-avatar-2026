@@ -4,6 +4,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import okhttp3.OkHttpClient
 import okhttp3.RequestBody
+import okhttp3.ResponseBody
 import okhttp3.MediaType.Companion.toMediaType
 import retrofit2.Response
 import retrofit2.Retrofit
@@ -25,6 +26,8 @@ val Wire = Json { ignoreUnknownKeys = true; encodeDefaults = true }
 @Serializable data class Sale(val id: String, val customer_id: String, val sold_at: String, val currency: String, val total_amount: String, val lines: List<SaleLine>)
 
 interface AvatarApi {
+    @Streaming @POST("v1/document-drafts/proforma/pdf")
+    suspend fun documentPdf(@Body request: DocumentPdfRequest): Response<ResponseBody>
     @GET("v1/document-drafts/sales/{id}") suspend fun documentSource(@Path("id") id: String): DocumentSource
     @GET("v1/alerts/summary") suspend fun alertSummary(): AlertSummary
     @GET("v1/alerts") suspend fun alerts(@Query("severity") severity: String? = null,

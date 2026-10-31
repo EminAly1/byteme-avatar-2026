@@ -25,6 +25,7 @@ class SalesViewModel(val graph: AppGraph): ViewModel() {
     private val status = MutableStateFlow(OperationStatus())
     private val endpoint = MutableStateFlow(graph.settings.base())
     val documents = graph.documents.state
+    fun generateDocumentPdf() = viewModelScope.launch { graph.documents.generatePdf() }
     fun loadDocument(id: String) = viewModelScope.launch { graph.documents.load(id) }
     fun documentKind(kind: com.byteme.avatar.network.DocumentKind) = graph.documents.selectKind(kind)
     fun documentDraft(draft: com.byteme.avatar.network.DocumentDraft) = graph.documents.saveDraft(draft)

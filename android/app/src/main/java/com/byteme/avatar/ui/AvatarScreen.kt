@@ -104,7 +104,7 @@ private fun unit(value: String) = when(value) { "package" -> "paket"; "unit" -> 
                         items(state.catalog.stocks,key={it.lotId+it.locationId}) { row -> StockCard(row) {newSale(row)} }
                     }
                     "sale" -> item { SaleForm(state,saleInput,{saleInput=it},vm) }
-                    "documents" -> documentsScreen(state.local.sales,documents,{vm.loadDocument(it)},{vm.documentKind(it)},{navigate("document-edit")})
+                    "documents" -> documentsScreen(state.local.sales,documents,{vm.loadDocument(it)},{vm.documentKind(it)},{navigate("document-edit")},{vm.generateDocumentPdf()})
                     "document-edit" -> item { DocumentEditor(documents,{vm.documentDraft(it);navigate("documents")},{navigate("documents")}) }
                     "alerts" -> alertsScreen(alerts,state.network,{vm.refreshAlerts(it)},{vm.refreshAlerts(more=true)})
                     "sales" -> {

@@ -15,7 +15,8 @@ import retrofit2.HttpException
 
 data class DocumentsState(val endpoint: String = "", val source: DocumentSource? = null,
     val kind: DocumentKind = DocumentKind.PROFORMA, val draft: DocumentDraft = DocumentDraft(),
-    val loading: Boolean = false, val stale: Boolean = true, val error: String? = null)
+    val loading: Boolean = false, val stale: Boolean = true, val error: String? = null,
+    val pdf: GeneratedDocument? = null)
 
 /** Transient document projection; no DAO, sale command or stock accounting dependency. */
 class DocumentsRepository(private val settings: ConnectionSettings, private val directory: File) {
@@ -30,12 +31,12 @@ class DocumentsRepository(private val settings: ConnectionSettings, private val 
     }
     fun selectKind(kind: DocumentKind) {
         generation++
-        mutable.value = mutable.value.copy(kind = kind, loading = false, error = null)
+        mutable.value = mutable.value.copy(kind = kind, loading = false, error = null, pdf = null)
     }
     fun saveDraft(draft: DocumentDraft) {
         require(draft.validationError() == null) { draft.validationError()!! }
         generation++
-        mutable.value = mutable.value.copy(draft = draft, loading = false, error = null)
+        mutable.value = mutable.value.copy(draft = draft, loading = false, error = null, pdf = null)
     }
     suspend fun load(saleId: String) = mutex.withLock {
         require(runCatching { UUID.fromString(saleId).toString() == saleId.lowercase() }.getOrDefault(false))
@@ -44,7 +45,7 @@ class DocumentsRepository(private val settings: ConnectionSettings, private val 
         val same = previous.source?.sale_id == saleId
         val version = generation
         mutable.value = previous.copy(endpoint = credentials.base, source = if (same) previous.source else null,
-            draft = if (same) previous.draft else DocumentDraft(), loading = true, stale = true, error = null)
+            draft = if (same) previous.draft else DocumentDraft(), loading = true, stale = true, error = null, pdf = null)
         try {
             require(credentials.base.isNotBlank())
             val source = api(credentials.base, credentials.key).documentSource(saleId)
@@ -57,9 +58,38 @@ class DocumentsRepository(private val settings: ConnectionSettings, private val 
                 mutable.value = mutable.value.copy(loading = false, stale = true, error = documentError(error))
         }
     }
+    suspend fun generatePdf() = mutex.withLock {
+        val current = mutable.value
+        val source = current.source ?: return@withLock
+        if (current.stale) return@withLock
+        require(current.draft.validationError() == null)
+        val credentials = withContext(Dispatchers.IO) { settings.connection() }
+        if (credentials.base != current.endpoint) { invalidate(clear = true); return@withLock }
+        val version = generation
+        mutable.value = current.copy(loading = true, error = null, pdf = null)
+        var generated: File? = null
+        var accepted = false
+        try {
+            val response = api(credentials.base, credentials.key).documentPdf(DocumentPdfRequest(
+                source.sale_id, current.kind, source.source_fingerprint, current.draft))
+            withContext(Dispatchers.IO) { generated = receiveDocumentPdf(response, directory) }
+            if (version == generation && credentials.base == settings.base()) {
+                val name = current.kind.name.lowercase(java.util.Locale.ROOT) + "-" + source.sale_id + ".pdf"
+                mutable.value = mutable.value.copy(loading = false, pdf = GeneratedDocument(generated!!, name))
+                accepted = true
+            }
+        } catch (cancelled: CancellationException) { throw cancelled
+        } catch (error: Exception) {
+            if (version == generation && credentials.base == settings.base())
+                mutable.value = mutable.value.copy(loading = false, stale = true, error = documentError(error))
+        } finally { if (!accepted) generated?.delete() }
+    }
+
 }
 
-internal fun documentError(error: Exception): String = when ((error as? HttpException)?.code()) {
+internal fun documentError(error: Exception): String = if (error is InvalidDocumentPdf)
+    "Sunucu geçerli bir PDF göndermedi (tür, imza, boyut veya dosya sonu). Dosya kaydedilmedi."
+    else when ((error as? HttpException)?.code()) {
     401 -> "API anahtarı kabul edilmedi. Bağlantı ayarlarını kontrol edin."
     403 -> "Belgeyi okumaya izin verilmedi. Sunucu yetkisini kontrol edin."
     404 -> "Kaynak satış bulunamadı. Onaylı satış listesini yenileyin."

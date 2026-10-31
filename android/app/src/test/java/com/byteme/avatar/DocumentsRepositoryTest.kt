@@ -8,6 +8,8 @@ import com.byteme.avatar.security.ConnectionSettings
 import java.nio.file.Files
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
+import okio.Buffer
+import kotlinx.serialization.json.*
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.Assert.*
@@ -61,6 +63,22 @@ class DocumentsRepositoryTest {
                 repo.saveDraft(DocumentDraft(note = "KURGUSAL geçici not", document_date = "2026-10-31"))
                 assertEquals(source, repo.state.value.source)
                 assertEquals(1, server.requestCount)
+                val pdf = javaClass.getResourceAsStream("/document-server-fixture.pdf")!!.readBytes()
+                val fields = Wire.decodeFromString<DocumentDraft>(javaClass.getResource("/document-draft-fixture.json")!!.readText())
+                repo.selectKind(DocumentKind.PROFORMA); repo.saveDraft(fields)
+                server.enqueue(MockResponse().setHeader("Content-Type","application/pdf").setBody(Buffer().write(pdf)))
+                repo.generatePdf()
+                assertNull(repo.state.value.error)
+                assertArrayEquals(pdf, repo.state.value.pdf!!.file.readBytes())
+                val posted = server.takeRequest()
+                assertEquals("POST", posted.method)
+                assertEquals("/v1/document-drafts/proforma/pdf", posted.path)
+                assertEquals("document-unit-test-only", posted.getHeader("X-API-Key"))
+                val payload = Wire.parseToJsonElement(posted.body.readUtf8()).jsonObject
+                assertEquals(source.sale_id, payload.getValue("sale_id").jsonPrimitive.content)
+                assertEquals(source.source_fingerprint, payload.getValue("expected_source_fingerprint").jsonPrimitive.content)
+                assertEquals("proforma", payload.getValue("kind").jsonPrimitive.content)
+                assertEquals(2, server.requestCount)
                 assertEquals(oldStocks, db.dao().stocksFlow().first())
                 assertEquals(oldSales, db.dao().salesFlow().first())
                 assertEquals(oldOutbox, db.dao().outboxFlow().first())
@@ -92,5 +110,22 @@ class DocumentsRepositoryTest {
             DocumentPdfRequest(source.sale_id, DocumentKind.PROFORMA, source.source_fingerprint, DocumentDraft()))
         assertFalse(encoded.contains("unit_price")); assertFalse(encoded.contains("customer_id"))
         assertFalse(encoded.contains("lines")); assertFalse(encoded.contains("quantity"))
+    }
+
+    @Test fun changedSourceCannotProducePdfUntilExplicitReload(): Unit = runBlocking {
+        val folder = Files.createTempDirectory("document-unit").toFile()
+        try { MockWebServer().use { server ->
+            server.start(); server.enqueue(MockResponse().setBody(fixture))
+            val repo = DocumentsRepository(settings(server), folder); repo.load(source.sale_id)
+            server.enqueue(MockResponse().setResponseCode(409))
+            repo.generatePdf()
+            assertTrue(repo.state.value.stale)
+            assertNull(repo.state.value.pdf)
+            assertTrue(repo.state.value.error!!.contains("değişti"))
+            assertEquals(source, repo.state.value.source)
+            repo.generatePdf()
+            assertEquals(2, server.requestCount)
+            assertTrue(folder.listFiles().orEmpty().isEmpty())
+        } } finally { folder.deleteRecursively() }
     }
 }

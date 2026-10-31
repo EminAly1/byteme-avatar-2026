@@ -17,7 +17,7 @@ import com.byteme.avatar.network.*
 import kotlinx.serialization.encodeToString
 
 fun LazyListScope.documentsScreen(sales: List<ConfirmedSaleSnapshot>, state: DocumentsState,
-    onSelect: (String) -> Unit, onKind: (DocumentKind) -> Unit, onEdit: () -> Unit) {
+    onSelect: (String) -> Unit, onKind: (DocumentKind) -> Unit, onEdit: () -> Unit, onPdf: () -> Unit) {
     item {
         Text("Belgeler", style = MaterialTheme.typography.headlineSmall)
         Text("Onaylı satıştan geçici proforma veya satış özeti. Resmî e-Fatura ya da mali arşiv değildir.",
@@ -40,7 +40,7 @@ fun LazyListScope.documentsScreen(sales: List<ConfirmedSaleSnapshot>, state: Doc
         Text(if (state.kind == DocumentKind.PROFORMA) "PROFORMA — RESMÎ FATURA DEĞİLDİR"
             else "SATIŞ ÖZETİ — MALİ BELGE DEĞİLDİR", fontWeight = FontWeight.Bold)
     }
-    if (state.loading) item { LinearProgressIndicator(Modifier.fillMaxWidth()); Text("Belge kaynağı okunuyor…") }
+    if (state.loading) item { LinearProgressIndicator(Modifier.fillMaxWidth()); Text("Belge sunucudan alınıyor…") }
     state.error?.let { error -> item { Text(error, color = MaterialTheme.colorScheme.error) } }
     state.source?.let { source ->
         item {
@@ -71,12 +71,24 @@ fun LazyListScope.documentsScreen(sales: List<ConfirmedSaleSnapshot>, state: Doc
             Text("Tahsilat, nakit iade ve vergi/KDV bilgisi kayıtlı değil; ödenecek bakiye hesaplanmaz.", Modifier.padding(top = 8.dp))
         }
         items(source.corrections, key = { "document-correction-${it.id}" }) { correction ->
-            Text("${if (correction.kind == "return") "İade" else "İptal"}: ${correction.reason}\nKayıtlı düzeltme: ${quantityText(correction.credit_eur)} EUR")
+            Column(verticalArrangement=Arrangement.spacedBy(8.dp)) {
+                Text("${if (correction.kind == "return") "İade" else "İptal"}: ${correction.reason}\nKayıtlı düzeltme: ${quantityText(correction.credit_eur)} EUR")
+                correction.lines.forEach { line ->
+                    Text("${source.lines.find { it.id == line.sale_line_id }?.lot_code ?: line.lot_id} · ${quantityText(line.quantity)} ${documentUnit(line.unit)} · ${line.credit_eur?.let(::quantityText) ?: "—"} EUR")
+                }
+            }
         }
         items(source.shipments, key = { "document-shipment-${it.id}" }) { shipment ->
-            Text("Bağlı sevkiyat: ${shipment.recipient_name} · ${shipment.shipped_at}\n${shipment.id}")
+            Column(verticalArrangement=Arrangement.spacedBy(8.dp)) {
+                Text("Bağlı sevkiyat: ${shipment.recipient_name} · ${shipment.shipped_at}\n${shipment.id}")
+                shipment.lines.forEach { line ->
+                    Text("${source.lines.find { it.id == line.sale_line_id }?.lot_code ?: line.lot_id} · ${quantityText(line.quantity)} ${documentUnit(line.unit)}")
+                }
+            }
         }
         item {
+            DocumentPdfTools(state,onPdf)
+            Spacer(Modifier.height(16.dp))
             Text("Geçici belge alanları", style = MaterialTheme.typography.titleMedium)
             Text(state.draft.title.ifBlank { state.kind.label })
             Text(state.draft.note.ifBlank { "Özel not girilmedi." })
