@@ -198,7 +198,7 @@ export function Receipts() {
                 <div><dt>Alış tarihi</dt><dd>{dateTime(detail.data.received_at)}</dd></div>
                 {detail.data.total_cost != null && <div><dt>Gerçek toplam maliyet</dt><dd>{eur(detail.data.total_cost)}</dd></div>}
               </dl>
-              <Table readonlyReason="Kesin kayıt korunur. Düzeltme yalnız desteklenen iade, iptal veya yeni işlemle yapılır." headers={["Ürün", "Lot", "Miktar", "Gerçek toplam maliyet"]} empty={!detail.data.lines.length}>
+              <Table headers={["Ürün", "Lot", "Miktar", "Gerçek toplam maliyet"]} empty={!detail.data.lines.length}>
                 {detail.data.lines.map(line => <tr key={line.id}>
                   <td>{line.product_name || data.products.find(p => p.id === line.product_id)?.name || line.product_id}</td>
                   <td className="code">{line.lot_code || data.lots.find(l => l.id === line.lot_id)?.external_code || line.lot_id}</td>

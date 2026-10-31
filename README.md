@@ -2,11 +2,21 @@
 
 Gıda işletmesi için yerel prototip: alış ve lot girişi, dış üretim ve gerçek EKP, kuzu parçalama/maliyet dağıtımı, lotlu satış/sevkiyat, kesin FK izlenebilirliği/geri çağırma ve iki sentetik ML modeli. React yönetim paneli ile Kotlin Android satış uygulaması aynı FastAPI/MySQL kayıtlarını kullanır.
 
+## Android uygulamasını indir
+
+[**Güncel Preview APK, tek kullanımlık Wi-Fi aktarımı ve kurulum →**](docs/INDIRME.md)
+
+GitHub Release gerekmez. `tools/share_apk.py` yalnız doğrulanmış güncel APK'yi,
+seçtiğiniz yerel adreste, rastgele token ve varsayılan 180 sn/tek indirme (üst sınır 600 sn) ile paylaşır.
+Kullanıcı başlatmadıkça LAN servisi açılmaz; API/MySQL/web portları loopback'te kalır.
+Herkese açık gerçek indirme URL'si henüz yok; geçici adresi araç terminalde üretir.
+
 ## Hızlı İndir ve Kur
 
 [**Android APK ve Linux kurulum adımları →**](docs/INDIRME.md)
 
-AVATAR Preview **0.1.0-preview.2** APK hazır. Release API erişimi `Forbidden`
+AVATAR Preview **0.1.0-preview.2** APK hazır; güncel Android UI paketi ve hash
+[INDIRME](docs/INDIRME.md) içindedir. Görev28 Android kaynaklarını değiştirmedi. Release API erişimi `Forbidden`
 olduğundan **yayımlanmış APK indirme bağlantısı yoktur**; yerel dosya, SHA256 ve
 manuel yükleme adımları [indirme belgesindedir](docs/INDIRME.md).
 Ayrı `com.byteme.avatar.preview` paketi eski uygulamanın üzerine yazmaz;
@@ -178,3 +188,29 @@ bulunamadığından eski uygulamaya upgrade denenmedi; ayrı Preview eski Room/o
 ## Açık teslim kapsamı
 
 Transfer, müşteri iadesi/iptali, desteklenen kg rework, web kârlılık ve kayıtlı ikinci kademe akışları uygulanıp kabul edildi. Kaydı olmayan sonraki alıcı/market fiziksel stoğu bilinmez. Kullanıcı oturumu/rol/TLS, fiziksel cihaz/Safari/Firefox, gerçek veriyle model doğruluğu, resmî e-Fatura/OCR/kalıcı belge arşivi ve final video/gönderim ayrı işlerdir. [Güncel P0/P1/P2 ve üç GO/NO-GO](docs/FINAL_RELEASE_READINESS.md) bu sınırları ayırır; yerel demo kabulü bütün yarışma tesliminin tamamlandığı anlamına gelmez.
+
+## İsteğe bağlı DEMO kataloğu
+
+[İndirme/kurulum](docs/INDIRME.md) ile yeni ayrı demo projesini başlatın. İlk
+kurulum aracı varsayılan olarak `avatar_release_demo_test` şemasını oluşturur;
+başka bir test adı seçtiyseniz aşağıdaki onay adını onunla eşleştirin.
+
+```bash
+docker compose --env-file /tmp/avatar-delivery.env exec backend \
+  python -m app.demo_catalog --confirm-database avatar_release_demo_test
+```
+
+Host venv kullanıyorsanız aynı özel ortamla:
+
+```bash
+python tools/release_env.py run --env-file /tmp/avatar-delivery.env -- \
+  backend/.venv/bin/python -m app.demo_catalog --confirm-database avatar_release_demo_test
+```
+
+11 DEMO ürün (bütün kuzu/beş gerçek parça/sucuk/hammaddeler), 3 firma, 3 konum ve
+sürümlü reçete hazırlanır; tekrarında kopya oluşmaz. Uygulama başlangıcında seed
+yoktur. Canlı/default `avatar` veritabanı reddedilir; alış/lot/satış/stok otomatik
+üretilmez. Fiilî işlemleri kullanıcı kaydeder. Bu görevde host CLI gerçek izole
+MySQL'de iki kez çalıştırıldı; yeni Docker image build'i tekrar denenmedi.
+[Kabul ve ekran görüntüleri](docs/FINAL_UX_CRUD_DEMO_ACCEPTANCE.md),
+[Wi-Fi koduyla güvenli eşleştirme tasarımı](docs/SECURE_DEVICE_PAIRING_PLAN.md).
