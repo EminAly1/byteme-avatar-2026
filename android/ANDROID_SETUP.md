@@ -1,4 +1,4 @@
-# Linux / Zorin OS Android kurulumu
+# Linux üzerinde Android kurulumu
 
 Android Studio’da bu deponun **android/** klasörünü açın. Backend’i ayrı terminalde mevcut backend/README.md ile çalıştırın; bu proje backend kaynaklarını değiştirmez. Yarışma PDF’sinin Kotlin+SQLite gereksinimi Room üzerinden karşılanır.
 
@@ -19,7 +19,7 @@ Android Studio’da bu deponun **android/** klasörünü açın. Backend’i ayr
 
 Android Studio’nun Gradle JDK ayarını JDK 17 kurulumunuza yönlendirin. Linux paket yöneticisindeki `openjdk-17-jdk` bir seçenek; yalnız `java -version` çıktısı yeterli değildir, `javac -version` da çalışmalıdır. Gradle sürümü wrapper’dan gelir, global Gradle kurulumu gerekmez.
 
-Android Studio → SDK Manager: Android SDK Platform 35, Build Tools 35.0.0, Platform Tools ve Android Emulator kurun. Device Manager’dan test için telefon oluşturun. Bu raporda başarıyla kullanılan imaj **API 28 AOSP x86_64**; API 35 Google APIs imajında bu hızlandırmasız bulutta instrumentation başlangıcı başarısız oldu. API 35 için donanım hızlandırmalı ayrıca doğrulama gerekir. Linux’ta KVM destekli emülatör için BIOS sanallaştırması ve kullanıcının KVM erişimi gerekir; gerçek USB cihazı da kullanılabilir. Bu adımlar Zorin/Linux kurulum yönergesidir; bulut doğrulamasının gerçek sonuçları [VALIDATION.md](VALIDATION.md) içindedir.
+Android Studio → SDK Manager: Android SDK Platform 35, Build Tools 35.0.0, Platform Tools ve Android Emulator kurun. Device Manager’dan test için telefon oluşturun. Bu raporda başarıyla kullanılan imaj **API 28 AOSP x86_64**; API 35 Google APIs imajında bu hızlandırmasız bulutta instrumentation başlangıcı başarısız oldu. API 35 için donanım hızlandırmalı ayrıca doğrulama gerekir. Linux’ta KVM destekli emülatör için BIOS sanallaştırması ve kullanıcının KVM erişimi gerekir; gerçek USB cihazı da kullanılabilir. Bu adımlar genel Linux kurulum yönergesidir; bulut doğrulamasının gerçek sonuçları [VALIDATION.md](VALIDATION.md) içindedir.
 
 ```bash
 cd android
@@ -43,6 +43,20 @@ Backend aynı bilgisayarda 127.0.0.1:8000 dinleyebilir. Emülatör uygulamasınd
 Uygulamada dişli simgesi → sunucu ve kullanıcı tarafından verilen API anahtarı → güvenli kaydet. Anahtar APK/BuildConfig içinde bulunmaz; Android Keystore AES-GCM ile şifrelenip uygulamanın özel alanında saklanır. Mevcut sunucu için alanı boş bırakmak kayıtlı anahtarı korur. Başka sunucu seçerken yeni anahtar gerekir. Bir outbox kaydı farklı sunucuya otomatik gönderilmez.
 
 USB fiziksel debug cihazında `adb reverse tcp:8000 tcp:8000` kullanıp uygulamaya `http://127.0.0.1:8000/` girilebilir. Debug HTTP izinleri yalnız localhost, 127.0.0.1, 10.0.2.2 içindir. Release manifest cleartext’i kapatır; uygulama ayarı da HTTPS zorunlu tutar. Release için gerçek backend kullanıcı/rol yetkilendirmesi ve TLS kurulumu ayrıca gereklidir; X-API-Key üretim oturumu değildir. Hiçbir HTTP header/body logger eklenmedi; redirect’ler kapalıdır.
+
+## Son teslim Preview paketi
+
+31 Ekim paketlemesi: `./gradlew testDebugUnitTest lintDebug assembleDebug lintPreview assemblePreview`.
+Preview APK: `app/build/outputs/apk/preview/app-preview.apk`, uygulama kimliği
+`com.byteme.avatar.preview`, etiket **AVATAR Preview**, sürüm `0.1.0-preview.2`.
+`debug` paketi `com.byteme.avatar` olarak korunur. Preview, debug'ın loopback HTTP
+manifest/kaynak politikasını kullanır; genel HTTP/LAN erişimi açılmaz.
+
+Eski sertifikanın anahtarı mevcut değildir. Preview ayrı UID/Room/Keystore alanında
+başlar; eski taslaklar taşınmaz. Eski uygulamayı uninstall veya `pm clear` etmeyin.
+Yeni paket kurulumu ve imza/hash için [INDIRME](../docs/INDIRME.md).
+Aşağıdaki debug cihaz komutları geliştirici içindir; sertifikası farklı mevcut
+kuruluma uygulanmaz. Bu oturumda cihaz testi yapılmadı; API35 başlatılmadı.
 
 ## APK ve cihaz testleri
 

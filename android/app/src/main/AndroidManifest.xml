@@ -7,7 +7,7 @@
             <data android:mimeType="application/pdf" />
         </intent>
     </queries>
-    <application android:name=".AvatarApplication" android:label="AVATAR" android:icon="@mipmap/ic_launcher"
+    <application android:name=".AvatarApplication" android:label="${appLabel}" android:icon="@mipmap/ic_launcher"
         android:theme="@style/Theme.Avatar" android:allowBackup="false"
         android:fullBackupContent="false" android:dataExtractionRules="@xml/data_extraction_rules"
         android:usesCleartextTraffic="false" android:supportsRtl="true">

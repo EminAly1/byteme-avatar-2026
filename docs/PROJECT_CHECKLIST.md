@@ -2,7 +2,32 @@
 
 **Teslim:** 1 Kasım 2026, **23:59 Europe/Istanbul (UTC+3)**. Tarih/saat kullanıcı talimatıdır; PDF’de teslim tarihi yoktur.
 
-**Gereksinim kaynağı:** [AVATAR_Assessment.pdf](AVATAR_Assessment.pdf), 3 sayfa. **Kanıt tarihi:** 28 Ekim 2026 (Görev 19 birleşik yerel final kabul, PR #35 dahil). [Güncel entegrasyon ve test raporu](INTEGRATION_VALIDATION_2026-10-24.md).
+**Gereksinim kaynağı:** [AVATAR_Assessment.pdf](AVATAR_Assessment.pdf), 3 sayfa. **Güncel kısa kabul:** 31 Ekim 2026; aşağıdaki 28 Ekim Görev19 tam-suite kanıtı ayrıca korunur. [Güncel entegrasyon ve test raporu](INTEGRATION_VALIDATION_2026-10-24.md).
+
+## 31 Ekim — Görev 26 son paketleme durumu
+
+Bu bölüm güncel durumu belirtir; yukarıdaki tarihli raporlar ve aşağıdaki eski test
+sayıları tarihsel kanıttır. Güncel main **f2a0a156d769793b16f17d5de09c5a0393f69aae**:
+Görev 21–25, PR #37/#38/#40/#41/#42 birleşmiştir. Paketleme ayrı
+`feature/final-delivery-packaging` branch'inde; main'e kendimiz merge yapmadık.
+[Son kabul](FINAL_RELEASE_READINESS.md), [JSON](final-delivery/acceptance.json),
+[İndir ve kur](INDIRME.md).
+
+| ID | Son görev | Durum | Kanıt / açık sınır |
+| --- | --- | --- | --- |
+| REL26-01 | Aynı kaynak tabanı ve Görev 21–25 atalarını kontrol | Tamamlandı | PR42/f2a0a15; backend/web/ML iş kodu değişmedi |
+| REL26-02 | Güncel kısa web/backend/ML kapısı | Tamamlandı | typecheck/build, MySQL8/health/ready/migration/check,5 recall+3 gerçek PDF=8 passed,30tablo değişmezliği,iki checksum/yükleme/tahmin |
+| REL26-03 | Veri silmeden Preview APK paketleme | Tamamlandı | com.byteme.avatar.preview, 0.1.0-preview.2;31/31 host,debug/preview lint0/build; APK kimlik/imza/hash doğrulandı. Cihaz kurulumu bu maddenin kapsamı değil |
+| REL26-04 | Preview fiziksel/API28 açılış, uyarı, satış/offline ve PDF/SAF/paylaşma | Doğrulama gerekiyor | Hazır cihaz yok; eski API28 kanıtı yeni APK'ye taşınmaz. API35 **NO ACCEPTANCE / 0 test** |
+| REL26-05 | Gerçek Release/APK yayın alanı | Doğrulama gerekiyor | Releases API **Forbidden**; tag/asset/download URL yok. Yerel APK/hash ve manuel adımlar INDIRME'de |
+| REL26-06 | Linux kullanıcı/indirme/video/taslak belgeleri | Tamamlandı | README,INDIRME,USER_GUIDE,DEMO_RUNBOOK,14:30 FINAL_DEMO_SCRIPT ve gönderilmemiş taslak güncellendi |
+| REL26-07 | Final PR/main incelemesi ve son GitHub check/policy | Devam ediyor | Push/uzak SHA doğrulandı; PR açma GraphQL Forbidden. Main'e merge edilmedi; manuel compare son kabulde |
+| REL26-08 | Video/link, gerçek e-posta ve alındı | Başlanmadı | Video çekilmedi/yüklenmedi; gönderim/alındı yok. Son tarih 1 Kasım 2026, 23:59 Türkiye |
+
+**Güncel GO:** kısa kapı kapsamındaki yerel web/backend/ML ve APK paketleme.
+**NO-GO:** eksiksiz resmî teslim/public APK dağıtımı ve internete açık üretim.
+TST-06,TES-03,TES-04,DOC-03 devam eder; TES-05 başlanmadı. ML toplam **6.000
+SYNTHETIC/0 gerçek tarihsel**; bazı metrikler gerilemiştir. RBAC/TLS/e-Fatura yoktur.
 
 **Tarihsel release entegrasyonu (26 Ekim):** [PR #20](https://github.com/EminAly1/byteme-avatar-2026/pull/20) `main` üzerine normal merge ile alındı (`9b33892b35c787559bae4d77211b1008a0a8bae4`). [RELEASE_READINESS.md](RELEASE_READINESS.md) ve [DEMO_RUNBOOK.md](DEMO_RUNBOOK.md): izole MySQL8'de 194 backend+ML testi, 45 frontend unit, 15 Chromium E2E + 1 gerçek missing-model 503; Android API28 4/4, API35 3/4 (önceden korunmuş kanıtlar, 26 Ekimde yeniden çalıştırılmadı). Üç servisli Docker Compose yerel demo GO, **tam PDF teslimi NO-GO** (transfer, müşteri iade/iptali, rework, ikinci kademe kabulü, video/tag/gönderim). 135 dosyalık PR içinde çok sayıda üretilmiş test logu ve PNG var; kullanıcı isteğine göre test kaynakları korunarak final temizlikte CI/Release arşivine taşınmalı. Eski tarihli ilerleme notları tarihsel bağlamdır, güncel durum için aşağıdaki maddeleri ve bu paragrafı esas alın.
 
@@ -43,7 +68,7 @@
 
 | ID | Görev | Durum | Kanıt / kalan iş |
 | --- | --- | --- | --- |
-| ALT-01 | Monorepo ve üç ajan için dosya sahipliği | Tamamlandı | [AGENTS.md](../AGENTS.md), [PR #1](https://github.com/EminAly1/byteme-avatar-2026/pull/1); mevcut kurulum/test yolları çalıştı. Android/ML klasörleri yalnız yönergedir. |
+| ALT-01 | Monorepo ve üç ajan için dosya sahipliği | Tamamlandı | [AGENTS.md](../AGENTS.md), [PR #1](https://github.com/EminAly1/byteme-avatar-2026/pull/1); mevcut kurulum/test yolları çalıştı. Android/ML uygulamaları sonradan eklendi; REL26 güncel kabulü gösterir. |
 | ALT-02 | FastAPI health ve MySQL ready | Tamamlandı | [main.py](../backend/app/main.py), [health testleri](../tests/test_health.py); gerçek iki endpoint 200. |
 | ALT-03 | Environment üzerinden MySQL 8, Alembic migration, FK/CHECK ve Decimal alanlar | Tamamlandı | [database.py](../backend/app/database.py), [migration](../backend/alembic/versions/eeea4b5dd1a8_create_production_and_stock_ledger_core.py), [migration testi](../tests/test_migrations_mysql.py); MySQL 8.0.46 üzerinde upgrade/check/downgrade/upgrade geçti. |
 | ALT-04 | Yerel proxy sınırı ve gizli bilgileri Git/tarayıcı dışında tutma | Tamamlandı | [proxy](../frontend/server/proxy.ts), [browser testi](../frontend/tests/browser/dashboard.spec.ts); Host/Origin, dosya erişimi ve key sızıntısı kontrolleri geçti. Üretim auth’u değildir. |
@@ -81,7 +106,7 @@ PDF s.1, Görev 2. Tabloda `cutting` türünün bulunması çalışan parçalama
 
 ## 4. Android Kotlin ve satış
 
-PDF s.1/s.3. [android/README.md](../android/README.md) yalnız yönergedir; Kotlin/Compose/Room/Retrofit uygulama kodu yoktur.
+PDF s.1/s.3. [Android](../android/README.md) uygulaması mevcut; [Görev24](ANDROID_PREMIUM_UX_ACCEPTANCE.md), [Görev25](ANDROID_DOCUMENTS_ACCEPTANCE.md) ve REL26 yeni paketleme/cihaz kabul sınırlarını ayrı gösterir.
 
 | ID | Görev | Durum | Kanıt / kalan iş |
 | --- | --- | --- | --- |
@@ -112,14 +137,14 @@ PDF s.2, Görev 3. Doğrudan emir ilişkisi, çok adımlı ileri/geri izleme yer
 
 ## 6. Zorunlu yapay zekâ modelleri
 
-PDF s.2. [ml/README.md](../ml/README.md) plandır; eğitim kodu, veri seti ve model artifact’ı yoktur.
+PDF s.2. [ML kaynak/model kartları](../ml/README.md) ve [Görev22 v2 kabulü](AI_MODEL_V2_ACCEPTANCE.md) mevcuttur; eski v1 sayıları tarihsel raporlarda korunur.
 
 | ID | Görev | Durum | Kanıt / kalan iş |
 | --- | --- | --- | --- |
-| ML-01 | Geçmiş üretim emirlerinden beklenen mamul miktarı ve EKP tahmini (A) | Tamamlandı | [Üretim model kartı](../ml/MODEL_CARD_PRODUCTION.md): 600 sentetik işlemle Ridge verim/hizmet çarpanı eğitimi; tahmini paket ve EKP API'si; gerçek işletme doğruluğu henüz yok. |
+| ML-01 | Geçmiş üretim emirlerinden beklenen mamul miktarı ve EKP tahmini (A) | Tamamlandı | [Üretim model kartı](../ml/MODEL_CARD_PRODUCTION.md): güncel v2: 3.000 sentetik işlemle Ridge verim/hizmet çarpanı eğitimi; tahmini paket ve EKP API'si; gerçek işletme doğruluğu henüz yok. |
 | ML-02 | Tür, giriş ağırlığı ve geçmişten beklenen parça ağırlıkları tahmini (B) | Tamamlandı | [Kesim model kartı](../ml/MODEL_CARD_CUTTING.md): 25 kg Kuzu/beş parça Ridge oran tahmini; fiziksel sınır ve reçete UUID eşlemesi; sentetik model, gerçek işletme doğruluğu yok. |
-| ML-03 | Örnek/anonymize veri, sentetik veri etiketi ve küçük veri sınırlamaları | Tamamlandı | [manifest](../ml/data/manifest.json) + [README](../ml/README.md): 600+600 SYNTHETIC, hash/seed/sürüm; gerçek tarihsel veri 0 olduğu açıkça kaydedildi. |
-| ML-04 | Yöntem açıklaması, basit referans karşılaştırması ve ayrı testte hata ölçümü | Tamamlandı | [Değerlendirme](../ml/EVALUATION_REPORT.md): her hedef için baseline/Ridge MAE ve RMSE, 360/120/120 zamansal sentetik ayrım, küçük kazanç/sınırlama şeffaf. |
+| ML-03 | Örnek/anonymize veri, sentetik veri etiketi ve küçük veri sınırlamaları | Tamamlandı | [manifest](../ml/data/manifest.json) + [README](../ml/README.md): güncel 3.000+3.000=6.000 SYNTHETIC, hash/seed/sürüm; gerçek tarihsel veri 0 olduğu açıkça kaydedildi. |
+| ML-04 | Yöntem açıklaması, basit referans karşılaştırması ve ayrı testte hata ölçümü | Tamamlandı | [Değerlendirme](../ml/EVALUATION_REPORT.md): her hedef için baseline/Ridge MAE ve RMSE, v2/model 1.800/600/600 zamansal sentetik ayrım, bazı metrik gerilemeleri şeffaf; eski v1 karşılaştırmaları korunur. |
 | ML-05 | Tahmin, gerçek sonuç ve sapmayı API/web üzerinde birlikte gösterme | Tamamlandı | [Frontend v2 gerçek E2E](../frontend/VALIDATION_V2.md): üretim/kesim tahminleri; prediction UUID/sürüm/zaman, işlem kapanınca backend kaynaklı gerçek ve sapma tabloları; SYNTHETIC etiketi görünür. |
 | ML-06 | Lot/recall sonuçlarını ML’den bağımsız kesin ilişkilerde tutma | Tamamlandı | [ML API ve test raporu](../ml/EVALUATION_REPORT.md): stok/lot/recall öncesi-sonrası snapshot eşitliği ve eski 131 backend testi; tahmin ayrı PredictionRecord tablosunda. |
 
@@ -145,7 +170,7 @@ OCR/fatura okuma ve anomali uyarıları PDF’de **isteğe bağlıdır**; iki zo
 | TST-03 | Temiz npm kurulumu, typecheck, build ve frontend unit/component | Tamamlandı | [Görev 16 raporu](../frontend/OPERATIONS_INTEGRATION_REPORT.md): `npm ci`, typecheck, build ve **65 unit passed** (45 önceki+20 yeni) gerçek Codex çalışma ortamında. Main'de son birleşik CI ayrıca TST-06 altında. |
 | TST-04 | Gerçek FastAPI/MySQL/Vite/Chromium ile alış–üretim–stok ve demo | Tamamlandı | [Görev 12](release-validation/frontend-e2e.txt) önceki 15 Chromium+ayrı 503; [Görev 16](../frontend/OPERATIONS_INTEGRATION_REPORT.md) farklı kaynak sürümünde **14 hedefli gerçek Chromium** (11 yeni+3 mevcut) operasyon/UI akışı, görünüm/erişilebilirlik kontrolü; bütün eski E2E tek koşuda tekrarlanmadı (TST-06). |
 | TST-05 | Parçalama, Kotlin satış/sync, recall yarışları ve iki ML modelinin değerlendirmesi | Tamamlandı | [Kesim/recall](../database/cutting-validation.md), [API 28 Android cihazı](../android/VALIDATION.md) ve [iki sentetik ML modeli](../ml/EVALUATION_REPORT.md) ayrı kabul testlerinde doğrulandı. **Tümünün yeni main'de tek koşuda testi, API 35 ve gerçek veri hâlâ TST-06/final doğrulama kapsamı.** |
-| TST-06 | GitHub main merge sonrası kontroller ve PR check/policy doğrulaması | Devam ediyor | [PR #35](https://github.com/EminAly1/byteme-avatar-2026/pull/35) main'e birleşen Task19 kabulü: güncel birleşik PR #1–#34 kaynak tabanında **427 backend/ML, 83 unit, 34 ayrı Chromium, API28 4/4**; local Compose/DB/PDF GO. **PR #35 merge sonrası yeni main smoke/GitHub check/policy kontrolü, API35 (0 instrumentation), fiziksel cihaz kabulü açık.** |
+| TST-06 | GitHub main merge sonrası kontroller ve PR check/policy doğrulaması | Devam ediyor | 31 Ekim PR42 tabanında kısa kapı geçti (REL26); paketleme main birleşimi ve GitHub check/policy erişimi bekler. Tarihsel tam-suite: [PR #35](https://github.com/EminAly1/byteme-avatar-2026/pull/35) main'e birleşen Task19 kabulü: güncel birleşik PR #1–#34 kaynak tabanında **427 backend/ML, 83 unit, 34 ayrı Chromium, API28 4/4**; local Compose/DB/PDF GO. **PR #35 merge sonrası yeni main smoke/GitHub check/policy kontrolü, API35 (0 instrumentation), fiziksel cihaz kabulü açık.** |
 
 ## 9. Dokümantasyon ve demo
 
@@ -167,6 +192,10 @@ OCR/fatura okuma ve anomali uyarıları PDF’de **isteğe bağlıdır**; iki zo
 | TES-04 | Final sensitive-data kontrolü, sürüm etiketi ve yeniden üretilebilirlik | Devam ediyor | [Task19 güvenlik/yeniden üretim kanıtı](final-release/acceptance.json): Gitleaks 0 bulgu, APK162 üye/36+36 bundle kontrolü, loopback/anahtar, iki ML checksum, Docker ReportLab, Alembic head ve restart sonrası 30 tablo hash eşit. **PR #35 merge sonrası tekrar kontrol, final sürüm etiketi ve public APK/artefakt yayın yok.** |
 | TES-05 | **1 Kasım 2026 23:59 Europe/Istanbul** öncesi gönderim ve alındı doğrulaması | Başlanmadı | **Son tarih 1 Kasım 2026 23:59 Türkiye saati.** [E-posta taslağı](SUBMISSION_EMAIL_DRAFT.md) mevcut; public repo bağlantısı yerinde, **≤15 dakika gerçek video URL'si yok, e-posta gönderilmedi, alındı teyidi alınmadı**. Kayıtlı ekip üyesinin doğrulanmış organizasyon adresine gönderimi gerekli. |
 
-## Bir sonraki kritik backend işi
+## Bir sonraki kritik iş
 
-**Lot bazlı satış/sevkiyat ve buna bağlı ileri/geri izleme–recall:** 85 paketi Market A/B/C’ye 30/25/30 kaydetmek, ET-2026-001’den bütün etkilenen lot/market/stoğa ulaşmak, recall ve satışta aynı lot kilidi altında blok denetlemek, yarış testlerini geçirmek. Bu iş zorunlu üçüncü demoyu ve Android satışını açar. Kuzu parçalama reçetesi/dağıtımı ayrı modül görevi olarak sürdürülmelidir.
+Teslim için **Preview cihaz provası → yetkili Release/APK yayını → paketleme PR/main
+incelemesi → 14:30 video/oturumsuz erişim → ekip gönderimi/alındı**. Lotlu satış,
+parçalama ve kontrollü recall zaten mevcuttur; yeniden geliştirme açılmaz.
+Backend'in sonraki üretim önceliği gerçek oturum/roller/RBAC ve TLS/operasyon
+kabulüdür; bugünkü yerel teslimi geciktiren yeni özellik olarak eklenmez.

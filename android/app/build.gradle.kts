@@ -15,6 +15,7 @@ android {
         targetSdk = 35
         versionCode = 1
         versionName = "0.1.0"
+        manifestPlaceholders["appLabel"] = "AVATAR"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
     buildFeatures { compose = true; buildConfig = true }
@@ -32,7 +33,22 @@ android {
         }
     }
     packaging { resources.excludes += "/META-INF/{AL2.0,LGPL2.1}" }
-    buildTypes { release { isMinifyEnabled = false } }
+    buildTypes {
+        release { isMinifyEnabled = false }
+        // Separate UID/data directory: never replace an installation signed with a lost key.
+        create("preview") {
+            initWith(getByName("debug"))
+            applicationIdSuffix = ".preview"
+            versionNameSuffix = "-preview.2"
+            manifestPlaceholders["appLabel"] = "AVATAR Preview"
+            matchingFallbacks += listOf("debug")
+        }
+    }
+    // Keep the debug variant's loopback-only HTTP policy for the local demo.
+    sourceSets.getByName("preview") {
+        manifest.srcFile("src/debug/AndroidManifest.xml")
+        res.srcDir("src/debug/res")
+    }
 }
 ksp { arg("room.schemaLocation", "$projectDir/schemas") }
 dependencies {

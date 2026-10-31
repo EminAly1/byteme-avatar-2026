@@ -1,4 +1,39 @@
-# Jüri demosu — Görev 12
+# AVATAR — Jüri demo runbook
+
+## 31 Ekim — Son teslim provası
+
+[İndir ve kur](INDIRME.md) · [14:30 plan](FINAL_DEMO_SCRIPT.md) ·
+[güncel kabul](FINAL_RELEASE_READINESS.md). Ürün **AVATAR**, ekip **ByteMe**.
+Güncel main `f2a0a156d769793b16f17d5de09c5a0393f69aae`, PR #37/#38/#40/#41/#42
+ile Görev 21–25'i içerir. Paketleme branch'i `feature/final-delivery-packaging`;
+aynı checkout'taki backend/web/ML kaynakları değiştirilmedi.
+
+1. Aşağıdaki mevcut Compose/seed komutlarını yalnız **yeni ayrı `*_test`** demo
+   şemasında kullanın. Taze canlı satış önce, recall sonra yapılır; eski dolu DB'de
+   pytest/temizleme, stok reseti veya `down -v` yoktur.
+2. Güncel dashboard/stok/AI/recall/uyarı/belge ekranlarını [kılavuzdaki](USER_GUIDE.md)
+   adreslerden açın. Recall önizleme → lot kodu doğrulama → kesinleştirme;
+   PDF detay → ayrı geçici not editörü → **Önizle** → indir akışını prova edin.
+3. ML verisi toplam **6.000 SYNTHETIC/0 gerçek tarihsel**; bazı metrik gerilemeleri
+   [raporda](../ml/EVALUATION_REPORT.md). Tahmin kesin üretim/EKP değildir.
+4. Android için **AVATAR Preview**, `com.byteme.avatar.preview`, ayrı boş Room/Keystore
+   kullanır. Eski veriler taşınmaz; eski uygulama uninstall/pm clear edilmez.
+   USB/eşleştirilmiş kablosuz ADB + `adb reverse`, uygulamada127.0.0.1:8000 ve aynı
+   özel sunucu anahtarı. Ayrı paket için eski `run-as com.byteme.avatar` fixture
+   komutlarını körlemesine kullanmayın; kullanıcı arayüzünden güvenli bağlantı kurun.
+5. Cihaz hazırsa beş sekme, stok mikro miktar, gerçek uyarı, satış/onay/offline ve
+   Ana Sayfa→Belgeler PDF sayfa/SAF/paylaşma provası. **Bu oturumda cihaz yoktu**;
+   native PDF gösterimi kabul edilmedi. API35 başlatılmaz: **NO ACCEPTANCE / 0 test**.
+6. Video çekimi ve e-posta ayrı insan adımıdır; şimdilik yapılmadı. Release API
+   `Forbidden`; yerel APK/hash ve manuel yayın [INDIRME](INDIRME.md) içindedir.
+
+**Bu görevde yeniden koşulan kısa kapı:** web typecheck/build; gerçek yeni MySQL8
+migration/check + FastAPI HTTP health/ready;5 recall+3 PDF hedefli test (**8/8**),
+PDF 30 tablo hash eşit; iki checksum/yükleme ve birer tahmin; Android **31/31** host,
+debug/preview lint0 ve iki APK. Tam-suite/Chromium/Compose yeniden build/restart
+ve cihaz testleri **tekrarlanmadı**. Aşağıdaki28 Ekim/Görev12 sayıları tarihsel
+kanıttır,31 Ekim sonucu değildir. Özel test DB'leri `avatar_final26_test` (ready)
+ve `avatar_final26_core_test` (yıkıcı pytest) ayrıdır; eski volume'lar korunmuştur.
 
 > **28 Ekim 2026 güncellemesi:** Aşağıdaki Görev12 bölümleri tarihsel, yeniden kullanılabilir teknik komutlardır; güncel kabul [FINAL_RELEASE_READINESS.md](FINAL_RELEASE_READINESS.md), kullanıcı akışı [USER_GUIDE.md](USER_GUIDE.md), ≤15 dakikalık çekim planı [FINAL_DEMO_SCRIPT.md](FINAL_DEMO_SCRIPT.md) içindedir. Transfer, müşteri iadesi/iptali, rework, ikinci kademe, web kârlılık, uyarı ve gerçek PDF artık main'dedir. Eski “bu modül yok” ifadeleri güncel duruma uygulanmaz.
 
