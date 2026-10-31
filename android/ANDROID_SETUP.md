@@ -38,6 +38,12 @@ Salt okunur home bulunan bulut ortamında GRADLE_USER_HOME ve ANDROID_USER_HOME 
 
 ## Backend bağlantısı
 
+Güncel uygulamada Ana Sayfa → **Sunucuya bağlan** / **Bağlantı yardımı** kullanın.
+**Bağlantıyı kontrol et**, kayıtlı anahtarla `GET /v1/products?limit=1` gönderir;
+yalnız URL yazılması bağlantı kabulü değildir. Kontrol satış kuyruğunu göndermez.
+QR ile APK indirmek sunucu eşleştirmesi yapmaz.
+[Görev29B güncel APK/hash ve test kabulü](../docs/ANDROID_CONNECTION_GUIDE_ACCEPTANCE.md).
+
 Backend aynı bilgisayarda 127.0.0.1:8000 dinleyebilir. Emülatör uygulamasındaki bağlantı ekranına `http://10.0.2.2:8000/` girin. 10.0.2.2 Android emülatörünün host köprüsüdür; cihazın localhost’u bilgisayar değildir.
 
 Uygulamada dişli simgesi → sunucu ve kullanıcı tarafından verilen API anahtarı → güvenli kaydet. Anahtar APK/BuildConfig içinde bulunmaz; Android Keystore AES-GCM ile şifrelenip uygulamanın özel alanında saklanır. Mevcut sunucu için alanı boş bırakmak kayıtlı anahtarı korur. Başka sunucu seçerken yeni anahtar gerekir. Bir outbox kaydı farklı sunucuya otomatik gönderilmez.

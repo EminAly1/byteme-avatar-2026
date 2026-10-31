@@ -5,7 +5,7 @@ import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.text.AnnotatedString
-import com.byteme.avatar.ui.SettingsDialog
+import com.byteme.avatar.ui.*
 import com.byteme.avatar.ui.connectionInputErrors
 import org.junit.Assert.*
 import org.junit.Rule
@@ -56,4 +56,37 @@ class ConnectionSettingsUiTest {
         assertNotNull(connectionInputErrors(base, "test\nonly", base, true, true).key)
         assertNull(connectionInputErrors(base, "", base, true, true).key)
     }
+    @Test fun firstLaunchOffersConnectionAndHelpWithoutClaimingApiSuccess() {
+        var connects = 0; var helps = 0
+        compose.setContent { MaterialTheme {
+            ConnectionCard(ScreenState(),onConnect={connects++},onHelp={helps++},onCheck={fail("Blank URL checked")})
+        } }
+        compose.onNodeWithTag("connection-status").assertTextEquals("Bağlı değil")
+        compose.onNodeWithText("Sunucuya bağlan").performClick()
+        compose.onNodeWithText("Bağlantı yardımı").performClick()
+        assertEquals(1, connects); assertEquals(1, helps)
+        assertEquals(ConnectionPhase.DISCONNECTED, connectionPhase("http://127.0.0.1:8000/",OperationStatus()))
+        assertEquals(ConnectionPhase.CONNECTING, connectionPhase("saved",OperationStatus(connectionChecking=true)))
+        assertEquals(ConnectionPhase.CONNECTED, connectionPhase("saved",OperationStatus(apiConnected=true)))
+        assertEquals(ConnectionPhase.ERROR, connectionPhase("saved",OperationStatus(apiConnected=false)))
+    }
+
+    @Test fun checkButtonOnlyRequestsCheckWithoutClaimingSuccess() {
+        var checks = 0
+        compose.setContent { MaterialTheme {
+            ConnectionCard(ScreenState(endpoint="http://127.0.0.1:8000/"),onConnect={},onHelp={},onCheck={checks++})
+        } }
+        compose.onNodeWithTag("check-connection").performClick()
+        assertEquals(1,checks)
+        compose.onNodeWithTag("connection-status").assertTextEquals("Bağlı değil")
+    }
+
+    @Test fun helpContainsUsbWirelessAndReverseWithoutAKeyInput() {
+        compose.setContent { MaterialTheme { ConnectionHelpDialog(onDismiss={},onConnect={}) } }
+        compose.onNodeWithText("APK indirmek bağlantı kurmaz").assertExists()
+        compose.onNodeWithTag("adb-reverse-command").performScrollTo().assertTextEquals("adb reverse tcp:8000 tcp:8000")
+        compose.onNodeWithText("Kablosuz (Android 11+):",substring=true).assertExists()
+        compose.onNodeWithTag("server-key").assertDoesNotExist()
+    }
+
 }

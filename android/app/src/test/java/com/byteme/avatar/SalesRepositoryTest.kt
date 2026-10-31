@@ -159,4 +159,24 @@ class SalesRepositoryTest {
         assertThrows(IllegalArgumentException::class.java) {normalizeBase("https://secret@example.com/path",true)}
         assertEquals("https://example.com/",normalizeBase("https://example.com",false))
     }
+    @Test fun readOnlyConnectionCheckPreservesOfflineDraftFrozenOutboxAndStock(): Unit = runBlocking {
+        val queued = queue()
+        val offline = repo.saveDraft(product,lot,location,customer,"0.5","25")
+        val drafts = db.dao().draftsFlow().first()
+        val outbox = db.dao().outboxFlow().first()
+        val stock = db.dao().stock(lot,location)
+        for (response in listOf(MockResponse().setBody("""{"items":[]}"""), MockResponse().setResponseCode(401))) {
+            server.enqueue(response)
+            probeConnection(settings)
+            assertEquals(drafts,db.dao().draftsFlow().first())
+            assertEquals(outbox,db.dao().outboxFlow().first())
+            assertEquals(stock,db.dao().stock(lot,location))
+            assertEquals(queued.body,db.dao().outbox(queued.key)?.body)
+            assertNotNull(db.dao().draft(offline.id))
+            assertTrue(db.dao().salesFlow().first().isEmpty())
+        }
+        repeat(2) { assertEquals("GET",server.takeRequest(2,TimeUnit.SECONDS)!!.method) }
+        assertEquals(2,server.requestCount)
+    }
+
 }

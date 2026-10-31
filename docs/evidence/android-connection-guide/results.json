@@ -1,0 +1,51 @@
+{
+  "task": "29B",
+  "base_commit": "868ae1dfd440c85e683550927d9f833e2afc7342",
+  "branch": "feature/android-connection-guide",
+  "host_tests": {
+    "framework": "Robolectric SDK28 / MockWebServer / native SQLite",
+    "variant": "debug",
+    "tests": 43,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "lint": {
+    "debug_issues": 0,
+    "preview_issues": 0
+  },
+  "assemblePreview": "PASS",
+  "apk": {
+    "build_path": "android/app/build/outputs/apk/preview/app-preview.apk",
+    "artifact_path": "/workspace/artifacts/AVATAR-Preview-connection-guide.apk",
+    "bytes": 17061564,
+    "sha256": "0affc5b5ba72650ec33fe96fa23c5fdec87cc83134cb8f9c1b75065a911cfd3e",
+    "application_id": "com.byteme.avatar.preview",
+    "version": "0.1.0-preview.2",
+    "certificate_sha256": "b9fbe028ac6c63fc1f873fbe446a0693be3f6260d57807f89d75ad6ef0418f9f",
+    "signature_verified": true
+  },
+  "qr_handoff": {
+    "chromium_scenarios": 1,
+    "passed": 1,
+    "real_new_apk_hash_match": true,
+    "independent_qr_decode": true,
+    "one_get_and_expiry_verified": true,
+    "old_apk_rejected": true,
+    "phone_wifi_camera": "NOT RUN"
+  },
+  "python_share_tests": {
+    "passed": 6,
+    "failed": 0,
+    "skipped": 0
+  },
+  "real_backend_read_only_contract": {
+    "authenticated_get_products_limit_1": 200,
+    "missing_key": 401,
+    "database": "isolated *_test",
+    "device_to_backend": "NOT RUN"
+  },
+  "physical_android": "NOT RUN",
+  "emulator_instrumentation": "NOT RUN",
+  "api35": "NO ACCEPTANCE / 0 test"
+}
