@@ -69,5 +69,12 @@ rota açılması bu formların tüm durumlarının kabulü sayılmaz.
   tarandı; mevcut birim testleri geçti. Satış/recall kesinleştirme smoke kapsamında yoktur.
 - Web gerçek 390px Chromium kontrolüdür; fiziksel mobil tarayıcı, Firefox/Safari,
   tam WCAG/manuel ekran okuyucu kabulü veya backend regresyon suite'i değildir.
-- Kaynaklar ayrı feature branch'inde push edilir; main'e kendimiz merge etmeyiz.
+- Kaynaklar ayrı feature branch'ine push edildi; main'e merge yapılmadı.
   [Main hedefli PR compare](https://github.com/EminAly1/byteme-avatar-2026/compare/main...feature/final-ui-polish?expand=1).
+
+## GitHub kaydı
+
+Kod commit'i: `72010bc2ce7f14d67cbfc3b23002de798428857a`; uzak branch SHA eşleşmesi doğrulandı.
+Main hedefli `gh pr create` denemesi GraphQL **Forbidden** verdi; PR oluşturulamadı.
+Yetkili ekip yukarıdaki compare bağlantısıyla PR açabilir. Issue #39 kapatılmadı;
+son dokümantasyon commit'i aynı branch başında ayrıca bulunur.
