@@ -32,7 +32,8 @@ Hash'i eşleştirin ve APK'yı açın. Yalnız gerekli dosya uygulamasına kurul
 - Link güçlü rastgele token içerir; bir GET indirmesi veya süre sonunda servis
   kendiliğinden kapanır. Başarısız/yarım indirmede aracı yeniden başlatın.
 - `--allow-lan` olmadan varsayılan 127.0.0.1; belirsiz 0.0.0.0 veya genel IP kabul
-  edilmez. Araç yalnız bu APK'yı sunar; klasör listesi/proje/env/API/DB erişimi yoktur.
+  edilmez. Varsayılan adres yalnız bu bilgisayarda açılır; telefon için yukarıdaki
+  açık Wi-Fi IP/--allow-lan komutunu kullanın. Araç yalnız bu APK'yı sunar; klasör listesi/proje/env/API/DB erişimi yoktur.
 - HTTP şifrelenmez; yalnız güvenilir yerel Wi-Fi'da kısa aktarım içindir. URL'yi
   herkese açık paylaşmayın. API anahtarı/cihaz eşleştirme kodu bu linkte bulunmaz.
 - Telefonla aynı Wi-Fi ve bilgisayarın seçilen portuna erişim gerekir. Ana uygulama

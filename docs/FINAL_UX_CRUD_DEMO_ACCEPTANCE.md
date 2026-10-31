@@ -117,5 +117,7 @@ ML kabulü, e-Fatura veya resmî yarışma gönderimi tamamlandı sayılmaz.
 
 - Aşama1 **444a452cdb7052f67eaec410882edacec058dbd6**; push/uzak SHA doğrulandı.
 - Aşama2 **fa09c475ac142bf3d1b3f2323f9cf6d94eb07f58**; push/uzak SHA doğrulandı.
-- Aşama3/son rapor aynı branch başında; main'e kendimiz merge yapmayız.
+- Aşama3 **aa1402024d156f93673db01a96f7ac502b6644d6**; push/uzak SHA doğrulandı.
+- Main hedefli PR denemesi GraphQL **Forbidden** verdi; PR oluşturulamadı.
+  Main'e merge yapılmadı. Son dokümantasyon commit'i branch başındadır.
 - [Main hedefli manuel PR](https://github.com/EminAly1/byteme-avatar-2026/compare/main...feature/final-ux-crud-demo-v1?expand=1).
