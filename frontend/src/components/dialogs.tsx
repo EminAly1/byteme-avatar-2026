@@ -103,7 +103,9 @@ export function DetailDrawer({
   title,
   children,
   onClose,
+  className = "",
 }: {
+  className?: string;
   title: string;
   children: ReactNode;
   onClose: () => void;
@@ -127,7 +129,7 @@ export function DetailDrawer({
   }, []);
   return (
     <dialog
-      className="detail-drawer"
+      className={"detail-drawer " + className}
       ref={ref}
       aria-labelledby={id}
       onKeyDown={containDialogFocus}

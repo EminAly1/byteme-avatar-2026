@@ -7,7 +7,8 @@ Android 8.0 / API26 ve üzeri için geliştirme imzalı APK.
 
 **GitHub Release zorunlu değildir.** Güncel APK'yı bilgisayardan aynı güvenilir
 Wi-Fi'daki telefona tek kullanımlık linkle aktarabilirsiniz. Şu anda herkese açık
-APK URL'si yoktur; çalışmayan indirme butonu sunulmaz.
+APK URL'si yoktur. Web'deki **Android Uygulamasını İndir** düğmesi yalnız aktif
+yerel paylaşım varsa gerçek QR gösterir.
 
 ### Tek kullanımlık yerel paylaşım
 
@@ -24,10 +25,11 @@ python3 tools/share_apk.py --sha256 DOGRULANMIS_64_HANELI_SHA256 \
   --bind 192.168.1.10 --allow-lan --ttl 180
 ```
 
-Araç APK boyutu/hash/sürüm ve telefonda açılacak **gerçek geçici URL'yi** yazdırır.
-`qrencode` kuruluysa terminal QR'ı da gösterilir; bu ortamda QR aracı bulunmadığından
-QR çıktısı test edilmedi. Telefonda terminaldeki URL'yi açıp dosyayı indirin.
-Hash'i eşleştirin ve APK'yı açın. Yalnız gerekli dosya uygulamasına kurulum izni verin.
+Araç APK boyutu/hash/sürüm bilgisini yazdırır; **token veya geçici URL terminale
+ve erişim loguna yazılmaz**. Web panelinde **Android Uygulamasını İndir** düğmesini
+açın. Telefonun standart kamerasıyla QR'ı okuyup tarayıcıda indirin; özel Android
+QR tarayıcısı gerekmez. Alternatif olarak popup'tan bağlantıyı kopyalayın. Hash'i
+eşleştirin ve APK'yı açın. Yalnız gerekli dosya uygulamasına kurulum izni verin.
 
 - Link güçlü rastgele token içerir; bir GET indirmesi veya süre sonunda servis
   kendiliğinden kapanır. Başarısız/yarım indirmede aracı yeniden başlatın.
@@ -38,9 +40,50 @@ Hash'i eşleştirin ve APK'yı açın. Yalnız gerekli dosya uygulamasına kurul
   herkese açık paylaşmayın. API anahtarı/cihaz eşleştirme kodu bu linkte bulunmaz.
 - Telefonla aynı Wi-Fi ve bilgisayarın seçilen portuna erişim gerekir. Ana uygulama
   portlarını LAN'a açmayın. Gerçek Wi-Fi/telefon aktarımı bu bulutta denenmedi;
-  kabul, gerçek APK baytlarının loopback üzerinden aynı hash'le aktarılmasıdır.
+  Görev29A kabulünde gerçek APK bu bulutun özel IPv4 arabiriminde aynı makineden
+  indirildi ve web QR'ı çözüldü. Fiziksel Wi-Fi/telefon kabulü değildir.
 - Araç seçilen APK hash'ini hem verdiğiniz hash'le hem güncel Preview build/metadata
   ile karşılaştırır; eski APK ve yanlış paket paylaşımını reddeder.
+
+### Web panelinden QR ile indirme
+
+**Linux / aynı kullanıcı:** `npm ci` sonrası web'i normal biçimde
+`http://127.0.0.1:5173` üzerinde çalıştırın. Yukarıdaki paylaşım komutu otomatik
+olarak `/tmp/.avatar-apk-share-<UID>/status.sock` oluşturur (TMPDIR ayarlanmışsa
+o dizin kullanılır). Dizin 0700, soket 0600 ve aynı kullanıcıya ait olmalıdır.
+Token yalnız çalışan süreçlerin/popup'ın belleğindedir; durum dosyası yazılmaz.
+Web'in Node süreci bu Unix soketinden yalnız durumu okur. FastAPI'ye APK endpoint'i
+eklenmedi. Web/API/MySQL'yi LAN'a açmayın.
+
+- Özel yol gerekiyorsa araçta `--status-socket /OZEL_0700_DIZIN/status.sock`,
+  web'in **sunucu** ortamında `AVATAR_APK_STATUS_SOCKET` aynı mutlak yol olsun.
+  Yolu repo dışına koyun; `VITE_*` ortamına token/anahtar eklemeyin.
+- Popup URL'yi `/api/apk-share` üzerinden aynı origin'den ve özel başlıkla okur;
+  yabancı Host/Origin/site, sorgu parametresi ve yazma isteği reddedilir.
+- Tek indirme, kapanış, hata veya süre sonu QR'ı kaldırır. **Paylaşımı kontrol et**
+  yalnız durum okur; yeni paylaşım/token başlatmaz. Yenisi için terminal komutunu
+  tekrar çalıştırın. Popup kapatıldığında QR/URL sorgu önbelleği silinir.
+- `localhost` paylaşımı telefona erişilebilir sayılmaz; o durumda QR gösterilmez.
+- Saf statik `dist`/`vite preview` dağıtımı IPC köprüsü içermez; bu yerel akış
+  mevcut Vite demo sunucusunu gerektirir. Socket desteklenmeyen ortamda kapalı kalır.
+
+**Docker Compose (isteğe bağlı):** Önce host'ta paylaşım komutunu başlatın. Host
+kullanıcısının UID'si frontend imajındaki `node` kullanıcısıyla aynı olmalı (1000).
+Uyuşmazsa izinleri gevşetmeyin; aynı kullanıcıyla host Node yolunu kullanın.
+Özel env dosyasını aşağıdaki örnekte kendi mevcut dosyanızla değiştirin:
+
+```bash
+export AVATAR_APK_STATUS_DIR="/tmp/.avatar-apk-share-$(id -u)"
+docker compose --env-file /tmp/avatar-delivery.env \
+  -f docker-compose.yml -f docker-compose.apk-qr.yml config --quiet
+docker compose --env-file /tmp/avatar-delivery.env \
+  -f docker-compose.yml -f docker-compose.apk-qr.yml up -d --build frontend
+```
+
+Override yalnız özel dizini salt okunur bağlar; ek TCP portu, anahtar veya
+veritabanı paylaşmaz. Host'ta sonraki paylaşım aynı dizinde yeni soket oluşturur.
+Mevcut volume'u silmeyin. Docker Desktop/Windows/macOS soket aktarımı bu görevde
+doğrulanmadı; hata durumunda QR üretilmez.
 
 [Wi-Fi bağlantı kodu için güvenlik planı](SECURE_DEVICE_PAIRING_PLAN.md) ayrı
 gelecek görevdir; bu indirme aracı otomatik sunucu eşleştirmesi yapmaz.

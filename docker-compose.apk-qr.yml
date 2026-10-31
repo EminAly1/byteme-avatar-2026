@@ -1,0 +1,13 @@
+# Optional Linux-only owner-private IPC. No additional TCP ports or API binds.
+# Host operator and frontend container must have the same UID (image: node=1000).
+services:
+  frontend:
+    environment:
+      AVATAR_APK_STATUS_SOCKET: /run/avatar-apk-share/status.sock
+    volumes:
+      - type: bind
+        source: ${AVATAR_APK_STATUS_DIR:?Set the absolute owner-private APK status directory}
+        target: /run/avatar-apk-share
+        read_only: true
+        bind:
+          create_host_path: false

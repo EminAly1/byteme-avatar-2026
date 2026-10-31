@@ -10,7 +10,7 @@ export function secretPathBlocked(url: string) {
   } catch {
     return true;
   }
-  return /(?:^|[\\/])(?:\.env[^\\/]*|\.git)(?:[\\/]|$)|\.(?:crt|pem|key)$/i.test(path);
+  return /(?:^|[\\/])(?:\.env[^\\/]*|\.git|\.avatar-apk-share-[^\\/]*)(?:[\\/]|$)|\.(?:crt|pem|key)$/i.test(path);
 }
 
 // Container bind is an explicit server-side deployment choice. Browser Host /
