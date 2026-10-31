@@ -27,6 +27,7 @@ import { Empty, ErrorBox, Section, State } from "../components/ui";
 import { ModuleIntro } from "../components/workflow";
 import { DocumentSheet } from "../components/DocumentSheet";
 import { PdfPreview } from "../components/PdfPreview";
+import { inputPlaceholder } from "../lib/input-examples";
 import "./documents.css";
 
 function useSource(id: string) {
@@ -416,8 +417,8 @@ function Editor({ saleId }: { saleId: string }) {
                           />
                         </label>
                         {fields.map(([name, label]) => (
-                          <label key={name}>
-                            {label}
+                          <div className="field" key={name}>
+                            <label htmlFor={"draft-" + name}>{label}</label>
                             {[
                               "description",
                               "seller_contact",
@@ -426,8 +427,9 @@ function Editor({ saleId }: { saleId: string }) {
                               "note",
                             ].includes(name) ? (
                               <textarea
+                                id={"draft-" + name}
                                 rows={name === "note" ? 4 : 2}
-                                placeholder={label + " girin (isteğe bağlı)"}
+                                placeholder={inputPlaceholder(name, label)}
                                 aria-describedby={"hint-" + name}
                                 maxLength={draftLimits[name]}
                                 value={draft[name]}
@@ -445,7 +447,8 @@ function Editor({ saleId }: { saleId: string }) {
                               />
                             ) : (
                               <input
-                                placeholder={label + " girin (isteğe bağlı)"}
+                                id={"draft-" + name}
+                                placeholder={inputPlaceholder(name, label)}
                                 aria-describedby={"hint-" + name}
                                 maxLength={draftLimits[name]}
                                 value={draft[name]}
@@ -455,12 +458,12 @@ function Editor({ saleId }: { saleId: string }) {
                               />
                             )}
                             <small id={"hint-" + name}>
-                              En fazla {draftLimits[name]} karakter ve 21 satır.
+                              İsteğe bağlı; en fazla {draftLimits[name]} karakter ve 21 satır.
                               {name.startsWith("seller")
                                 ? " Kullanıcı girişi; doğrulanmadı."
                                 : ""}
                             </small>
-                          </label>
+                          </div>
                         ))}
                       </div>
                       <label className="document-demo-toggle">

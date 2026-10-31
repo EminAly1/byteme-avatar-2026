@@ -11,6 +11,7 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ReceiptLong
 import androidx.compose.material.icons.outlined.*
@@ -28,10 +29,12 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.byteme.avatar.data.*
+import com.byteme.avatar.BuildConfig
 import com.byteme.avatar.network.Sale
 import com.byteme.avatar.network.Wire
 import java.time.Instant
@@ -140,7 +143,11 @@ private fun unit(value: String) = when(value) { "package" -> "paket"; "unit" -> 
                 item { Spacer(Modifier.height(12.dp)); Text("EUR · Stok merkezî sunucudan doğrulanır",style=MaterialTheme.typography.labelSmall) }
             }
         }
-        if(settings) SettingsDialog(state.endpoint,onDismiss={settings=false},onSave={base,key->vm.configure(base,key);settings=false})
+        if(settings) {
+            val hasSavedKey = remember(state.endpoint) { vm.hasSavedApiKey() }
+            SettingsDialog(state.endpoint,hasSavedKey,onDismiss={settings=false},
+                onSave={base,key->vm.configure(base,key,onSaved={settings=false})})
+        }
         review?.let { draft ->
             val stock = state.catalog.stocks.find { draft.endpoint==state.endpoint && it.lotId==draft.lotId && it.locationId==draft.locationId }
             AlertDialog(onDismissRequest={vm.review.value=null},title={Text("Satış onayı")},text={Column(Modifier.verticalScroll(rememberScrollState()),verticalArrangement=Arrangement.spacedBy(8.dp)) {
@@ -190,8 +197,14 @@ private fun unit(value: String) = when(value) { "package" -> "paket"; "unit" -> 
         Picker("Lot ve konum",candidates.map {it.lotId+it.locationId to "${it.lotCode} · ${it.locationName}"},stockId,"stock-picker") {onInput(input.copy(stockId=it))}
         stock?.let {Notice("Kayıtlı: ${quantityText(it.quantity)} / kullanılabilir: ${quantityText(it.availableQuantity)} ${unit(it.unit)} · ${if(saleable(it)) "satışta yeniden doğrulanır" else "bu lot satılamaz"}",!saleable(it))}
         Picker("Müşteri",state.catalog.customers.map {it.id to it.name},customer,"customer-picker") {onInput(input.copy(customer=it))}
-        OutlinedTextField(quantity,{onInput(input.copy(quantity=it))},isError=quantityError!=null,supportingText={quantityError?.let {Text(it)}},label={Text("Miktar (${unit(stock?.unit ?: "kg")})")},singleLine=true,keyboardOptions=KeyboardOptions(keyboardType=KeyboardType.Decimal),modifier=Modifier.fillMaxWidth().testTag("quantity"))
-        OutlinedTextField(price,{onInput(input.copy(price=it))},isError=priceError!=null,label={Text("Birim satış fiyatı (EUR)")},supportingText={Text(priceError ?: "Satış fiyatıdır; stok maliyeti değildir.")},singleLine=true,keyboardOptions=KeyboardOptions(keyboardType=KeyboardType.Decimal),modifier=Modifier.fillMaxWidth().testTag("price"))
+        OutlinedTextField(quantity,{onInput(input.copy(quantity=it))},isError=quantityError!=null,
+            placeholder={Text(if((stock?.unit ?: "kg")=="kg") "Örn: 1,5" else "Örn: 2")},
+            supportingText={Text(quantityError ?: if((stock?.unit ?: "kg")=="kg") "Virgül veya nokta kullanabilirsiniz; en küçük miktar 0,000001 kg." else "Paket ve adet miktarlarını tam sayı girin.")},
+            label={Text("Miktar (${unit(stock?.unit ?: "kg")})")},singleLine=true,
+            keyboardOptions=KeyboardOptions(keyboardType=KeyboardType.Decimal,imeAction=ImeAction.Next),modifier=Modifier.fillMaxWidth().testTag("quantity"))
+        OutlinedTextField(price,{onInput(input.copy(price=it))},isError=priceError!=null,label={Text("Birim satış fiyatı (EUR)")},
+            placeholder={Text("Örn: 18,16")},supportingText={Text(priceError ?: "Satış fiyatıdır; stok maliyeti değildir. Virgül veya nokta kullanabilirsiniz.")},singleLine=true,
+            keyboardOptions=KeyboardOptions(keyboardType=KeyboardType.Decimal,imeAction=ImeAction.Done),keyboardActions=KeyboardActions(onDone={focusManager.clearFocus()}),modifier=Modifier.fillMaxWidth().testTag("price"))
         Button(onClick={focusManager.clearFocus();stock?.let {vm.save(it,customer,quantity,price)}},enabled=stock!=null && state.catalog.customers.any {it.id==customer} && quantity.isNotBlank() && price.isNotBlank() && quantityError==null && priceError==null && saleable(stock),modifier=Modifier.fillMaxWidth().heightIn(min=48.dp).testTag("review-sale")) {Text("Taslağı kaydet ve özeti gör")}
         Text("Ağ yokken taslak cihazda saklanır; stok düşmüş sayılmaz.",style=MaterialTheme.typography.bodySmall)
     }
@@ -209,19 +222,32 @@ private fun unit(value: String) = when(value) { "package" -> "paket"; "unit" -> 
         Text("SUNUCU ONAYLI",color=MaterialTheme.colorScheme.primary,style=MaterialTheme.typography.labelLarge)
         Text("${row.totalAmount} EUR",style=MaterialTheme.typography.titleLarge)
         OutlinedButton(onClick={onDocument(row.id)},modifier=Modifier.heightIn(min=48.dp).testTag("document-open-${row.id}")) {Text("Satış belgesini aç")}
-        Text("Satış ID: ${row.id}",style=MaterialTheme.typography.bodySmall);Text(row.soldAt,style=MaterialTheme.typography.labelSmall)
+        Text("Satış kayıt kimliği: ${row.id}",style=MaterialTheme.typography.bodySmall);Text(row.soldAt,style=MaterialTheme.typography.labelSmall)
         if(sale==null) TextButton(onClick={vm.detail(row.id)}) {Text("Satır ve hareket ayrıntısını yükle")}
         sale?.lines?.forEach {line -> Text("${line.quantity} ${unit(line.unit)} · ${line.unit_price} EUR/${unit(line.unit)}"); Text("Lot: ${line.lot_id}\nSatır: ${line.id}\nStok hareketi: ${line.stock_movement_id}",style=MaterialTheme.typography.bodySmall) }
     } }
 }
-@Composable private fun SettingsDialog(base: String,onDismiss: ()->Unit,onSave: (String,String)->Unit) {
-    var address by rememberSaveable {mutableStateOf(base.ifBlank {"http://10.0.2.2:8000/"})}
+@Composable internal fun SettingsDialog(base: String,hasSavedKey: Boolean,onDismiss: ()->Unit,onSave: (String,String)->Unit) {
+    var address by rememberSaveable(base) {mutableStateOf(base)}
     var key by remember {mutableStateOf("")}
+    var submitted by rememberSaveable {mutableStateOf(false)}
+    val errors = if(submitted) connectionInputErrors(address,key,base,hasSavedKey,BuildConfig.DEBUG) else ConnectionInputErrors()
+    val focus = LocalFocusManager.current
+    fun submit() {
+        submitted = true
+        val checked = connectionInputErrors(address,key,base,hasSavedKey,BuildConfig.DEBUG)
+        if(checked.address == null && checked.key == null) { focus.clearFocus(); onSave(address,key) }
+    }
     AlertDialog(onDismissRequest=onDismiss,title={Text("Sunucu bağlantısı")},text={Column(Modifier.verticalScroll(rememberScrollState()),verticalArrangement=Arrangement.spacedBy(12.dp)) {
         Text("Yerel prototip API anahtarı kullanır. Üretim kullanıcı/rol oturumu henüz yoktur.")
-        OutlinedTextField(address,{address=it},label={Text("Backend adresi")},keyboardOptions=KeyboardOptions(keyboardType=KeyboardType.Uri),modifier=Modifier.fillMaxWidth())
-        OutlinedTextField(key,{key=it},label={Text("API anahtarı")},supportingText={Text("Keystore ile şifrelenir. Aynı sunucu için boş bırakırsanız mevcut anahtar korunur.")},visualTransformation=PasswordVisualTransformation(),singleLine=true,modifier=Modifier.fillMaxWidth())
+        OutlinedTextField(address,{address=it},label={Text("Sunucu adresi")},placeholder={Text("Örn: https://sunucu.example/")},
+            isError=errors.address!=null,supportingText={Text(errors.address ?: "Emülatör: http://10.0.2.2:8000/\nTelefon: ADB reverse ile http://127.0.0.1:8000/")},singleLine=true,
+            keyboardOptions=KeyboardOptions(keyboardType=KeyboardType.Uri,imeAction=ImeAction.Next),modifier=Modifier.fillMaxWidth().testTag("server-address"))
+        OutlinedTextField(key,{key=it},label={Text("API anahtarı")},placeholder={Text("Örn: sunucunun verdiği gizli anahtar")},
+            isError=errors.key!=null,supportingText={Text(errors.key ?: if(hasSavedKey) "Keystore ile şifrelenir. Aynı sunucuda boş bırakmak kayıtlı anahtarı korur." else "Sunucu anahtarını girin; Keystore ile şifrelenir.")},
+            visualTransformation=PasswordVisualTransformation(),singleLine=true,
+            keyboardOptions=KeyboardOptions(keyboardType=KeyboardType.Password,imeAction=ImeAction.Done),keyboardActions=KeyboardActions(onDone={submit()}),modifier=Modifier.fillMaxWidth().testTag("server-key"))
         Text("Android 11+ kablosuz ADB eşleştirmesinden sonra adb reverse tcp:8000 tcp:8000 kullanabilirsiniz. 127.0.0.1 ancak doğru tünelle bilgisayara ulaşır.",style=MaterialTheme.typography.bodySmall)
         Text("HTTP yalnız yerel debug içindir. Sunucu değişince bekleyen işlemler yeni sunucuya otomatik gönderilmez.",style=MaterialTheme.typography.bodySmall)
-    }},confirmButton={TextButton(onClick={onSave(address,key);key=""}) {Text("Güvenli kaydet ve bağlan")}},dismissButton={TextButton(onClick=onDismiss) {Text("Vazgeç")}})
+    }},confirmButton={TextButton(onClick={submit()},modifier=Modifier.heightIn(min=48.dp).testTag("save-connection")) {Text("Güvenli kaydet ve bağlan")}},dismissButton={TextButton(onClick=onDismiss,modifier=Modifier.heightIn(min=48.dp)) {Text("Vazgeç")}})
 }

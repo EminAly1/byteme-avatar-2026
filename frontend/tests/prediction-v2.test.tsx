@@ -55,7 +55,7 @@ it("malzeme miktarlarını seçili et miktarının desteklenen oranıyla doğrul
 it("üretim ekranı boş başlar, soluk örnek/metadata sınırı gösterir ve geçerli örneği doldurur", async () => {
   mockApi(); mount(); const user = userEvent.setup();
   const meat = await screen.findByLabelText("Planlanan et (kg)");
-  expect(meat).toHaveValue(""); expect(meat).toHaveAttribute("placeholder", "25");
+  expect(meat).toHaveValue(""); expect(meat).toHaveAttribute("placeholder", "Örn: 25");
   expect(screen.getByText("Desteklenen aralık 5–300 kg.")).toBeVisible();
   await user.click(screen.getByRole("button", { name: "Geçerli üretim örneğini doldur" }));
   expect(meat).toHaveValue("25"); expect(screen.getByLabelText("Planlanan baharat (kg)")).toHaveValue("0.5");

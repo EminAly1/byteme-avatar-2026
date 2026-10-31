@@ -108,15 +108,15 @@ private fun documentUnit(value: String) = when (value) { "package" -> "paket"; "
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
         Text("Geçici belge notları", style = MaterialTheme.typography.headlineSmall)
         Text("Yalnız bu taslağa uygulanır. Müşteri, fiyat, miktar ve lot değiştirilemez; sunucuda taslak arşivi oluşturulmaz.")
-        DraftInput("Başlık · en çok 120 karakter", draft.title) { draft = draft.copy(title = it) }
-        DraftInput("Açıklama · 600", draft.description) { draft = draft.copy(description = it) }
-        DraftInput("Satıcı adı · kullanıcı beyanı · 200", draft.seller_name) { draft = draft.copy(seller_name = it) }
-        DraftInput("Satıcı iletişim · 300", draft.seller_contact) { draft = draft.copy(seller_contact = it) }
-        DraftInput("Belge tarihi · YYYY-AA-GG", draft.document_date) { draft = draft.copy(document_date = it) }
-        DraftInput("Ödeme/vade açıklaması · 500", draft.payment_note) { draft = draft.copy(payment_note = it) }
-        DraftInput("Teslimat açıklaması · 500", draft.delivery_note) { draft = draft.copy(delivery_note = it) }
-        DraftInput("Özel not · 1500", draft.note) { draft = draft.copy(note = it) }
-        DraftInput("Taslak referansı · 100", draft.reference) { draft = draft.copy(reference = it) }
+        DraftInput("Başlık", draft.title, "Proforma taslağı", "İsteğe bağlı; en fazla 120 karakter.") { draft = draft.copy(title = it) }
+        DraftInput("Açıklama", draft.description, "Seçilen satışın ürün özeti", "İsteğe bağlı; en fazla 600 karakter.") { draft = draft.copy(description = it) }
+        DraftInput("Satıcı adı", draft.seller_name, "Örnek Gıda", "Kullanıcı beyanı; en fazla 200 karakter.") { draft = draft.copy(seller_name = it) }
+        DraftInput("Satıcı iletişim", draft.seller_contact, "belge@example.invalid", "Kullanıcı beyanı; en fazla 300 karakter.") { draft = draft.copy(seller_contact = it) }
+        DraftInput("Belge tarihi", draft.document_date, "2026-11-01", "Tarih biçimi: yıl-ay-gün (YYYY-AA-GG).") { draft = draft.copy(document_date = it) }
+        DraftInput("Ödeme/vade açıklaması", draft.payment_note, "Vade için müşteriyle görüşülecek", "İsteğe bağlı; en fazla 500 karakter.") { draft = draft.copy(payment_note = it) }
+        DraftInput("Teslimat açıklaması", draft.delivery_note, "Soğuk zincirle teslim", "İsteğe bağlı; en fazla 500 karakter.") { draft = draft.copy(delivery_note = it) }
+        DraftInput("Özel not", draft.note, "Teslimattan önce alıcıyı arayın", "İsteğe bağlı; en fazla 1500 karakter.") { draft = draft.copy(note = it) }
+        DraftInput("Taslak referansı", draft.reference, "BELGE-2026-001", "İsteğe bağlı; en fazla 100 karakter.") { draft = draft.copy(reference = it) }
         Row { Checkbox(draft.demo, { draft = draft.copy(demo = it) }); Text("KURGUSAL DEMO · kullanıcı beyanı", Modifier.padding(top = 12.dp)) }
         val error = draft.validationError()
         error?.let { Text(it, color = MaterialTheme.colorScheme.error) }
@@ -125,6 +125,7 @@ private fun documentUnit(value: String) = when (value) { "package" -> "paket"; "
         OutlinedButton(onClick = onCancel, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)) { Text("Değişiklikleri bırak") }
     }
 }
-@Composable private fun DraftInput(label: String, value: String, onChange: (String) -> Unit) {
-    OutlinedTextField(value, onChange, label = { Text(label) }, modifier = Modifier.fillMaxWidth())
+@Composable private fun DraftInput(label: String, value: String, example: String, help: String, onChange: (String) -> Unit) {
+    OutlinedTextField(value, onChange, label = { Text(label) }, placeholder = { Text("Örn: $example") },
+        supportingText = { Text(help) }, modifier = Modifier.fillMaxWidth())
 }

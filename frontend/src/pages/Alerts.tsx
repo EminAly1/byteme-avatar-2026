@@ -40,12 +40,12 @@ export function Alerts() {
         {(lot||operation) && <button className="button" onClick={()=>{const next=new URLSearchParams(search);next.delete('lot_id');next.delete('operation_id');next.delete('cursor');next.delete('alert');setSourceId('');setSearch(next);}}>Kaynak filtresini temizle</button>}
       </div>
       <details><summary>Kaynak lot veya işlem filtresi</summary>
-        <form className="form-grid" onSubmit={event=>{event.preventDefault();if(sourceId&&!z.string().uuid().safeParse(sourceId.trim()).success){setFilterError('Kaynak kaydın tam UUID kimliğini girin.');return;}setFilterError('');const next=new URLSearchParams(search);next.delete('lot_id');next.delete('operation_id');next.delete('cursor');next.delete('alert');if(sourceId.trim())next.set(sourceKind==='lot'?'lot_id':'operation_id',sourceId.trim());setSearch(next);}}>
+        <form className="form-grid" onSubmit={event=>{event.preventDefault();if(sourceId&&!z.string().uuid().safeParse(sourceId.trim()).success){setFilterError('Kaynak kaydın tam kayıt kimliğini girin.');return;}setFilterError('');const next=new URLSearchParams(search);next.delete('lot_id');next.delete('operation_id');next.delete('cursor');next.delete('alert');if(sourceId.trim())next.set(sourceKind==='lot'?'lot_id':'operation_id',sourceId.trim());setSearch(next);}}>
           <label className="field">Kaynak türü<select aria-label="Kaynak türü" value={sourceKind} onChange={event=>setSourceKind(event.target.value)}><option value="lot">Lot</option><option value="operation">Üretim / parçalama işlemi</option></select></label>
-          <label className="field">Kaynak kayıt kimliği<input value={sourceId} onChange={event=>setSourceId(event.target.value)} autoComplete="off"/></label>
+          <div className="field"><label htmlFor="alert-source">Kaynak kayıt kimliği</label><input id="alert-source" value={sourceId} onChange={event=>{setSourceId(event.target.value);setFilterError('');}} autoComplete="off" placeholder="Örn: 00000000-0000-4000-8000-000000000001" aria-invalid={!!filterError} aria-describedby={filterError?'alert-source-help alert-source-error':'alert-source-help'}/><small id="alert-source-help">Lot veya işlem ayrıntılarındaki tam kimliği kopyalayın.</small></div>
           <button className="button" type="submit">Kaynağa göre filtrele</button>
         </form>
-        {filterError&&<p role="alert" className="field-error">{filterError}</p>}
+        {filterError&&<p id="alert-source-error" role="alert" className="field-error">{filterError}</p>}
         <p className="caption">Lot filtresi lot kaynaklı, işlem filtresi işlem kaynaklı uyarıları sınırlar. Ürün bazlı düşük stok, tek lot stoğu değildir.</p>
       </details>
     </Section>

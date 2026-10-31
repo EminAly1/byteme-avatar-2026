@@ -33,7 +33,7 @@ async function submit(page: Page, kind: "production" | "cutting") {
 test("metadata örneğiyle 25 kg; küçük/100/büyük üretim; geçersiz giriş alan bazında reddedilir, mobil/desktop", async ({ page }) => {
   watch(page); await page.goto("/yapay-zeka");
   let calls = 0; page.on("request", r => { if (r.method() === "POST" && r.url().endsWith("/predictions/production")) calls++; });
-  await expect(page.getByLabel("Planlanan et (kg)", { exact: true })).toHaveAttribute("placeholder", "25");
+  await expect(page.getByLabel("Planlanan et (kg)", { exact: true })).toHaveAttribute("placeholder", "Örn: 25");
   await expect(page.getByLabel("Planlanan et (kg)", { exact: true })).toHaveValue("");
   await page.getByRole("button", { name: "Geçerli üretim örneğini doldur", exact: true }).click();
   await page.getByLabel("Planlanan et (kg)", { exact: true }).fill("4");

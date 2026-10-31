@@ -102,7 +102,7 @@ export function Products() {
             <input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder="SKU veya ürün adı"
+              placeholder="Örn: Et veya ET-001"
             />
           </label>
           <label>

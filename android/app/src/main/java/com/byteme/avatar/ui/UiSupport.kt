@@ -19,9 +19,26 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.byteme.avatar.R
 import com.byteme.avatar.data.StockRow
+import com.byteme.avatar.security.normalizeBase
 import java.math.BigDecimal
 import java.time.LocalDate
 import java.time.ZoneOffset
+
+data class ConnectionInputErrors(val address: String? = null, val key: String? = null)
+
+/** Field feedback only; SecureSettings remains the authority when saving. */
+fun connectionInputErrors(address: String, key: String, savedBase: String,
+    hasSavedKey: Boolean, debug: Boolean): ConnectionInputErrors {
+    val normalized = runCatching { normalizeBase(address, debug) }
+    val addressError = if (address.isBlank()) "Sunucu adresi gerekli." else normalized.exceptionOrNull()?.message
+    val reuse = normalized.getOrNull() == savedBase && hasSavedKey
+    val keyError = when {
+        key.isBlank() && !reuse -> "Bu sunucu için API anahtarı gerekli."
+        key.isNotBlank() && key.any { it == '\r' || it == '\n' } -> "API anahtarını tek satır olarak girin."
+        else -> null
+    }
+    return ConnectionInputErrors(addressError, keyError)
+}
 
 fun quantityText(value: String): String = runCatching {
     BigDecimal(value).stripTrailingZeros().toPlainString().replace('.', ',')

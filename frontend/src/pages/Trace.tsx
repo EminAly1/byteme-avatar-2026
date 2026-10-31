@@ -300,7 +300,7 @@ export function TraceReportView({
             İşlem bağlamındaki diğer lotlar ({report.context_lots.length})
           </summary>
           <p className="caption">
-            Bu liste tek başına recall üyeliği veya atalık ilişkisi oluşturmaz.
+            Bu liste tek başına geri çağırma üyeliği veya kaynak lot ilişkisi oluşturmaz.
           </p>
           {report.context_lots.map((l) => (
             <LotCard key={l.id} lot={l} onOpen={() => setSelected(l)} />
@@ -329,7 +329,7 @@ export function TraceReportView({
               </td>
               <td>
                 <Badge tone={s.blocked ? "red" : ""}>
-                  {s.blocked ? "Bloke" : "Backend kaydı"}
+                  {s.blocked ? "Bloke" : "Sunucu kaydı"}
                 </Badge>
               </td>
             </tr>
@@ -448,28 +448,31 @@ export function Recalls() {
         navigate("/geri-cagirma/" + record.id);
       }} />
       <Section
-        title="Kayıtlı recall sonucunu aç"
-        subtitle="Backend liste endpoint'i yoktur; bilinen UUID ile açılır. Aşağıdakiler yalnız bu sekmede oluşturulan referanslardır."
+        title="Kayıtlı geri çağırmayı aç"
+        subtitle="Elinizdeki kayıt kimliğiyle sonuca ulaşın. Aşağıda bu tarayıcı sekmesinde oluşturulan kayıtlar bulunur."
       >
         <form
           className="inline-form"
           onSubmit={(e) => {
             e.preventDefault();
             if (!/^[0-9a-f-]{36}$/i.test(lookup)) {
-              setLookupError("Geçerli recall UUID girin.");
+              setLookupError("Geçerli bir geri çağırma kayıt kimliği girin.");
               return;
             }
             navigate("/geri-cagirma/" + lookup);
           }}
         >
-          <label>
-            Recall UUID
-            <input value={lookup} onChange={(e) => setLookup(e.target.value)} />
-          </label>
+          <div className="field">
+            <label htmlFor="recall-lookup">Geri çağırma kayıt kimliği</label>
+            <input id="recall-lookup" value={lookup} onChange={(e) => { setLookup(e.target.value); setLookupError(""); }}
+              placeholder="Örn: 00000000-0000-4000-8000-000000000001" autoComplete="off"
+              aria-invalid={!!lookupError} aria-describedby={lookupError ? "recall-lookup-help recall-lookup-error" : "recall-lookup-help"} />
+            <small id="recall-lookup-help">Kayıt ayrıntılarındaki tam kimliği kopyalayın.</small>
+          </div>
           <button className="button">Kaydı aç</button>
         </form>
         {lookupError && (
-          <p role="alert" className="field-error">
+          <p id="recall-lookup-error" role="alert" className="field-error">
             {lookupError}
           </p>
         )}

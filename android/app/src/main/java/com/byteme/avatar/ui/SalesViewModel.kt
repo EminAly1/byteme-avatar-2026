@@ -48,8 +48,10 @@ class SalesViewModel(val graph: AppGraph): ViewModel() {
             }
         }
     }
-    fun configure(base: String,key: String) = action {
+    fun hasSavedApiKey(): Boolean = graph.settings.key().isNotBlank()
+    fun configure(base: String,key: String,onSaved: () -> Unit = {}) = action {
         withContext(Dispatchers.IO) { graph.settings.save(base,key,BuildConfig.DEBUG) }
+        onSaved()
         endpoint.value = graph.settings.base(); graph.documents.invalidate(clear = true); alertsRepository.invalidate(clear = true); refreshAlerts(); sync()
     }
     fun refresh() = action { refreshAlerts(); sync() }

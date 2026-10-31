@@ -560,17 +560,22 @@ export function Predictions() {
               setParams({ prediction: lookup });
             }}
           >
-            <label>
-              Tahmin kaydı kimliği
+            <div className="field">
+              <label htmlFor="prediction-lookup">Tahmin kaydı kimliği</label>
               <input
+                id="prediction-lookup"
                 value={lookup}
-                onChange={(e) => setLookup(e.target.value)}
+                onChange={(e) => { setLookup(e.target.value); setLookupError(""); }}
+                placeholder="Örn: 00000000-0000-4000-8000-000000000001"
+                autoComplete="off" aria-invalid={!!lookupError}
+                aria-describedby={lookupError ? "prediction-lookup-help prediction-lookup-error" : "prediction-lookup-help"}
               />
-            </label>
+              <small id="prediction-lookup-help">Tahmin ayrıntılarındaki tam kimliği kopyalayın.</small>
+            </div>
             <button className="button">Tahmin kaydını aç</button>
           </form>
           {lookupError && (
-            <p className="field-error" role="alert">
+            <p id="prediction-lookup-error" className="field-error" role="alert">
               {lookupError}
             </p>
           )}

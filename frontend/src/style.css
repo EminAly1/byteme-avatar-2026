@@ -881,6 +881,12 @@ th.numeric {
   display: grid;
   gap: 18px;
 }
+form > fieldset ~ .button {
+  margin-top: 16px;
+}
+.form-area + .filters {
+  margin-top: 20px;
+}
 .form-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -976,7 +982,8 @@ th.numeric {
   gap: 12px;
   margin-bottom: 20px;
 }
-.inline-form label {
+.inline-form label,
+.inline-form > .field {
   flex: 1;
 }
 .optional {
@@ -2234,7 +2241,7 @@ th.numeric {
 .page-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
 .button,.text-button{min-width:44px;justify-content:center}
 .tabs a{display:inline-flex;align-items:center;justify-content:center;min-height:44px;min-width:44px}
-input::placeholder,textarea::placeholder{color:#647880;opacity:1}
+input::placeholder,textarea::placeholder{color:#60747c;opacity:1;font-weight:400}
 section[id]{scroll-margin-top:24px}
 .avatar-loading{display:flex;align-items:center;gap:14px;font-weight:600}
 .avatar-loading img{animation:avatar-breathe 1.4s ease-in-out infinite}

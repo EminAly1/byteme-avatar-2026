@@ -15,6 +15,7 @@ import { ApiError, newCommand, send, type Command } from "../lib/api";
 import { ErrorBox, Success } from "./ui";
 import { loadPending, savePending, clearPending } from "../lib/pending";
 import { ConfirmDialog } from "./dialogs";
+import { inputPlaceholder } from "../lib/input-examples";
 
 interface Props<T extends FieldValues> {
   schema: z.ZodType<T>;
@@ -100,7 +101,7 @@ export function CommandForm<T extends FieldValues>({
         <fieldset disabled={locked}>{children}</fieldset>
         {mutation.isError && <ErrorBox error={mutation.error} />}
         {mutation.isSuccess && (
-          <Success>Kayıt backend tarafından onaylandı.</Success>
+          <Success>Kayıt sunucu tarafından onaylandı.</Success>
         )}
         {uncertain ? (
           <div className="retry-box">
@@ -170,6 +171,10 @@ export function Field({
   } = useFormContext();
   const error = errorAt(errors, name),
     id = "field-" + name + useId();
+  const help = hint || (type === "decimal"
+    ? "Virgül veya nokta kullanabilirsiniz; alanın birimini kontrol edin."
+    : type === "date" || type === "datetime-local" ? "Takvimden tarih seçin." : undefined);
+  const describedBy = [help && id + "-hint", error && id + "-error"].filter(Boolean).join(" ") || undefined;
   return (
     <div className="field">
       <label htmlFor={id}>{label}</label>
@@ -178,7 +183,7 @@ export function Field({
           id={id}
           {...register(name)}
           aria-invalid={!!error}
-          aria-describedby={error ? id + "-error" : undefined}
+          aria-describedby={describedBy}
         >
           {children}
         </select>
@@ -188,14 +193,14 @@ export function Field({
           type={type === "decimal" ? "text" : type}
           {...register(name)}
           autoComplete="off"
-          placeholder={placeholder}
+          placeholder={inputPlaceholder(name, label, type, placeholder)}
           step={type === "datetime-local" ? "any" : undefined}
           inputMode={type === "decimal" ? "decimal" : undefined}
           aria-invalid={!!error}
-          aria-describedby={[hint && id + "-hint", error && id + "-error"].filter(Boolean).join(" ") || undefined}
+          aria-describedby={describedBy}
         />
       )}
-      {hint && <small id={id + "-hint"}>{hint}</small>}
+      {help && <small id={id + "-hint"}>{help}</small>}
       {error && (
         <small id={id + "-error"} className="field-error">
           {error}

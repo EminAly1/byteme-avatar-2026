@@ -117,7 +117,7 @@ export function LotSelector({
       </Field>
       {unavailable && (
         <p className="field-error" role="alert">
-          Bu lot artık kullanılamıyor. Başka uygun lot seçin; backend durumu
+          Bu lot artık kullanılamıyor. Başka uygun lot seçin; sunucu durumu
           tekrar kontrol eder.
         </p>
       )}
