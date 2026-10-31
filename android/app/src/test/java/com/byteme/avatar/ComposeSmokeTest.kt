@@ -56,6 +56,11 @@ class ComposeSmokeTest {
             compose.waitUntil(120000) { compose.onAllNodesWithText("Satış onayı").fetchSemanticsNodes().isNotEmpty() }
             compose.onNodeWithText("Satış onayı").assertIsDisplayed()
             compose.onNodeWithText("Taslakta bırak").performClick()
+            compose.onNodeWithTag("nav-home").performClick()
+            compose.onNodeWithTag("main-list").performScrollToNode(hasTestTag("documents-entry"))
+            compose.onNodeWithTag("documents-entry").performClick()
+            compose.onNodeWithText("Belgeler").assertIsDisplayed()
+            listOf("home","stocks","sale","pending","alerts").forEach { tab -> compose.onNodeWithTag("nav-$tab").assertExists() }
         }
         app.graph.database.close()
     }

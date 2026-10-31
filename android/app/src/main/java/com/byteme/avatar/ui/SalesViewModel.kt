@@ -24,6 +24,11 @@ class SalesViewModel(val graph: AppGraph): ViewModel() {
         viewModelScope.launch { alertsRepository.refresh(filter, more) }
     private val status = MutableStateFlow(OperationStatus())
     private val endpoint = MutableStateFlow(graph.settings.base())
+    val documents = graph.documents.state
+    fun generateDocumentPdf() = viewModelScope.launch { graph.documents.generatePdf() }
+    fun loadDocument(id: String) = viewModelScope.launch { graph.documents.load(id) }
+    fun documentKind(kind: com.byteme.avatar.network.DocumentKind) = graph.documents.selectKind(kind)
+    fun documentDraft(draft: com.byteme.avatar.network.DocumentDraft) = graph.documents.saveDraft(draft)
     val selected = MutableStateFlow<StockRow?>(null)
     val review = MutableStateFlow<SaleDraft?>(null)
     private val catalog = combine(repo.dao.productsFlow(),repo.dao.lotsFlow(),repo.dao.stocksFlow(),repo.dao.customersFlow(),repo.dao.metadataFlow()) { p,l,s,c,m -> Catalog(p,l,s,c,m) }
@@ -35,7 +40,7 @@ class SalesViewModel(val graph: AppGraph): ViewModel() {
         viewModelScope.launch {
             repo.recover()
             graph.network.connected.collect {
-                if (!it) alertsRepository.invalidate()
+                if (!it) { alertsRepository.invalidate(); graph.documents.invalidate() }
                 if (it && graph.settings.base().isNotBlank()) {
                     refreshAlerts()
                     viewModelScope.launch { sync() }
@@ -45,7 +50,7 @@ class SalesViewModel(val graph: AppGraph): ViewModel() {
     }
     fun configure(base: String,key: String) = action {
         withContext(Dispatchers.IO) { graph.settings.save(base,key,BuildConfig.DEBUG) }
-        endpoint.value = graph.settings.base(); alertsRepository.invalidate(clear = true); refreshAlerts(); sync()
+        endpoint.value = graph.settings.base(); graph.documents.invalidate(clear = true); alertsRepository.invalidate(clear = true); refreshAlerts(); sync()
     }
     fun refresh() = action { refreshAlerts(); sync() }
     private suspend fun sync() {
