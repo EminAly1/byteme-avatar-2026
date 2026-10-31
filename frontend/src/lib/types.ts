@@ -61,6 +61,10 @@ export interface Receipt extends Entity {
   reference: string | null;
 }
 export interface ReceiptLine extends Entity {
+  product_name?: string;
+  sku?: string;
+  lot_code?: string;
+  unit?: Unit;
   receipt_id: string;
   product_id: string;
   lot_id: string;
@@ -68,6 +72,9 @@ export interface ReceiptLine extends Entity {
   total_cost: string;
 }
 export interface ReceiptDetail extends Receipt {
+  supplier_name?: string;
+  location_name?: string;
+  total_cost?: string;
   lines: ReceiptLine[];
 }
 export interface Operation extends Entity {

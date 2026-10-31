@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { ProductFields } from "../components/catalog-product";
 import { useFormContext } from "react-hook-form";
 import type { z } from "zod";
 import { Plus } from "lucide-react";
@@ -20,37 +21,6 @@ import {
 import { CommandForm, Field, Options } from "../components/forms";
 import { Badge, Section, State, Table } from "../components/ui";
 
-function ProductFields() {
-  const { watch } = useFormContext();
-  return (
-    <div className="form-grid">
-      <Field name="sku" label="SKU" />
-      <Field name="name" label="Ürün adı" />
-      <Field name="type" label="Ürün türü">
-        {Object.entries(productTypes).map(([v, l]) => (
-          <option key={v} value={v}>
-            {l}
-          </option>
-        ))}
-      </Field>
-      <Field name="base_unit" label="Stok birimi">
-        {Object.entries(units).map(([v, l]) => (
-          <option key={v} value={v}>
-            {l}
-          </option>
-        ))}
-      </Field>
-      {watch("base_unit") === "package" && (
-        <Field
-          name="package_weight_kg"
-          label="Bir paket kaç kg?"
-          type="decimal"
-          hint="Örneğin: 1 veya 0,5"
-        />
-      )}
-    </div>
-  );
-}
 export function Products() {
   const data = useCatalog(),
     [search, setSearch] = useState(""),

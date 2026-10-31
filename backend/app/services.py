@@ -119,7 +119,15 @@ def move(db, lot_id, location_id, quantity, kind, operation_id=None, receipt_lin
 
 
 def receipt_detail(db, row):
-    return {**entity(row), 'lines': [entity(x) for x in db.scalars(select(m.ReceiptLine).where(m.ReceiptLine.receipt_id == row.id).order_by(m.ReceiptLine.id))]}
+    rows = db.execute(select(m.ReceiptLine, m.Product, m.Lot)
+        .join(m.Product, m.ReceiptLine.product_id == m.Product.id)
+        .join(m.Lot, m.ReceiptLine.lot_id == m.Lot.id)
+        .where(m.ReceiptLine.receipt_id == row.id).order_by(m.ReceiptLine.id)).all()
+    return {**entity(row), 'supplier_name': get(db, m.Party, row.supplier_id).name,
+            'location_name': get(db, m.Location, row.location_id).name,
+            'total_cost': format(sum((line.total_cost for line, _, _ in rows), Decimal('0')), '.2f'),
+            'lines': [{**entity(line), 'product_name': product.name, 'sku': product.sku,
+                       'unit': product.base_unit, 'lot_code': lot.external_code} for line, product, lot in rows]}
 
 
 def create_receipt(db, request):

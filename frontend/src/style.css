@@ -2250,3 +2250,16 @@ section[id]{scroll-margin-top:24px}
 @media(max-width:600px){.page-actions{width:100%}.page-actions>.button.primary{flex:1}.page-actions>.refresh{flex:0 0 44px;margin-left:auto}.nav-group-toggle{font-size:13px}}
 
 @media(max-width:600px){.page-heading{flex-wrap:wrap}.page-heading>div:first-child{flex:1 1 100%;min-width:0}.page-description{max-width:52ch}.page-actions{width:100%;justify-content:flex-start}}
+
+/* Shared form rhythm: helpers no longer stretch an input away from its label. */
+form > fieldset { display:flex;flex-direction:column;gap:20px;min-width:0 }
+.field { align-content:start }
+.field > label { line-height:1.5 }
+.line-title .icon-button { margin:0;min-width:44px;min-height:44px;flex-shrink:0 }
+.form-section { gap:20px }
+.selection-help { display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px;padding:16px;background:var(--brand-soft);border-radius:var(--radius-sm) }
+.selection-help p { margin-top:6px;font-size:var(--text-sm);color:var(--muted) }
+.record-facts { display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;margin:20px 0 24px }
+.record-facts dt { font-size:var(--text-xs);color:var(--muted);margin-bottom:6px }
+.record-facts dd { margin:0;font-weight:600;overflow-wrap:anywhere }
+@media(max-width:600px){.record-facts{grid-template-columns:1fr}.selection-help>.button{width:100%}.detail-drawer{width:100%;max-width:100%;border-left:0}}
